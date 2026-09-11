@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Build output
+build/
+
+# Vivado / Vitis generated files
+.Xil/
+*.jou
+*.log
+*.str
+*.xpr
+*.cache/
+*.runs/
+*.sim/
+*.gen/
+*.hw/
+*.ip_user_files/
+
+# Model / dataset binaries
+*.pt
+*.pth
+*.npy
+*.npz
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
