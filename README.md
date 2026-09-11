@@ -22,6 +22,7 @@ wifi-csi-project/
 │  ├─ architecture.md      # 전체 시스템 구조
 │  ├─ interface.md         # 모듈 간 입력/출력, 데이터 형식
 │  ├─ git_guide.md         # Git/GitHub 초보자용 팀 작업 가이드
+│  ├─ images/              # README / 문서용 이미지, 블록다이어그램
 │  └─ members/             # 팀원별 조사 / 진행 내용
 │
 ├─ esp32/
@@ -52,6 +53,11 @@ wifi-csi-project/
 - `rtl/` : FPGA에서 실제로 동작할 설계 코드
 - `testbench/` : RTL 동작을 검증하는 시뮬레이션 코드
 - UVM을 사용할 경우 `testbench/uvm/` 폴더를 추가해서 사용
+
+## 이미지 저장 기준
+
+일반 사진/스크린샷은 `.gitignore`로 제외합니다.
+문서나 README에 필요한 블록다이어그램, 캡처 이미지 등은 `docs/images/`에 저장하면 Git에 올라갑니다.
 
 ## `.gitkeep`이란?
 
@@ -104,6 +110,7 @@ git push origin feature/작업이름
 - 전체 구조 변경 → `docs/architecture.md`
 - 모듈 I/O / AXI / 데이터 형식 변경 → `docs/interface.md`
 - Git/GitHub 사용법 → `docs/git_guide.md`
+- 문서용 이미지 / 블록다이어그램 → `docs/images/`
 - 개인 조사 / 진행 내용 → `docs/members/memberX.md`
 - 실제 코드는 해당 기능 폴더에 저장
 
