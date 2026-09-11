@@ -1,6 +1,7 @@
 # GitHub 팀 작업 가이드
 
-Git을 처음 쓰는 팀원도 아래 순서대로 하면 됩니다.
+Git을 처음 쓰는 팀원은 **일단 push까지 할 수 있으면 됩니다.**
+PR(Pull Request)은 나중에 익숙해진 뒤 사용합니다.
 
 ## 1. 저장소 초대 수락
 
@@ -45,7 +46,7 @@ git switch -c feature/axi
 git switch feature/cnn
 ```
 
-## 5. 작업한 내용 올리기
+## 5. 작업한 내용 올리기 — 여기까지 필수
 
 ```bash
 git status
@@ -65,13 +66,7 @@ git push -u origin feature/cnn
 git push
 ```
 
-## 6. Pull Request(PR) 만들기
-
-GitHub에서 내 브랜치를 올린 뒤 `Compare & pull request`를 눌러 PR을 생성합니다.
-
-PR은 **내 브랜치의 변경 내용을 main에 합치기 전에 팀원이 확인하는 단계**입니다.
-
-권장 흐름:
+### 처음에는 이 흐름만 기억
 
 ```text
 main 최신화
@@ -81,22 +76,24 @@ main 최신화
 코드 작성
    ↓
 add → commit → push
-   ↓
-Pull Request
-   ↓
-리뷰 후 main에 merge
 ```
+
+## PR(Pull Request)은 나중에
+
+PR은 **내 브랜치의 내용을 main에 합치기 전에 확인하는 기능**입니다.
+
+처음에는 필수가 아닙니다. Git 사용에 익숙해진 뒤 팀에서 PR 방식을 추가하면 됩니다.
 
 ## 자주 쓰는 명령어
 
 ```bash
-git status          # 현재 상태 확인
-git branch          # 브랜치 목록 확인
-git switch main     # main으로 이동
-git pull            # 최신 내용 받기
-git add .           # 변경 파일 스테이징
-git commit -m "..." # 커밋
-git push            # GitHub에 업로드
+git status           # 현재 상태 확인
+git branch           # 브랜치 목록 확인
+git switch main      # main으로 이동
+git pull             # 최신 내용 받기
+git add .            # 변경 파일 선택
+git commit -m "..."  # 커밋
+git push             # GitHub에 업로드
 ```
 
 ## 주의
