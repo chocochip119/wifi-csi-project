@@ -21,6 +21,7 @@ wifi-csi-project/
 ├─ docs/                   # 공통 문서
 │  ├─ architecture.md      # 전체 시스템 구조
 │  ├─ interface.md         # 모듈 간 입력/출력, 데이터 형식
+│  ├─ git_guide.md         # Git/GitHub 초보자용 팀 작업 가이드
 │  └─ members/             # 팀원별 조사 / 진행 내용
 │
 ├─ esp32/
@@ -66,6 +67,8 @@ pl/fft/rtl/.gitkeep
 
 ## 처음 작업할 때
 
+처음 Git을 사용하는 팀원은 **[GitHub 팀 작업 가이드](docs/git_guide.md)** 를 먼저 확인하세요.
+
 ```bash
 git clone <repository URL>
 cd wifi-csi-project
@@ -100,6 +103,7 @@ git push origin feature/작업이름
 
 - 전체 구조 변경 → `docs/architecture.md`
 - 모듈 I/O / AXI / 데이터 형식 변경 → `docs/interface.md`
+- Git/GitHub 사용법 → `docs/git_guide.md`
 - 개인 조사 / 진행 내용 → `docs/members/memberX.md`
 - 실제 코드는 해당 기능 폴더에 저장
 
