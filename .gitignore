@@ -1,18 +1,69 @@
-# Python
+# ==================================================
+# OS / Editor / temporary files
+# ==================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.tmp
+*.temp
+*.bak
+~$*
+*.lock
+*.lck
+
+# ==================================================
+# Python / Jupyter
+# ==================================================
 __pycache__/
 *.py[cod]
 .venv/
 venv/
+env/
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
 
-# Build output
+# ML experiment outputs / large generated files
+runs/
+outputs/
+checkpoints/
+wandb/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.engine
+*.npy
+*.npz
+
+# ==================================================
+# ESP-IDF / CMake generated files
+# ==================================================
 build/
+managed_components/
+sdkconfig.old
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
 
-# Vivado / Vitis generated files
+# ==================================================
+# Vivado generated files
+# Keep source files such as .sv/.v/.vhd/.xdc/.tcl/.bd
+# ==================================================
 .Xil/
 *.jou
 *.log
 *.str
 *.xpr
+*.xpr.bak
 *.cache/
 *.runs/
 *.sim/
@@ -20,13 +71,38 @@ build/
 *.hw/
 *.ip_user_files/
 
-# Model / dataset binaries
-*.pt
-*.pth
-*.npy
-*.npz
+# Vivado implementation / simulation outputs
+*.bit
+*.bin
+*.ltx
+*.dcp
+*.wdb
+*.vcd
+*.fst
+*.pb
+*.webtalk
+usage_statistics_webtalk.xml
 
-# OS / editor
-.DS_Store
-Thumbs.db
-.vscode/
+# ==================================================
+# Vitis / Eclipse workspace generated files
+# ==================================================
+.metadata/
+.settings/
+RemoteSystemsTempFiles/
+_ide/
+.analytics/
+Debug/
+Release/
+*.elf
+*.o
+*.obj
+*.a
+*.map
+*.xsa
+
+# ==================================================
+# Misc generated archives
+# ==================================================
+*.zip
+*.tar
+*.tar.gz
