@@ -11,6 +11,8 @@ PR(Pull Request)은 나중에 익숙해진 뒤 사용합니다.
 
 ## 2. 처음 한 번만 Clone
 
+> 저장소는 **Google Drive / OneDrive 같은 동기화 폴더가 아닌 일반 로컬 폴더**에 Clone하는 것을 권장합니다.
+
 ```bash
 git clone https://github.com/chocochip119/wifi-csi-project.git
 cd wifi-csi-project
@@ -19,6 +21,14 @@ cd wifi-csi-project
 `clone`은 GitHub 저장소를 내 컴퓨터로 복사하는 작업입니다.
 
 ## 3. 작업 전 최신 내용 받기
+
+먼저 현재 작업 상태를 확인합니다.
+
+```bash
+git status
+```
+
+작업 중인 변경사항이 없다면 최신 내용을 받습니다.
 
 ```bash
 git switch main
@@ -69,6 +79,8 @@ git push
 ### 처음에는 이 흐름만 기억
 
 ```text
+status 확인
+   ↓
 main 최신화
    ↓
 내 branch 생성
@@ -96,9 +108,11 @@ git commit -m "..."  # 커밋
 git push             # GitHub에 업로드
 ```
 
-## 주의
+## 충돌 줄이기
 
+- 저장소는 Google Drive / OneDrive 동기화 폴더 안에 두지 않습니다.
 - 가능하면 `main`에서 직접 작업하지 않습니다.
-- 작업 시작 전 `main`에서 `git pull`로 최신 상태를 먼저 받습니다.
+- `git pull` 전에 `git status`로 작업 중인 변경사항이 없는지 확인합니다.
 - 다른 사람 파일을 수정해야 하면 먼저 이야기하고 진행합니다.
-- 큰 파일이나 Vivado 생성 파일은 무조건 올리지 말고 `.gitignore`를 먼저 확인합니다.
+- `.gitignore`는 공통 설정이므로 필요한 항목이 있으면 임의로 여러 명이 동시에 수정하지 말고 관리자에게 알려주세요.
+- Vivado/Vitis 빌드 결과, Python 캐시, 모델 출력 등은 `.gitignore`로 제외되어 있습니다.
