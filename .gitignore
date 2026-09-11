@@ -17,6 +17,21 @@ desktop.ini
 *.lck
 
 # ==================================================
+# Images / screenshots
+# SVG is intentionally kept for diagrams/documentation.
+# ==================================================
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.bmp
+*.gif
+*.tif
+*.tiff
+*.heic
+*.avif
+
+# ==================================================
 # Python / Jupyter
 # ==================================================
 __pycache__/
