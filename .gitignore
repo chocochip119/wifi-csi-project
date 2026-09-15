@@ -73,6 +73,7 @@ wandb/
 # ==================================================
 build/
 managed_components/
+dependencies.lock
 sdkconfig.old
 CMakeFiles/
 CMakeCache.txt
