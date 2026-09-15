@@ -73,15 +73,11 @@ wandb/
 # ==================================================
 build/
 managed_components/
-sdkconfig
 sdkconfig.old
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 compile_commands.json
-
-# Keep ESP-IDF dependency lock files for reproducible builds
-!**/dependencies.lock
 
 # ==================================================
 # Vivado generated files
