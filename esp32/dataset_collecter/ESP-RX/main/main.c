@@ -27,7 +27,7 @@
 #define APP_WIFI_PROTOCOL_BITMAP             (WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N)
 #define APP_DEFAULT_WIFI_CHANNEL             6
 #define APP_DEFAULT_SECOND_CHANNEL           WIFI_SECOND_CHAN_ABOVE
-#define APP_WIFI_BANDWIDTH                   WIFI_BW_HT40
+#define APP_WIFI_BANDWIDTH                   WIFI_BW40
 
 #define APP_LINK_CTRL_MAGIC                  0x35544343u
 #define APP_LINK_UDP_MAGIC                   0x35554450u
