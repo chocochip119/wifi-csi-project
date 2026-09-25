@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 
 module Buffer #(
     parameter W_DATA_WIDTH = 64,
