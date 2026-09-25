@@ -1,0 +1,7 @@
+*.hex
+xsim.dir/
+*.jou
+*.log
+*.pb
+*.wdb
+.Xil/
