@@ -1,0 +1,27 @@
+* text=auto
+
+# HDL
+*.v    text eol=lf
+*.sv   text eol=lf
+*.vh   text eol=lf
+*.svh  text eol=lf
+
+# FPGA / build scripts
+*.tcl  text eol=lf
+*.sh   text eol=lf
+Makefile text eol=lf
+*.mk   text eol=lf
+CMakeLists.txt text eol=lf
+*.cmake text eol=lf
+
+# Source files commonly built on Linux / PetaLinux
+*.c    text eol=lf
+*.h    text eol=lf
+*.cpp  text eol=lf
+*.hpp  text eol=lf
+*.py   text eol=lf
+
+# Documentation / config
+*.md   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
