@@ -1,0 +1,18 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/l02_tb_loader_rams/xsim_script.tcl
+# xsim {l02_tb_loader_rams} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: L-02 RAM M1/M3/M4 full_readback conv=333 param=328 lut=1024 fcw=2432 boundaries=332/327/1023/2431 latency_edges=1
+PASS: L-02 RAM M2 conv_byte_masks=16 param_field_masks=3 zero_mask=2 untouched_lanes=preserved
+PASS: L-02 RAM M5 no_reset_ports control_reset_edges=2 full_contents_preserved=333/328/1024/2432
+PASS: L-02 RAM M1-M6 ALL checks_read_cycles=4884 shared_outputs_equal=1
+$finish called at time : 73606 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_loader_rams.v" Line 91
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 16:37:50 2026...

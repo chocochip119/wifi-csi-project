@@ -1,0 +1,87 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\storage_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\fc\fc1_weight_fifo.v D:\2609_final_project\cnn_rtl\rtl\fc\hidden_buffer.v D:\2609_final_project\cnn_rtl\rtl\fc\pose_buffer.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fc/fc1_weight_fifo.v" into library work
+INFO: [VRFC 10-311] analyzing module fc1_weight_fifo
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fc/hidden_buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module hidden_buffer
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fc/pose_buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_buffer
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.989272
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\storage_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\tb_fc_storage.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_fc_storage.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_fc_storage
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.960566
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\storage_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_fc_storage -s f01_storage
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_fc_storage -s f01_storage 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.fc1_weight_fifo
+Compiling module work.hidden_buffer
+Compiling module work.pose_buffer
+Compiling module work.tb_fc_storage
+Built simulation snapshot f01_storage
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-f03a/storage_sim/xsim.dir/f01_storage/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 19:12:42 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.015223
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\storage_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat f01_storage -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/f01_storage/xsim_script.tcl
+# xsim {f01_storage} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: Y4 two banks bytes=256 words=32 lane_order=low_address_low_byte read_latency=1 cycle
+PASS: Y4 same-word read/write collisions=8 read-first=8 next_read_new_data=8
+PASS: Y4 unused address bits invalid_write_ignored=1 invalid_read_zero=1 valid_bytes_unchanged=8
+PASS: Y5 pose bytes=24 parallel_bits=192 byte_k_at_8k=24
+PASS: Y5 partial_writes=3 other_bytes_held=21 idle_hold_cycles=7 invalid_write_ignored=1
+PASS: Y4/Y5 reset hidden_retained_bytes=256 pose_retained_bytes=24 writes_during_reset_ignored=1
+OBS: Y5 parallel pose output shows OLD value before write edge and NEW value after edge; no clocked read port
+PASS: Y4/Y5 baseline unchanged checks=215 cycles=663
+PASS: Y1 FIFO pushes=512 pops=512 full_at=512 not_full_at=511 FWFT_without_pop=1 held_head_cycles=8 empty_after_drain=1
+PASS: Y2 empty_pop_attempts=4 pointer_changes=0 empty=1
+PASS: Y2 full_pop occupancy=511 full=0 next_write_accepted=1 occupancy_after_write=512
+PASS: Y2/Y3 full_simultaneous occupancy=512->511 rejected=deadf011bad00001 later_pops=511 dropped_word_seen=0 all_512_valid_words_preserved=1
+PASS: Y3 full_write occupancy=512->512 rejected=deadf011bad00002 later_pops=512 dropped_word_seen=0 Top_must_block_full_write=1
+PASS: Y2 empty_simultaneous occupancy=0->1 single_word_replacements=64 FWFT_no_bubble=1
+PASS: Y2 simultaneous_below_full=2048 occupancy=511 pointer_wraps_each=4 ordered_words_compared=2559 mismatches=0
+PASS: Y2 random_stalls seed=F0015128 cycles=4096 final_empty=1 dropped_marker_seen=0
+PASS: Y1/Y2 synchronous_reset occupancy=3->0 pointers=0 storage_retained=1 fresh_push_pop=1
+PASS: Y1-Y3 FIFO pushes=6189 pops=6186 reset_discarded=3 full_write_dropped=2 dropped_markers_seen=0 simultaneous_accepted=3115 empty_pop_ignored=55 cycles=10327
+PASS: tb_fc_storage ALL Y1-Y5 cases complete checks=80662 cycles=10990
+$finish called at time : 109896 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_fc_storage.v" Line 324
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 19:12:47 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.752813

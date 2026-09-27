@@ -1,0 +1,10 @@
+{
+  "tag": "encoder_freq1_13.160",
+  "block": "encoder",
+  "top": "CNN_Encoder",
+  "mode": "performance",
+  "period_ns": 13.16,
+  "exit": 1,
+  "seconds": 4.413186,
+  "complete": false
+}

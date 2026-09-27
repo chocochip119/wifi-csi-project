@@ -1,0 +1,44 @@
+--- original/full_pose.cpp
++++ full_pose_instrumented.cpp
+@@ -1,4 +1,5 @@
+ #include "full_pose.h"
++#include "golden_hooks.hpp"
+ 
+ static signed char g_conv1_weight_int8[NODE_COUNT][CONV1_OUT][RECEIVER_CHANNELS][5][3];
+ static int g_conv1_bias_int32[NODE_COUNT][CONV1_OUT];
+@@ -313,6 +314,7 @@
+             acc1 += mul_i8_dsp(input[i + 1], (qint8_t)weight[o][i + 1]);
+         }
+         qint32_t acc = (qint32_t)bias[o] + acc0 + acc1;
++        g01_capture_acc(OUT_DIM == HIDDEN_DIM ? 2 : 3, o, acc);
+         output[o] = requant_acc_int(acc, requant_mult[o], requant_shift[o]);
+     }
+ }
+@@ -557,6 +559,7 @@
+             acc3 += mul_i8_dsp(read_banked_flatten(input, i + 3), unpack_i8(packed, 3));
+         }
+         qint32_t acc = (qint32_t)g_fc1_bias_int32[o] + acc0 + acc1 + acc2 + acc3;
++        g01_capture_acc(1, o, acc);
+         output[o] = requant_acc_int(acc, g_fc1_requant_mult[o], g_fc1_requant_shift[o]);
+     }
+ }
+@@ -664,11 +667,18 @@
+ #pragma HLS ARRAY_PARTITION variable=pose_q complete
+ 
+     encode_all_receivers_direct(input, flatten_banks);
++    g01_dump_flatten(flatten_banks);
+ 
+     fc1_requant_4way_banked(flatten_banks, weights, head_fc1);
++    g01_dump_i8("fc1_requant_i8.hex", head_fc1, HIDDEN_DIM);
+     apply_head_gelu1(head_fc1, head_gelu1);
++    g01_dump_i8("fc1_gelu_i8.hex", head_gelu1, HIDDEN_DIM);
+     fc2_requant(head_gelu1, head_fc2);
++    g01_dump_i8("fc2_requant_i8.hex", head_fc2, HIDDEN_DIM);
+     apply_head_gelu2(head_fc2, head_gelu2);
++    g01_dump_i8("fc2_gelu_i8.hex", head_gelu2, HIDDEN_DIM);
+     fc3_requant(head_gelu2, pose_q);
++    g01_dump_i8("fc3_i8.hex", pose_q, POSE_DIM);
+     write_final_pose(pose_q, final_pose);
+-}
++    g01_dump_accs();
++}

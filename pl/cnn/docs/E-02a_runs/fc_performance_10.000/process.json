@@ -1,0 +1,22 @@
+{
+  "pid": 29272,
+  "tag": "fc_performance_10.000",
+  "command": [
+    "C:\\Xilinx\\Vivado\\2020.2\\bin\\vivado.bat",
+    "-mode",
+    "batch",
+    "-source",
+    "D:/2609_final_project/cnn_rtl/syn/impl_check.tcl",
+    "-nojournal",
+    "-nolog",
+    "-tclargs",
+    "fc_mac_requant_ooc",
+    "xc7z020clg400-1",
+    "10.000",
+    "performance",
+    "D:/2609_final_project/cnn_rtl/docs/E-02a_runs/fc_performance_10.000",
+    "D:/2609_final_project/cnn_rtl/rtl/fc/fc_mac.v",
+    "D:/2609_final_project/cnn_rtl/rtl/encoder/requant_stage.v",
+    "C:/Users/kccistc/AppData/Local/Temp/codex-e02a/fc_mac_requant_ooc.v"
+  ]
+}

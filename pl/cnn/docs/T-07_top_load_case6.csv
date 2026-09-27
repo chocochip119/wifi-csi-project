@@ -1,0 +1,7 @@
+case,cycle,state,top_busy,mem_busy,mem_err,mem_start,loader_done,raw_R,loader_words,AR1,AR2
+read_error_part1,84891,1,1,0,0,1,0,0,0,0,0
+read_error_part1,84892,2,1,1,0,0,0,0,0,0,0
+read_error_part1,84918,11,1,1,1,0,0,23,21,2,0
+read_error_part1,85728,11,1,0,1,0,0,742,21,47,0
+read_error_part1,85729,12,1,0,1,0,0,742,21,47,0
+read_error_part1,85730,0,0,0,1,0,0,742,21,47,0

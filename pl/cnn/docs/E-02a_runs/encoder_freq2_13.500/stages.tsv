@@ -1,0 +1,4 @@
+post_synth	-0.141	0.219	u_enc_rq/param3_reg[69]/C	u_enc_rq/rq_reg[1]/R
+post_place	-0.088	0.125	u_input_buf/gen_word_write.mem_reg_1/CLKBWRCLK	u_conv_mac/g_lane[3].lane_out_reg[29]/D
+post_phys_opt	0.324	0.125	pool_shift[5]	u_pool/p_r3_reg[13]/R
+post_route	-0.052	0.100	u_enc_rq/param3_reg[66]_rep/C	u_enc_rq/rq_reg[1]/R

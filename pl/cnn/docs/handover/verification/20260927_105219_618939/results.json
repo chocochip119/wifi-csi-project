@@ -1,0 +1,221 @@
+{
+  "suite": "smoke",
+  "cwd": "D:\\2609_final_project\\CNN_RTL_인수인계_2026-09-27\\runs\\20260927_105219_618939",
+  "commands": [
+    {
+      "label": "compile_rtl",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xvlog.bat",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/rtl/pose_cnn_ctrl.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/rtl/blob_decoder.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/rtl/conv_weight_ram.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/rtl/param_ram.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/rtl/gelu_lut_ram.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/rtl/fcw_ram.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/rtl/weight_param_loader.v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 1.894,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "compile_tb",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xvlog.bat",
+        "-sv",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/axi4_slave_mem_model.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/loader_stub.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/in_ram_stub.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/enc_stub.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/fc_stub.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_write.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_regs.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_read.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_ctrl.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_ctrl_status.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_csr_ctrl_link.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_top_load.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_top_infer.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_top_fc1.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_top_full.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_m00_read.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_m00_read_perf.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_m00_write.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_m00_err.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_axi4_slave_mem_model.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_blob_decoder.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_loader_rams.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_weight_param_loader.v",
+        "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_loader_real_blob.v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.961,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_s00_axi_ctrl_elab",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+        "work.tb_s00_axi_ctrl",
+        "-s",
+        "handover_tb_s00_axi_ctrl"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 5.154,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_s00_axi_ctrl_run",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat",
+        "handover_tb_s00_axi_ctrl",
+        "-runall",
+        "-onerror",
+        "quit"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 6.318,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": "PASS: S00-05 ALL CONTROL CHECKS PASSED"
+    },
+    {
+      "label": "tb_ctrl_status_elab",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+        "work.tb_ctrl_status",
+        "-s",
+        "handover_tb_ctrl_status"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 3.492,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_ctrl_status_run",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat",
+        "handover_tb_ctrl_status",
+        "-runall",
+        "-onerror",
+        "quit"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.124,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": "PASS: T-06 ALL CTRL STATUS CHECKS PASSED"
+    },
+    {
+      "label": "tb_m00_read_elab",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+        "work.tb_m00_read",
+        "-s",
+        "handover_tb_m00_read"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 3.503,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_m00_read_run",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat",
+        "handover_tb_m00_read",
+        "-runall",
+        "-onerror",
+        "quit"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.595,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": "PASS: T-02b FUNCTIONAL 12/12 CASES"
+    },
+    {
+      "label": "tb_top_load_elab",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+        "work.tb_top_load",
+        "-s",
+        "handover_tb_top_load"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 3.879,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_top_load_run",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat",
+        "handover_tb_top_load",
+        "-runall",
+        "-onerror",
+        "quit"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.976,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": "PASS: T-07 LOAD ALL SELECTED cases=10 selector=-1"
+    },
+    {
+      "label": "tb_loader_real_blob_elab",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+        "work.tb_loader_real_blob",
+        "-s",
+        "handover_tb_loader_real_blob"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 3.545,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_loader_real_blob_run",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat",
+        "handover_tb_loader_real_blob",
+        "-runall",
+        "-onerror",
+        "quit",
+        "-f",
+        "blob.args"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.107,
+      "passed": false,
+      "diagnostics": [
+        "WARNING: file D:/2609_final_project/CNN_RTL_?��?��?���?_2026-09-27/project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6_weights.bin could not be opened\r",
+        "FAIL: L-05 cycle=0 accepted=0 open reference binary read-only\r",
+        "Fatal: reference blob verification failed; do not change RTL or contract to pass\r"
+      ],
+      "required_marker": "PASS: L-05 REAL_BLOB B1-B6 ALL"
+    }
+  ],
+  "tests": {
+    "tb_s00_axi_ctrl": "PASS",
+    "tb_ctrl_status": "PASS",
+    "tb_m00_read": "PASS",
+    "tb_top_load": "PASS"
+  },
+  "passed": false,
+  "error": "Check full log: D:\\2609_final_project\\CNN_RTL_인수인계_2026-09-27\\runs\\20260927_105219_618939\\tb_loader_real_blob_run.log"
+}

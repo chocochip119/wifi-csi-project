@@ -1,0 +1,127 @@
+Working directory: C:\Users\kccistc\AppData\Local\Temp\codex-t02c-27a27f718efa4b85affa9fc0dc0804dc\sim
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.815875
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\tb_m00_write.v D:\2609_final_project\cnn_rtl\tb\tb_m00_read.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_write.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_m00_write
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_read.v" into library work
+INFO: [VRFC 10-311] analyzing module m00_read_fixture
+INFO: [VRFC 10-311] analyzing module tb_m00_read
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.790742
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_m00_write -s t02c_write
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_m00_write -s t02c_write 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.tb_m00_write
+Built simulation snapshot t02c_write
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t02c-27a27f718efa4b85affa9fc0dc0804dc/sim/xsim.dir/t02c_write/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 21:24:44 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.945244
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t02c_write -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t02c_write/xsim_script.tcl
+# xsim {t02c_write} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: pose_24 W1/W2 snapshot busy_cycles=5 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: pose_24 W3/W4/W7 bytes=24 AW=1 expected=1 B=1 full_cover=24 payload_checks=1 boundary_shorts=0
+PASS: pose_24 W5 handshake/count/data ready_high_cycles=3 W_beats=3 producer_advances=3 compared_W_words=3 W_stall=0
+CONTRACT_FAIL: pose_24 W5 isolated_pulse runs=1 max_high_run=3 adjacent_high_pairs=2 (handshake/data checks passed)
+PASS: pose_24 W8 initial_unwritten=3 readback_compared=3 mem_compare_words=3 mismatches=0 guards_unwritten=2 violations=0
+PASS: size_8 W1/W2 snapshot busy_cycles=3 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: size_8 W3/W4/W7 bytes=8 AW=1 expected=1 B=1 full_cover=8 payload_checks=1 boundary_shorts=0
+PASS: size_8 W5 handshake/count/data ready_high_cycles=1 W_beats=1 producer_advances=1 compared_W_words=1 W_stall=0
+PASS: size_8 W5 isolated_pulse runs=1 max_high_run=1 adjacent_high_pairs=0
+PASS: size_8 W8 initial_unwritten=1 readback_compared=1 mem_compare_words=1 mismatches=0 guards_unwritten=2 violations=0
+PASS: size_128 W1/W2 snapshot busy_cycles=18 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: size_128 W3/W4/W7 bytes=128 AW=1 expected=1 B=1 full_cover=128 payload_checks=1 boundary_shorts=0
+PASS: size_128 W5 handshake/count/data ready_high_cycles=16 W_beats=16 producer_advances=16 compared_W_words=16 W_stall=0
+CONTRACT_FAIL: size_128 W5 isolated_pulse runs=1 max_high_run=16 adjacent_high_pairs=15 (handshake/data checks passed)
+PASS: size_128 W8 initial_unwritten=16 readback_compared=16 mem_compare_words=16 mismatches=0 guards_unwritten=2 violations=0
+PASS: size_136_busy W1/W2 snapshot busy_cycles=21 accepted_start=1 ignored_start=1 lastW_to_B=1 postW_busy_samples=1
+PASS: size_136_busy W3/W4/W7 bytes=136 AW=2 expected=2 B=2 full_cover=136 payload_checks=2 boundary_shorts=0
+PASS: size_136_busy W5 handshake/count/data ready_high_cycles=17 W_beats=17 producer_advances=17 compared_W_words=17 W_stall=0
+CONTRACT_FAIL: size_136_busy W5 isolated_pulse runs=2 max_high_run=16 adjacent_high_pairs=15 (handshake/data checks passed)
+PASS: size_136_busy W8 initial_unwritten=17 readback_compared=17 mem_compare_words=17 mismatches=0 guards_unwritten=2 violations=0
+PASS: boundary_ff8 W1/W2 snapshot busy_cycles=21 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: boundary_ff8 W3/W4/W7 bytes=136 AW=2 expected=2 B=2 full_cover=136 payload_checks=2 boundary_shorts=1
+PASS: boundary_ff8 W5 handshake/count/data ready_high_cycles=17 W_beats=17 producer_advances=17 compared_W_words=17 W_stall=0
+CONTRACT_FAIL: boundary_ff8 W5 isolated_pulse runs=2 max_high_run=16 adjacent_high_pairs=15 (handshake/data checks passed)
+PASS: boundary_ff8 W8 initial_unwritten=17 readback_compared=17 mem_compare_words=17 mismatches=0 guards_unwritten=2 violations=0
+PASS: size_4096 W1/W2 snapshot busy_cycles=578 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: size_4096 W3/W4/W7 bytes=4096 AW=33 expected=33 B=33 full_cover=4096 payload_checks=33 boundary_shorts=1
+PASS: size_4096 W5 handshake/count/data ready_high_cycles=512 W_beats=512 producer_advances=512 compared_W_words=512 W_stall=0
+CONTRACT_FAIL: size_4096 W5 isolated_pulse runs=33 max_high_run=16 adjacent_high_pairs=479 (handshake/data checks passed)
+PASS: size_4096 W8 initial_unwritten=512 readback_compared=512 mem_compare_words=512 mismatches=0 guards_unwritten=2 violations=0
+PASS: pose_Bdelay12 W1/W2 snapshot busy_cycles=17 accepted_start=1 ignored_start=0 lastW_to_B=13 postW_busy_samples=13
+PASS: pose_Bdelay12 W3/W4/W7 bytes=24 AW=1 expected=1 B=1 full_cover=24 payload_checks=1 boundary_shorts=0
+PASS: pose_Bdelay12 W5 handshake/count/data ready_high_cycles=3 W_beats=3 producer_advances=3 compared_W_words=3 W_stall=0
+CONTRACT_FAIL: pose_Bdelay12 W5 isolated_pulse runs=1 max_high_run=3 adjacent_high_pairs=2 (handshake/data checks passed)
+PASS: pose_Bdelay12 W8 initial_unwritten=3 readback_compared=3 mem_compare_words=3 mismatches=0 guards_unwritten=2 violations=0
+PASS: W_before_AW W1/W2 snapshot busy_cycles=64 accepted_start=1 ignored_start=0 lastW_to_B=47 postW_busy_samples=47
+PASS: W_before_AW W3/W4/W7 bytes=128 AW=1 expected=1 B=1 full_cover=128 payload_checks=1 boundary_shorts=0
+PASS: W_before_AW W5 handshake/count/data ready_high_cycles=16 W_beats=16 producer_advances=16 compared_W_words=16 W_stall=0
+CONTRACT_FAIL: W_before_AW W5 isolated_pulse runs=1 max_high_run=16 adjacent_high_pairs=15 (handshake/data checks passed)
+PASS: W_before_AW W6 first_AW_cycle=1460 first_W_cycle=1399 W_before_AW=16 AW_before_W=0 AW_stall=61 W_stall=0
+PASS: W_before_AW W8 initial_unwritten=16 readback_compared=16 mem_compare_words=16 mismatches=0 guards_unwritten=2 violations=0
+PASS: AW_before_W W1/W2 snapshot busy_cycles=192 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: AW_before_W W3/W4/W7 bytes=24 AW=1 expected=1 B=1 full_cover=24 payload_checks=1 boundary_shorts=0
+PASS: AW_before_W W5 handshake/count/data ready_high_cycles=3 W_beats=3 producer_advances=3 compared_W_words=3 W_stall=187
+PASS: AW_before_W W5 isolated_pulse runs=3 max_high_run=1 adjacent_high_pairs=0
+PASS: AW_before_W W6 first_AW_cycle=1492 first_W_cycle=1553 W_before_AW=0 AW_before_W=1 AW_stall=0 W_stall=187
+PASS: AW_before_W W8 initial_unwritten=3 readback_compared=3 mem_compare_words=3 mismatches=0 guards_unwritten=2 violations=0
+PASS: W_periodic W1/W2 snapshot busy_cycles=51 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: W_periodic W3/W4/W7 bytes=136 AW=2 expected=2 B=2 full_cover=136 payload_checks=2 boundary_shorts=0
+PASS: W_periodic W5 handshake/count/data ready_high_cycles=17 W_beats=17 producer_advances=17 compared_W_words=17 W_stall=30
+PASS: W_periodic W5 isolated_pulse runs=17 max_high_run=1 adjacent_high_pairs=0
+PASS: W_periodic W8 initial_unwritten=17 readback_compared=17 mem_compare_words=17 mismatches=0 guards_unwritten=2 violations=0
+PASS: W_random W1/W2 snapshot busy_cycles=127 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: W_random W3/W4/W7 bytes=512 AW=4 expected=4 B=4 full_cover=512 payload_checks=4 boundary_shorts=0
+PASS: W_random W5 handshake/count/data ready_high_cycles=64 W_beats=64 producer_advances=64 compared_W_words=64 W_stall=55
+CONTRACT_FAIL: W_random W5 isolated_pulse runs=29 max_high_run=7 adjacent_high_pairs=35 (handshake/data checks passed)
+PASS: W_random W8 initial_unwritten=64 readback_compared=64 mem_compare_words=64 mismatches=0 guards_unwritten=2 violations=0
+PASS: T-02c DATA_AND_HANDSHAKE cases=11 words=669 AW=49 ready_high_cycles=669 readback_all=1 guards=22 protocol_violations=0 final_quiescent=1
+CONTRACT_FAIL: T-02c W5 no-consecutive-HIGH cases=8 adjacent_pairs=578; RTL/model unchanged
+Fatal: T-02c W5 isolated pulse contract not satisfied
+Time: 19850 ns  Iteration: 0  Process: /tb_m00_write/Initial462_12  Scope: tb_m00_write  File: D:/2609_final_project/cnn_rtl/tb/tb_m00_write.v Line: 491
+$finish called at time : 19850 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 21:24:49 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.455357

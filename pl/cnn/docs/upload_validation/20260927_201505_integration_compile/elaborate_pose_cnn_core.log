@@ -1,0 +1,52 @@
+{
+  "label": "elaborate_pose_cnn_core",
+  "argv": [
+    "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+    "work.tb_pose_cnn_core",
+    "-s",
+    "upload_core_compile"
+  ],
+  "cwd": "D:\\wifi-csi-project\\pl\\cnn\\runs\\20260927_201505_integration_compile",
+  "exit_code": 0,
+  "wall_seconds": 7.031,
+  "passed": true
+}
+
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_pose_cnn_core -s upload_core_compile 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.pose_cnn_ctrl
+Compiling module work.blob_decoder
+Compiling module work.conv_weight_ram
+Compiling module work.param_ram
+Compiling module work.gelu_lut_ram
+Compiling module work.fcw_ram
+Compiling module work.weight_param_loader
+Compiling module work.Buffer_default
+Compiling module work.Conv_MAC
+Compiling module work.requant_stage
+Compiling module work.gelu_stage
+Compiling module work.Buffer(W_DATA_WIDTH=8,DEPTH_BYTE...
+Compiling module work.Pool
+Compiling module work.CNN_Encoder
+Compiling module work.fc_stub
+Compiling module work.pose_cnn
+Compiling module work.tb_pose_cnn_core
+Built simulation snapshot upload_core_compile
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source D:/wifi-csi-project/pl/cnn/runs/20260927_201505_integration_compile/xsim.dir/upload_core_compile/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sun Sep 27 20:15:14 2026...

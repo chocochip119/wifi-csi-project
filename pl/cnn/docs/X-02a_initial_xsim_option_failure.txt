@@ -1,0 +1,139 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\core_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\weight_param_loader.v D:\2609_final_project\cnn_rtl\rtl\encoder\Buffer.v D:\2609_final_project\cnn_rtl\rtl\encoder\Conv_MAC.v D:\2609_final_project\cnn_rtl\rtl\encoder\requant_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\gelu_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\Pool.v D:\2609_final_project\cnn_rtl\rtl\encoder\CNN_Encoder.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/conv_weight_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module conv_weight_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/param_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module param_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/gelu_lut_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_lut_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module weight_param_loader
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module Buffer
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Conv_MAC.v" into library work
+INFO: [VRFC 10-311] analyzing module Conv_MAC
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/requant_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module requant_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/gelu_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Pool.v" into library work
+INFO: [VRFC 10-311] analyzing module Pool
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/CNN_Encoder.v" into library work
+INFO: [VRFC 10-311] analyzing module CNN_Encoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.865247
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\core_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\fc_stub.v D:\2609_final_project\cnn_rtl\tb\tb_pose_cnn_core.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_pose_cnn_core.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_pose_cnn_core
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.833288
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\core_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_pose_cnn_core -s x02a_core
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_pose_cnn_core -s x02a_core 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.pose_cnn_ctrl
+Compiling module work.blob_decoder
+Compiling module work.conv_weight_ram
+Compiling module work.param_ram
+Compiling module work.gelu_lut_ram
+Compiling module work.fcw_ram
+Compiling module work.weight_param_loader
+Compiling module work.Buffer_default
+Compiling module work.Conv_MAC
+Compiling module work.requant_stage
+Compiling module work.gelu_stage
+Compiling module work.Buffer(W_DATA_WIDTH=8,DEPTH_BYTE...
+Compiling module work.Pool
+Compiling module work.CNN_Encoder
+Compiling module work.fc_stub
+Compiling module work.pose_cnn
+Compiling module work.tb_pose_cnn_core
+Built simulation snapshot x02a_core
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-x02a/core_sim/xsim.dir/x02a_core/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 15:28:13 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 5.684987
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\core_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat x02a_core -runall -onerror quit -testplusarg CASE=1
+Expected a switch but found 1
+XSim simulation executable
+Usage: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xsim.exe [options]
+(Switches with double dash '--' can also be used with a single dash '-')
+    --R                  : Run simulation till end i.e. do 'run all;quit'
+    --cov_db_dir         : Functional Coverage database dump directory. The coverage data will be present under <arg>/xsim.covdb/<cov_db_name> directory. Default is ./ or inherits value set in xelab.
+    --cov_db_name        : Functional Coverage database name. The coverage data will be present under <cov_db_dir>/xsim.covdb/<arg> directory. Default is snapshot name or inherits value set in xelab.
+    --downgrade_error2info : Downgrade severity level of HDL messages from Error to Info.
+    --downgrade_error2warning : Downgrade severity level of HDL messages from Error to Warning.
+    --downgrade_fatal2info : Downgrade severity level of HDL messages from Fatal to Info.
+    --downgrade_fatal2warning : Downgrade severity level of HDL messages from Fatal to Warning.
+    --downgrade_severity : Downgrade severity level of HDL messages. Choices are:error2warning|error2info|fatal2warning|fatal2info
+    --f                  : Take command line options from a file
+    --file               : Take command line options from a file
+    --g                  : Run with interactive GUI
+    --gui                : Run with interactive GUI
+    --h                  : Print help message and exit
+    --help               : Print help message and exit
+    --ieeewarnings       : Enable warnings from VHDL IEEE functions
+    --ignore_assertions  : Ignore System Verilog Concurrent Assertions.
+    --ignore_coverage    : Ignore System Verilog Functional Coverage.
+    --ignore_feature     : Ignore effect of specific HDL feature or construct. Choices are: assertion
+    --log                : Specify the log file name
+    --maxdeltaid         : Specify the maximum delta number. Will report error if it exceeds maximum simulation loops at the same time
+    --maxlogsize         : Set the maximum size a log file can reach in MB. The default setting is unlimited
+    --nolog              : Suppress log file generation
+    --nosignalhandlers   : Run with no signal handlers to avoid conflict with security software.
+    --onerror            : Specify behavior upon simulation run-time error: quit|stop
+    --onfinish           : Specify behavior at end of simulation: quit|stop
+    --protoinst          : Specify a .protoinst file for protocol analysis
+    --runall             : Run simulation till end i.e. do 'run all;quit'
+    --stats              : Display memory and cpu stats upon exiting
+    --sv_seed            : seed for sv constraint random
+    --t                  : Specify the TCL file for batch mode execution
+    --tclbatch           : Specify the TCL file for batch mode execution
+    --tempDir            : Specify the temporary directory name
+    --testplusarg        : Specify plus args to be used by $test$plusargs and $value$plusargs system functions
+    --tl                 : Enable printing of file name and line number of statements being executed.
+    --tp                 : Enable printing of hierarchical names of process being executed.
+    --version            : Print the simulator version and quit.
+    --view               : Open a wave configuration file. This switch should be used together with -gui switch
+    --wdb                : Specify the waveform database output file.
+
+EXIT_CODE: 1
+WALL_CLOCK_SECONDS: 0.789314

@@ -1,0 +1,54 @@
+[
+  {
+    "target": "encoder_before",
+    "LUT": 6490,
+    "LUTRAM": 27,
+    "FF": 3530,
+    "BRAM": 13,
+    "DSP": 10,
+    "WNS": -3.641,
+    "failing_endpoints": 684,
+    "start": "u_enc_rq/param3_reg[69]/C",
+    "end": "u_enc_rq/rq_reg[1]/R",
+    "seconds": 62.443191
+  },
+  {
+    "target": "encoder_after",
+    "LUT": 6490,
+    "LUTRAM": 27,
+    "FF": 3530,
+    "BRAM": 13,
+    "DSP": 10,
+    "WNS": -3.641,
+    "failing_endpoints": 684,
+    "start": "u_enc_rq/param3_reg[69]/C",
+    "end": "u_enc_rq/rq_reg[1]/R",
+    "seconds": 80.263187
+  },
+  {
+    "target": "fc_requant_ooc",
+    "LUT": 966,
+    "LUTRAM": 9,
+    "FF": 157,
+    "BRAM": 0,
+    "DSP": 7,
+    "WNS": -3.494,
+    "failing_endpoints": 15,
+    "start": "u_rq/param3_reg[69]/C",
+    "end": "u_rq/rq_reg[1]/R",
+    "seconds": 64.654924
+  },
+  {
+    "target": "fc_mac_requant_ooc",
+    "LUT": 1742,
+    "LUTRAM": 9,
+    "FF": 773,
+    "BRAM": 0,
+    "DSP": 7,
+    "WNS": -3.494,
+    "failing_endpoints": 15,
+    "start": "u_rq/param3_reg[69]/C",
+    "end": "u_rq/rq_reg[1]/R",
+    "seconds": 67.068546
+  }
+]

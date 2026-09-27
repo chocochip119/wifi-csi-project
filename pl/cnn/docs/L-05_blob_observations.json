@@ -1,0 +1,685 @@
+{
+  "files": [
+    {
+      "path": "D:\\2609_final_project\\wifi-csi-pose-main\\HLS\\pl_accel_v6\\pl_accel_v6_weights.bin",
+      "bytes": 422992,
+      "sha256": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+      "header_hex": [
+        "0x36574C50",
+        "0x00000002",
+        "0x00019D14",
+        "0x3CB76ADB",
+        "0x3BD997A8",
+        "0x783B66B4",
+        "0x0000001F",
+        "0x00000000"
+      ],
+      "input_scale": 0.022389819845557213,
+      "output_scale": 0.006640393286943436,
+      "pool_mult": 2017158836,
+      "pool_shift": 31
+    },
+    {
+      "path": "D:\\2609_final_project\\wifi-csi-pose-main\\petalinux\\tools\\pl_accel_v6\\pl_accel_v6_weights.bin",
+      "bytes": 422992,
+      "sha256": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+      "header_hex": [
+        "0x36574C50",
+        "0x00000002",
+        "0x00019D14",
+        "0x3CB76ADB",
+        "0x3BD997A8",
+        "0x783B66B4",
+        "0x0000001F",
+        "0x00000000"
+      ],
+      "input_scale": 0.022389819845557213,
+      "output_scale": 0.006640393286943436,
+      "pool_mult": 2017158836,
+      "pool_shift": 31
+    }
+  ],
+  "header": [
+    {
+      "word": 0,
+      "hex": "0x36574C50",
+      "uint32": 911690832
+    },
+    {
+      "word": 1,
+      "hex": "0x00000002",
+      "uint32": 2
+    },
+    {
+      "word": 2,
+      "hex": "0x00019D14",
+      "uint32": 105748
+    },
+    {
+      "word": 3,
+      "hex": "0x3CB76ADB",
+      "uint32": 1018653403,
+      "float32": 0.022389819845557213,
+      "finite": true
+    },
+    {
+      "word": 4,
+      "hex": "0x3BD997A8",
+      "uint32": 1004115880,
+      "float32": 0.006640393286943436,
+      "finite": true
+    },
+    {
+      "word": 5,
+      "hex": "0x783B66B4",
+      "uint32": 2017158836,
+      "signed32": 2017158836
+    },
+    {
+      "word": 6,
+      "hex": "0x0000001F",
+      "uint32": 31,
+      "signed32": 31
+    },
+    {
+      "word": 7,
+      "hex": "0x00000000",
+      "uint32": 0
+    }
+  ],
+  "weights": {
+    "Conv1": {
+      "byte_offset": 32,
+      "count": 720,
+      "min": -127,
+      "max": 127,
+      "zeros": 4,
+      "negative": 369,
+      "positive": 347
+    },
+    "Conv2": {
+      "byte_offset": 944,
+      "count": 4608,
+      "min": -127,
+      "max": 127,
+      "zeros": 30,
+      "negative": 2294,
+      "positive": 2284
+    },
+    "FC1": {
+      "byte_offset": 5936,
+      "count": 393216,
+      "min": -127,
+      "max": 127,
+      "zeros": 7312,
+      "negative": 203377,
+      "positive": 182527
+    },
+    "FC2": {
+      "byte_offset": 400688,
+      "count": 16384,
+      "min": -127,
+      "max": 127,
+      "zeros": 103,
+      "negative": 7711,
+      "positive": 8570
+    },
+    "FC3": {
+      "byte_offset": 418608,
+      "count": 3072,
+      "min": -127,
+      "max": 127,
+      "zeros": 4,
+      "negative": 1822,
+      "positive": 1246
+    }
+  },
+  "shifts": {
+    "Conv1": {
+      "word_offset": 220,
+      "count": 16,
+      "min": 39,
+      "max": 40,
+      "invalid": [],
+      "distinct": [
+        39,
+        40
+      ]
+    },
+    "Conv2": {
+      "word_offset": 1452,
+      "count": 32,
+      "min": 39,
+      "max": 40,
+      "invalid": [],
+      "distinct": [
+        39,
+        40
+      ]
+    },
+    "FC1": {
+      "word_offset": 100044,
+      "count": 128,
+      "min": 40,
+      "max": 44,
+      "invalid": [],
+      "distinct": [
+        40,
+        41,
+        42,
+        43,
+        44
+      ]
+    },
+    "FC2": {
+      "word_offset": 104524,
+      "count": 128,
+      "min": 39,
+      "max": 41,
+      "invalid": [],
+      "distinct": [
+        39,
+        40,
+        41
+      ]
+    },
+    "FC3": {
+      "word_offset": 105468,
+      "count": 24,
+      "min": 42,
+      "max": 43,
+      "invalid": [],
+      "distinct": [
+        42,
+        43
+      ]
+    }
+  },
+  "shift_invalid": [],
+  "luts": {
+    "Conv1": {
+      "byte_offset": 421968,
+      "count": 256,
+      "min": -5,
+      "max": 127,
+      "zeros": 69,
+      "negative": 60,
+      "positive": 127,
+      "increasing_pairs": 113,
+      "equal_pairs": 137,
+      "decreasing_pairs": 5,
+      "total_down_steps": 5,
+      "max_drop": 1,
+      "decreases": [
+        {
+          "index": 67,
+          "q": -61,
+          "value": 0,
+          "next_value": -1
+        },
+        {
+          "index": 80,
+          "q": -48,
+          "value": -1,
+          "next_value": -2
+        },
+        {
+          "index": 88,
+          "q": -40,
+          "value": -2,
+          "next_value": -3
+        },
+        {
+          "index": 95,
+          "q": -33,
+          "value": -3,
+          "next_value": -4
+        },
+        {
+          "index": 103,
+          "q": -25,
+          "value": -4,
+          "next_value": -5
+        }
+      ],
+      "sha256": "d8a3d92c0382671c7fa54523aaac513d044979225cc75f91a45a12ababb65cb6",
+      "samples": {
+        "0": 0,
+        "64": 0,
+        "96": -4,
+        "127": -1,
+        "128": 0,
+        "129": 1,
+        "192": 73,
+        "255": 127
+      }
+    },
+    "Conv2": {
+      "byte_offset": 422224,
+      "count": 256,
+      "min": -7,
+      "max": 127,
+      "zeros": 73,
+      "negative": 56,
+      "positive": 127,
+      "increasing_pairs": 73,
+      "equal_pairs": 175,
+      "decreasing_pairs": 7,
+      "total_down_steps": 7,
+      "max_drop": 1,
+      "decreases": [
+        {
+          "index": 71,
+          "q": -57,
+          "value": 0,
+          "next_value": -1
+        },
+        {
+          "index": 82,
+          "q": -46,
+          "value": -1,
+          "next_value": -2
+        },
+        {
+          "index": 88,
+          "q": -40,
+          "value": -2,
+          "next_value": -3
+        },
+        {
+          "index": 92,
+          "q": -36,
+          "value": -3,
+          "next_value": -4
+        },
+        {
+          "index": 96,
+          "q": -32,
+          "value": -4,
+          "next_value": -5
+        },
+        {
+          "index": 100,
+          "q": -28,
+          "value": -5,
+          "next_value": -6
+        },
+        {
+          "index": 105,
+          "q": -23,
+          "value": -6,
+          "next_value": -7
+        }
+      ],
+      "sha256": "f042b733dfd6a26896652c0d60b5164be2ac61d8bcdf9e5a10695c80feeacf5f",
+      "samples": {
+        "0": 0,
+        "64": 0,
+        "96": -4,
+        "127": -1,
+        "128": 0,
+        "129": 1,
+        "192": 124,
+        "255": 127
+      }
+    },
+    "FC1": {
+      "byte_offset": 422480,
+      "count": 256,
+      "min": -12,
+      "max": 127,
+      "zeros": 86,
+      "negative": 43,
+      "positive": 127,
+      "increasing_pairs": 36,
+      "equal_pairs": 207,
+      "decreasing_pairs": 12,
+      "total_down_steps": 12,
+      "max_drop": 1,
+      "decreases": [
+        {
+          "index": 84,
+          "q": -44,
+          "value": 0,
+          "next_value": -1
+        },
+        {
+          "index": 91,
+          "q": -37,
+          "value": -1,
+          "next_value": -2
+        },
+        {
+          "index": 94,
+          "q": -34,
+          "value": -2,
+          "next_value": -3
+        },
+        {
+          "index": 97,
+          "q": -31,
+          "value": -3,
+          "next_value": -4
+        },
+        {
+          "index": 99,
+          "q": -29,
+          "value": -4,
+          "next_value": -5
+        },
+        {
+          "index": 101,
+          "q": -27,
+          "value": -5,
+          "next_value": -6
+        },
+        {
+          "index": 103,
+          "q": -25,
+          "value": -6,
+          "next_value": -7
+        },
+        {
+          "index": 105,
+          "q": -23,
+          "value": -7,
+          "next_value": -8
+        },
+        {
+          "index": 106,
+          "q": -22,
+          "value": -8,
+          "next_value": -9
+        },
+        {
+          "index": 108,
+          "q": -20,
+          "value": -9,
+          "next_value": -10
+        },
+        {
+          "index": 110,
+          "q": -18,
+          "value": -10,
+          "next_value": -11
+        },
+        {
+          "index": 112,
+          "q": -16,
+          "value": -11,
+          "next_value": -12
+        }
+      ],
+      "sha256": "0bbeb5f65254b6150eff95f29d35d63fe8d43971a39a2dac08bc6cb01295842a",
+      "samples": {
+        "0": 0,
+        "64": 0,
+        "96": -3,
+        "127": -2,
+        "128": 0,
+        "129": 3,
+        "192": 127,
+        "255": 127
+      }
+    },
+    "FC2": {
+      "byte_offset": 422736,
+      "count": 256,
+      "min": -48,
+      "max": 127,
+      "zeros": 1,
+      "negative": 128,
+      "positive": 127,
+      "increasing_pairs": 77,
+      "equal_pairs": 146,
+      "decreasing_pairs": 32,
+      "total_down_steps": 32,
+      "max_drop": 1,
+      "decreases": [
+        {
+          "index": 2,
+          "q": -126,
+          "value": -16,
+          "next_value": -17
+        },
+        {
+          "index": 4,
+          "q": -124,
+          "value": -17,
+          "next_value": -18
+        },
+        {
+          "index": 6,
+          "q": -122,
+          "value": -18,
+          "next_value": -19
+        },
+        {
+          "index": 8,
+          "q": -120,
+          "value": -19,
+          "next_value": -20
+        },
+        {
+          "index": 10,
+          "q": -118,
+          "value": -20,
+          "next_value": -21
+        },
+        {
+          "index": 13,
+          "q": -115,
+          "value": -21,
+          "next_value": -22
+        },
+        {
+          "index": 15,
+          "q": -113,
+          "value": -22,
+          "next_value": -23
+        },
+        {
+          "index": 17,
+          "q": -111,
+          "value": -23,
+          "next_value": -24
+        },
+        {
+          "index": 19,
+          "q": -109,
+          "value": -24,
+          "next_value": -25
+        },
+        {
+          "index": 20,
+          "q": -108,
+          "value": -25,
+          "next_value": -26
+        },
+        {
+          "index": 22,
+          "q": -106,
+          "value": -26,
+          "next_value": -27
+        },
+        {
+          "index": 24,
+          "q": -104,
+          "value": -27,
+          "next_value": -28
+        },
+        {
+          "index": 26,
+          "q": -102,
+          "value": -28,
+          "next_value": -29
+        },
+        {
+          "index": 28,
+          "q": -100,
+          "value": -29,
+          "next_value": -30
+        },
+        {
+          "index": 30,
+          "q": -98,
+          "value": -30,
+          "next_value": -31
+        },
+        {
+          "index": 32,
+          "q": -96,
+          "value": -31,
+          "next_value": -32
+        },
+        {
+          "index": 34,
+          "q": -94,
+          "value": -32,
+          "next_value": -33
+        },
+        {
+          "index": 35,
+          "q": -93,
+          "value": -33,
+          "next_value": -34
+        },
+        {
+          "index": 37,
+          "q": -91,
+          "value": -34,
+          "next_value": -35
+        },
+        {
+          "index": 39,
+          "q": -89,
+          "value": -35,
+          "next_value": -36
+        },
+        {
+          "index": 41,
+          "q": -87,
+          "value": -36,
+          "next_value": -37
+        },
+        {
+          "index": 43,
+          "q": -85,
+          "value": -37,
+          "next_value": -38
+        },
+        {
+          "index": 45,
+          "q": -83,
+          "value": -38,
+          "next_value": -39
+        },
+        {
+          "index": 47,
+          "q": -81,
+          "value": -39,
+          "next_value": -40
+        },
+        {
+          "index": 49,
+          "q": -79,
+          "value": -40,
+          "next_value": -41
+        },
+        {
+          "index": 51,
+          "q": -77,
+          "value": -41,
+          "next_value": -42
+        },
+        {
+          "index": 53,
+          "q": -75,
+          "value": -42,
+          "next_value": -43
+        },
+        {
+          "index": 56,
+          "q": -72,
+          "value": -43,
+          "next_value": -44
+        },
+        {
+          "index": 58,
+          "q": -70,
+          "value": -44,
+          "next_value": -45
+        },
+        {
+          "index": 61,
+          "q": -67,
+          "value": -45,
+          "next_value": -46
+        },
+        {
+          "index": 64,
+          "q": -64,
+          "value": -46,
+          "next_value": -47
+        },
+        {
+          "index": 68,
+          "q": -60,
+          "value": -47,
+          "next_value": -48
+        }
+      ],
+      "sha256": "3804427c66391f4248976f4c896cd23a4280c7e290dceee9e46694763fa67f33",
+      "samples": {
+        "0": -16,
+        "64": -46,
+        "96": -43,
+        "127": -2,
+        "128": 0,
+        "129": 2,
+        "192": 127,
+        "255": 127
+      }
+    }
+  },
+  "lut_pair_differences": [
+    {
+      "a": 0,
+      "b": 1,
+      "different_bytes": 148
+    },
+    {
+      "a": 0,
+      "b": 2,
+      "different_bytes": 167
+    },
+    {
+      "a": 0,
+      "b": 3,
+      "different_bytes": 238
+    },
+    {
+      "a": 1,
+      "b": 2,
+      "different_bytes": 118
+    },
+    {
+      "a": 1,
+      "b": 3,
+      "different_bytes": 193
+    },
+    {
+      "a": 2,
+      "b": 3,
+      "different_bytes": 165
+    }
+  ],
+  "stream": {
+    "first_offset": 0,
+    "first_bytes": 5936,
+    "second_offset": 399152,
+    "second_bytes": 23840,
+    "skipped_bytes": 393216,
+    "beats": 3722
+  }
+}

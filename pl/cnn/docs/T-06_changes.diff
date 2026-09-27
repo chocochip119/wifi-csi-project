@@ -1,0 +1,669 @@
+--- before/fc_stub.v
++++ after/fc_stub.v
+@@ -1,17 +1,27 @@
+ `timescale 1ns / 1ps
+ 
+-// TB-only FC1 consumer and standard 512-word FIFO. No CNN arithmetic.
++// TB-only FC stages and standard 512-word FC1 FIFO. No CNN arithmetic.
+ module fc_stub (
+     input wire clk, resetn, fc_start,
+     input wire [1:0] fc_sel,
+     input wire fifo_we,
+     input wire [63:0] fifo_wdata,
+     output wire fifo_full,
+-    output reg fc_done
++    output reg fc_done,
++    output reg [191:0] pose_data
+ );
+     integer consume_mode=0; // 0 every cycle, 1 fixed period, 2 random, 3 pause/resume
+     integer consume_period=4, pause_after=1024, pause_cycles=2000;
+     integer expected_words=49152, done_delay_cycles=5, done_width_cycles=1;
++    // FC2/3 respond no earlier than the edge following START. Zero means
++    // no extra wait beyond that one synchronous cycle, keeping START pulses distinct.
++    integer fc2_delay_cycles=3, fc3_delay_cycles=4;
++    integer fc2_done_width_cycles=1, fc3_done_width_cycles=1;
++    reg [191:0] pose_value=192'h17161514131211100f0e0d0c0b0a09080706050403020100;
++    integer phase_starts[0:2], phase_dones[0:2], phase_start_cycle[0:2], phase_done_cycle[0:2];
++    // Explicit negative-test budget only. Unexpected non-idle START stays fatal;
++    // an expected rejected START leaves the old operation intact, never aborts it.
++    integer expected_busy_starts=0, rejected_starts=0, pulse_width_reg=1;
+     // 0: real completion after all pops. 1/2 are explicit control-test injections:
+     // 1: done on the last push; 2: done after early_done_after pops.
+     integer done_mode=0, early_done_after=1024;
+@@ -43,6 +53,10 @@
+     always @(posedge clk) begin
+         if (!resetn) begin
+             fc_done<=0; active<=0; completing<=0; prior_start<=0;
++            pose_data<=0; rejected_starts<=0; expected_busy_starts<=0; pulse_width_reg<=1;
++            for(integer j=0;j<3;j=j+1) begin
++                phase_starts[j]<=0;phase_dones[j]<=0;phase_start_cycle[j]<=0;phase_done_cycle[j]<=0;
++            end
+             count<=0; write_ptr<=0; read_ptr<=0; push_count<=0; pop_count<=0;
+             accepted_starts<=0; done_count<=0; selected_reg<=0;
+             cycle_count<=0; start_cycle<=0; done_cycle<=0; last_pop_cycle<=0;
+@@ -55,7 +69,7 @@
+             emit_done=0; pop_now=0;
+             if (fc_start && prior_start) fail("START exceeds one cycle");
+             prior_start<=fc_start;
+-            if (fc_done && done_width_cycles!=0) begin
++            if (fc_done && pulse_width_reg!=0) begin
+                 if (width_left<=1) fc_done<=0;
+                 else width_left<=width_left-1;
+             end
+@@ -68,19 +82,40 @@
+             if (fifo_we !== 1'b0 && fifo_we !== 1'b1) fail("unknown FIFO write enable");
+             if (fifo_we && fifo_full) fail("push while full");
+             if (fc_start) begin
+-                if (active || count!=0) fail("START while non-idle");
+-                if (fc_sel!==2'd0) fail("FC1 START must select zero");
+-                if (expected_words<1 || expected_words>49152 || consume_period<1 ||
+-                    done_delay_cycles<0 || done_width_cycles<0 || pause_cycles<0)
+-                    fail("invalid configuration");
+-                active<=1; completing<=0; selected_reg<=fc_sel; fc_done<=0;
+-                accepted_starts<=accepted_starts+1; start_cycle<=cycle_count;
+-                push_count<=0; pop_count<=0; write_ptr<=0; read_ptr<=0; count<=0;
+-                cooldown<=0; pause_left<=0; paused_once<=0; injected_done<=0;
+-                random_state<=seed;
+-                full_cycles<=0; full_run<=0; max_full_run<=0; max_count<=0;
+-                simultaneous<=0; sel_changed_cycles<=0;
+-            end else if (active && !completing) begin
++                if (active || count!=0) begin
++                    if(expected_busy_starts==0) fail("START while non-idle");
++                    else begin
++                        expected_busy_starts<=expected_busy_starts-1;
++                        rejected_starts<=rejected_starts+1;
++                        $display("OBS: expected FC non-idle START rejected; selected=%0d active=%b count=%0d pushes=%0d pops=%0d",
++                            selected_reg,active,count,push_count,pop_count);
++                    end
++                end else begin
++                    if ((^fc_sel)===1'bx || fc_sel>2) fail("invalid FC selector");
++                    if (expected_words<1 || expected_words>49152 || consume_period<1 ||
++                        done_delay_cycles<0 || done_width_cycles<0 || pause_cycles<0 ||
++                        fc2_delay_cycles<0 || fc3_delay_cycles<0 || fc2_done_width_cycles<0 || fc3_done_width_cycles<0)
++                        fail("invalid configuration");
++                    if(fc_sel!=0 && (selected_reg!=fc_sel-1 || pop_count!=expected_words))
++                        fail("FC2/3 START before predecessor completed");
++                    active<=1; completing<=0; selected_reg<=fc_sel; fc_done<=0;
++                    accepted_starts<=accepted_starts+1; start_cycle<=cycle_count;
++                    phase_starts[fc_sel]<=phase_starts[fc_sel]+1;phase_start_cycle[fc_sel]<=cycle_count;
++                    if(fc_sel==0) begin
++                        pulse_width_reg<=done_width_cycles;
++                        push_count<=0; pop_count<=0; write_ptr<=0; read_ptr<=0; count<=0;
++                        cooldown<=0; pause_left<=0; paused_once<=0; injected_done<=0;
++                        random_state<=seed;
++                        full_cycles<=0; full_run<=0; max_full_run<=0; max_count<=0;
++                        simultaneous<=0; sel_changed_cycles<=0;
++                    end else begin
++                        completing<=1;
++                        completion_left<=fc_sel==1 ? (fc2_delay_cycles==0?1:fc2_delay_cycles) :
++                            (fc3_delay_cycles==0?1:fc3_delay_cycles);
++                        pulse_width_reg<=fc_sel==1?fc2_done_width_cycles:fc3_done_width_cycles;
++                    end
++                end
++            end else if (active && !completing && selected_reg==0) begin
+                 if (cooldown>0) cooldown<=cooldown-1;
+                 if (pause_left>0) pause_left<=pause_left-1;
+                 if (consume_mode==3 && !paused_once && push_count>=pause_after) begin
+@@ -122,7 +157,7 @@
+                 endcase
+             end
+             if (fifo_we) begin
+-                if (!active || completing) fail("push while FC inactive/completing");
++                if (!active || completing || selected_reg!=0) fail("push while FC inactive/completing/non-FC1");
+                 if ((^fifo_wdata)===1'bx) fail("unknown FIFO data");
+                 if (push_count>=expected_words) fail("more pushes than expected");
+                 fifo[write_ptr]<=fifo_wdata; pushed[push_count]<=fifo_wdata;
+@@ -137,8 +172,10 @@
+                 end else completion_left<=completion_left-1;
+             end
+             if (emit_done) begin
+-                fc_done<=1; width_left<=done_width_cycles;
++                fc_done<=1; width_left<=pulse_width_reg;
+                 done_count<=done_count+1; done_cycle<=cycle_count;
++                phase_dones[selected_reg]<=phase_dones[selected_reg]+1;phase_done_cycle[selected_reg]<=cycle_count;
++                if(selected_reg==2) pose_data<=pose_value;
+             end
+             if (count<0 || count>512) fail("FIFO count outside 0..512");
+         end
+--- before/pose_cnn_ctrl.v
++++ after/pose_cnn_ctrl.v
+@@ -1,7 +1,7 @@
+ `timescale 1 ns / 1 ps
+ 
+-// T-05 PARTIAL IMPLEMENTATION: LOAD remembers its base (D06); INFER runs
+-// input/Encoder/FC1 streaming. FC1 -> FINISH is temporary until T-06.
++// T-06: complete normal LOAD/INFER path through FC1/FC2/FC3 and pose write.
++// Read-error drain is still temporary; ERR_DRAIN is reserved for T-07/D08.
+ // Contract: pose_cnn_ctrl_fsm.drawio p1/p2; PROJECT_CONTEXT.md 5.1 D02/D03, 5.2 reset.
+ module pose_cnn_ctrl (
+     input  wire         clk,
+@@ -25,11 +25,11 @@
+     input  wire         mem_rd_valid,
+     output reg          mem_rd_ready,
+     input  wire         mem_rd_err,
+-    output wire         mem_wr_start,
+-    output wire [31:0]  mem_wr_addr,
+-    output wire [19:0]  mem_wr_bytes,
++    output reg          mem_wr_start,
++    output reg  [31:0]  mem_wr_addr,
++    output reg  [19:0]  mem_wr_bytes,
+     input  wire         mem_wr_busy,
+-    output wire [63:0]  mem_wr_data,
++    output reg  [63:0]  mem_wr_data,
+     input  wire         mem_wr_ready,
+     input  wire         mem_wr_err,
+ 
+@@ -75,6 +75,7 @@
+     localparam [3:0] ERR_NO_CFG  = 4'd2;
+     localparam [3:0] ERR_BLOB    = 4'd3;
+     localparam [3:0] ERR_MEM_RD  = 4'd4;
++    localparam [3:0] ERR_MEM_WR  = 4'd5;
+ 
+     reg [3:0]  state_reg, state_next;
+     // Unsigned configuration snapshots; only reset/accepted START changes them.
+@@ -87,21 +88,18 @@
+     reg        done_reg, done_next;
+     reg [3:0]  error_reg, error_next;
+     reg        mem_rd_busy_prev_reg;
++    reg        mem_wr_busy_prev_reg;
+     reg        loader_done_seen_reg, loader_done_seen_next;
+     reg        loader_error_seen_reg, loader_error_seen_next;
+     reg [10:0] beat_reg, beat_next;
+     reg [31:0] load_base_reg, load_base_next;
++    reg [31:0] ld2_addr_reg, ld2_addr_next;
++    reg [31:0] fc1_addr_reg, fc1_addr_next;
+     reg        fc_done_seen_reg, fc_done_seen_next;
+ 
+     assign status_busy  = (state_reg != IDLE);
+     assign status_done  = done_reg;
+     assign status_error = error_reg;
+-
+-    // T-06 이후: write path remains inactive.
+-    assign mem_wr_start = 1'b0;
+-    assign mem_wr_addr  = 32'b0;
+-    assign mem_wr_bytes = 20'b0;
+-    assign mem_wr_data  = 64'b0;
+ 
+     // User decision (2026-09-25): synchronous active-low reset, as in Encoder.
+     always @(posedge clk) begin
+@@ -115,10 +113,13 @@
+             done_reg        <= 1'b0;
+             error_reg       <= ERR_NONE;
+             mem_rd_busy_prev_reg <= 1'b0;
++            mem_wr_busy_prev_reg <= 1'b0;
+             loader_done_seen_reg <= 1'b0;
+             loader_error_seen_reg <= 1'b0;
+             beat_reg        <= 11'd0;
+             load_base_reg   <= 32'd0;
++            ld2_addr_reg    <= 32'd0;
++            fc1_addr_reg    <= 32'd0;
+             fc_done_seen_reg <= 1'b0;
+         end else begin
+             state_reg       <= state_next;
+@@ -130,10 +131,13 @@
+             done_reg        <= done_next;
+             error_reg       <= error_next;
+             mem_rd_busy_prev_reg <= mem_rd_busy;
++            mem_wr_busy_prev_reg <= mem_wr_busy;
+             loader_done_seen_reg <= loader_done_seen_next;
+             loader_error_seen_reg <= loader_error_seen_next;
+             beat_reg        <= beat_next;
+             load_base_reg   <= load_base_next;
++            ld2_addr_reg    <= ld2_addr_next;
++            fc1_addr_reg    <= fc1_addr_next;
+             fc_done_seen_reg <= fc_done_seen_next;
+         end
+     end
+@@ -151,11 +155,17 @@
+         loader_error_seen_next = loader_error_seen_reg;
+         beat_next        = beat_reg;
+         load_base_next   = load_base_reg;
++        ld2_addr_next    = ld2_addr_reg;
++        fc1_addr_next    = fc1_addr_reg;
+         fc_done_seen_next = fc_done_seen_reg;
+         mem_rd_start     = 1'b0;
+         mem_rd_addr      = 32'b0;
+         mem_rd_bytes     = 20'b0;
+         mem_rd_ready     = 1'b0;
++        mem_wr_start     = 1'b0;
++        mem_wr_addr      = 32'd0;
++        mem_wr_bytes     = 20'd0;
++        mem_wr_data      = 64'd0;
+         loader_start     = 1'b0;
+         ld_data          = 64'b0;
+         ld_valid         = 1'b0;
+@@ -178,7 +188,8 @@
+ 
+         // FC completion is a pulse and may precede read completion.
+         // Keep it until the read is idle; a new FC START clears it below.
+-        if ((state_reg == FC1) && fc_done)
++        if (((state_reg == FC1) || (state_reg == FC2) ||
++             (state_reg == FC3)) && fc_done)
+             fc_done_seen_next = 1'b1;
+ 
+         // D02 R3: CLEAR affects display only, never the pending execution result.
+@@ -217,6 +228,10 @@
+                     mem_rd_bytes = 20'd5936;
+                     // D06: remember the same snapshot used by this LOAD read.
+                     load_base_next = weight_addr_reg;
++                    // Both addresses belong to this NEW LOAD snapshot. Using
++                    // the old load_base_reg here would lag one LOAD behind.
++                    ld2_addr_next = weight_addr_reg + 32'd399152;
++                    fc1_addr_next = load_base_next + 32'd5936;
+                     state_next = LD_RD1;
+                 end else if ((cmd_reg == CMD_INFER) && cfg_ok) begin
+                     run_error_next = ERR_NONE;
+@@ -248,7 +263,7 @@
+                     if (!mem_rd_busy) state_next = FINISH;
+                 end else if (mem_rd_busy_prev_reg && !mem_rd_busy) begin
+                     mem_rd_start = 1'b1;
+-                    mem_rd_addr = weight_addr_reg + 32'd399152;
++                    mem_rd_addr = ld2_addr_reg;
+                     mem_rd_bytes = 20'd23840;
+                     state_next = LD_RD2;
+                 end
+@@ -304,7 +319,7 @@
+                     fc_done_seen_next = 1'b0;
+                     mem_rd_start = 1'b1;
+                     // D06 confirmed: use the LOAD base, not this INFER snapshot.
+-                    mem_rd_addr = load_base_reg + 32'd5936;
++                    mem_rd_addr = fc1_addr_reg;
+                     mem_rd_bytes = 20'd393216;
+                     state_next = FC1;
+                 end
+@@ -322,20 +337,49 @@
+                     // Do not restart/abort active FC without a defined contract.
+                     if (!mem_rd_busy) state_next = FINISH;
+                 end else if ((fc_done || fc_done_seen_reg) && !mem_rd_busy) begin
+-                    // T-06: replace FINISH with FC2, add fc_start(fc_sel=1).
++                    fc_start = 1'b1;
++                    fc_sel = 2'd1;
++                    fc_done_seen_next = 1'b0;
++                    state_next = FC2;
++                end
++            end
++            FC2: begin
++                if (fc_done || fc_done_seen_reg) begin
++                    fc_start = 1'b1;
++                    fc_sel = 2'd2;
++                    fc_done_seen_next = 1'b0;
++                    state_next = FC3;
++                end
++            end
++            FC3: begin
++                if (fc_done || fc_done_seen_reg) begin
++                    mem_wr_start = 1'b1;
++                    mem_wr_addr = output_addr_reg;
++                    mem_wr_bytes = 20'd24;
++                    beat_next = 11'd0;
++                    state_next = WR;
++                end
++            end
++            WR: begin
++                // Explicit 64-bit slices avoid an out-of-range part select.
++                // After the third transfer, keep the final word valid while
++                // M00 waits for B. There is no fourth producer transfer.
++                case (beat_reg)
++                    11'd0: mem_wr_data = pose_data[63:0];
++                    11'd1: mem_wr_data = pose_data[127:64];
++                    default: mem_wr_data = pose_data[191:128];
++                endcase
++                if (mem_wr_ready) begin
++                    // Consecutive HIGH cycles are distinct accepted beats.
++                    if (beat_reg < 11'd3) beat_next = beat_reg + 11'd1;
++                end else if (mem_wr_busy_prev_reg && !mem_wr_busy) begin
++                    // Write errors are checked only after the final B response;
++                    // M00 has already finished, so WR does not enter ERR_DRAIN.
++                    if (mem_wr_err) run_error_next = ERR_MEM_WR;
+                     state_next = FINISH;
+                 end
+             end
+-            // T-06~T-07: unimplemented states recover without new results.
+-            FC2: begin
+-                state_next = IDLE;
+-            end
+-            FC3: begin
+-                state_next = IDLE;
+-            end
+-            WR: begin
+-                state_next = IDLE;
+-            end
++            // T-07: the only remaining unimplemented state.
+             ERR_DRAIN: begin
+                 state_next = IDLE;
+             end
+--- before/tb_csr_ctrl_link.v
++++ after/tb_csr_ctrl_link.v
+@@ -1,6 +1,6 @@
+ `timescale 1 ns / 1 ps
+ 
+-// T-05 CSR/ctrl integration regression. All commands use AXI4-Lite.
++// T-06 CSR/ctrl integration regression. All commands use AXI4-Lite.
+ // cfg_ok/scale model Loader-owned levels. No hierarchical drive, force or delay
+ // extension of ctrl busy is used. LOAD/INFER use short read/Loader/Encoder/FC handshake models.
+ module tb_csr_ctrl_link;
+@@ -51,12 +51,21 @@
+     // and real-M00 data verification belongs to tb_top_load/tb_top_infer.
+     reg mock_rd_busy = 0, mock_loader_done = 0, mock_enc_done = 0, mock_fc_done = 0;
+     integer mock_left = 0, mock_commands = 0, mock_done_left = 0, mock_enc_left = 0, mock_fc_left = 0;
++    reg mock_wr_busy=0;
++    integer mock_wr_left=0;
++    wire mock_wr_ready=mock_wr_busy && mock_wr_left>2;
+     always @(posedge clk) begin
+         if (!rst_n) begin
+             mock_rd_busy <= 0; mock_loader_done <= 0; mock_enc_done <= 0; mock_enc_left <= 0; mock_fc_done <= 0; mock_fc_left <= 0;
+             mock_left <= 0; mock_commands <= 0; mock_done_left <= 0;
++            mock_wr_busy<=0; mock_wr_left<=0;
+         end else begin
+             mock_loader_done <= 0; mock_enc_done <= 0; mock_fc_done <= 0;
++            if (mem_wr_start) begin mock_wr_busy<=1; mock_wr_left<=5; end
++            else if (mock_wr_busy) begin
++                if (mock_wr_left==0) mock_wr_busy<=0;
++                else mock_wr_left<=mock_wr_left-1;
++            end
+             if (fc_start) mock_fc_left <= 5;
+             else if (mock_fc_left != 0) begin
+                 mock_fc_left <= mock_fc_left-1;
+@@ -95,7 +104,7 @@
+         .mem_rd_busy(mock_rd_busy), .mem_rd_data(64'b0), .mem_rd_valid(1'b0),
+         .mem_rd_ready(mem_rd_ready), .mem_rd_err(1'b0),
+         .mem_wr_start(mem_wr_start), .mem_wr_addr(mem_wr_addr), .mem_wr_bytes(mem_wr_bytes),
+-        .mem_wr_busy(1'b0), .mem_wr_data(mem_wr_data), .mem_wr_ready(1'b0), .mem_wr_err(1'b0),
++        .mem_wr_busy(mock_wr_busy), .mem_wr_data(mem_wr_data), .mem_wr_ready(mock_wr_ready), .mem_wr_err(1'b0),
+         .loader_start(loader_start), .loader_done(mock_loader_done), .loader_err(1'b0),
+         .ld_data(ld_data), .ld_valid(ld_valid), .ld_ready(1'b1),
+         .enc_start(enc_start), .enc_done(mock_enc_done), .in_we(in_we), .in_waddr(in_waddr), .in_wdata(in_wdata),
+@@ -111,7 +120,7 @@
+         begin
+             if (condition !== 1'b1) begin
+                 $display("FAIL: %s at %0t", message, $time);
+-                $fatal(1, "T-05 CSR/ctrl integration mismatch");
++                $fatal(1, "T-06 CSR/ctrl integration mismatch");
+             end
+         end
+     endtask
+@@ -175,7 +184,7 @@
+         integer polls;
+         begin
+             completed = 1'b0; saw_busy = 1'b0; polls = 0;
+-            while (!completed && polls < 16) begin
++            while (!completed && polls < 32) begin
+                 read_word(5'h04, 2'b00, value);
+                 polls = polls + 1;
+                 $display("TRACE: STATUS poll %0d = 0x%08h", polls, value);
+@@ -209,13 +218,14 @@
+             end
+         end
+         #2;
++        if (u_ctrl.state_reg!=4'd9 && u_ctrl.state_reg!=4'd10)
+         check({mem_wr_start, mem_wr_addr, mem_wr_bytes, mem_wr_data} === '0,
+-               "unimplemented write/compute outputs remain zero in T-05");
++               "write outputs stay zero outside FC3/WR");
+     end
+ 
+     initial begin
+         #20000;
+-        $fatal(1, "T-05 integration watchdog timeout");
++        $fatal(1, "T-06 integration watchdog timeout");
+     end
+ 
+     initial begin
+@@ -288,10 +298,10 @@
+         read_expect(5'h04, 32'h00000008);
+         $display("PASS: totals START=%0d busy_cycles=%0d AXI_busy_reads=%0d busy_COMMAND_commits=%0d",
+                  start_count, busy_cycles, busy_reads, command_busy_commits);
+-        // Modeled LOAD=12; INFER=DECODE(1)+IN_RD(4)+ENC(4)+FC1(6)+FINISH(1)=16.
+-        check(start_count == 7 && busy_cycles == 62 && busy_reads >= 6,
+-              "seven STARTs: two 12-cycle LOADs + two 16-cycle INFERs + three 2-cycle errors; busy snapshots observed");
+-        $display("PASS: T-05 ALL REACHABLE CSR/CTRL LINK CHECKS PASSED");
++        // Modeled LOAD=12; INFER=DECODE(1)+IN_RD(4)+ENC(4)+FC1/2/3(18)+WR(7)+FINISH(1)=35.
++        check(start_count == 7 && busy_cycles == 100 && busy_reads >= 6,
++              "seven STARTs: two 12-cycle LOADs + two 35-cycle INFERs + three 2-cycle errors; busy snapshots observed");
++        $display("PASS: T-06 ALL REACHABLE CSR/CTRL LINK CHECKS PASSED");
+         $finish;
+     end
+ endmodule
+--- before/tb_ctrl_status.v
++++ after/tb_ctrl_status.v
+@@ -1,6 +1,6 @@
+ `timescale 1 ns / 1 ps
+ 
+-// T-05 status regression: LOAD/INFER use short read/Loader/Encoder/FC handshake models.
++// T-06 status regression: LOAD/INFER use short read/Loader/Encoder/FC handshake models.
+ // Compile with xvlog -sv. Force/release is limited to state-recovery checks.
+ module tb_ctrl_status;
+     reg clk = 1'b0;
+@@ -31,12 +31,21 @@
+     // and real-M00 data verification belongs to tb_top_load/tb_top_infer.
+     reg mock_rd_busy = 0, mock_loader_done = 0, mock_enc_done = 0, mock_fc_done = 0;
+     integer mock_left = 0, mock_commands = 0, mock_done_left = 0, mock_enc_left = 0, mock_fc_left = 0;
++    reg mock_wr_busy=0;
++    integer mock_wr_left=0;
++    wire mock_wr_ready=mock_wr_busy && mock_wr_left>2;
+     always @(posedge clk) begin
+         if (!rst_n) begin
+             mock_rd_busy <= 0; mock_loader_done <= 0; mock_enc_done <= 0; mock_enc_left <= 0; mock_fc_done <= 0; mock_fc_left <= 0;
+             mock_left <= 0; mock_commands <= 0; mock_done_left <= 0;
++            mock_wr_busy<=0; mock_wr_left<=0;
+         end else begin
+             mock_loader_done <= 0; mock_enc_done <= 0; mock_fc_done <= 0;
++            if (mem_wr_start) begin mock_wr_busy<=1; mock_wr_left<=5; end
++            else if (mock_wr_busy) begin
++                if (mock_wr_left==0) mock_wr_busy<=0;
++                else mock_wr_left<=mock_wr_left-1;
++            end
+             if (fc_start) mock_fc_left <= 5;
+             else if (mock_fc_left != 0) begin
+                 mock_fc_left <= mock_fc_left-1;
+@@ -75,19 +84,19 @@
+         .mem_rd_busy(mock_rd_busy), .mem_rd_data(unused_inputs),
+         .mem_rd_valid(1'b0), .mem_rd_ready(mem_rd_ready), .mem_rd_err(1'b0),
+         .mem_wr_start(mem_wr_start), .mem_wr_addr(mem_wr_addr), .mem_wr_bytes(mem_wr_bytes),
+-        .mem_wr_busy(unused_inputs[3]), .mem_wr_data(mem_wr_data),
+-        .mem_wr_ready(unused_inputs[4]), .mem_wr_err(unused_inputs[5]),
++        .mem_wr_busy(mock_wr_busy), .mem_wr_data(mem_wr_data),
++        .mem_wr_ready(mock_wr_ready), .mem_wr_err(1'b0),
+         .loader_start(loader_start), .loader_done(mock_loader_done), .loader_err(1'b0),
+         .ld_data(ld_data), .ld_valid(ld_valid), .ld_ready(1'b1),
+         .enc_start(enc_start), .enc_done(mock_enc_done),
+         .in_we(in_we), .in_waddr(in_waddr), .in_wdata(in_wdata),
+         .fc_start(fc_start), .fc_done(mock_fc_done), .fc_sel(fc_sel),
+         .fifo_we(fifo_we), .fifo_wdata(fifo_wdata), .fifo_full(unused_inputs[11]),
+-        .pose_data({3{unused_inputs}})
++        .pose_data(192'h17161514131211100f0e0d0c0b0a09080706050403020100)
+     );
+ 
+     always #5 clk = ~clk;
+-    // Unused compute/write inputs must not affect T-05 execution.
++    // Unused read/FIFO inputs vary; write now has a completion model.
+     always @(negedge clk) unused_inputs <= ~unused_inputs;
+ 
+     task check;
+@@ -96,7 +105,7 @@
+         begin
+             if (condition !== 1'b1) begin
+                 $display("FAIL: %s at %0t", message, $time);
+-                $fatal(1, "T-05 standalone mismatch");
++                $fatal(1, "T-06 standalone mismatch");
+             end
+         end
+     endtask
+@@ -265,14 +274,15 @@
+ 
+     always @(posedge clk) begin
+         #2;
++        if (u_ctrl.state_reg!=4'd9 && u_ctrl.state_reg!=4'd10)
+         check({mem_wr_start, mem_wr_addr, mem_wr_bytes, mem_wr_data} === '0,
+-              "all unused outputs must remain zero, including during reset");
++              "write outputs stay zero outside FC3/WR, including reset");
+         zero_output_checks = zero_output_checks + 1;
+     end
+ 
+     initial begin
+         #10000;
+-        $fatal(1, "T-05 standalone watchdog timeout");
++        $fatal(1, "T-06 standalone watchdog timeout");
+     end
+ 
+     initial begin
+@@ -360,11 +370,11 @@
+ 
+         // Pending/displayed BAD_CMD is intentionally nonzero, so a recovery
+         // that silently clears results cannot pass these checks.
+-        for (state_index = 8; state_index <= 11; state_index = state_index + 1)
++        for (state_index = 11; state_index <= 11; state_index = state_index + 1)
+             check_recovery(state_index[3:0]);
+         for (state_index = 13; state_index <= 15; state_index = state_index + 1)
+             check_recovery(state_index[3:0]);
+-        $display("PASS: four unimplemented and three illegal states recover without changing results/snapshots (%0d checks)", recovery_checks);
++        $display("PASS: one unimplemented and three illegal states recover without changing results/snapshots (%0d checks)", recovery_checks);
+ 
+         begin_run(32'd2, 1'b0, 1'b0);
+         decode_run(4'd1, 1'b0, 1'b0, 1'b0);
+@@ -386,7 +396,7 @@
+         check_status(1'b0, 1'b0, 4'd0);
+         $display("PASS: synchronous reset in FINISH waits for the edge, clears all state, and produces no phantom completion");
+         $display("PASS: unused outputs stayed zero for %0d sampled cycles while unused inputs toggled", zero_output_checks);
+-        $display("PASS: T-05 ALL CTRL STATUS CHECKS PASSED (%0d START snapshots checked)", starts_checked);
++        $display("PASS: T-06 ALL CTRL STATUS CHECKS PASSED (%0d START snapshots checked)", starts_checked);
+         $finish;
+     end
+ endmodule
+--- before/tb_top_infer.v
++++ after/tb_top_infer.v
+@@ -1,7 +1,7 @@
+ `timescale 1ns / 1ps
+ 
+-// T-04 input/Encoder regression with T-05 FC1 completion connected.
+-// Input cases/checks remain independent of the later FC1 read.
++// T-04 input/Encoder regression with T-06 FC1/FC2/FC3/write completion.
++// Input cases/checks remain independent of subsequent FC and pose transfers.
+ module tb_top_infer;
+     reg clk = 0, resetn = 0;
+     always #5 clk = ~clk;
+@@ -167,7 +167,6 @@
+     wire [63:0] fifo_wdata;
+     wire  fifo_full;
+     wire [191:0] pose_data;
+-    assign pose_data = '0;
+     pose_cnn_ctrl ctrl (
+         .clk(clk),
+         .rst_n(resetn),
+@@ -216,19 +215,21 @@
+         .pose_data(pose_data)
+     );
+ 
+-    assign loader_done = 1'b0;
+-    assign loader_err = 1'b0;
+-    assign ld_ready = 1'b0; // IN_RD must use READY=1 independently of Loader.
++    reg preparing_load=0;
++    wire loader_ready;
++    assign ld_ready = preparing_load ? loader_ready:1'b0; // IN_RD remains independent of Loader READY=0.
++    loader_stub loader(.clk(clk),.resetn(resetn),.loader_start(loader_start),
++        .ld_data(ld_data),.ld_valid(ld_valid),.ld_ready(loader_ready),.loader_done(loader_done),.loader_err(loader_err));
+     in_ram_stub input_ram(.clk(clk),.resetn(resetn),.in_we(in_we),
+         .in_waddr(in_waddr),.in_wdata(in_wdata));
+     enc_stub encoder(.clk(clk),.resetn(resetn),.enc_start(enc_start),.enc_done(enc_done));
+     fc_stub fc(.clk(clk),.resetn(resetn),.fc_start(fc_start),.fc_sel(fc_sel),
+-        .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done));
++        .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done),.pose_data(pose_data));
+ 
+     localparam integer LAST_CASE=12;
+     localparam [31:0] SEED=32'h24681357, BEFORE_SEED=32'hbaad0001, AFTER_SEED=32'hbaad0002;
+-    // This input-only fixture drives cfg_ok directly, without a LOAD. Saved base
+-    // is reset zero; the LOAD/D06 contract is tested separately in tb_top_fc1.
++    // Seed the registered addresses with a real LOAD at base zero. The input
++    // cases still drive cfg_ok (including NO_CFG) directly as in T-04.
+     localparam [31:0] FC_BASE=32'd5936, FC_SEED=32'hfc04face;
+     reg [31:0] base, next_ar;
+     integer selected=-1, case_id, leg=0, cycle=0, tests=0, completed_cases=0;
+@@ -283,11 +284,15 @@
+             check(!(prior_start && mem_rd_start),"read START one-cycle pulse");
+             check(!(prior_enc_start && enc_start),"Encoder START one-cycle pulse");
+             prior_start=mem_rd_start; prior_enc_start=enc_start;
+-            check({mem_wr_start,mem_wr_addr,mem_wr_bytes,mem_wr_data,loader_start,ld_valid,ld_data,
+-                   fc_sel}==='0,"LOAD/write outputs and FC1 selector remain zero");
++            check({loader_start,ld_valid,ld_data}==='0,"LOAD outputs remain zero during INFER");
++            if(ctrl.state_reg!=9 && ctrl.state_reg!=10)
++                check({mem_wr_start,mem_wr_addr,mem_wr_bytes,mem_wr_data}==='0,"write outputs zero before FC3/WR");
++            if(ctrl.state_reg==5 || ctrl.state_reg==6)
++                check(fc_sel==0,"input/Encoder keeps FC selector zero");
+             if (ctrl.state_reg!=7)
+                 check({fifo_we,fifo_wdata}==='0,"FIFO outputs remain zero outside FC1");
+-            if (ctrl.state_reg!=6 || !enc_done)
++            if ((ctrl.state_reg!=6 && ctrl.state_reg!=7 && ctrl.state_reg!=8) ||
++                (ctrl.state_reg==6 && !enc_done))
+                 check(!fc_start,"FC START only on completed Encoder transition");
+             if (mem_rd_start) begin
+                 if (ctrl.state_reg==1) begin
+@@ -365,7 +370,8 @@
+                     enc_start,enc_done,raw_beats,writes,ar_count);
+             prior_state=ctrl.state_reg; prior_busy=mem_rd_busy;
+             #1;
+-            check(int'(ctrl.beat_reg)==expected_counter,"beat increments only on normal valid, clears at input command");
++            if(fc_commands==0)
++                check(int'(ctrl.beat_reg)==expected_counter,"input beat increments only on normal valid, clears at input command");
+             if (start_edge!=0 && !status_busy && finish_edge==0) finish_edge=cycle;
+         end
+     end
+@@ -387,7 +393,7 @@
+             memory.mem_fill(base,11520,SEED);
+             memory.mem_fill(base+11520,8,AFTER_SEED);
+             memory.mem_fill(FC_BASE,393216,FC_SEED);
+-            reg_cmd=0; reg_input_addr=base; reg_start=1; active=1;
++            reg_cmd=0; reg_input_addr=base; reg_output_addr=32'h1e000000; reg_start=1; active=1;
+             @(posedge clk); #2;
+             check(status_busy && ctrl.state_reg==1 && !status_done && status_error==0,"accepted START clears display and enters DECODE");
+             @(negedge clk); reg_start=0; reg_input_addr=32'hbad00000; reg_cmd=32'hdeadbeef;
+@@ -395,7 +401,7 @@
+                 @(posedge clk); #2;
+                 check(cycle-start_edge<300000,"bounded INFER completion including FC1");
+             end
+-            check(!mem_rd_busy,"Top cannot finish before M00 drains");
++            check(!mem_rd_busy && !mem_wr_busy,"Top cannot finish before M00 read/write completes");
+             repeat(3) begin @(posedge clk); #2; end
+             @(negedge clk); active=0;
+             expected_error=!cfg_ok ? 2:(fault_mode!=0 ? 4:0);
+@@ -433,7 +439,7 @@
+                 end
+             end
+             check(fc_commands==(expected_error==0?1:0) &&
+-                  fc.accepted_starts-fc_before==fc_commands,"FC1 only runs after successful input/Encoder");
++                  fc.accepted_starts-fc_before==3*fc_commands,"FC1/2/3 only run after successful input/Encoder");
+             if (expected_error==0)
+                 check(fc.push_count==49152 && fc.pop_count==49152 && fc.count==0 && !fc.active,
+                     "FC1 completion fixture consumed all words before Top finished");
+@@ -447,8 +453,22 @@
+                 case_id,leg,case_name,base,finish_edge-start_edge,read_end-read_edge,
+                 encoder.delay_cycles,enc_cycles,commands,ar_count,cfg_ok?expected_bursts:0,boundary_shorts,
+                 raw_beats,writes,enc_pulses,equations,no_valid_checks,drain_cycles,raw_beats-writes,status_done,status_error);
+-            $display("PASS: T-05 input regression case=%0d leg=%0d FC_commands=%0d FC_pushes=%0d FC_pops=%0d violations=%0d",
++            $display("PASS: T-06 input regression case=%0d leg=%0d FC_commands=%0d FC_pushes=%0d FC_pops=%0d violations=%0d",
+                 case_id,leg,fc_commands,fc.push_count,fc.pop_count,fc.violations);
++        end
++    endtask
++
++    task prepare_addresses;
++        integer began;
++        begin
++            @(negedge clk); preparing_load=1;reg_cmd=1;reg_weight_addr=0;reg_start=1;began=cycle;
++            @(posedge clk);#2;check(status_busy,"fixture LOAD accepted");
++            @(negedge clk);reg_start=0;
++            while(status_busy) begin @(posedge clk);#2;check(cycle-began<30000,"fixture LOAD bounded");end
++            check(status_done && status_error==0 && loader.received_count==3722,"fixture resident LOAD complete");
++            check(ctrl.ld2_addr_reg==399152 && ctrl.fc1_addr_reg==FC_BASE,"LOAD populated precomputed addresses");
++            memory.check_quiescent;
++            @(negedge clk);preparing_load=0;
+         end
+     endtask
+ 
+@@ -479,6 +499,9 @@
+                 default: $fatal(1,"invalid CASE");
+             endcase
+             resetn=1;
++            prepare_addresses;
++            // LOAD preparation must not consume the input case's PRNG sequence.
++            if(id==6) memory.ar_seed=32'h23456789;
+             @(negedge clk); execute_transfer;
+             if (id==11 || id==12) begin
+                 // No hardware reset: prove beat clear, stale level done and read-error clear.

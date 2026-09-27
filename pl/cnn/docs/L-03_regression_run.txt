@@ -1,0 +1,931 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_S00_AXI.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_S00_AXI
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.048792
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_write.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_regs.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_read.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_ctrl.v D:\2609_final_project\cnn_rtl\tb\tb_m00_read.v D:\2609_final_project\cnn_rtl\tb\tb_m00_read_perf.v D:\2609_final_project\cnn_rtl\tb\tb_m00_write.v D:\2609_final_project\cnn_rtl\tb\tb_m00_err.v D:\2609_final_project\cnn_rtl\tb\tb_axi4_slave_mem_model.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_write.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_write
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_regs.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_regs
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_read.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_read
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_ctrl
+INFO: [VRFC 10-311] analyzing module s00_ctrl_case
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_read.v" into library work
+INFO: [VRFC 10-311] analyzing module m00_read_fixture
+INFO: [VRFC 10-311] analyzing module tb_m00_read
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_read_perf.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_m00_read_perf
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_write.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_m00_write
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_err.v" into library work
+INFO: [VRFC 10-311] analyzing module m00_err_fixture
+INFO: [VRFC 10-311] analyzing module tb_m00_err
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_axi4_slave_mem_model
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.003496
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_s00_axi_write -s t07_tb_s00_axi_write
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_s00_axi_write -s t07_tb_s00_axi_write 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.tb_s00_axi_write
+Built simulation snapshot t07_tb_s00_axi_write
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-l03/regression/xsim.dir/t07_tb_s00_axi_write/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 02:17:09 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.188893
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_s00_axi_write -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_s00_axi_write/xsim_script.tcl
+# xsim {t07_tb_s00_axi_write} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: reset assertion and immediate release keep AWREADY/WREADY/BVALID low
+PASS: simultaneous AW/W -> exactly 1 commit and 1 B response
+PASS: AW first -> AWREADY=0/WREADY=1 while held; 1 commit and 1 B response
+PASS: W first -> WREADY=0/AWREADY=1 while held; 1 commit and 1 B response
+PASS: BREADY delayed 4 cycles -> stable BVALID/BRESP; AWREADY=WREADY=0
+PASS: R-01 b-2 response phase: short reset masks BVALID/RVALID without clearing registers
+PASS: 2 consecutive writes preserve distinct address/data/strobe with no replay
+PASS: concurrent scale/OKAY reads do not disturb writes; control pulses stay zero
+PASS: totals AW=5 W=5 commit=5 B=5
+PASS: R-01 b-2 idle phase: short reset masks READY; registers retained as required by reset contract
+PASS: R-01 b-1: clock-spanning reset clears registers and restart guard preserves channel timing
+PASS: S00-02 ALL CHECKS PASSED
+$finish called at time : 446 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_write.v" Line 381
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 02:17:13 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.287636
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_s00_axi_regs -s t07_tb_s00_axi_regs
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_s00_axi_regs -s t07_tb_s00_axi_regs 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.tb_s00_axi_regs
+Built simulation snapshot t07_tb_s00_axi_regs
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-l03/regression/xsim.dir/t07_tb_s00_axi_regs/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 02:17:16 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.492421
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_s00_axi_regs -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_s00_axi_regs/xsim_script.tcl
+# xsim {t07_tb_s00_axi_regs} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: reset clears COMMAND/INPUT_ADDR/WEIGHT_ADDR/OUTPUT_ADDR
+PASS: full writes update only the selected CSR and preserve all 32 COMMAND bits
+PASS: offset 0x08 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x08 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x08 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x08 disabled WDATA lanes are ignored, including X values
+PASS: offset 0x0c single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x0c combined strobes 6/C preserve unselected bytes
+PASS: offset 0x0c idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x0c disabled WDATA lanes are ignored, including X values
+PASS: offset 0x10 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x10 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x10 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x10 disabled WDATA lanes are ignored, including X values
+PASS: offset 0x14 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x14 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x14 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x14 disabled WDATA lanes are ignored, including X values
+PASS: CONTROL reserved bits are ignored; START/CLEAR pulses stay zero
+PASS: writes to 0x00/0x04/0x18/0x1C preserve every CSR and return OKAY
+PASS: 0x0C and 0x0E select the same INPUT_ADDR (D04 confirmed)
+PASS: consecutive writes preserve distinct destinations/data; no pre-commit updates or replay
+PASS: reset also clears all four previously nonzero CSRs
+PASS: totals writes=49 commit=49 B=49
+PASS: S00-03 ALL REGISTER CHECKS PASSED
+$finish called at time : 1556 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_regs.v" Line 284
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 02:17:20 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.397369
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_s00_axi_read -s t07_tb_s00_axi_read
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_s00_axi_read -s t07_tb_s00_axi_read 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.tb_s00_axi_read
+Built simulation snapshot t07_tb_s00_axi_read
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-l03/regression/xsim.dir/t07_tb_s00_axi_read/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 02:17:23 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.851550
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_s00_axi_read -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_s00_axi_read/xsim_script.tcl
+# xsim {t07_tb_s00_axi_read} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: reset assertion and immediate release keep ARREADY/RVALID low
+PASS: all 8 offsets match the read mux; all 4 RW values read back
+PASS: STATUS bit layout in 24 combinations (error=0/5/F, cfg=0/1, busy/done=00/01/10/11)
+PASS: scale returns zero/SLVERR for cfg=0 and scale/OKAY for cfg=1
+PASS: STATUS snapshot survives changed live inputs and 4-cycle R stall with ARVALID low
+PASS: scale RDATA/RRESP snapshots survive cfg 0->1 and 1->0 during stall
+PASS: low address bits ignored (0x0C/0x0E and 0x04/0x07 aliases)
+PASS: a read completes while the write B response is stalled
+PASS: a write completes during R stall without changing the pending read snapshot
+PASS: simultaneous RW commit and AR acceptance return the pre-update value
+PASS: same-edge synchronous status update also returns the pre-update snapshot
+PASS: consecutive reads stay distinct; no AR acceptance on the R handshake edge
+PASS: totals AR=50 R=50 commit=7 B=7
+PASS: S00-04 ALL READ CHECKS PASSED
+$finish called at time : 2706 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_read.v" Line 394
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 02:17:27 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.348014
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_s00_axi_ctrl -s t07_tb_s00_axi_ctrl
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_s00_axi_ctrl -s t07_tb_s00_axi_ctrl 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.s00_ctrl_case
+Compiling module work.tb_s00_axi_ctrl
+Built simulation snapshot t07_tb_s00_axi_ctrl
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-l03/regression/xsim.dir/t07_tb_s00_axi_ctrl/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 02:17:30 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.961383
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_s00_axi_ctrl -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_s00_axi_ctrl/xsim_script.tcl
+# xsim {t07_tb_s00_axi_ctrl} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: N=1 reset clears both control pulses and BRESP
+PASS: N=2 reset clears both control pulses and BRESP
+PASS: N=8 reset clears both control pulses and BRESP
+PASS: N=1 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=2 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=8 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=1 idle CLEAR pulses once; TB display clears
+PASS: N=2 idle CLEAR pulses once; TB display clears
+PASS: N=8 idle CLEAR pulses once; TB display clears
+PASS: N=1 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=2 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=8 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=1 busy START and START+CLEAR reject atomically without pulses
+PASS: N=2 busy START and START+CLEAR reject atomically without pulses
+PASS: N=8 busy START and START+CLEAR reject atomically without pulses
+PASS: N=1 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=2 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=8 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=1 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=2 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=8 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=1 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=2 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=8 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=1 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=2 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=8 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=1 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=2 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=8 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=1 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=2 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=8 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=1 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=2 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=8 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=1 rejection samples busy at commit, not at AW/W capture
+PASS: N=2 rejection samples busy at commit, not at AW/W capture
+PASS: N=8 rejection samples busy at commit, not at AW/W capture
+PASS: N=1 core raises busy on START sampling edge and holds exactly N cycles
+PASS: N=2 core raises busy on START sampling edge and holds exactly N cycles
+PASS: N=8 core raises busy on START sampling edge and holds exactly N cycles
+PASS: 15b N=1 fastest second START: commit busy=0 -> OKAY, second 1-cycle pulse
+PASS: N=1 totals commit=52 B=52 START=6 CLEAR=4
+PASS: 15a N=2 fastest second START: commit busy=1 -> SLVERR, no second pulse
+PASS: N=2 totals commit=52 B=52 START=5 CLEAR=4
+PASS: N=8 CLEAR updates display while the core keeps running
+PASS: 15a N=8 fastest second START: commit busy=1 -> SLVERR, no second pulse
+PASS: 15c N=8 early busy START: remaining=7 -> SLVERR, no pulse
+PASS: 15c N=8 middle busy START: remaining=4 -> SLVERR, no pulse
+PASS: 15c N=8 final busy START: remaining=1 -> SLVERR, no pulse after busy drops
+PASS: N=8 totals commit=58 B=58 START=7 CLEAR=5
+PASS: S00-05 ALL CONTROL CHECKS PASSED (15a/15b/15c included)
+$finish called at time : 2426 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_ctrl.v" Line 21
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 02:17:35 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.302833
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_m00_read -s t07_tb_m00_read
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_m00_read -s t07_tb_m00_read 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.m00_read_fixture
+Compiling module work.tb_m00_read
+Built simulation snapshot t07_tb_m00_read
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-l03/regression/xsim.dir/t07_tb_m00_read/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 02:17:38 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.666200
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_m00_read -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_m00_read/xsim_script.tcl
+# xsim {t07_tb_m00_read} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: size_8 R1/R2 snapshot+busy words=1 bursts=1 expected=1 cycles=3 busy_samples=3 accepted_start=1 ignored_start=0
+PASS: size_8 R3/R4/R5 cover_bytes=8 compared_words=1 AR_constant_checks=1 nonfinal_boundary_short=0
+PASS: size_8 R6 transfer/stall ready_checks=1 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: size_8 literal_RREADY_direct_mismatch_cycles=3 (state-qualified RTL; data-phase equality passed)
+PASS: size_128 R1/R2 snapshot+busy words=16 bursts=1 expected=1 cycles=18 busy_samples=18 accepted_start=1 ignored_start=0
+PASS: size_128 R3/R4/R5 cover_bytes=128 compared_words=16 AR_constant_checks=1 nonfinal_boundary_short=0
+PASS: size_128 R6 transfer/stall ready_checks=16 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: size_128 literal_RREADY_direct_mismatch_cycles=3 (state-qualified RTL; data-phase equality passed)
+PASS: size_136_snapshot_busy_start R1/R2 snapshot+busy words=17 bursts=2 expected=2 cycles=21 busy_samples=21 accepted_start=1 ignored_start=1
+PASS: size_136_snapshot_busy_start R3/R4/R5 cover_bytes=136 compared_words=17 AR_constant_checks=2 nonfinal_boundary_short=0
+PASS: size_136_snapshot_busy_start R6 transfer/stall ready_checks=17 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: size_136_snapshot_busy_start literal_RREADY_direct_mismatch_cycles=5 (state-qualified RTL; data-phase equality passed)
+PASS: boundary_before R1/R2 snapshot+busy words=17 bursts=2 expected=2 cycles=21 busy_samples=21 accepted_start=1 ignored_start=0
+PASS: boundary_before R3/R4/R5 cover_bytes=136 compared_words=17 AR_constant_checks=2 nonfinal_boundary_short=1
+PASS: boundary_before R6 transfer/stall ready_checks=17 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: boundary_before literal_RREADY_direct_mismatch_cycles=5 (state-qualified RTL; data-phase equality passed)
+SPEC_NOTE: boundary_before has 1 legal non-final short burst(s) ending at 4-KiB boundaries
+PASS: boundary_exact R1/R2 snapshot+busy words=17 bursts=2 expected=2 cycles=21 busy_samples=21 accepted_start=1 ignored_start=0
+PASS: boundary_exact R3/R4/R5 cover_bytes=136 compared_words=17 AR_constant_checks=2 nonfinal_boundary_short=0
+PASS: boundary_exact R6 transfer/stall ready_checks=17 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: boundary_exact literal_RREADY_direct_mismatch_cycles=5 (state-qualified RTL; data-phase equality passed)
+PASS: boundary_after R1/R2 snapshot+busy words=512 bursts=33 expected=33 cycles=578 busy_samples=578 accepted_start=1 ignored_start=0
+PASS: boundary_after R3/R4/R5 cover_bytes=4096 compared_words=512 AR_constant_checks=33 nonfinal_boundary_short=1
+PASS: boundary_after R6 transfer/stall ready_checks=512 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: boundary_after literal_RREADY_direct_mismatch_cycles=67 (state-qualified RTL; data-phase equality passed)
+SPEC_NOTE: boundary_after has 1 legal non-final short burst(s) ending at 4-KiB boundaries
+PASS: load_part1 R1/R2 snapshot+busy words=742 bursts=47 expected=47 cycles=836 busy_samples=836 accepted_start=1 ignored_start=0
+PASS: load_part1 R3/R4/R5 cover_bytes=5936 compared_words=742 AR_constant_checks=47 nonfinal_boundary_short=0
+PASS: load_part1 R6 transfer/stall ready_checks=742 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: load_part1 literal_RREADY_direct_mismatch_cycles=95 (state-qualified RTL; data-phase equality passed)
+PASS: load_part2 R1/R2 snapshot+busy words=2980 bursts=187 expected=187 cycles=3354 busy_samples=3354 accepted_start=1 ignored_start=0
+PASS: load_part2 R3/R4/R5 cover_bytes=23840 compared_words=2980 AR_constant_checks=187 nonfinal_boundary_short=1
+PASS: load_part2 R6 transfer/stall ready_checks=2980 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: load_part2 literal_RREADY_direct_mismatch_cycles=375 (state-qualified RTL; data-phase equality passed)
+SPEC_NOTE: load_part2 has 1 legal non-final short burst(s) ending at 4-KiB boundaries
+PASS: ready_hold_8 R1/R2 snapshot+busy words=17 bursts=2 expected=2 cycles=29 busy_samples=29 accepted_start=1 ignored_start=0
+PASS: ready_hold_8 R3/R4/R5 cover_bytes=136 compared_words=17 AR_constant_checks=2 nonfinal_boundary_short=0
+PASS: ready_hold_8 R6 transfer/stall ready_checks=25 held_valid_cycles=8 ar_wait=0 protocol_violations=0
+OBSERVATION: ready_hold_8 literal_RREADY_direct_mismatch_cycles=5 (state-qualified RTL; data-phase equality passed)
+PASS: ready_alternate R1/R2 snapshot+busy words=64 bursts=4 expected=4 cycles=135 busy_samples=135 accepted_start=1 ignored_start=0
+PASS: ready_alternate R3/R4/R5 cover_bytes=512 compared_words=64 AR_constant_checks=4 nonfinal_boundary_short=0
+PASS: ready_alternate R6 transfer/stall ready_checks=127 held_valid_cycles=63 ar_wait=0 protocol_violations=0
+OBSERVATION: ready_alternate literal_RREADY_direct_mismatch_cycles=4 (state-qualified RTL; data-phase equality passed)
+PASS: combined_periodic_stalls R1/R2 snapshot+busy words=64 bursts=4 expected=4 cycles=257 busy_samples=257 accepted_start=1 ignored_start=0
+PASS: combined_periodic_stalls R3/R4/R5 cover_bytes=512 compared_words=64 AR_constant_checks=5 nonfinal_boundary_short=0
+PASS: combined_periodic_stalls R6 transfer/stall ready_checks=128 held_valid_cycles=64 ar_wait=1 protocol_violations=0
+OBSERVATION: combined_periodic_stalls literal_RREADY_direct_mismatch_cycles=5 (state-qualified RTL; data-phase equality passed)
+PASS: combined_random_stalls R1/R2 snapshot+busy words=64 bursts=4 expected=4 cycles=255 busy_samples=255 accepted_start=1 ignored_start=0
+PASS: combined_random_stalls R3/R4/R5 cover_bytes=512 compared_words=64 AR_constant_checks=6 nonfinal_boundary_short=0
+PASS: combined_random_stalls R6 transfer/stall ready_checks=125 held_valid_cycles=61 ar_wait=2 protocol_violations=0
+OBSERVATION: combined_random_stalls literal_RREADY_direct_mismatch_cycles=4 (state-qualified RTL; data-phase equality passed)
+PASS: T-02b FUNCTIONAL 12/12 CASES, ALL COLLECTED WORDS AND AR RANGES CHECKED; protocol violations=0
+REVIEW: literal R3 last-short-only excludes necessary 4-KiB splits; literal R6 direct RREADY differs outside RD_DATA; no RTL/model edits
+$finish called at time : 55947 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_m00_read.v" Line 419
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 02:17:43 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.884107
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_m00_read_perf -s t07_tb_m00_read_perf
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_m00_read_perf -s t07_tb_m00_read_perf 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.m00_read_fixture
+Compiling module work.tb_m00_read_perf
+Built simulation snapshot t07_tb_m00_read_perf
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-l03/regression/xsim.dir/t07_tb_m00_read_perf/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 02:17:47 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.821341
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_m00_read_perf -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_m00_read_perf/xsim_script.tcl
+# xsim {t07_tb_m00_read_perf} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: fc1_latency_0 R1/R2 snapshot+busy words=49152 bursts=3072 expected=3072 cycles=55296 busy_samples=55296 accepted_start=1 ignored_start=0
+PASS: fc1_latency_0 R3/R4/R5 cover_bytes=393216 compared_words=49152 AR_constant_checks=3072 nonfinal_boundary_short=0
+PASS: fc1_latency_0 R6 transfer/stall ready_checks=49152 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: fc1_latency_0 literal_RREADY_direct_mismatch_cycles=6145 (state-qualified RTL; data-phase equality passed)
+PERF: latency=0 bytes=393216 beats=49152 bursts=3072 cycles=55296 cycles_per_beat=1.125000 inter_burst_idle=6142 startup_idle=2 time_us_100mhz=552.96 judgement=one_outstanding_sufficient_under_this_latency
+PASS: fc1_latency_16 R1/R2 snapshot+busy words=49152 bursts=3072 expected=3072 cycles=104448 busy_samples=104448 accepted_start=1 ignored_start=0
+PASS: fc1_latency_16 R3/R4/R5 cover_bytes=393216 compared_words=49152 AR_constant_checks=3072 nonfinal_boundary_short=0
+PASS: fc1_latency_16 R6 transfer/stall ready_checks=49152 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: fc1_latency_16 literal_RREADY_direct_mismatch_cycles=6145 (state-qualified RTL; data-phase equality passed)
+PERF: latency=16 bytes=393216 beats=49152 bursts=3072 cycles=104448 cycles_per_beat=2.125000 inter_burst_idle=55278 startup_idle=18 time_us_100mhz=1044.48 judgement=review_2_to_4_outstanding
+PASS: fc1_latency_32 R1/R2 snapshot+busy words=49152 bursts=3072 expected=3072 cycles=153600 busy_samples=153600 accepted_start=1 ignored_start=0
+PASS: fc1_latency_32 R3/R4/R5 cover_bytes=393216 compared_words=49152 AR_constant_checks=3072 nonfinal_boundary_short=0
+PASS: fc1_latency_32 R6 transfer/stall ready_checks=49152 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: fc1_latency_32 literal_RREADY_direct_mismatch_cycles=6145 (state-qualified RTL; data-phase equality passed)
+PERF: latency=32 bytes=393216 beats=49152 bursts=3072 cycles=153600 cycles_per_beat=3.125000 inter_burst_idle=104414 startup_idle=34 time_us_100mhz=1536.00 judgement=review_2_to_4_outstanding
+PASS: fc1_latency_64 R1/R2 snapshot+busy words=49152 bursts=3072 expected=3072 cycles=251904 busy_samples=251904 accepted_start=1 ignored_start=0
+PASS: fc1_latency_64 R3/R4/R5 cover_bytes=393216 compared_words=49152 AR_constant_checks=3072 nonfinal_boundary_short=0
+PASS: fc1_latency_64 R6 transfer/stall ready_checks=49152 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: fc1_latency_64 literal_RREADY_direct_mismatch_cycles=6145 (state-qualified RTL; data-phase equality passed)
+PERF: latency=64 bytes=393216 beats=49152 bursts=3072 cycles=251904 cycles_per_beat=5.125000 inter_burst_idle=202686 startup_idle=66 time_us_100mhz=2519.04 judgement=review_2_to_4_outstanding
+PASS: T-02b PERFORMANCE MEASUREMENT COMPLETE; all words checked, C11 enabled, violations=0
+$finish called at time : 5652747 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_m00_read_perf.v" Line 41
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:00:08 . Memory (MB): peak = 918.305 ; gain = 0.000
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 02:17:59 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 12.449830
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_m00_write -s t07_tb_m00_write
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_m00_write -s t07_tb_m00_write 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.tb_m00_write
+Built simulation snapshot t07_tb_m00_write
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-l03/regression/xsim.dir/t07_tb_m00_write/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 02:18:03 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.637475
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_m00_write -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_m00_write/xsim_script.tcl
+# xsim {t07_tb_m00_write} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: pose_24 W1/W2 snapshot busy_cycles=5 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: pose_24 W3/W4/W7 bytes=24 AW=1 expected=1 B=1 full_cover=24 payload_checks=1 boundary_shorts=0
+PASS: pose_24 W5 handshake/count/data ready_high_cycles=3 W_beats=3 producer_advances=3 compared_W_words=3 W_stall=0
+PASS: pose_24 W5 pulse_shape runs=1 max_high_run=3 back_to_back_pairs=2 (one HIGH cycle per beat verified above)
+PASS: pose_24 W8 initial_unwritten=3 readback_compared=3 mem_compare_words=3 mismatches=0 guards_unwritten=2 violations=0
+PASS: size_8 W1/W2 snapshot busy_cycles=3 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: size_8 W3/W4/W7 bytes=8 AW=1 expected=1 B=1 full_cover=8 payload_checks=1 boundary_shorts=0
+PASS: size_8 W5 handshake/count/data ready_high_cycles=1 W_beats=1 producer_advances=1 compared_W_words=1 W_stall=0
+PASS: size_8 W5 pulse_shape runs=1 max_high_run=1 back_to_back_pairs=0 (one HIGH cycle per beat verified above)
+PASS: size_8 W8 initial_unwritten=1 readback_compared=1 mem_compare_words=1 mismatches=0 guards_unwritten=2 violations=0
+PASS: size_128 W1/W2 snapshot busy_cycles=18 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: size_128 W3/W4/W7 bytes=128 AW=1 expected=1 B=1 full_cover=128 payload_checks=1 boundary_shorts=0
+PASS: size_128 W5 handshake/count/data ready_high_cycles=16 W_beats=16 producer_advances=16 compared_W_words=16 W_stall=0
+PASS: size_128 W5 pulse_shape runs=1 max_high_run=16 back_to_back_pairs=15 (one HIGH cycle per beat verified above)
+PASS: size_128 W8 initial_unwritten=16 readback_compared=16 mem_compare_words=16 mismatches=0 guards_unwritten=2 violations=0
+PASS: size_136_busy W1/W2 snapshot busy_cycles=21 accepted_start=1 ignored_start=1 lastW_to_B=1 postW_busy_samples=1
+PASS: size_136_busy W3/W4/W7 bytes=136 AW=2 expected=2 B=2 full_cover=136 payload_checks=2 boundary_shorts=0
+PASS: size_136_busy W5 handshake/count/data ready_high_cycles=17 W_beats=17 producer_advances=17 compared_W_words=17 W_stall=0
+PASS: size_136_busy W5 pulse_shape runs=2 max_high_run=16 back_to_back_pairs=15 (one HIGH cycle per beat verified above)
+PASS: size_136_busy W8 initial_unwritten=17 readback_compared=17 mem_compare_words=17 mismatches=0 guards_unwritten=2 violations=0
+PASS: boundary_ff8 W1/W2 snapshot busy_cycles=21 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: boundary_ff8 W3/W4/W7 bytes=136 AW=2 expected=2 B=2 full_cover=136 payload_checks=2 boundary_shorts=1
+PASS: boundary_ff8 W5 handshake/count/data ready_high_cycles=17 W_beats=17 producer_advances=17 compared_W_words=17 W_stall=0
+PASS: boundary_ff8 W5 pulse_shape runs=2 max_high_run=16 back_to_back_pairs=15 (one HIGH cycle per beat verified above)
+PASS: boundary_ff8 W8 initial_unwritten=17 readback_compared=17 mem_compare_words=17 mismatches=0 guards_unwritten=2 violations=0
+PASS: size_4096 W1/W2 snapshot busy_cycles=578 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: size_4096 W3/W4/W7 bytes=4096 AW=33 expected=33 B=33 full_cover=4096 payload_checks=33 boundary_shorts=1
+PASS: size_4096 W5 handshake/count/data ready_high_cycles=512 W_beats=512 producer_advances=512 compared_W_words=512 W_stall=0
+PASS: size_4096 W5 pulse_shape runs=33 max_high_run=16 back_to_back_pairs=479 (one HIGH cycle per beat verified above)
+PASS: size_4096 W8 initial_unwritten=512 readback_compared=512 mem_compare_words=512 mismatches=0 guards_unwritten=2 violations=0
+PASS: pose_Bdelay12 W1/W2 snapshot busy_cycles=17 accepted_start=1 ignored_start=0 lastW_to_B=13 postW_busy_samples=13
+PASS: pose_Bdelay12 W3/W4/W7 bytes=24 AW=1 expected=1 B=1 full_cover=24 payload_checks=1 boundary_shorts=0
+PASS: pose_Bdelay12 W5 handshake/count/data ready_high_cycles=3 W_beats=3 producer_advances=3 compared_W_words=3 W_stall=0
+PASS: pose_Bdelay12 W5 pulse_shape runs=1 max_high_run=3 back_to_back_pairs=2 (one HIGH cycle per beat verified above)
+PASS: pose_Bdelay12 W8 initial_unwritten=3 readback_compared=3 mem_compare_words=3 mismatches=0 guards_unwritten=2 violations=0
+PASS: W_before_AW W1/W2 snapshot busy_cycles=64 accepted_start=1 ignored_start=0 lastW_to_B=47 postW_busy_samples=47
+PASS: W_before_AW W3/W4/W7 bytes=128 AW=1 expected=1 B=1 full_cover=128 payload_checks=1 boundary_shorts=0
+PASS: W_before_AW W5 handshake/count/data ready_high_cycles=16 W_beats=16 producer_advances=16 compared_W_words=16 W_stall=0
+PASS: W_before_AW W5 pulse_shape runs=1 max_high_run=16 back_to_back_pairs=15 (one HIGH cycle per beat verified above)
+PASS: W_before_AW W6 first_AW_cycle=1460 first_W_cycle=1399 W_before_AW=16 AW_before_W=0 AW_stall=61 W_stall=0
+PASS: W_before_AW W8 initial_unwritten=16 readback_compared=16 mem_compare_words=16 mismatches=0 guards_unwritten=2 violations=0
+PASS: AW_before_W W1/W2 snapshot busy_cycles=192 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: AW_before_W W3/W4/W7 bytes=24 AW=1 expected=1 B=1 full_cover=24 payload_checks=1 boundary_shorts=0
+PASS: AW_before_W W5 handshake/count/data ready_high_cycles=3 W_beats=3 producer_advances=3 compared_W_words=3 W_stall=187
+PASS: AW_before_W W5 pulse_shape runs=3 max_high_run=1 back_to_back_pairs=0 (one HIGH cycle per beat verified above)
+PASS: AW_before_W W6 first_AW_cycle=1492 first_W_cycle=1553 W_before_AW=0 AW_before_W=1 AW_stall=0 W_stall=187
+PASS: AW_before_W W8 initial_unwritten=3 readback_compared=3 mem_compare_words=3 mismatches=0 guards_unwritten=2 violations=0
+PASS: W_periodic W1/W2 snapshot busy_cycles=51 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: W_periodic W3/W4/W7 bytes=136 AW=2 expected=2 B=2 full_cover=136 payload_checks=2 boundary_shorts=0
+PASS: W_periodic W5 handshake/count/data ready_high_cycles=17 W_beats=17 producer_advances=17 compared_W_words=17 W_stall=30
+PASS: W_periodic W5 pulse_shape runs=17 max_high_run=1 back_to_back_pairs=0 (one HIGH cycle per beat verified above)
+PASS: W_periodic W8 initial_unwritten=17 readback_compared=17 mem_compare_words=17 mismatches=0 guards_unwritten=2 violations=0
+PASS: W_random W1/W2 snapshot busy_cycles=127 accepted_start=1 ignored_start=0 lastW_to_B=1 postW_busy_samples=1
+PASS: W_random W3/W4/W7 bytes=512 AW=4 expected=4 B=4 full_cover=512 payload_checks=4 boundary_shorts=0
+PASS: W_random W5 handshake/count/data ready_high_cycles=64 W_beats=64 producer_advances=64 compared_W_words=64 W_stall=55
+PASS: W_random W5 pulse_shape runs=29 max_high_run=7 back_to_back_pairs=35 (one HIGH cycle per beat verified above)
+PASS: W_random W8 initial_unwritten=64 readback_compared=64 mem_compare_words=64 mismatches=0 guards_unwritten=2 violations=0
+PASS: T-02c DATA_AND_HANDSHAKE cases=11 words=669 AW=49 ready_high_cycles=669 readback_all=1 guards=22 protocol_violations=0 final_quiescent=1
+PASS: T-02c W5 pulse_shape summary back_to_back_pairs=578 full_rate_cases=8 (ready_high_cycles == W_beats in all 11 cases)
+PASS: T-02c ALL W1-W8 CHECKS
+$finish called at time : 19850 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_m00_write.v" Line 494
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 02:18:07 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.224148
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_m00_err -s t07_tb_m00_err
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_m00_err -s t07_tb_m00_err 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.m00_err_fixture
+Compiling module work.pose_cnn_v1_0_M00_AXI(WATCHDOG_C...
+Compiling module work.m00_err_fixture(WD=8)
+Compiling module work.tb_m00_err
+Built simulation snapshot t07_tb_m00_err
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-l03/regression/xsim.dir/t07_tb_m00_err/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 02:18:13 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 5.410455
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_m00_err -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_m00_err/xsim_script.tcl
+# xsim {t07_tb_m00_err} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: E1_E3_RRESP_middle reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E1_E3_RRESP_middle expected_checker_codes=NONE; slave injections counted separately
+PASS: E1_E3_RRESP_middle START rd=1 wr=0 old_err=00 clear_edge=6 err_after=00 busy_after=10
+PASS: E1_E3_RRESP_middle READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=29 first_err_edge=31 bad_beats=1 bad_burst=2 first_bad_word_1based=21 remaining_after_first_bad=27 finish_edge=60
+PASS: E1_E3_RRESP_middle  read sticky_idle_cycles=5 err=1 last_edge=65
+PASS: E1_E3_RRESP_middle START rd=1 wr=0 old_err=10 clear_edge=66 err_after=00 busy_after=10
+PASS: E1_E3_RRESP_middle READ beats=1 AR=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=69
+PASS: E1_E3_RRESP_middle END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E2_E3_RID_middle reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E2_E3_RID_middle expected_checker_codes=NONE; slave injections counted separately
+PASS: E2_E3_RID_middle START rd=1 wr=0 old_err=00 clear_edge=79 err_after=00 busy_after=10
+PASS: E2_E3_RID_middle READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=33 first_err_edge=100 bad_beats=16 bad_burst=2 first_bad_word_1based=17 remaining_after_first_bad=31 finish_edge=133
+PASS: E2_E3_RID_middle  read sticky_idle_cycles=5 err=1 last_edge=138
+PASS: E2_E3_RID_middle START rd=1 wr=0 old_err=10 clear_edge=139 err_after=00 busy_after=10
+PASS: E2_E3_RID_middle READ beats=1 AR=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=142
+PASS: E2_E3_RID_middle END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E4_BRESP_middle reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E4_BRESP_middle expected_checker_codes=NONE; slave injections counted separately
+PASS: E4_BRESP_middle START rd=0 wr=1 old_err=00 clear_edge=152 err_after=00 busy_after=01
+PASS: E4_BRESP_middle WRITE beats=48 AW=3 B=3 busy_cycles=54 err_high_sample_cycles=18 first_err_edge=188 bad_B=1 bad_burst=2 words_at_bad_B=32 remaining_after_bad_B=16 finish_edge=206 mem_mismatches=0
+PASS: E4_BRESP_middle START rd=1 wr=0 old_err=01 clear_edge=208 err_after=01 busy_after=10
+PASS: E4_BRESP_middle READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=262
+PASS: E4_BRESP_middle write_readback_words=48 mismatches=0
+PASS: E4_BRESP_middle write sticky_idle_cycles=5 err=1 last_edge=267
+PASS: E4_BRESP_middle START rd=0 wr=1 old_err=01 clear_edge=268 err_after=00 busy_after=01
+PASS: E4_BRESP_middle WRITE beats=1 AW=1 B=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=271 mem_mismatches=0
+PASS: E4_BRESP_middle END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E4_BID_middle reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E4_BID_middle expected_checker_codes=NONE; slave injections counted separately
+PASS: E4_BID_middle START rd=0 wr=1 old_err=00 clear_edge=281 err_after=00 busy_after=01
+PASS: E4_BID_middle WRITE beats=48 AW=3 B=3 busy_cycles=54 err_high_sample_cycles=18 first_err_edge=317 bad_B=1 bad_burst=2 words_at_bad_B=32 remaining_after_bad_B=16 finish_edge=335 mem_mismatches=0
+PASS: E4_BID_middle START rd=1 wr=0 old_err=01 clear_edge=337 err_after=01 busy_after=10
+PASS: E4_BID_middle READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=391
+PASS: E4_BID_middle write_readback_words=48 mismatches=0
+PASS: E4_BID_middle write sticky_idle_cycles=5 err=1 last_edge=396
+PASS: E4_BID_middle START rd=0 wr=1 old_err=01 clear_edge=397 err_after=00 busy_after=01
+PASS: E4_BID_middle WRITE beats=1 AW=1 B=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=400 mem_mismatches=0
+PASS: E4_BID_middle END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E6_zero_length reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E6_zero_length expected_checker_codes=NONE; slave injections counted separately
+PASS: E6_zero_length START rd=1 wr=1 old_err=00 clear_edge=410 err_after=00 busy_after=11
+PASS: E6_zero_length addr=18200000 bytes=0 AR=0 AW=0 W=0 B=0 rd_busy_cycles=1 wr_busy_cycles=1 err_edge=411 start_edge=410 sticky_idle_cycles=5
+PASS: E6_zero_length END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E6_unaligned_address reset_pair sampled_edges=2 busy_before=00 err_before=11 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E6_unaligned_address expected_checker_codes=NONE; slave injections counted separately
+PASS: E6_unaligned_address START rd=1 wr=1 old_err=00 clear_edge=421 err_after=00 busy_after=11
+PASS: E6_unaligned_address addr=18200001 bytes=8 AR=0 AW=0 W=0 B=0 rd_busy_cycles=1 wr_busy_cycles=1 err_edge=422 start_edge=421 sticky_idle_cycles=5
+PASS: E6_unaligned_address END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E6_unaligned_length reset_pair sampled_edges=2 busy_before=00 err_before=11 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E6_unaligned_length expected_checker_codes=NONE; slave injections counted separately
+PASS: E6_unaligned_length START rd=1 wr=1 old_err=00 clear_edge=432 err_after=00 busy_after=11
+PASS: E6_unaligned_length addr=18200000 bytes=10 AR=0 AW=0 W=0 B=0 rd_busy_cycles=1 wr_busy_cycles=1 err_edge=433 start_edge=432 sticky_idle_cycles=5
+PASS: E6_unaligned_length END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E6_address_overflow reset_pair sampled_edges=2 busy_before=00 err_before=11 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E6_address_overflow expected_checker_codes=NONE; slave injections counted separately
+PASS: E6_address_overflow START rd=1 wr=1 old_err=00 clear_edge=443 err_after=00 busy_after=11
+PASS: E6_address_overflow addr=fffffff8 bytes=16 AR=0 AW=0 W=0 B=0 rd_busy_cycles=1 wr_busy_cycles=1 err_edge=444 start_edge=443 sticky_idle_cycles=5
+PASS: E6_address_overflow END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E6_end_exactly_2pow32_is_valid reset_pair sampled_edges=2 busy_before=00 err_before=11 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E6_end_exactly_2pow32_is_valid expected_checker_codes=NONE; slave injections counted separately
+PASS: E6_end_exactly_2pow32_is_valid START rd=1 wr=1 old_err=00 clear_edge=454 err_after=00 busy_after=11
+PASS: E6_end_exactly_2pow32_is_valid READ beats=1 AR=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=457
+PASS: E6_end_exactly_2pow32_is_valid WRITE beats=1 AW=1 B=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=457 mem_mismatches=0
+PASS: E6_end_exactly_2pow32_is_valid END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E8_clean_W_finishes_first reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E8_clean_W_finishes_first expected_checker_codes=NONE; slave injections counted separately
+PASS: E8_clean_W_finishes_first START rd=1 wr=1 old_err=00 clear_edge=463 err_after=00 busy_after=11
+PASS: E8_clean_W_finishes_first READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=517
+PASS: E8_clean_W_finishes_first WRITE beats=3 AW=1 B=1 busy_cycles=5 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=468 mem_mismatches=0
+PASS: E8_clean_W_finishes_first simultaneous_start=463 read_finish=517 write_finish=468 read_err=0 write_err=0 clean_side_error_contamination=0
+PASS: E8_clean_W_finishes_first START rd=1 wr=0 old_err=00 clear_edge=519 err_after=00 busy_after=10
+PASS: E8_clean_W_finishes_first READ beats=3 AR=1 busy_cycles=5 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=524
+PASS: E8_clean_W_finishes_first write_readback_words=3 mismatches=0
+PASS: E8_clean_W_finishes_first END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E8_R_error_R_finishes_first reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E8_R_error_R_finishes_first expected_checker_codes=NONE; slave injections counted separately
+PASS: E8_R_error_R_finishes_first START rd=1 wr=1 old_err=00 clear_edge=530 err_after=00 busy_after=11
+PASS: E8_R_error_R_finishes_first READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=29 first_err_edge=555 bad_beats=1 bad_burst=2 first_bad_word_1based=21 remaining_after_first_bad=27 finish_edge=584
+PASS: E8_R_error_R_finishes_first WRITE beats=3 AW=1 B=1 busy_cycles=85 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=615 mem_mismatches=0
+PASS: E8_R_error_R_finishes_first simultaneous_start=530 read_finish=584 write_finish=615 read_err=1 write_err=0 clean_side_error_contamination=0
+PASS: E8_R_error_R_finishes_first START rd=1 wr=0 old_err=10 clear_edge=617 err_after=00 busy_after=10
+PASS: E8_R_error_R_finishes_first READ beats=3 AR=1 busy_cycles=5 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=622
+PASS: E8_R_error_R_finishes_first write_readback_words=3 mismatches=0
+PASS: E8_R_error_R_finishes_first END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E8_W_error_W_finishes_first reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E8_W_error_W_finishes_first expected_checker_codes=NONE; slave injections counted separately
+PASS: E8_W_error_W_finishes_first START rd=1 wr=1 old_err=00 clear_edge=628 err_after=00 busy_after=11
+PASS: E8_W_error_W_finishes_first READ beats=48 AR=3 busy_cycles=234 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=862
+PASS: E8_W_error_W_finishes_first WRITE beats=48 AW=3 B=3 busy_cycles=54 err_high_sample_cycles=18 first_err_edge=664 bad_B=1 bad_burst=2 words_at_bad_B=32 remaining_after_bad_B=16 finish_edge=682 mem_mismatches=0
+PASS: E8_W_error_W_finishes_first simultaneous_start=628 read_finish=862 write_finish=682 read_err=0 write_err=1 clean_side_error_contamination=0
+PASS: E8_W_error_W_finishes_first START rd=1 wr=0 old_err=01 clear_edge=864 err_after=01 busy_after=10
+PASS: E8_W_error_W_finishes_first READ beats=48 AR=3 busy_cycles=234 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1098
+PASS: E8_W_error_W_finishes_first write_readback_words=48 mismatches=0
+PASS: E8_W_error_W_finishes_first END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E7_AR_stall reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=8 E7_AR_stall expected_checker_codes=NONE; slave injections counted separately
+PASS: E7_AR_stall START rd=1 wr=0 old_err=00 clear_edge=1106 err_after=00 busy_after=10
+PASS: E7_AR_stall WATCHDOG=8 observed_waits_at_error=8 first_err_edge=1115 hold_observed=24 busy_preserved=1 valid_or_outstanding_preserved=1 AR=0 AW=0 R=0 W=0 B=0
+PASS: E7_AR_stall READ beats=16 AR=1 busy_cycles=43 err_high_sample_cycles=34 first_err_edge=1115 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1149
+PASS: E7_AR_stall START rd=1 wr=0 old_err=10 clear_edge=1151 err_after=00 busy_after=10
+PASS: E7_AR_stall READ beats=1 AR=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1154
+PASS: E7_AR_stall END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E7_R_stall reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=8 E7_R_stall expected_checker_codes=NONE; slave injections counted separately
+PASS: E7_R_stall START rd=1 wr=0 old_err=00 clear_edge=1162 err_after=00 busy_after=10
+PASS: E7_R_stall WATCHDOG=8 observed_waits_at_error=8 first_err_edge=1172 hold_observed=24 busy_preserved=1 valid_or_outstanding_preserved=1 AR=1 AW=0 R=0 W=0 B=0
+PASS: E7_R_stall READ beats=16 AR=1 busy_cycles=82 err_high_sample_cycles=72 first_err_edge=1172 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1244
+PASS: E7_R_stall START rd=1 wr=0 old_err=10 clear_edge=1246 err_after=00 busy_after=10
+PASS: E7_R_stall READ beats=1 AR=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1249
+PASS: E7_R_stall END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E7_AW_W_stall reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=8 E7_AW_W_stall expected_checker_codes=NONE; slave injections counted separately
+PASS: E7_AW_W_stall START rd=0 wr=1 old_err=00 clear_edge=1257 err_after=00 busy_after=01
+PASS: E7_AW_W_stall WATCHDOG=8 observed_waits_at_error=8 first_err_edge=1266 hold_observed=24 busy_preserved=1 valid_or_outstanding_preserved=1 AR=0 AW=0 R=0 W=0 B=0
+PASS: E7_AW_W_stall WRITE beats=16 AW=1 B=1 busy_cycles=43 err_high_sample_cycles=34 first_err_edge=1266 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=1300 mem_mismatches=0
+PASS: E7_AW_W_stall START rd=1 wr=0 old_err=01 clear_edge=1302 err_after=01 busy_after=10
+PASS: E7_AW_W_stall READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1320
+PASS: E7_AW_W_stall write_readback_words=16 mismatches=0
+PASS: E7_AW_W_stall START rd=0 wr=1 old_err=01 clear_edge=1322 err_after=00 busy_after=01
+PASS: E7_AW_W_stall WRITE beats=1 AW=1 B=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=1325 mem_mismatches=0
+PASS: E7_AW_W_stall END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E7_B_stall reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=8 E7_B_stall expected_checker_codes=NONE; slave injections counted separately
+PASS: E7_B_stall START rd=0 wr=1 old_err=00 clear_edge=1333 err_after=00 busy_after=01
+PASS: E7_B_stall WATCHDOG=8 observed_waits_at_error=8 first_err_edge=1358 hold_observed=24 busy_preserved=1 valid_or_outstanding_preserved=1 AR=0 AW=1 R=0 W=16 B=0
+PASS: E7_B_stall WRITE beats=16 AW=1 B=1 busy_cycles=82 err_high_sample_cycles=57 first_err_edge=1358 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=1415 mem_mismatches=0
+PASS: E7_B_stall START rd=1 wr=0 old_err=01 clear_edge=1417 err_after=01 busy_after=10
+PASS: E7_B_stall READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1435
+PASS: E7_B_stall write_readback_words=16 mismatches=0
+PASS: E7_B_stall START rd=0 wr=1 old_err=01 clear_edge=1437 err_after=00 busy_after=01
+PASS: E7_B_stall WRITE beats=1 AW=1 B=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=1440 mem_mismatches=0
+PASS: E7_B_stall END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E9_read_mid_reset reset_pair sampled_edges=2 busy_before=00 err_before=01 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E9_read_mid_reset expected_checker_codes=NONE; slave injections counted separately
+PASS: E9_read_mid_reset START rd=1 wr=0 old_err=00 clear_edge=1446 err_after=00 busy_after=10
+PASS: E9_read_mid_reset reset_pair sampled_edges=2 busy_before=10 err_before=00 busy_after=00 err_after=00 C12_violations=0
+PASS: E9_read_mid_reset aborted_beats=5 requested_beats=16 reset_edges=2 busy=00 err=00 VALID=000 partial_write_rollback=none
+PASS: E9_read_mid_reset START rd=1 wr=0 old_err=00 clear_edge=1458 err_after=00 busy_after=10
+PASS: E9_read_mid_reset READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1476
+PASS: E9_read_mid_reset END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E9_write_mid_reset reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E9_write_mid_reset expected_checker_codes=NONE; slave injections counted separately
+PASS: E9_write_mid_reset START rd=0 wr=1 old_err=00 clear_edge=1482 err_after=00 busy_after=01
+PASS: E9_write_mid_reset reset_pair sampled_edges=2 busy_before=01 err_before=00 busy_after=00 err_after=00 C12_violations=0
+PASS: E9_write_mid_reset aborted_beats=5 requested_beats=16 reset_edges=2 busy=00 err=00 VALID=000 partial_write_rollback=none
+PASS: E9_write_mid_reset START rd=0 wr=1 old_err=00 clear_edge=1493 err_after=00 busy_after=01
+PASS: E9_write_mid_reset WRITE beats=16 AW=1 B=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=1511 mem_mismatches=0
+PASS: E9_write_mid_reset START rd=1 wr=0 old_err=00 clear_edge=1513 err_after=00 busy_after=10
+PASS: E9_write_mid_reset READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1531
+PASS: E9_write_mid_reset write_readback_words=16 mismatches=0
+PASS: E9_write_mid_reset END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E5_E9_early_RLAST reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E5_E9_early_RLAST expected_checker_codes=NONE; slave injections counted separately
+PASS: E5_E9_early_RLAST START rd=1 wr=0 old_err=00 clear_edge=1537 err_after=00 busy_after=10
+PASS: E5_E9_early_RLAST mode=1 entry_edge=1554 state=4 busy_hold_cycles=2000 received_beats=15 pending_words=1 err_high_sample_cycles=2000 busy_samples=2017 START_while_fault=ignored READY_toggle=no_effect master_violations=0 quiescent=SKIPPED
+PASS: E5_E9_early_RLAST reset_pair sampled_edges=2 busy_before=10 err_before=10 busy_after=00 err_after=00 C12_violations=0
+PASS: E5_E9_early_RLAST recovery=coordinated_reset state=IDLE err=0 busy=0 expected_checker_codes=NONE injections=1
+PASS: E5_recovery_after_early START rd=1 wr=0 old_err=00 clear_edge=3560 err_after=00 busy_after=10
+PASS: E5_recovery_after_early READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=3578
+PASS: E5_recovery_after_early END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E5_E9_missing_RLAST reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E5_E9_missing_RLAST expected_checker_codes=NONE; slave injections counted separately
+PASS: E5_E9_missing_RLAST START rd=1 wr=0 old_err=00 clear_edge=3584 err_after=00 busy_after=10
+PASS: E5_E9_missing_RLAST mode=2 entry_edge=3602 state=4 busy_hold_cycles=2000 received_beats=16 pending_words=0 err_high_sample_cycles=2000 busy_samples=2018 START_while_fault=ignored READY_toggle=no_effect master_violations=0 quiescent=SKIPPED
+PASS: E5_E9_missing_RLAST reset_pair sampled_edges=2 busy_before=10 err_before=10 busy_after=00 err_after=00 C12_violations=0
+PASS: E5_E9_missing_RLAST recovery=coordinated_reset state=IDLE err=0 busy=0 expected_checker_codes=NONE injections=1
+PASS: E5_recovery_after_missing START rd=1 wr=0 old_err=00 clear_edge=5608 err_after=00 busy_after=10
+PASS: E5_recovery_after_missing READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=5626
+PASS: E5_recovery_after_missing END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: T-02d E1-E9 ALL CHECKS cases=22 normal_injections=8 watchdog_injections=0 master_violations=0 expected_checker_violations=0 C12=0 RD_FAULT_hold=2000_each reset_recovery=PASS
+$finish called at time : 56260 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_m00_err.v" Line 692
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 02:18:17 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.415204
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_axi4_slave_mem_model -s t07_tb_axi4_slave_mem_model
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_axi4_slave_mem_model -s t07_tb_axi4_slave_mem_model 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.axi4_slave_mem_model
+Compiling module work.tb_axi4_slave_mem_model
+Built simulation snapshot t07_tb_axi4_slave_mem_model
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-l03/regression/xsim.dir/t07_tb_axi4_slave_mem_model/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 02:18:20 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.263104
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l03\regression
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_axi4_slave_mem_model -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_axi4_slave_mem_model/xsim_script.tcl
+# xsim {t07_tb_axi4_slave_mem_model} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: A1 single-beat write/read data match
+PASS: A2 16-beat write/read all words match
+PASS: A3 consecutive bursts preserve distinct addresses and data
+PASS: A4 sparse mem_fill/read 40 words; compare=0; wrong-seed compare=1
+PASS: A5 unwritten address returns DEAD_BEEF_BAD0_0001
+PASS: A6 all 4 W beats before AW; no early B; buffered data read back
+PASS: A6-extra AW first, no B while waiting for WLAST, then correct response/data
+PASS: A-extra independent read/write; stable stalled R checks=5 B checks=5
+PASS: B1 ARREADY gap=7 observed address stalls=6 (baseline=0)
+PASS: B2 R beat interval baseline=1 configured-gap=3 observed=4 clocks
+PASS: B3 WLAST-to-B handshake baseline=1 delay=4 observed=5 clocks
+PASS: B3-extra WLAST delay expired before AW; no early B, AW-to-B handshake=1 clock
+PASS: B4 AR-to-first-R handshake baseline=1 latency=5 observed=6 clocks
+PASS: B5 seed=1234ABCD repeated WREADY trace=000000a014168cf9 samples=44 stalls=28
+PASS: C1/C4 RRESP=SLVERR on beat 2 only; next burst OKAY; count=1
+PASS: C2/C4 RID=1 in selected burst; next RID=0; count=1
+PASS: C2/C4 BRESP=SLVERR then next OKAY; count=1
+PASS: C2/C4 BID=1 then next BID=0; count=1
+PASS: C3/C4 early RLAST at beat 2 instead of 3; next burst normal
+PASS: C3/C4/C5 missing RLAST then normal; counters RRESP/RID/BRESP/BID/RLAST=1/1/1/1/2 total=6
+PASS: C12-positive reset masks active master VALID after delta settling; violations=0
+EXPECTED_VIOLATION: C1 AR payload/VALID changed while stalled at 4635000
+PASS: D1 ARADDR changes during AR stall -> C1 detected exactly once; delta=1
+EXPECTED_VIOLATION: C4 AR SIZE/BURST/ID at 4685000
+PASS: D2 ARSIZE=2 -> C4 detected exactly once; delta=1
+EXPECTED_VIOLATION: C5 AR LEN > 15 or X at 4745000
+PASS: D3 ARLEN=16 (17 beats) -> C5 detected exactly once; delta=1
+EXPECTED_VIOLATION: C7 AR burst crosses 4 KiB at 4805000
+PASS: D4 AR burst crosses 4 KiB -> C7 detected exactly once; delta=1
+EXPECTED_VIOLATION: C8 WSTRB is not FF at 4865000
+PASS: D5 WSTRB=0F -> C8 detected exactly once; delta=1
+EXPECTED_VIOLATION: C9 WLAST position disagrees with AWLEN at 4945000
+PASS: D6 WLAST one beat early -> C9 detected exactly once; delta=1
+EXPECTED_VIOLATION: C2 AW payload/VALID changed while stalled at 5015000
+PASS: D-extra AWVALID drops during stall -> C2 detected exactly once; delta=1
+EXPECTED_VIOLATION: C3 W payload/VALID changed while stalled at 5075000
+PASS: D-extra WDATA changes during stall -> C3 detected exactly once; delta=1
+EXPECTED_VIOLATION: C6 AW address must be 8-byte aligned at 5125000
+PASS: D-extra misaligned AWADDR -> C6 detected exactly once; delta=1
+EXPECTED_VIOLATION: C10 test ended with incomplete write beat count at 5190000
+PASS: D-extra declared end with missing W beats -> C10 detected exactly once; delta=1
+EXPECTED_VIOLATION: C10 actual W count exceeds AWLEN+1 at 5275000
+PASS: D-extra buffered W count exceeds AWLEN+1 -> C10 detected exactly once; delta=1
+EXPECTED_VIOLATION: C11 second AR before prior read completion at 5355000
+PASS: D-extra second AR before first R completion -> C11 detected exactly once; delta=1
+EXPECTED_VIOLATION: C12 master VALID asserted during reset at 5401000
+PASS: D-extra AWVALID during reset between clock edges -> C12 detected exactly once; delta=1
+PASS: D-extra C11 switch permits queued address without parallel service
+PASS: T-02a ALL A/B/C/D CHECKS PASSED; mandatory negatives=6/6 total negatives=13 injections=6
+$finish called at time : 5520 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_axi4_slave_mem_model.v" Line 410
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 02:18:25 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.129084

@@ -1,0 +1,25 @@
+C:\Users\kccistc\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -X utf8 -u C:\Users\kccistc\AppData\Local\Temp\codex-f01-fifo\run_equiv.py
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat C:\Users\kccistc\AppData\Local\Temp\codex-f01-fifo\reference\Buffer.v C:\Users\kccistc\AppData\Local\Temp\codex-f01-fifo\reference\Conv_MAC.v C:\Users\kccistc\AppData\Local\Temp\codex-f01-fifo\reference\requant_stage.v C:\Users\kccistc\AppData\Local\Temp\codex-f01-fifo\reference\gelu_stage.v C:\Users\kccistc\AppData\Local\Temp\codex-f01-fifo\reference\Pool.v C:\Users\kccistc\AppData\Local\Temp\codex-f01-fifo\reference\CNN_Encoder.v D:\2609_final_project\cnn_rtl\rtl\encoder\Buffer.v D:\2609_final_project\cnn_rtl\rtl\encoder\Conv_MAC.v D:\2609_final_project\cnn_rtl\rtl\encoder\requant_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\gelu_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\Pool.v D:\2609_final_project\cnn_rtl\rtl\encoder\CNN_Encoder.v D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\weight_param_loader.v
+
+WALL_CLOCK_SECONDS: 1.060
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\tb_encoder_equiv.v
+
+WALL_CLOCK_SECONDS: 0.925
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_encoder_equiv -s e01_equiv
+
+WALL_CLOCK_SECONDS: 6.042
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat e01_equiv -runall -onerror quit
+PASS: E-01 BUFFER id=2 W=8 R=64 bytes=64 checks=288 read_first_collisions=29 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BUFFER id=4 W=64 R=16 bytes=64 checks=304 read_first_collisions=52 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BUFFER id=3 W=24 R=8 bytes=60 checks=400 read_first_collisions=68 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BLOB path=D:/2609_final_project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6_weights.bin bytes=422992 LOAD_beats=3722 LOAD_cycles=9772 pool_mult=783b66b4 pool_shift=31
+PASS: E-01 BUFFER id=0 W=64 R=8 bytes=11520 checks=36200 read_first_collisions=11521 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BUFFER id=1 W=8 R=8 bytes=20480 checks=82120 read_first_collisions=20481 latency=1 lane_order=LSB_at_low_address mismatches=0
+OBS: E-01 ENCODER case=0 pattern=deterministic seed=00000000 sampled_done_cycles=1278889 first_assert_cycles=1278888 compared_cycles=1278890 output_signals=5 output_bits=93 extra_buffer_signals=2 known_feat_samples=440704 unknown_feat_samples=838186 done_pulses=1 mismatches=0
+OBS: E-01 CYCLE_DEFINITION case=0 spec=1278890 elapsed_edges=1278889 inclusive_edges=1278890 original_and_new_finish_together=1
+PASS: E-01 FEATURES case=0 swept_addresses=512 valid_words=384 known_bytes=3072 out_of_range_X=128 nonzero_words=384 changed_from_pattern0=0 mismatches=0 latency=1
+OBS: E-01 ENCODER case=1 pattern=   xorshift32 seed=6e01cafe sampled_done_cycles=1278889 first_assert_cycles=1278888 compared_cycles=1278890 output_signals=5 output_bits=93 extra_buffer_signals=2 known_feat_samples=959231 unknown_feat_samples=319659 done_pulses=1 mismatches=0
+OBS: E-01 CYCLE_DEFINITION case=1 spec=1278890 elapsed_edges=1278889 inclusive_edges=1278890 original_and_new_finish_together=1
+PASS: E-01 FEATURES case=1 swept_addresses=512 valid_words=384 known_bytes=3072 out_of_range_X=128 nonzero_words=384 changed_from_pattern0=384 mismatches=0 latency=1
+PASS: E-01 ALL cases=2 full_run_compared_cycles=2557780 output_signals_per_cycle=5 extra_buffer_signals_per_cycle=2 final_valid_feature_words=768 buffer_variants=5 mismatches=0
+WALL_CLOCK_SECONDS: 86.812

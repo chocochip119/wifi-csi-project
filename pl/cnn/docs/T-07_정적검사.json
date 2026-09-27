@@ -1,0 +1,228 @@
+{
+  "changed": [
+    {
+      "path": "cnn_rtl/rtl/pose_cnn_ctrl.v",
+      "sha256_before": "0b44e612b473f23fd8539aacc2adb9d8bbe6ca3ea0ade0751768c294cecf201d",
+      "sha256_after": "de0326cb2f07eb3e9ac251594886c5727dc8b781db91c2b0770245b6ef62723d",
+      "unchanged": false
+    },
+    {
+      "path": "cnn_rtl/tb/tb_ctrl_status.v",
+      "sha256_before": "f0223fc70ab8c88b2504a65895366a68f0ebfc534565b58b4e0103ca76d87456",
+      "sha256_after": "5f02331834abb6e2deefc2ad51945ec1c2dc0c60e1f96abc174b1e2644c8c217",
+      "unchanged": false
+    },
+    {
+      "path": "cnn_rtl/tb/tb_top_fc1.v",
+      "sha256_before": "1286dda8192e733a8bd4f87017b64185eef07fe7cf21befc547e2898669c8c6f",
+      "sha256_after": "eb1eb95ce807c53c2d49de875bc642f3da0bc1856cb5c9c578a2dfd07d91a196",
+      "unchanged": false
+    },
+    {
+      "path": "cnn_rtl/tb/tb_top_full.v",
+      "sha256_before": "5626a5a1f506a0a1bdb3210fb59d66565d294273f149de2d4db911805f0a7266",
+      "sha256_after": "3ca96be988f4665207665b1e9d16ce2a709c5f5f871b16437a2812635ea0a6e4",
+      "unchanged": false
+    },
+    {
+      "path": "cnn_rtl/tb/tb_top_infer.v",
+      "sha256_before": "dc06aac95ff3c09809122b6bba9325b1de339e4ad4999f077e02933c9b2bc60d",
+      "sha256_after": "1943b354af97fd74bb3a5eac102a7a09b6cf0f19038e5937ab5b02ac46334387",
+      "unchanged": false
+    },
+    {
+      "path": "cnn_rtl/tb/tb_top_load.v",
+      "sha256_before": "140e2fdaa1c604ebbb892f4d98b148c2b2d3208d0ec6602be06b6168c15e2304",
+      "sha256_after": "7b8ab4ff457254c5a6e52b9b65a4644a676e07ffe19bce9620e9be3ae6df8746",
+      "unchanged": false
+    }
+  ],
+  "protected": [
+    {
+      "path": "cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v",
+      "sha256_before": "9c5ee22c6d25602e97032c337ad437032f99e94ea883f55c231a2d4d71e998d0",
+      "sha256_after": "9c5ee22c6d25602e97032c337ad437032f99e94ea883f55c231a2d4d71e998d0",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v",
+      "sha256_before": "78adb298e83ae2c4ab023748aff78104a237648364579729d951a5b597e1a65e",
+      "sha256_after": "78adb298e83ae2c4ab023748aff78104a237648364579729d951a5b597e1a65e",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/axi4_slave_mem_model.v",
+      "sha256_before": "02813e9d5789189b27464dad307d39c0c2eaae56106d28d437afe731b9bea348",
+      "sha256_after": "02813e9d5789189b27464dad307d39c0c2eaae56106d28d437afe731b9bea348",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/enc_stub.v",
+      "sha256_before": "34794641743be6d2de3138cc90eec4dd6fe370199d2dbb5384fdb4f4c48ba333",
+      "sha256_after": "34794641743be6d2de3138cc90eec4dd6fe370199d2dbb5384fdb4f4c48ba333",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/fc_stub.v",
+      "sha256_before": "48b4bd7c02d8c0ecb29527107615ea54160384d19273c6c46c8aab851abca26a",
+      "sha256_after": "48b4bd7c02d8c0ecb29527107615ea54160384d19273c6c46c8aab851abca26a",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/in_ram_stub.v",
+      "sha256_before": "5e0cd6bab4a93cf602d86720d2698d5e30b9a9398370f0db259b351849a2c45d",
+      "sha256_after": "5e0cd6bab4a93cf602d86720d2698d5e30b9a9398370f0db259b351849a2c45d",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/loader_stub.v",
+      "sha256_before": "5bc7d249ed1cd89adbc041b4c8e950575259bd10f670ccff93338d3e00285e9b",
+      "sha256_after": "5bc7d249ed1cd89adbc041b4c8e950575259bd10f670ccff93338d3e00285e9b",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/tb_axi4_slave_mem_model.v",
+      "sha256_before": "170ca4b8ab67996c6c4bb52d9112acbac4aec292311aa9893ee8d20c9d6e7944",
+      "sha256_after": "170ca4b8ab67996c6c4bb52d9112acbac4aec292311aa9893ee8d20c9d6e7944",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/tb_csr_ctrl_link.v",
+      "sha256_before": "bddec9002951ff2636e107ba38973afce666c3ca671c1584f0c52b1119ccbf00",
+      "sha256_after": "bddec9002951ff2636e107ba38973afce666c3ca671c1584f0c52b1119ccbf00",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/tb_m00_err.v",
+      "sha256_before": "02e1e0a88b16168ce0734b34faff7ac2344a86fbe330be227703177da4f90486",
+      "sha256_after": "02e1e0a88b16168ce0734b34faff7ac2344a86fbe330be227703177da4f90486",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/tb_m00_read_perf.v",
+      "sha256_before": "4e29a74bf287b001a73c91d5e49af606c32cb2db6c9f97c1b43a87ac1a309439",
+      "sha256_after": "4e29a74bf287b001a73c91d5e49af606c32cb2db6c9f97c1b43a87ac1a309439",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/tb_m00_read.v",
+      "sha256_before": "99705f116077c108dc7d3799057b8d637395ba2783f84187d8a4b916b682e101",
+      "sha256_after": "99705f116077c108dc7d3799057b8d637395ba2783f84187d8a4b916b682e101",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/tb_m00_write.v",
+      "sha256_before": "bda8ff6685076323e5d138061bfca6a6b3e58b345b4bbca527efbf43283e713c",
+      "sha256_after": "bda8ff6685076323e5d138061bfca6a6b3e58b345b4bbca527efbf43283e713c",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/tb_s00_axi_ctrl.v",
+      "sha256_before": "72bcd126b4e6ca0e1a1b129973ff65c0c1f6f40c2b3d691c568da15041206d2f",
+      "sha256_after": "72bcd126b4e6ca0e1a1b129973ff65c0c1f6f40c2b3d691c568da15041206d2f",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/tb_s00_axi_read.v",
+      "sha256_before": "1733a639ed4d2299dd8b1f72f4d282b5b3535b3f033f41c00f49707f2a42c0f5",
+      "sha256_after": "1733a639ed4d2299dd8b1f72f4d282b5b3535b3f033f41c00f49707f2a42c0f5",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/tb_s00_axi_regs.v",
+      "sha256_before": "773760f459f582096d1644b06cd0a85cdd37db33bfa190bb3ff7fc46ef60cab2",
+      "sha256_after": "773760f459f582096d1644b06cd0a85cdd37db33bfa190bb3ff7fc46ef60cab2",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl/tb/tb_s00_axi_write.v",
+      "sha256_before": "aff01c63ad24a35ca122c912b6a781e5e5a623b9341f26ed7c4fcbf16f1e7170",
+      "sha256_after": "aff01c63ad24a35ca122c912b6a781e5e5a623b9341f26ed7c4fcbf16f1e7170",
+      "unchanged": true
+    }
+  ],
+  "Encoder_protected": [
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\.gitignore",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\Buffer.v",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\CNN_Encoder.v",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\Conv_MAC.v",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\gelu_stage.v",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\gen_CNN_Encoder.py",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\gen_Conv_MAC.py",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\gen_requant_stage.py",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\Pool.v",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\README.md",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\requant_stage.v",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\tb_CNN_Encoder.v",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\tb_Conv_MAC.v",
+      "unchanged": true
+    },
+    {
+      "path": "cnn_rtl\\others\\CNN_Encoder\\tb_requant_stage.v",
+      "unchanged": true
+    }
+  ],
+  "states": {
+    "IDLE": "0000",
+    "DECODE": "0001",
+    "LD_RD1": "0010",
+    "LD_RD2": "0011",
+    "LD_WAIT": "0100",
+    "IN_RD": "0101",
+    "ENC": "0110",
+    "FC1": "0111",
+    "FC2": "1000",
+    "FC3": "1001",
+    "WR": "1010",
+    "ERR_DRAIN": "1011",
+    "FINISH": "1100"
+  },
+  "implemented_states": 13,
+  "illegal_encodings": [
+    13,
+    14,
+    15
+  ],
+  "drain_origins": 4,
+  "RTL_timeout": false,
+  "direct_RTL_prohibited_constructs": 0,
+  "sync_active_low_reset": true,
+  "diagram_encoding_matches": true
+}

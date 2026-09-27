@@ -1,0 +1,171 @@
+{
+  "schema": "G-01-v1",
+  "status": "COMPLETE",
+  "blob": {
+    "size_bytes": 422992,
+    "sha256": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+    "input_scale": 0.022389819845557213,
+    "output_scale": 0.006640393286943436,
+    "header_hex": [
+      "36574c50",
+      "00000002",
+      "00019d14",
+      "3cb76adb",
+      "3bd997a8",
+      "783b66b4",
+      "0000001f",
+      "00000000"
+    ],
+    "shift_ranges": {
+      "pool": {
+        "min": 31,
+        "max": 31,
+        "count": 1
+      },
+      "conv1": {
+        "min": 39,
+        "max": 40,
+        "count": 16
+      },
+      "conv2": {
+        "min": 39,
+        "max": 40,
+        "count": 32
+      },
+      "fc1": {
+        "min": 40,
+        "max": 44,
+        "count": 128
+      },
+      "fc2": {
+        "min": 39,
+        "max": 41,
+        "count": 128
+      },
+      "fc3": {
+        "min": 42,
+        "max": 43,
+        "count": 24
+      }
+    },
+    "path": "D:\\2609_final_project\\wifi-csi-pose-main\\HLS\\pl_accel_v6\\pl_accel_v6_weights.bin"
+  },
+  "input": {
+    "source": "test_vectors.h:test_input",
+    "sha256": "949915442c9dfcf980d4880e52b4ff6b08b1b5ff75bdccfa346b807ba0c6fffa"
+  },
+  "original_source_sha256": {
+    "full_pose.cpp": "c2c45b9db1d32fde9be53a48a150a77725a042ed13bca0bd13c9f2ffa2f2da1c",
+    "full_pose.h": "1ce9c7844905e2ac21a978a5565ad20d33c381cb40224643b7c0e22a4b4c0874",
+    "test_vectors.h": "c86d0f930986dbbea0b68596deeb8aad40d1373f4400d08cc1423461e2c710f9",
+    "testbench.cpp": "68c816ab48ab01c043710a27b58987ba56a62ce7961eedd0ae581a31e46e093b"
+  },
+  "instrumented_sha256": "f6df7c1be5c7707b9ba48ac938ea6b46f73b4f311478b337f25dd0ac2f5e64cf",
+  "compiler": "g++.exe (Rev5, Built by MSYS2 project) 16.1.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "invocation": "C:\\Users\\kccistc\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe cnn_rtl/golden/build_golden.py",
+  "expected_sample_checked": true,
+  "max_abs_err": 0.0,
+  "baseline_bit_matches": 24,
+  "independent_fc_checks": {
+    "fc1": {
+      "acc": 128,
+      "requant": 128,
+      "gelu": 128
+    },
+    "fc2": {
+      "acc": 128,
+      "requant": 128,
+      "gelu": 128
+    },
+    "fc3": {
+      "acc": 24,
+      "requant": 24,
+      "gelu": 0
+    }
+  },
+  "timings": [
+    {
+      "step": "original sample",
+      "seconds": 1.55188,
+      "exit": 0
+    },
+    {
+      "step": "uninstrumented file model",
+      "seconds": 1.514839,
+      "exit": 0
+    },
+    {
+      "step": "instrumented file model",
+      "seconds": 1.500327,
+      "exit": 0
+    }
+  ],
+  "total_seconds": 4.844376,
+  "dumps": {
+    "encoder_flat_i8.hex": {
+      "lines": 3072,
+      "text_bytes": 9216,
+      "sha256": "f7488415544621e924197e7294c46bfb44db3635ef6beb9e21adb62a9402a1ad"
+    },
+    "fc1_requant_i8.hex": {
+      "lines": 128,
+      "text_bytes": 384,
+      "sha256": "b039e226c4b846d174178cb075e0a3e17324ee341dedfd6a11de82e51ea15c66"
+    },
+    "fc1_gelu_i8.hex": {
+      "lines": 128,
+      "text_bytes": 384,
+      "sha256": "3ed38e4567bac7f9ca5bf9cefecc11471e5cebae3a4ae8bffff66ef04ef6170b"
+    },
+    "fc2_requant_i8.hex": {
+      "lines": 128,
+      "text_bytes": 384,
+      "sha256": "5e681962a9b9735400ac3aeb16b3d60295df724978723c321fbe6098db51ec53"
+    },
+    "fc2_gelu_i8.hex": {
+      "lines": 128,
+      "text_bytes": 384,
+      "sha256": "f741ba38d3adc58a77a93137ee08860b1314fecb5e320f72a47f8d9f633c4ffe"
+    },
+    "fc3_i8.hex": {
+      "lines": 24,
+      "text_bytes": 72,
+      "sha256": "fe2e64d09125e251f61d1837285718837af28e07e1a24c78c78b9aa633caa150"
+    },
+    "fc1_acc_i32.hex": {
+      "lines": 128,
+      "text_bytes": 1152,
+      "sha256": "22b6aca7a6875ef604e8bfbfc5238de14cb78602256cd8d4aaac9f3821fc306d"
+    },
+    "fc2_acc_i32.hex": {
+      "lines": 128,
+      "text_bytes": 1152,
+      "sha256": "081119f47e2668b983023ef428ca871900338a4563551ed355e906c0aa2df1f8"
+    },
+    "fc3_acc_i32.hex": {
+      "lines": 24,
+      "text_bytes": 216,
+      "sha256": "31021ea552cac2163495cb6b37789f977a8ccf9f9ec470a1e7e0621f3e0b0ec9"
+    },
+    "pose_f32.hex": {
+      "lines": 24,
+      "text_bytes": 216,
+      "sha256": "3645306406f53e8ba909a98821e24277137b7e20c7f71e553f66c9eded0c8e69"
+    },
+    "encoder_flat_u64.hex": {
+      "lines": 384,
+      "text_bytes": 6528,
+      "sha256": "50922ed6746c48c4dda4be98e161152af47d5068c76392300fe5cea8846f0120"
+    },
+    "input_i8.hex": {
+      "lines": 11520,
+      "text_bytes": 34560,
+      "sha256": "bcfe8b0aa9a23613ac60543ebbe2956bf993952a51adbf0f733e44135aa9d6a5"
+    },
+    "pose_f32.txt": {
+      "lines": 24,
+      "text_bytes": 285,
+      "sha256": "5156a6367cdbc72ab949a1dda9ec32f5a2ca425209bb48de01543721f7d44597"
+    }
+  }
+}

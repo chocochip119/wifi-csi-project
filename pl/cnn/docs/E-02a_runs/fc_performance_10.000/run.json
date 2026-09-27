@@ -1,0 +1,10 @@
+{
+  "tag": "fc_performance_10.000",
+  "block": "fc",
+  "top": "fc_mac_requant_ooc",
+  "mode": "performance",
+  "period_ns": 10.0,
+  "exit": 0,
+  "seconds": 279.15776,
+  "complete": true
+}

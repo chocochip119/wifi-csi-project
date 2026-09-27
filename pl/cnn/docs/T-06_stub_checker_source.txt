@@ -1,0 +1,21 @@
+`timescale 1ns/1ps
+module tb_t06_fc_contract;
+ reg clk=0,resetn=0,fc_start=0,fifo_we=0;
+ reg [1:0] fc_sel=0;
+ wire full,done;wire [191:0] pose;
+ integer mode;
+ always #5 clk=~clk;
+ fc_stub fc(.clk(clk),.resetn(resetn),.fc_start(fc_start),.fc_sel(fc_sel),
+   .fifo_we(fifo_we),.fifo_wdata(64'd0),.fifo_full(full),.fc_done(done),.pose_data(pose));
+ initial begin
+  if(!$value$plusargs("MODE=%d",mode)) $fatal(1,"missing MODE");
+  repeat(3) @(negedge clk);resetn=1;
+  if(mode==1) fc_sel=3;
+  if(mode==2) fc_sel=1;
+  fc_start=1;@(negedge clk);fc_start=0;
+  if(mode==0) begin @(negedge clk);fc_start=1;end
+  if(mode==3) begin fifo_we=1;@(negedge clk);fifo_we=0;end
+  repeat(5) @(negedge clk);$fatal(1,"CHECKER_MISSED_INVALID_START");
+ end
+ initial begin #1000;$fatal(1,"CHECKER_TIMEOUT");end
+endmodule

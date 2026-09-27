@@ -1,0 +1,171 @@
+{
+  "schema": "G-01-v1",
+  "status": "COMPLETE",
+  "blob": {
+    "size_bytes": 422992,
+    "sha256": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+    "input_scale": 0.022389819845557213,
+    "output_scale": 0.006640393286943436,
+    "header_hex": [
+      "36574c50",
+      "00000002",
+      "00019d14",
+      "3cb76adb",
+      "3bd997a8",
+      "783b66b4",
+      "0000001f",
+      "00000000"
+    ],
+    "shift_ranges": {
+      "pool": {
+        "min": 31,
+        "max": 31,
+        "count": 1
+      },
+      "conv1": {
+        "min": 39,
+        "max": 40,
+        "count": 16
+      },
+      "conv2": {
+        "min": 39,
+        "max": 40,
+        "count": 32
+      },
+      "fc1": {
+        "min": 40,
+        "max": 44,
+        "count": 128
+      },
+      "fc2": {
+        "min": 39,
+        "max": 41,
+        "count": 128
+      },
+      "fc3": {
+        "min": 42,
+        "max": 43,
+        "count": 24
+      }
+    },
+    "path": "D:\\2609_final_project\\wifi-csi-pose-main\\HLS\\pl_accel_v6\\pl_accel_v6_weights.bin"
+  },
+  "input": {
+    "source": "C:\\Users\\kccistc\\AppData\\Local\\Temp\\codex-g02\\zero_input.bin",
+    "sha256": "2ddbd07ddfda5d4f9b1c44c8ff16f7e38027d275af6bf57f317b136060d695a9"
+  },
+  "original_source_sha256": {
+    "full_pose.cpp": "c2c45b9db1d32fde9be53a48a150a77725a042ed13bca0bd13c9f2ffa2f2da1c",
+    "full_pose.h": "1ce9c7844905e2ac21a978a5565ad20d33c381cb40224643b7c0e22a4b4c0874",
+    "test_vectors.h": "c86d0f930986dbbea0b68596deeb8aad40d1373f4400d08cc1423461e2c710f9",
+    "testbench.cpp": "68c816ab48ab01c043710a27b58987ba56a62ce7961eedd0ae581a31e46e093b"
+  },
+  "instrumented_sha256": "f6df7c1be5c7707b9ba48ac938ea6b46f73b4f311478b337f25dd0ac2f5e64cf",
+  "compiler": "g++.exe (Rev5, Built by MSYS2 project) 16.1.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "invocation": "C:\\Users\\kccistc\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe C:/Users/kccistc/AppData/Local/Temp/codex-g02/tool_copy/cnn_rtl/golden/build_golden.py --reference-dir D:/2609_final_project/wifi-csi-pose-main/HLS/pl_accel_v6 --blob D:/2609_final_project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6_weights.bin --input-bin C:/Users/kccistc/AppData/Local/Temp/codex-g02/zero_input.bin --output C:/Users/kccistc/AppData/Local/Temp/codex-g02/golden_zero",
+  "expected_sample_checked": false,
+  "max_abs_err": null,
+  "baseline_bit_matches": 24,
+  "independent_fc_checks": {
+    "fc1": {
+      "acc": 128,
+      "requant": 128,
+      "gelu": 128
+    },
+    "fc2": {
+      "acc": 128,
+      "requant": 128,
+      "gelu": 128
+    },
+    "fc3": {
+      "acc": 24,
+      "requant": 24,
+      "gelu": 0
+    }
+  },
+  "timings": [
+    {
+      "step": "original sample",
+      "seconds": 1.093539,
+      "exit": 0
+    },
+    {
+      "step": "uninstrumented file model",
+      "seconds": 0.948846,
+      "exit": 0
+    },
+    {
+      "step": "instrumented file model",
+      "seconds": 0.948273,
+      "exit": 0
+    }
+  ],
+  "total_seconds": 3.193705,
+  "dumps": {
+    "encoder_flat_i8.hex": {
+      "lines": 3072,
+      "text_bytes": 9216,
+      "sha256": "3d6f0dbbaf827b5fb9f289511afbd18c5b6c88b650dc5c42b7b9b88238f486bd"
+    },
+    "fc1_requant_i8.hex": {
+      "lines": 128,
+      "text_bytes": 384,
+      "sha256": "e5de08466d7c5036a24fe513026784406fa08840d78d0f42cc2295b39d899be4"
+    },
+    "fc1_gelu_i8.hex": {
+      "lines": 128,
+      "text_bytes": 384,
+      "sha256": "2272a668befc655b3494705bbfaf5c620e6f3cb922ba949916df3ff33e7e1098"
+    },
+    "fc2_requant_i8.hex": {
+      "lines": 128,
+      "text_bytes": 384,
+      "sha256": "8a94cc9e51044d6959464f67d67ff2c35a274cd2746b7da4dcef58489596e086"
+    },
+    "fc2_gelu_i8.hex": {
+      "lines": 128,
+      "text_bytes": 384,
+      "sha256": "3854453cbb4bd75668e696390a1da95d8dfce3a16c07463d1e8b20fea949af10"
+    },
+    "fc3_i8.hex": {
+      "lines": 24,
+      "text_bytes": 72,
+      "sha256": "1e25ae9d709c326e3abcd4ff0911da0e81b54bd60d0c6958f76bea124e0dd082"
+    },
+    "fc1_acc_i32.hex": {
+      "lines": 128,
+      "text_bytes": 1152,
+      "sha256": "574a666c8a627ef473fde5bb9bc87413ac7d7e9a56de61f0f2845ac631a0af80"
+    },
+    "fc2_acc_i32.hex": {
+      "lines": 128,
+      "text_bytes": 1152,
+      "sha256": "02de93435feccd68e4cb9540de1760307c7a116ff6dc19a148720ffbd8724118"
+    },
+    "fc3_acc_i32.hex": {
+      "lines": 24,
+      "text_bytes": 216,
+      "sha256": "915e5d4fa640515b9b416ec775b7217ee5cfb14d2a9c91d417b2da4139988314"
+    },
+    "pose_f32.hex": {
+      "lines": 24,
+      "text_bytes": 216,
+      "sha256": "65da77685e28fed5814f08fc6e2e6a8b61f2c0b97a357d76ec68035b6ce54f04"
+    },
+    "encoder_flat_u64.hex": {
+      "lines": 384,
+      "text_bytes": 6528,
+      "sha256": "752e7b2fe4638be8071d92b34f333b459ab08fc7db1618a4e4de49458261e811"
+    },
+    "input_i8.hex": {
+      "lines": 11520,
+      "text_bytes": 34560,
+      "sha256": "e87063f40c208040b7ba167d4d9c922d0f792c1a66357c8d5b64021c950fbbfd"
+    },
+    "pose_f32.txt": {
+      "lines": 24,
+      "text_bytes": 288,
+      "sha256": "f633fb351adc4635fd78e0bbadb07a0f56c35c274737cfd737471bcab8bdf45b"
+    }
+  }
+}

@@ -1,0 +1,86 @@
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.734492
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\in_ram_stub.v D:\2609_final_project\cnn_rtl\tb\enc_stub.v D:\2609_final_project\cnn_rtl\tb\tb_top_infer.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/in_ram_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module in_ram_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/enc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module enc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_top_infer.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_infer
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.732117
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_top_infer -s t04_infer
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_top_infer -s t04_infer 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.pose_cnn_ctrl
+Compiling module work.in_ram_stub
+Compiling module work.enc_stub
+Compiling module work.tb_top_infer
+Built simulation snapshot t04_infer
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t04-_m1x7upj/sim/xsim.dir/t04_infer/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 22:55:17 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.233982
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t04_infer -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t04_infer/xsim_script.tcl
+# xsim {t04_infer} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-04 case=0 leg=0 name=aligned_delay0 base=1d000000 total_cycles=1624 input_cycles=1621 enc_delay=0 enc_cycles=1 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-04 case=1 leg=0 name=aligned_delay5 base=1d000000 total_cycles=1629 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-04 case=2 leg=0 name=aligned_delay100 base=1d000000 total_cycles=1724 input_cycles=1621 enc_delay=100 enc_cycles=101 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-04 case=3 leg=0 name=aligned_delay1000 base=1d000000 total_cycles=2624 input_cycles=1621 enc_delay=1000 enc_cycles=1001 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-04 case=4 leg=0 name=unaligned_008 base=1d000008 total_cycles=1631 input_cycles=1623 enc_delay=5 enc_cycles=6 commands=1 AR=91 expected_AR=91 boundary_shorts=1 R=1440 RAM_words=1440 enc_start=1 equations=1623 no_valid=183 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-04 case=5 leg=0 name=boundary_ff8_stalls base=1d000ff8 total_cycles=4338 input_cycles=4330 enc_delay=5 enc_cycles=6 commands=1 AR=91 expected_AR=91 boundary_shorts=1 R=1440 RAM_words=1440 enc_start=1 equations=4330 no_valid=2890 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-04 case=6 leg=0 name=random_AR_and_R_gaps base=1d000000 total_cycles=3065 input_cycles=3057 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=3057 no_valid=1617 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-04 case=7 leg=0 name=level_done base=1d000000 total_cycles=1629 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-04 case=8 leg=0 name=NO_CFG base=1d000000 total_cycles=2 input_cycles=0 enc_delay=5 enc_cycles=0 commands=0 AR=0 expected_AR=0 boundary_shorts=0 R=0 RAM_words=0 enc_start=0 equations=0 no_valid=0 drain_cycles=0 discarded=0 done=0 error=2 violations=0
+PASS: T-04 case=9 leg=0 name=RRESP_middle base=1d000000 total_cycles=1623 input_cycles=1621 enc_delay=5 enc_cycles=0 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=21 enc_start=0 equations=25 no_valid=4 drain_cycles=1596 discarded=1419 done=0 error=4 violations=0
+PASS: T-04 case=10 leg=0 name=RRESP_last base=1d000000 total_cycles=1623 input_cycles=1621 enc_delay=5 enc_cycles=0 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=0 equations=1620 no_valid=180 drain_cycles=1 discarded=0 done=0 error=4 violations=0
+PASS: T-04 case=11 leg=0 name=level_done_repeat base=1d000000 total_cycles=1629 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-04 case=11 leg=1 name=level_done_repeat base=1d000000 total_cycles=1629 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-04 case=12 leg=0 name=error_then_restart base=1d000000 total_cycles=1623 input_cycles=1621 enc_delay=5 enc_cycles=0 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=21 enc_start=0 equations=25 no_valid=4 drain_cycles=1596 discarded=1419 done=0 error=4 violations=0
+PASS: T-04 case=12 leg=1 name=error_then_restart base=1d000000 total_cycles=1629 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-04 N1-N8 ALL SELECTED CHECKS cases=13 runs=15 selector=-1 AXI_C12_violations=0 RAM_violations=0
+$finish called at time : 281490 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_infer.v" Line 478
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:55:21 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.045290

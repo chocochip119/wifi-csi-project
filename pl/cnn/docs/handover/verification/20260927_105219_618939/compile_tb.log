@@ -1,0 +1,90 @@
+{
+  "label": "compile_tb",
+  "argv": [
+    "C:\\Xilinx\\Vivado\\2020.2\\bin\\xvlog.bat",
+    "-sv",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/axi4_slave_mem_model.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/loader_stub.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/in_ram_stub.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/enc_stub.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/fc_stub.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_write.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_regs.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_read.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_ctrl.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_ctrl_status.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_csr_ctrl_link.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_top_load.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_top_infer.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_top_fc1.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_top_full.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_m00_read.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_m00_read_perf.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_m00_write.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_m00_err.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_axi4_slave_mem_model.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_blob_decoder.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_loader_rams.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_weight_param_loader.v",
+    "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_loader_real_blob.v"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 0.961,
+  "passed": true,
+  "diagnostics": [],
+  "required_marker": null
+}
+
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/loader_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module loader_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/in_ram_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module in_ram_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/enc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module enc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_write.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_write
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_regs.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_regs
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_read.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_read
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_ctrl
+INFO: [VRFC 10-311] analyzing module s00_ctrl_case
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_ctrl_status.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_ctrl_status
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_csr_ctrl_link.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_csr_ctrl_link
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_top_load.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_load
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_top_infer.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_infer
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_top_fc1.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_fc1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_top_full.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_full
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_m00_read.v" into library work
+INFO: [VRFC 10-311] analyzing module m00_read_fixture
+INFO: [VRFC 10-311] analyzing module tb_m00_read
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_m00_read_perf.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_m00_read_perf
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_m00_write.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_m00_write
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_m00_err.v" into library work
+INFO: [VRFC 10-311] analyzing module m00_err_fixture
+INFO: [VRFC 10-311] analyzing module tb_m00_err
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder_fixture
+INFO: [VRFC 10-311] analyzing module blob_default_version_probe
+INFO: [VRFC 10-311] analyzing module tb_blob_decoder
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_loader_rams.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_loader_rams
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_weight_param_loader
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_loader_real_blob.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_loader_real_blob

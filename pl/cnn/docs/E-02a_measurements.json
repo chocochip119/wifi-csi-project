@@ -1,0 +1,663 @@
+{
+  "runs": [
+    {
+      "tag": "core_default_10.000",
+      "block": "core",
+      "top": "pose_cnn",
+      "mode": "default",
+      "period_ns": 10.0,
+      "exit": 1,
+      "seconds": 18.050178,
+      "complete": false,
+      "recorded_tag": "core_default_10.000",
+      "stages": {},
+      "measurement_valid": false
+    },
+    {
+      "tag": "encoder_default_10.000",
+      "block": "encoder",
+      "top": "CNN_Encoder",
+      "mode": "default",
+      "period_ns": 10.0,
+      "exit": 1,
+      "seconds": 192.255294,
+      "complete": false,
+      "recorded_tag": "encoder_default_10.000",
+      "stages": {
+        "post_synth": {
+          "WNS": -3.641,
+          "WHS": 0.219,
+          "start": "u_enc_rq/param3_reg[69]/C",
+          "end": "u_enc_rq/rq_reg[1]/R",
+          "data_ns": 13.033,
+          "logic_ns": 5.588,
+          "route_ns": 7.445,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT3=1 LUT5=1 LUT6=5",
+          "failing_setup_endpoints": 684,
+          "failing_hold_endpoints": 0
+        },
+        "post_place": {
+          "WNS": -3.376,
+          "WHS": 0.097,
+          "start": "u_input_buf/gen_word_write.mem_reg_1/CLKBWRCLK",
+          "end": "u_conv_mac/g_lane[4].lane_out_reg[29]/D",
+          "data_ns": 13.401,
+          "logic_ns": 6.564,
+          "route_ns": 6.837,
+          "levels": 17,
+          "primitives": "CARRY4=10 LUT2=2 LUT3=1 LUT4=1 LUT6=3",
+          "failing_setup_endpoints": 1150,
+          "failing_hold_endpoints": 0
+        },
+        "post_phys_opt": {
+          "WNS": -2.847,
+          "WHS": 0.097,
+          "start": "pool_shift[5]",
+          "end": "u_pool/p_r3_reg[3]/S",
+          "data_ns": 11.212,
+          "logic_ns": 4.87,
+          "route_ns": 6.342,
+          "levels": 30,
+          "primitives": "CARRY4=22 LUT2=1 LUT3=1 LUT5=2 LUT6=4",
+          "failing_setup_endpoints": 1151,
+          "failing_hold_endpoints": 0
+        },
+        "post_route": {
+          "WNS": -3.562,
+          "WHS": 0.053,
+          "start": "u_enc_rq/param3_reg[68]/C",
+          "end": "u_enc_rq/rq_reg[2]/R",
+          "data_ns": 12.954,
+          "logic_ns": 5.221,
+          "route_ns": 7.733,
+          "levels": 30,
+          "primitives": "CARRY4=22 LUT2=1 LUT3=1 LUT5=1 LUT6=5",
+          "failing_setup_endpoints": 1485,
+          "failing_hold_endpoints": 0
+        }
+      },
+      "period_estimate_ns": 13.562,
+      "fmax_estimate_mhz": 73.7354372511429,
+      "inspection": {
+        "exit": 0,
+        "seconds": 22.47142439999152,
+        "route_reopened_verified": true
+      },
+      "measurement_valid": true
+    },
+    {
+      "tag": "encoder_freq1_13.160",
+      "block": "encoder",
+      "top": "CNN_Encoder",
+      "mode": "performance",
+      "period_ns": 13.16,
+      "exit": 1,
+      "seconds": 4.413186,
+      "complete": false,
+      "recorded_tag": "encoder_freq1_13.160",
+      "stages": {},
+      "measurement_valid": false
+    },
+    {
+      "tag": "encoder_freq1_13.160_retry",
+      "block": "encoder",
+      "top": "CNN_Encoder",
+      "mode": "performance",
+      "period_ns": 13.16,
+      "exit": 0,
+      "seconds": 345.308489,
+      "complete": true,
+      "recorded_tag": "encoder_freq1_13.160_retry",
+      "stages": {
+        "post_synth": {
+          "WNS": -0.481,
+          "WHS": 0.219,
+          "start": "u_enc_rq/param3_reg[69]/C",
+          "end": "u_enc_rq/rq_reg[1]/R",
+          "data_ns": 13.033,
+          "logic_ns": 5.588,
+          "route_ns": 7.445,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT3=1 LUT5=1 LUT6=5",
+          "failing_setup_endpoints": 21,
+          "failing_hold_endpoints": 0
+        },
+        "post_place": {
+          "WNS": -0.275,
+          "WHS": 0.13,
+          "start": "u_input_buf/gen_word_write.mem_reg_2/CLKBWRCLK",
+          "end": "u_conv_mac/g_lane[10].lane_acc_reg[29]/D",
+          "data_ns": 13.413,
+          "logic_ns": 6.694,
+          "route_ns": 6.719,
+          "levels": 16,
+          "primitives": "CARRY4=9 LUT3=2 LUT4=1 LUT6=4",
+          "failing_setup_endpoints": 87,
+          "failing_hold_endpoints": 0
+        },
+        "post_phys_opt": {
+          "WNS": 0.034,
+          "WHS": 0.13,
+          "start": "u_input_buf/gen_word_write.mem_reg_2/CLKBWRCLK",
+          "end": "u_conv_mac/g_lane[4].lane_out_reg[29]/D",
+          "data_ns": 13.104,
+          "logic_ns": 6.348,
+          "route_ns": 6.756,
+          "levels": 15,
+          "primitives": "CARRY4=9 LUT3=2 LUT4=1 LUT6=3",
+          "failing_setup_endpoints": 0,
+          "failing_hold_endpoints": 0
+        },
+        "post_route": {
+          "WNS": -0.268,
+          "WHS": 0.106,
+          "start": "pool_shift[5]",
+          "end": "u_pool/p_r3_reg[7]/S",
+          "data_ns": 11.793,
+          "logic_ns": 4.894,
+          "route_ns": 6.899,
+          "levels": 29,
+          "primitives": "CARRY4=21 LUT2=1 LUT3=1 LUT5=3 LUT6=3",
+          "failing_setup_endpoints": 32,
+          "failing_hold_endpoints": 0
+        }
+      },
+      "period_estimate_ns": 13.428,
+      "fmax_estimate_mhz": 74.47125409591897,
+      "measurement_valid": true
+    },
+    {
+      "tag": "encoder_freq2_13.500",
+      "block": "encoder",
+      "top": "CNN_Encoder",
+      "mode": "performance",
+      "period_ns": 13.5,
+      "exit": 0,
+      "seconds": 240.943439,
+      "complete": true,
+      "recorded_tag": "encoder_freq2_13.500",
+      "stages": {
+        "post_synth": {
+          "WNS": -0.141,
+          "WHS": 0.219,
+          "start": "u_enc_rq/param3_reg[69]/C",
+          "end": "u_enc_rq/rq_reg[1]/R",
+          "data_ns": 13.033,
+          "logic_ns": 5.588,
+          "route_ns": 7.445,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT3=1 LUT5=1 LUT6=5",
+          "failing_setup_endpoints": 7,
+          "failing_hold_endpoints": 0
+        },
+        "post_place": {
+          "WNS": -0.088,
+          "WHS": 0.125,
+          "start": "u_input_buf/gen_word_write.mem_reg_1/CLKBWRCLK",
+          "end": "u_conv_mac/g_lane[3].lane_out_reg[29]/D",
+          "data_ns": 13.566,
+          "logic_ns": 6.623,
+          "route_ns": 6.943,
+          "levels": 16,
+          "primitives": "CARRY4=9 LUT3=2 LUT4=1 LUT6=4",
+          "failing_setup_endpoints": 9,
+          "failing_hold_endpoints": 0
+        },
+        "post_phys_opt": {
+          "WNS": 0.324,
+          "WHS": 0.125,
+          "start": "pool_shift[5]",
+          "end": "u_pool/p_r3_reg[13]/R",
+          "data_ns": 11.541,
+          "logic_ns": 5.116,
+          "route_ns": 6.425,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT3=1 LUT5=2 LUT6=4",
+          "failing_setup_endpoints": 0,
+          "failing_hold_endpoints": 0
+        },
+        "post_route": {
+          "WNS": -0.052,
+          "WHS": 0.1,
+          "start": "u_enc_rq/param3_reg[66]_rep/C",
+          "end": "u_enc_rq/rq_reg[1]/R",
+          "data_ns": 13.039,
+          "logic_ns": 5.462,
+          "route_ns": 7.577,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT3=1 LUT5=1 LUT6=5",
+          "failing_setup_endpoints": 7,
+          "failing_hold_endpoints": 0
+        }
+      },
+      "period_estimate_ns": 13.552,
+      "fmax_estimate_mhz": 73.78984651711924,
+      "measurement_valid": true
+    },
+    {
+      "tag": "encoder_freq3_14.000",
+      "block": "encoder",
+      "top": "CNN_Encoder",
+      "mode": "performance",
+      "period_ns": 14.0,
+      "exit": 0,
+      "seconds": 217.047553,
+      "complete": true,
+      "recorded_tag": "encoder_freq3_14.000",
+      "stages": {
+        "post_synth": {
+          "WNS": 0.359,
+          "WHS": 0.219,
+          "start": "u_enc_rq/param3_reg[69]/C",
+          "end": "u_enc_rq/rq_reg[1]/R",
+          "data_ns": 13.033,
+          "logic_ns": 5.588,
+          "route_ns": 7.445,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT3=1 LUT5=1 LUT6=5",
+          "failing_setup_endpoints": 0,
+          "failing_hold_endpoints": 0
+        },
+        "post_place": {
+          "WNS": 0.332,
+          "WHS": 0.097,
+          "start": "u_input_buf/gen_word_write.mem_reg_0/CLKBWRCLK",
+          "end": "u_conv_mac/g_lane[9].lane_acc_reg[29]/D",
+          "data_ns": 13.646,
+          "logic_ns": 6.721,
+          "route_ns": 6.925,
+          "levels": 16,
+          "primitives": "CARRY4=9 LUT3=2 LUT4=1 LUT6=4",
+          "failing_setup_endpoints": 0,
+          "failing_hold_endpoints": 0
+        },
+        "post_phys_opt": {
+          "WNS": 0.332,
+          "WHS": 0.097,
+          "start": "u_input_buf/gen_word_write.mem_reg_0/CLKBWRCLK",
+          "end": "u_conv_mac/g_lane[9].lane_acc_reg[29]/D",
+          "data_ns": 13.646,
+          "logic_ns": 6.721,
+          "route_ns": 6.925,
+          "levels": 16,
+          "primitives": "CARRY4=9 LUT3=2 LUT4=1 LUT6=4",
+          "failing_setup_endpoints": 0,
+          "failing_hold_endpoints": 0
+        },
+        "post_route": {
+          "WNS": 0.182,
+          "WHS": 0.082,
+          "start": "pool_shift[5]",
+          "end": "u_pool/p_r3_reg[10]/S",
+          "data_ns": 12.183,
+          "logic_ns": 4.888,
+          "route_ns": 7.295,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT3=1 LUT5=2 LUT6=4",
+          "failing_setup_endpoints": 0,
+          "failing_hold_endpoints": 0
+        }
+      },
+      "period_estimate_ns": 13.818,
+      "fmax_estimate_mhz": 72.36937328122738,
+      "measurement_valid": true
+    },
+    {
+      "tag": "encoder_performance_10.000",
+      "block": "encoder",
+      "top": "CNN_Encoder",
+      "mode": "performance",
+      "period_ns": 10.0,
+      "exit": 0,
+      "seconds": 404.815525,
+      "complete": true,
+      "recorded_tag": "encoder_performance_10.000",
+      "stages": {
+        "post_synth": {
+          "WNS": -3.641,
+          "WHS": 0.219,
+          "start": "u_enc_rq/param3_reg[69]/C",
+          "end": "u_enc_rq/rq_reg[1]/R",
+          "data_ns": 13.033,
+          "logic_ns": 5.588,
+          "route_ns": 7.445,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT3=1 LUT5=1 LUT6=5",
+          "failing_setup_endpoints": 684,
+          "failing_hold_endpoints": 0
+        },
+        "post_place": {
+          "WNS": -2.912,
+          "WHS": 0.124,
+          "start": "u_input_buf/gen_word_write.mem_reg_0/CLKBWRCLK",
+          "end": "u_conv_mac/g_lane[14].lane_out_reg[29]/D",
+          "data_ns": 12.89,
+          "logic_ns": 6.277,
+          "route_ns": 6.613,
+          "levels": 16,
+          "primitives": "CARRY4=9 LUT2=1 LUT3=1 LUT4=1 LUT6=4",
+          "failing_setup_endpoints": 1220,
+          "failing_hold_endpoints": 0
+        },
+        "post_phys_opt": {
+          "WNS": -2.357,
+          "WHS": 0.124,
+          "start": "pool_shift[5]",
+          "end": "u_pool/p_r3_reg[11]/S",
+          "data_ns": 10.817,
+          "logic_ns": 5.026,
+          "route_ns": 5.791,
+          "levels": 30,
+          "primitives": "CARRY4=22 LUT2=1 LUT3=1 LUT5=2 LUT6=4",
+          "failing_setup_endpoints": 1204,
+          "failing_hold_endpoints": 0
+        },
+        "post_route": {
+          "WNS": -3.16,
+          "WHS": 0.099,
+          "start": "pool_shift[5]",
+          "end": "u_pool/p_r3_reg[9]/D",
+          "data_ns": 12.006,
+          "logic_ns": 4.868,
+          "route_ns": 7.138,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT4=1 LUT5=1 LUT6=6",
+          "failing_setup_endpoints": 1523,
+          "failing_hold_endpoints": 0
+        }
+      },
+      "period_estimate_ns": 13.16,
+      "fmax_estimate_mhz": 75.98784194528875,
+      "inspection": {
+        "exit": 0,
+        "seconds": 18.570722500007832,
+        "route_reopened_verified": true
+      },
+      "measurement_valid": true
+    },
+    {
+      "tag": "fc_default_10.000",
+      "block": "fc",
+      "top": "fc_mac_requant_ooc",
+      "mode": "default",
+      "period_ns": 10.0,
+      "exit": 1,
+      "seconds": 125.405316,
+      "complete": false,
+      "recorded_tag": "fc_default_10.000",
+      "stages": {
+        "post_synth": {
+          "WNS": -3.494,
+          "WHS": 0.219,
+          "start": "u_rq/param3_reg[69]/C",
+          "end": "u_rq/rq_reg[1]/R",
+          "data_ns": 12.886,
+          "logic_ns": 5.885,
+          "route_ns": 7.001,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT5=1 LUT6=5 MUXF7=1",
+          "failing_setup_endpoints": 15,
+          "failing_hold_endpoints": 0
+        },
+        "post_place": {
+          "WNS": -1.718,
+          "WHS": 0.122,
+          "start": "u_rq/param3_reg[69]/C",
+          "end": "u_rq/rq_reg[7]/D",
+          "data_ns": 11.752,
+          "logic_ns": 6.056,
+          "route_ns": 5.696,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT5=2 LUT6=5 MUXF7=1",
+          "failing_setup_endpoints": 15,
+          "failing_hold_endpoints": 0
+        },
+        "post_phys_opt": {
+          "WNS": -1.471,
+          "WHS": 0.122,
+          "start": "u_rq/param3_reg[69]/C",
+          "end": "u_rq/rq_reg[7]/D",
+          "data_ns": 11.505,
+          "logic_ns": 6.032,
+          "route_ns": 5.473,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT5=2 LUT6=5 MUXF7=1",
+          "failing_setup_endpoints": 15,
+          "failing_hold_endpoints": 0
+        },
+        "post_route": {
+          "WNS": -2.413,
+          "WHS": 0.097,
+          "start": "u_rq/param3_reg[69]/C",
+          "end": "u_rq/rq_reg[1]/R",
+          "data_ns": 11.805,
+          "logic_ns": 5.501,
+          "route_ns": 6.304,
+          "levels": 30,
+          "primitives": "CARRY4=22 LUT2=1 LUT5=1 LUT6=5 MUXF7=1",
+          "failing_setup_endpoints": 15,
+          "failing_hold_endpoints": 0
+        }
+      },
+      "period_estimate_ns": 12.413,
+      "fmax_estimate_mhz": 80.5607024893257,
+      "inspection": {
+        "exit": 0,
+        "seconds": 21.864795100002084,
+        "route_reopened_verified": true
+      },
+      "measurement_valid": true
+    },
+    {
+      "tag": "fc_performance_10.000",
+      "block": "fc",
+      "top": "fc_mac_requant_ooc",
+      "mode": "performance",
+      "period_ns": 10.0,
+      "exit": 0,
+      "seconds": 279.15776,
+      "complete": true,
+      "recorded_tag": "fc_performance_10.000",
+      "stages": {
+        "post_synth": {
+          "WNS": -3.494,
+          "WHS": 0.219,
+          "start": "u_rq/param3_reg[69]/C",
+          "end": "u_rq/rq_reg[1]/R",
+          "data_ns": 12.886,
+          "logic_ns": 5.885,
+          "route_ns": 7.001,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT5=1 LUT6=5 MUXF7=1",
+          "failing_setup_endpoints": 15,
+          "failing_hold_endpoints": 0
+        },
+        "post_place": {
+          "WNS": -1.241,
+          "WHS": 0.087,
+          "start": "u_rq/param3_reg[69]/C",
+          "end": "u_rq/rq_reg[1]/R",
+          "data_ns": 10.633,
+          "logic_ns": 5.446,
+          "route_ns": 5.187,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT5=1 LUT6=5 MUXF7=1",
+          "failing_setup_endpoints": 15,
+          "failing_hold_endpoints": 0
+        },
+        "post_phys_opt": {
+          "WNS": -0.964,
+          "WHS": 0.087,
+          "start": "u_rq/param3_reg[66]_rep_replica_6/C",
+          "end": "u_rq/rq_reg[1]/R",
+          "data_ns": 10.356,
+          "logic_ns": 5.297,
+          "route_ns": 5.059,
+          "levels": 31,
+          "primitives": "CARRY4=23 LUT2=1 LUT5=1 LUT6=5 MUXF7=1",
+          "failing_setup_endpoints": 15,
+          "failing_hold_endpoints": 0
+        },
+        "post_route": {
+          "WNS": -2.133,
+          "WHS": 0.111,
+          "start": "u_rq/rq[7]_i_343_psdsp/C",
+          "end": "u_rq/rq_reg[1]/R",
+          "data_ns": 11.525,
+          "logic_ns": 4.979,
+          "route_ns": 6.546,
+          "levels": 21,
+          "primitives": "CARRY4=12 LUT2=1 LUT3=1 LUT4=1 LUT5=1 LUT6=4 MUXF7=1",
+          "failing_setup_endpoints": 15,
+          "failing_hold_endpoints": 0
+        }
+      },
+      "period_estimate_ns": 12.133,
+      "fmax_estimate_mhz": 82.41984669908514,
+      "inspection": {
+        "exit": 0,
+        "seconds": 21.442211499990663,
+        "route_reopened_verified": true
+      },
+      "measurement_valid": true
+    },
+    {
+      "tag": "setup_failure_encoder_default_10.000",
+      "block": "encoder",
+      "top": "CNN_Encoder",
+      "mode": "default",
+      "period_ns": 10.0,
+      "exit": 1,
+      "seconds": 3.981733,
+      "complete": false,
+      "recorded_tag": "encoder_default_10.000",
+      "stages": {},
+      "measurement_valid": false
+    },
+    {
+      "tag": "setup_failure_fc_default_10.000",
+      "block": "fc",
+      "top": "fc_mac_requant_ooc",
+      "mode": "default",
+      "period_ns": 10.0,
+      "exit": 1,
+      "seconds": 3.603958,
+      "complete": false,
+      "recorded_tag": "fc_default_10.000",
+      "stages": {},
+      "measurement_valid": false
+    }
+  ],
+  "encoder_failure_groups": {
+    "encoder_default_10.000": {
+      "u_enc_rq": {
+        "count": 15,
+        "worst": [
+          -3.562,
+          "u_enc_rq/param3_reg[68]/C",
+          "u_enc_rq/rq_reg[2]/R"
+        ]
+      },
+      "u_pool": {
+        "count": 571,
+        "worst": [
+          -3.488,
+          "pool_shift[5]",
+          "u_pool/p_r3_reg[14]/D"
+        ]
+      },
+      "u_conv_mac": {
+        "count": 899,
+        "worst": [
+          -3.028,
+          "u_input_buf/gen_word_write.mem_reg_3/CLKBWRCLK",
+          "u_conv_mac/g_lane[11].lane_out_reg[29]/D"
+        ]
+      }
+    },
+    "encoder_performance_10.000": {
+      "u_pool": {
+        "count": 657,
+        "worst": [
+          -3.16,
+          "pool_shift[5]",
+          "u_pool/p_r3_reg[9]/D"
+        ]
+      },
+      "u_enc_rq": {
+        "count": 15,
+        "worst": [
+          -2.986,
+          "u_enc_rq/param3_reg[69]/C",
+          "u_enc_rq/rq_reg[2]/R"
+        ]
+      },
+      "u_conv_mac": {
+        "count": 851,
+        "worst": [
+          -2.824,
+          "u_input_buf/gen_word_write.mem_reg_1/CLKBWRCLK",
+          "u_conv_mac/g_lane[3].lane_out_reg[29]/D"
+        ]
+      }
+    }
+  },
+  "warnings_by_code": {
+    "encoder_default_10.000": {
+      "Common 17-741": 1,
+      "Timing 38-242": 6,
+      "Route 35-198": 100,
+      "Route 35-197": 1,
+      "Route 35-328": 1
+    },
+    "encoder_performance_10.000": {
+      "Common 17-741": 1,
+      "Timing 38-242": 7,
+      "Route 35-198": 100,
+      "Route 35-197": 2,
+      "Route 35-39": 1
+    },
+    "fc_default_10.000": {
+      "Common 17-741": 1,
+      "Timing 38-242": 6,
+      "Route 35-198": 100,
+      "Route 35-197": 1,
+      "Route 35-328": 1
+    },
+    "fc_performance_10.000": {
+      "Common 17-741": 1,
+      "Timing 38-242": 7,
+      "Route 35-198": 100,
+      "Route 35-197": 2,
+      "Route 35-39": 1
+    },
+    "encoder_freq1_13.160_retry": {
+      "Common 17-741": 1,
+      "Constraints 18-619": 2,
+      "Synth 8-565": 1,
+      "Timing 38-242": 7,
+      "Route 35-198": 100,
+      "Route 35-197": 2,
+      "Route 35-39": 1
+    },
+    "encoder_freq2_13.500": {
+      "Common 17-741": 1,
+      "Constraints 18-619": 2,
+      "Synth 8-565": 1,
+      "Timing 38-242": 7,
+      "Route 35-198": 100,
+      "Route 35-197": 2,
+      "Route 35-39": 1
+    },
+    "encoder_freq3_14.000": {
+      "Common 17-741": 1,
+      "Constraints 18-619": 2,
+      "Synth 8-565": 1,
+      "Timing 38-242": 5,
+      "Route 35-198": 100,
+      "Route 35-197": 2,
+      "Vivado 12-975": 1
+    }
+  }
+}

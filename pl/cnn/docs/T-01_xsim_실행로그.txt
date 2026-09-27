@@ -1,0 +1,387 @@
+WORKDIR: C:\Users\kccistc\AppData\Local\Temp\cnn_t01_3b4a771759b840d09474c744a79bbe6e
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xvlog.bat' 'D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_S00_AXI.v' 'D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v'
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_S00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xvlog.bat' -sv 'D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_write.v' 'D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_regs.v' 'D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_read.v' 'D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_ctrl.v' 'D:\2609_final_project\cnn_rtl\tb\tb_ctrl_status.v' 'D:\2609_final_project\cnn_rtl\tb\tb_csr_ctrl_link.v'
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_write.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_write
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_regs.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_regs
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_read.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_read
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_ctrl
+INFO: [VRFC 10-311] analyzing module s00_ctrl_case
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_ctrl_status.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_ctrl_status
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_csr_ctrl_link.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_csr_ctrl_link
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xelab.bat' work.tb_ctrl_status -s t01_tb_ctrl_status
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_ctrl_status -s t01_tb_ctrl_status 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_ctrl
+Compiling module work.tb_ctrl_status
+Built simulation snapshot t01_tb_ctrl_status
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/cnn_t01_3b4a771759b840d09474c744a79bbe6e/xsim.dir/t01_tb_ctrl_status/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Thu Sep 24 20:50:00 2026...
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xsim.bat' t01_tb_ctrl_status -runall -onerror quit -log t01_tb_ctrl_status.log
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t01_tb_ctrl_status/xsim_script.tcl
+# xsim {t01_tb_ctrl_status} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: reset clears status, snapshots and pending result
+PASS: LOAD succeeds with cfg=0; busy rises at START edge and lasts exactly one cycle
+PASS: INFER cfg=1 succeeds; START clears previous done; later invalid cmd/cfg changes have no effect
+PASS: IDLE CLEAR removes sticky done without changing snapshots/internal result
+PASS: INFER cfg=0 reports NO_CFG even if cfg becomes 1 after START
+PASS: cmd=2 reports BAD_CMD; new START clears previous NO_CFG
+PASS: cmd=FFFFFFFF reports BAD_CMD; consecutive errors are recorded anew
+PASS: cmd=80000000 reports BAD_CMD (full 32-bit decode, independent of cfg)
+PASS: IDLE CLEAR removes sticky error without erasing internal failure
+PASS: BUSY CLEAR cannot cancel success; completion wins over same-edge CLEAR
+PASS: BUSY CLEAR preserves NO_CFG; error wins over same-edge CLEAR
+PASS: IDLE START+CLEAR accepts START and clears old error before new completion
+PASS: BUSY START is ignored; original success and all four snapshots survive
+PASS: BUSY START+CLEAR cannot overwrite original BAD_CMD at completion
+PASS: asynchronous reset during BUSY clears immediately; release creates no phantom completion
+PASS: unused outputs stayed zero for 66 sampled cycles while unused inputs toggled
+PASS: T-01 ALL CTRL STATUS CHECKS PASSED (12 START snapshots checked)
+$finish called at time : 666 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_ctrl_status.v" Line 240
+exit
+INFO: [Common 17-206] Exiting xsim at Thu Sep 24 20:50:04 2026...
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xelab.bat' work.tb_csr_ctrl_link -s t01_tb_csr_ctrl_link
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_csr_ctrl_link -s t01_tb_csr_ctrl_link 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.pose_cnn_ctrl
+Compiling module work.tb_csr_ctrl_link
+Built simulation snapshot t01_tb_csr_ctrl_link
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/cnn_t01_3b4a771759b840d09474c744a79bbe6e/xsim.dir/t01_tb_csr_ctrl_link/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Thu Sep 24 20:50:07 2026...
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xsim.bat' t01_tb_csr_ctrl_link -runall -onerror quit -log t01_tb_csr_ctrl_link.log
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t01_tb_csr_ctrl_link/xsim_script.tcl
+# xsim {t01_tb_csr_ctrl_link} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: AXI reset STATUS=0 and three aligned address writes/readbacks
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000002
+PASS: AXI COMMAND=1 -> START -> busy snapshot 0x01 -> sticky done 0x02
+PASS: AXI CLEAR removes done; STATUS reads have no clear side effect
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000014
+PASS: AXI COMMAND=2 -> START -> BAD_CMD STATUS=0x14 (writes still OKAY)
+PASS: AXI CLEAR removes error and error_code
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000024
+PASS: AXI INFER cfg=0 -> NO_CFG STATUS=0x24
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000024
+PASS: AXI repeated failing START clears old error during busy and records new NO_CFG
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x0000000a
+PASS: AXI INFER cfg=1 -> busy 0x09 -> done 0x0A; Loader scale passes through CSR
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x0000000a
+PASS: AXI idle START+CLEAR works with the real ctrl
+PASS: fastest COMMAND offered while busy commits at START+3 with busy=0, returns OKAY and updates CSR
+NOTE: busy COMMAND SLVERR is not reachable with T-01 real ctrl; existing CSR TB covers rejection
+PASS: totals START=7 busy_cycles=7 AXI_busy_reads=6 busy_COMMAND_commits=0
+PASS: T-01 ALL REACHABLE CSR/CTRL LINK CHECKS PASSED
+$finish called at time : 1046 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_csr_ctrl_link.v" Line 258
+exit
+INFO: [Common 17-206] Exiting xsim at Thu Sep 24 20:50:11 2026...
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xelab.bat' work.tb_s00_axi_write -s t01_tb_s00_axi_write
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_s00_axi_write -s t01_tb_s00_axi_write 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.tb_s00_axi_write
+Built simulation snapshot t01_tb_s00_axi_write
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/cnn_t01_3b4a771759b840d09474c744a79bbe6e/xsim.dir/t01_tb_s00_axi_write/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Thu Sep 24 20:50:14 2026...
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xsim.bat' t01_tb_s00_axi_write -runall -onerror quit -log t01_tb_s00_axi_write.log
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t01_tb_s00_axi_write/xsim_script.tcl
+# xsim {t01_tb_s00_axi_write} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: reset assertion and immediate release keep AWREADY/WREADY/BVALID low
+PASS: simultaneous AW/W -> exactly 1 commit and 1 B response
+PASS: AW first -> AWREADY=0/WREADY=1 while held; 1 commit and 1 B response
+PASS: W first -> WREADY=0/AWREADY=1 while held; 1 commit and 1 B response
+PASS: BREADY delayed 4 cycles -> stable BVALID/BRESP; AWREADY=WREADY=0
+PASS: 2 consecutive writes preserve distinct address/data/strobe with no replay
+PASS: concurrent scale/OKAY reads do not disturb writes; control pulses stay zero
+PASS: totals AW=5 W=5 commit=5 B=5
+PASS: S00-02 ALL CHECKS PASSED
+$finish called at time : 366 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_write.v" Line 308
+exit
+INFO: [Common 17-206] Exiting xsim at Thu Sep 24 20:50:18 2026...
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xelab.bat' work.tb_s00_axi_regs -s t01_tb_s00_axi_regs
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_s00_axi_regs -s t01_tb_s00_axi_regs 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.tb_s00_axi_regs
+Built simulation snapshot t01_tb_s00_axi_regs
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/cnn_t01_3b4a771759b840d09474c744a79bbe6e/xsim.dir/t01_tb_s00_axi_regs/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Thu Sep 24 20:50:21 2026...
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xsim.bat' t01_tb_s00_axi_regs -runall -onerror quit -log t01_tb_s00_axi_regs.log
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t01_tb_s00_axi_regs/xsim_script.tcl
+# xsim {t01_tb_s00_axi_regs} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: reset clears COMMAND/INPUT_ADDR/WEIGHT_ADDR/OUTPUT_ADDR
+PASS: full writes update only the selected CSR and preserve all 32 COMMAND bits
+PASS: offset 0x08 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x08 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x08 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x08 disabled WDATA lanes are ignored, including X values
+PASS: offset 0x0c single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x0c combined strobes 6/C preserve unselected bytes
+PASS: offset 0x0c idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x0c disabled WDATA lanes are ignored, including X values
+PASS: offset 0x10 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x10 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x10 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x10 disabled WDATA lanes are ignored, including X values
+PASS: offset 0x14 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x14 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x14 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x14 disabled WDATA lanes are ignored, including X values
+PASS: CONTROL reserved bits are ignored; START/CLEAR pulses stay zero
+PASS: writes to 0x00/0x04/0x18/0x1C preserve every CSR and return OKAY
+PASS: 0x0C and 0x0E select the same INPUT_ADDR (D04 confirmed)
+PASS: consecutive writes preserve distinct destinations/data; no pre-commit updates or replay
+PASS: reset also clears all four previously nonzero CSRs
+PASS: totals writes=49 commit=49 B=49
+PASS: S00-03 ALL REGISTER CHECKS PASSED
+$finish called at time : 1556 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_regs.v" Line 283
+exit
+INFO: [Common 17-206] Exiting xsim at Thu Sep 24 20:50:25 2026...
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xelab.bat' work.tb_s00_axi_read -s t01_tb_s00_axi_read
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_s00_axi_read -s t01_tb_s00_axi_read 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.tb_s00_axi_read
+Built simulation snapshot t01_tb_s00_axi_read
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/cnn_t01_3b4a771759b840d09474c744a79bbe6e/xsim.dir/t01_tb_s00_axi_read/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Thu Sep 24 20:50:27 2026...
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xsim.bat' t01_tb_s00_axi_read -runall -onerror quit -log t01_tb_s00_axi_read.log
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t01_tb_s00_axi_read/xsim_script.tcl
+# xsim {t01_tb_s00_axi_read} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: reset assertion and immediate release keep ARREADY/RVALID low
+PASS: all 8 offsets match the read mux; all 4 RW values read back
+PASS: STATUS bit layout in 24 combinations (error=0/5/F, cfg=0/1, busy/done=00/01/10/11)
+PASS: scale returns zero/SLVERR for cfg=0 and scale/OKAY for cfg=1
+PASS: STATUS snapshot survives changed live inputs and 4-cycle R stall with ARVALID low
+PASS: scale RDATA/RRESP snapshots survive cfg 0->1 and 1->0 during stall
+PASS: low address bits ignored (0x0C/0x0E and 0x04/0x07 aliases)
+PASS: a read completes while the write B response is stalled
+PASS: a write completes during R stall without changing the pending read snapshot
+PASS: simultaneous RW commit and AR acceptance return the pre-update value
+PASS: same-edge synchronous status update also returns the pre-update snapshot
+PASS: consecutive reads stay distinct; no AR acceptance on the R handshake edge
+PASS: totals AR=50 R=50 commit=7 B=7
+PASS: S00-04 ALL READ CHECKS PASSED
+$finish called at time : 2706 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_read.v" Line 394
+exit
+INFO: [Common 17-206] Exiting xsim at Thu Sep 24 20:50:31 2026...
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xelab.bat' work.tb_s00_axi_ctrl -s t01_tb_s00_axi_ctrl
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_s00_axi_ctrl -s t01_tb_s00_axi_ctrl 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.s00_ctrl_case
+Compiling module work.tb_s00_axi_ctrl
+Built simulation snapshot t01_tb_s00_axi_ctrl
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/cnn_t01_3b4a771759b840d09474c744a79bbe6e/xsim.dir/t01_tb_s00_axi_ctrl/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Thu Sep 24 20:50:34 2026...
+COMMAND: & 'C:\Xilinx\Vivado\2020.2\bin\xsim.bat' t01_tb_s00_axi_ctrl -runall -onerror quit -log t01_tb_s00_axi_ctrl.log
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t01_tb_s00_axi_ctrl/xsim_script.tcl
+# xsim {t01_tb_s00_axi_ctrl} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: N=1 reset clears both control pulses and BRESP
+PASS: N=2 reset clears both control pulses and BRESP
+PASS: N=8 reset clears both control pulses and BRESP
+PASS: N=1 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=2 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=8 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=1 idle CLEAR pulses once; TB display clears
+PASS: N=2 idle CLEAR pulses once; TB display clears
+PASS: N=8 idle CLEAR pulses once; TB display clears
+PASS: N=1 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=2 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=8 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=1 busy START and START+CLEAR reject atomically without pulses
+PASS: N=2 busy START and START+CLEAR reject atomically without pulses
+PASS: N=8 busy START and START+CLEAR reject atomically without pulses
+PASS: N=1 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=2 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=8 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=1 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=2 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=8 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=1 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=2 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=8 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=1 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=2 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=8 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=1 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=2 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=8 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=1 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=2 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=8 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=1 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=2 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=8 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=1 rejection samples busy at commit, not at AW/W capture
+PASS: N=2 rejection samples busy at commit, not at AW/W capture
+PASS: N=8 rejection samples busy at commit, not at AW/W capture
+PASS: N=1 core raises busy on START sampling edge and holds exactly N cycles
+PASS: N=2 core raises busy on START sampling edge and holds exactly N cycles
+PASS: N=8 core raises busy on START sampling edge and holds exactly N cycles
+PASS: 15b N=1 fastest second START: commit busy=0 -> OKAY, second 1-cycle pulse
+PASS: N=1 totals commit=52 B=52 START=6 CLEAR=4
+PASS: 15a N=2 fastest second START: commit busy=1 -> SLVERR, no second pulse
+PASS: N=2 totals commit=52 B=52 START=5 CLEAR=4
+PASS: N=8 CLEAR updates display while the core keeps running
+PASS: 15a N=8 fastest second START: commit busy=1 -> SLVERR, no second pulse
+PASS: 15c N=8 early busy START: remaining=7 -> SLVERR, no pulse
+PASS: 15c N=8 middle busy START: remaining=4 -> SLVERR, no pulse
+PASS: 15c N=8 final busy START: remaining=1 -> SLVERR, no pulse after busy drops
+PASS: N=8 totals commit=58 B=58 START=7 CLEAR=5
+PASS: S00-05 ALL CONTROL CHECKS PASSED (15a/15b/15c included)
+$finish called at time : 2426 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_ctrl.v" Line 21
+exit
+INFO: [Common 17-206] Exiting xsim at Thu Sep 24 20:50:38 2026...

@@ -1,0 +1,9 @@
+case,cycle,state,top_busy,mem_busy,mem_err,mem_start,loader_done,raw_R,loader_words,AR1,AR2
+immediate_done_error,6,1,1,0,0,1,0,0,0,0,0
+immediate_done_error,7,2,1,1,0,0,0,0,0,0,0
+immediate_done_error,843,2,1,0,0,1,0,742,742,47,0
+immediate_done_error,844,3,1,1,0,0,0,742,742,47,0
+immediate_done_error,4198,3,1,0,0,0,1,3722,3722,47,187
+immediate_done_error,4199,4,1,0,0,0,0,3722,3722,47,187
+immediate_done_error,4200,12,1,0,0,0,0,3722,3722,47,187
+immediate_done_error,4201,0,0,0,0,0,0,3722,3722,47,187

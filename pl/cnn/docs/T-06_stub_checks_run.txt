@@ -1,0 +1,108 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\stub_checks
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\fc_stub.v C:\Users\kccistc\AppData\Local\Temp\codex-t06\stub_checks\tb_t06_fc_contract.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/stub_checks/tb_t06_fc_contract.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_t06_fc_contract
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.724866
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\stub_checks
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_t06_fc_contract -s t06_fc_contract
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_t06_fc_contract -s t06_fc_contract 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.fc_stub
+Compiling module work.tb_t06_fc_contract
+Built simulation snapshot t06_fc_contract
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t06/stub_checks/xsim.dir/t06_fc_contract/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:57:30 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.912642
+
+OPTION_FILE mode0.args: -testplusarg "MODE=0"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\stub_checks
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_fc_contract -runall -onerror quit -f mode0.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_fc_contract/xsim_script.tcl
+# xsim {t06_fc_contract} -testplusarg MODE=0 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: fc_stub START while non-idle
+Time: 55 ns  Iteration: 0  Process: /tb_t06_fc_contract/fc/fail  Scope: tb_t06_fc_contract.fc.fail  File: D:/2609_final_project/cnn_rtl/tb/fc_stub.v Line: 50
+$finish called at time : 55 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:57:34 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.679325
+
+OPTION_FILE mode1.args: -testplusarg "MODE=1"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\stub_checks
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_fc_contract -runall -onerror quit -f mode1.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_fc_contract/xsim_script.tcl
+# xsim {t06_fc_contract} -testplusarg MODE=1 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: fc_stub invalid FC selector
+Time: 35 ns  Iteration: 0  Process: /tb_t06_fc_contract/fc/fail  Scope: tb_t06_fc_contract.fc.fail  File: D:/2609_final_project/cnn_rtl/tb/fc_stub.v Line: 50
+$finish called at time : 35 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:57:36 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.837151
+
+OPTION_FILE mode2.args: -testplusarg "MODE=2"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\stub_checks
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_fc_contract -runall -onerror quit -f mode2.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_fc_contract/xsim_script.tcl
+# xsim {t06_fc_contract} -testplusarg MODE=2 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: fc_stub FC2/3 START before predecessor completed
+Time: 35 ns  Iteration: 0  Process: /tb_t06_fc_contract/fc/fail  Scope: tb_t06_fc_contract.fc.fail  File: D:/2609_final_project/cnn_rtl/tb/fc_stub.v Line: 50
+$finish called at time : 35 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:57:39 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.920277

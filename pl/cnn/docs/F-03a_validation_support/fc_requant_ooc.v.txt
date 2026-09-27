@@ -1,0 +1,13 @@
+`timescale 1ns / 1ps
+// Synthesis-only measurement fixture; not FC control or production wiring.
+module fc_requant_ooc (
+ input wire clk,input wire rst_n,
+ input wire [31:0] acc,input wire acc_valid,input wire [8:0] acc_tag,
+ output wire [8:0] fc_param_raddr,input wire [95:0] fc_param_rdata,
+ output wire [7:0] rq,output wire rq_valid,output wire [8:0] rq_tag
+);
+ requant_stage #(.TAG_WIDTH(9),.FC_MODE(1),.PARAM_BASE0(9'd48),.PARAM_BASE1(9'd176),.PARAM_BASE2(9'd304)) u_rq (
+  .clk(clk),.rst_n(rst_n),.acc(acc),.acc_valid(acc_valid),.acc_tag(acc_tag),
+  .enc_param_raddr(fc_param_raddr),.enc_param_rdata(fc_param_rdata),.rq(rq),.rq_valid(rq_valid),.rq_tag(rq_tag)
+ );
+endmodule

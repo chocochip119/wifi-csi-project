@@ -1,0 +1,146 @@
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\in_ram_stub.v D:\2609_final_project\cnn_rtl\tb\enc_stub.v C:\Users\kccistc\AppData\Local\Temp\codex-t04-_m1x7upj\stub_checks\tb_t04_stub_checks.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/in_ram_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module in_ram_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/enc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module enc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t04-_m1x7upj/stub_checks/tb_t04_stub_checks.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_t04_stub_checks
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.967419
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_t04_stub_checks -s t04_stub_checks
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_t04_stub_checks -s t04_stub_checks 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.in_ram_stub
+Compiling module work.enc_stub
+Compiling module work.tb_t04_stub_checks
+Built simulation snapshot t04_stub_checks
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t04-_m1x7upj/stub_checks/xsim.dir/t04_stub_checks/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 22:56:20 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.035932
+
+OPTION_FILE case0.args: -testplusarg "CASE=0"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t04_stub_checks -runall -onerror quit -f case0.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t04_stub_checks/xsim_script.tcl
+# xsim {t04_stub_checks} -testplusarg CASE=0 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: in_ram_stub duplicate address
+Time: 35 ns  Iteration: 0  Process: /tb_t04_stub_checks/ram/fail  Scope: tb_t04_stub_checks.ram.fail  File: D:/2609_final_project/cnn_rtl/tb/in_ram_stub.v Line: 22
+$finish called at time : 35 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:56:24 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.057893
+
+OPTION_FILE case1.args: -testplusarg "CASE=1"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t04_stub_checks -runall -onerror quit -f case1.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t04_stub_checks/xsim_script.tcl
+# xsim {t04_stub_checks} -testplusarg CASE=1 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: in_ram_stub address must increase by exactly one from zero
+Time: 35 ns  Iteration: 0  Process: /tb_t04_stub_checks/ram/fail  Scope: tb_t04_stub_checks.ram.fail  File: D:/2609_final_project/cnn_rtl/tb/in_ram_stub.v Line: 22
+$finish called at time : 35 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:56:27 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.114071
+
+OPTION_FILE case2.args: -testplusarg "CASE=2"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t04_stub_checks -runall -onerror quit -f case2.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t04_stub_checks/xsim_script.tcl
+# xsim {t04_stub_checks} -testplusarg CASE=2 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: in_ram_stub address outside 0..1439
+Time: 35 ns  Iteration: 0  Process: /tb_t04_stub_checks/ram/fail  Scope: tb_t04_stub_checks.ram.fail  File: D:/2609_final_project/cnn_rtl/tb/in_ram_stub.v Line: 22
+$finish called at time : 35 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:56:31 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.075984
+
+OPTION_FILE case3.args: -testplusarg "CASE=3"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t04_stub_checks -runall -onerror quit -f case3.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t04_stub_checks/xsim_script.tcl
+# xsim {t04_stub_checks} -testplusarg CASE=3 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: in_ram_stub unknown write data
+Time: 35 ns  Iteration: 0  Process: /tb_t04_stub_checks/ram/fail  Scope: tb_t04_stub_checks.ram.fail  File: D:/2609_final_project/cnn_rtl/tb/in_ram_stub.v Line: 22
+$finish called at time : 35 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:56:34 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.076778
+
+OPTION_FILE case4.args: -testplusarg "CASE=4"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t04_stub_checks -runall -onerror quit -f case4.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t04_stub_checks/xsim_script.tcl
+# xsim {t04_stub_checks} -testplusarg CASE=4 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: Encoder stub busy START ignored=1 accepted=1 delay=8 done_width=2
+$finish called at time : 127 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t04-_m1x7upj/stub_checks/tb_t04_stub_checks.v" Line 36
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:56:37 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.017940

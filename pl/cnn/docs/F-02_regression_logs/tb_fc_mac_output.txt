@@ -1,0 +1,53 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/f02_mac/xsim_script.tcl
+# xsim {f02_mac} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: preflight blob_bytes=422992 golden_outputs=280 activation_words=384+16+16 hash_guard=F02ACC01
+PASS: Z1_FC1_golden layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=0 groups=49152 first_acc_after_start=390 last_acc_after_start=49158 done_after_start=49159 done_gap=1 busy_start_ignored=1
+OBS: Z1_FC1_golden min_pure_sum=-280055 max_pure_sum=54582 negative_outputs=95 positive_i32_margin=2147429065 negative_i32_margin=2147203593
+PASS: Z1_FC1_golden FIFO words=49152 full_cycles=5 empty_stall_cycles=0 empty_read_probes=0 stretched_intervals=0 overflow=0
+PASS: Z2_FC2_golden layer=1 outputs=128 mismatch=0 tag_base=128 interval=16 stalled=0 groups=2048 first_acc_after_start=22 last_acc_after_start=2054 done_after_start=2055 done_gap=1 busy_start_ignored=1
+OBS: Z2_FC2_golden min_pure_sum=-58962 max_pure_sum=33324 negative_outputs=81 positive_i32_margin=2147450323 negative_i32_margin=2147424686
+PASS: Z3_FC3_golden layer=2 outputs=24 mismatch=0 tag_base=256 interval=16 stalled=0 groups=384 first_acc_after_start=22 last_acc_after_start=390 done_after_start=391 done_gap=1 busy_start_ignored=1
+OBS: Z3_FC3_golden min_pure_sum=97493 max_pure_sum=224858 negative_outputs=0 positive_i32_margin=2147258789 negative_i32_margin=2147581141
+PASS: Z1-Z3 golden accumulator comparison outputs=280 mismatch=0 bias_added_only_in_TB=1
+PASS: Z5_FC1_empty_stalls layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=1 groups=49152 first_acc_after_start=390 last_acc_after_start=56509 done_after_start=56510 done_gap=1 busy_start_ignored=1
+OBS: Z5_FC1_empty_stalls min_pure_sum=-280055 max_pure_sum=54582 negative_outputs=95 positive_i32_margin=2147429065 negative_i32_margin=2147203593
+PASS: Z5_FC1_empty_stalls FIFO words=49152 full_cycles=5 empty_stall_cycles=7351 empty_read_probes=7358 stretched_intervals=126 overflow=0
+PASS: Z6_FC1_activation layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=0 groups=49152 first_acc_after_start=390 last_acc_after_start=49158 done_after_start=49159 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC1_activation min_pure_sum=-280117 max_pure_sum=54555 negative_outputs=95 positive_i32_margin=2147429092 negative_i32_margin=2147203531
+PASS: Z6_FC1_activation FIFO words=49152 full_cycles=5 empty_stall_cycles=0 empty_read_probes=0 stretched_intervals=0 overflow=0
+PASS: Z6 Z6_FC1_activation activation_byte=0 weight_byte=-1 delta=1 changed_outputs=126 exact_delta_compare=1
+PASS: Z6_FC1_weight layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=0 groups=49152 first_acc_after_start=390 last_acc_after_start=49158 done_after_start=49159 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC1_weight min_pure_sum=-280055 max_pure_sum=54582 negative_outputs=95 positive_i32_margin=2147429065 negative_i32_margin=2147203593
+PASS: Z6_FC1_weight FIFO words=49152 full_cycles=5 empty_stall_cycles=0 empty_read_probes=0 stretched_intervals=0 overflow=0
+PASS: Z6 Z6_FC1_weight activation_byte=-1 weight_byte=15360 delta=1 changed_outputs=1 exact_delta_compare=1
+PASS: Z6_FC2_activation layer=1 outputs=128 mismatch=0 tag_base=128 interval=16 stalled=0 groups=2048 first_acc_after_start=22 last_acc_after_start=2054 done_after_start=2055 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC2_activation min_pure_sum=-59034 max_pure_sum=33298 negative_outputs=81 positive_i32_margin=2147450349 negative_i32_margin=2147424614
+PASS: Z6 Z6_FC2_activation activation_byte=0 weight_byte=-1 delta=1 changed_outputs=127 exact_delta_compare=1
+PASS: Z6_FC2_weight layer=1 outputs=128 mismatch=0 tag_base=128 interval=16 stalled=0 groups=2048 first_acc_after_start=22 last_acc_after_start=2054 done_after_start=2055 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC2_weight min_pure_sum=-58962 max_pure_sum=33324 negative_outputs=81 positive_i32_margin=2147450323 negative_i32_margin=2147424686
+PASS: Z6 Z6_FC2_weight activation_byte=-1 weight_byte=640 delta=1 changed_outputs=1 exact_delta_compare=1
+PASS: Z6_FC3_activation layer=2 outputs=24 mismatch=0 tag_base=256 interval=16 stalled=0 groups=384 first_acc_after_start=22 last_acc_after_start=390 done_after_start=391 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC3_activation min_pure_sum=97450 max_pure_sum=224793 negative_outputs=0 positive_i32_margin=2147258854 negative_i32_margin=2147581098
+PASS: Z6 Z6_FC3_activation activation_byte=0 weight_byte=-1 delta=1 changed_outputs=24 exact_delta_compare=1
+PASS: Z6_FC3_weight layer=2 outputs=24 mismatch=0 tag_base=256 interval=16 stalled=0 groups=384 first_acc_after_start=22 last_acc_after_start=390 done_after_start=391 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC3_weight min_pure_sum=97493 max_pure_sum=224858 negative_outputs=0 positive_i32_margin=2147258789 negative_i32_margin=2147581141
+PASS: Z6 Z6_FC3_weight activation_byte=-1 weight_byte=640 delta=1 changed_outputs=1 exact_delta_compare=1
+PASS: Z4_FC1_minus128_squared layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=0 groups=49152 first_acc_after_start=390 last_acc_after_start=49158 done_after_start=49159 done_gap=1 busy_start_ignored=1
+OBS: Z4_FC1_minus128_squared min_pure_sum=50331648 max_pure_sum=50331648 negative_outputs=0 positive_i32_margin=2097151999 negative_i32_margin=2197815296
+PASS: Z4_FC1_minus128_squared FIFO words=49152 full_cycles=5 empty_stall_cycles=0 empty_read_probes=0 stretched_intervals=0 overflow=0
+PASS: Z4_FC1_signed_minimum layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=0 groups=49152 first_acc_after_start=390 last_acc_after_start=49158 done_after_start=49159 done_gap=1 busy_start_ignored=1
+OBS: Z4_FC1_signed_minimum min_pure_sum=-49938432 max_pure_sum=-49938432 negative_outputs=128 positive_i32_margin=2197422079 negative_i32_margin=2097545216
+PASS: Z4_FC1_signed_minimum FIFO words=49152 full_cycles=5 empty_stall_cycles=0 empty_read_probes=0 stretched_intervals=0 overflow=0
+PASS: F-02 ALL cases=12 outputs_compared=1224 checks=2128172 cycles=320872
+$finish called at time : 3208717 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_fc_mac.v" Line 356
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 18:28:14 2026...

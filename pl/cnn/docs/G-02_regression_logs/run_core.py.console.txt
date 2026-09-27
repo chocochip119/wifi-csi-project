@@ -1,0 +1,42 @@
+C:\Users\kccistc\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -u C:\Users\kccistc\AppData\Local\Temp\codex-g02\run_core.py
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\weight_param_loader.v D:\2609_final_project\cnn_rtl\rtl\encoder\Buffer.v D:\2609_final_project\cnn_rtl\rtl\encoder\Conv_MAC.v D:\2609_final_project\cnn_rtl\rtl\encoder\requant_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\gelu_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\Pool.v D:\2609_final_project\cnn_rtl\rtl\encoder\CNN_Encoder.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn.v
+
+WALL_CLOCK_SECONDS: 0.950
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\fc_stub.v D:\2609_final_project\cnn_rtl\tb\tb_pose_cnn_core.v
+
+WALL_CLOCK_SECONDS: 0.855
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_pose_cnn_core -s x02a_core
+
+WALL_CLOCK_SECONDS: 6.331
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat x02a_core -runall -onerror quit
+PASS: X-02a FILE bytes=422992 DDR_words=52874 scale=3bd997a8 independent_gold_conv=333 param=328 lut=1024 fcw=2432
+PASS: X-02a W2 LOAD cycles=10114 standalone_loader=9772 overhead=342 AR=47+187 scale=3bd997a8 cfg=1
+PASS: X-02a W3-W5 INFER cycles=1338265 enc_elapsed=1278889 input_words=1440 FC1_words=49152 AR_input=90 AR_FC1=3073 AW=1 pose_bytes=24 ram_1cycle_checks=8029596
+PASS: X-02a W4 OWNERSHIP enc_cycles=1278889 fc_cycles=57747 differing_data_enc_param/lut=1163269/820662 fc_param/lut=57747/57746 enc_residual_param/lut=32/423 fc_residual_param/lut=327/1023
+PASS: X-02a W5/W7 mode=0 flat_words=384 feature_changes=0 digest_pose=d740b1dcc5777eb6ed2c49081c9280f2a45f75f43c1a738f legacy_FC_arithmetic=0
+PASS: X-02a W3-W5 INFER cycles=1338265 enc_elapsed=1278889 input_words=1440 FC1_words=49152 AR_input=90 AR_FC1=3073 AW=1 pose_bytes=24 ram_1cycle_checks=8029596
+PASS: X-02a W4 OWNERSHIP enc_cycles=1278889 fc_cycles=57747 differing_data_enc_param/lut=1278889/1028756 fc_param/lut=57747/57746 enc_residual_param/lut=32/423 fc_residual_param/lut=327/1023
+PASS: X-02a W5/W7 mode=1 flat_words=384 feature_changes=0 digest_pose=d740b1dcc5777eb6ed2c49081c9280f2a45f75f43c1a738f legacy_FC_arithmetic=0
+PASS: X-02a W3-W5 INFER cycles=1338265 enc_elapsed=1278889 input_words=1440 FC1_words=49152 AR_input=90 AR_FC1=3073 AW=1 pose_bytes=24 ram_1cycle_checks=8029596
+PASS: X-02a W4 OWNERSHIP enc_cycles=1278889 fc_cycles=57747 differing_data_enc_param/lut=1278889/1064180 fc_param/lut=57747/57746 enc_residual_param/lut=32/424 fc_residual_param/lut=327/1023
+PASS: X-02a W5/W7 mode=2 flat_words=384 feature_changes=384 digest_pose=967591aa6a0b5a2586d9563474f1f79af3057bfb95d33d88 legacy_FC_arithmetic=0
+PASS: X-02a CASE id=0 completed=1 AXI_violations=0 FC_violations=0
+PASS: X-02a W6 case=1 error=4 cfg=0 cycles=860 ERR_DRAIN_cycles=826 enc_starts=0 input_writes=0 FC1_pushes=0 write_beats=0 rd_busy=0 wr_busy=0
+PASS: X-02a CASE id=1 completed=2 AXI_violations=0 FC_violations=0
+PASS: X-02a W2 LOAD cycles=10114 standalone_loader=9772 overhead=342 AR=47+187 scale=3bd997a8 cfg=1
+PASS: X-02a W6 case=2 error=4 cfg=1 cycles=1623 ERR_DRAIN_cycles=1610 enc_starts=0 input_writes=8 FC1_pushes=0 write_beats=0 rd_busy=0 wr_busy=0
+PASS: X-02a CASE id=2 completed=3 AXI_violations=0 FC_violations=0
+PASS: X-02a W2 LOAD cycles=10114 standalone_loader=9772 overhead=342 AR=47+187 scale=3bd997a8 cfg=1
+PASS: X-02a D08/D09 revoked_param_reads=117 revoked_lut_reads=245 FC_active=1 addresses_continue=1 selected_data_checker_continues=1
+PASS: X-02a W6 case=3 error=4 cfg=1 cycles=1335811 ERR_DRAIN_cycles=55288 enc_starts=1 input_writes=1440 FC1_pushes=8 write_beats=0 rd_busy=0 wr_busy=0
+PASS: X-02a CASE id=3 completed=4 AXI_violations=0 FC_violations=0
+PASS: X-02a W2 LOAD cycles=10114 standalone_loader=9772 overhead=342 AR=47+187 scale=3bd997a8 cfg=1
+PASS: X-02a W6 case=4 error=5 cfg=1 cycles=1338265 ERR_DRAIN_cycles=0 enc_starts=1 input_writes=1440 FC1_pushes=49152 write_beats=3 rd_busy=0 wr_busy=0
+PASS: X-02a CASE id=4 completed=5 AXI_violations=0 FC_violations=0
+PASS: X-02a W2 LOAD cycles=10114 standalone_loader=9772 overhead=342 AR=47+187 scale=3bd997a8 cfg=1
+PASS: X-02a W3-W5 INFER cycles=1338265 enc_elapsed=1278889 input_words=1440 FC1_words=49152 AR_input=90 AR_FC1=3073 AW=1 pose_bytes=24 ram_1cycle_checks=8029596
+PASS: X-02a W4 OWNERSHIP enc_cycles=1278889 fc_cycles=57747 differing_data_enc_param/lut=1163317/820715 fc_param/lut=57747/57746 enc_residual_param/lut=32/423 fc_residual_param/lut=327/1023
+PASS: X-02a W5/W7 mode=0 flat_words=384 feature_changes=0 digest_pose=d740b1dcc5777eb6ed2c49081c9280f2a45f75f43c1a738f legacy_FC_arithmetic=0
+PASS: X-02a CASE id=5 completed=6 AXI_violations=0 FC_violations=0
+PASS: X-02a ALL cases=6 selector=-1 successful_INFERs=4 real_encoder_completions=6 interface_ports=28 failures=0
+WALL_CLOCK_SECONDS: 136.564

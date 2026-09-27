@@ -1,0 +1,81 @@
+C:\Users\kccistc\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -u D:\2609_final_project\cnn_rtl\golden\build_golden.py --output C:\Users\kccistc\AppData\Local\Temp\codex-g01-validation\changed_blob --blob C:\Users\kccistc\AppData\Local\Temp\codex-g01-validation\fc3_zero_weights_bias.bin
+NOTE: changed blob with original quantized input; supply --input-bin for a new scale/sample.
+RUN: original sample
+int8 fast cnn checksum=14.190520287 max_abs_err=0.000000000 invalid=0
+pose[00]=0.551152647 expected=0.551152647
+pose[01]=0.557793021 expected=0.557793021
+pose[02]=0.464827538 expected=0.464827538
+pose[03]=0.551152647 expected=0.551152647
+pose[04]=0.557793021 expected=0.557793021
+pose[05]=0.637477756 expected=0.637477756
+pose[06]=0.458187133 expected=0.458187133
+pose[07]=0.637477756 expected=0.637477756
+pose[08]=0.531231463 expected=0.531231463
+pose[09]=0.644118130 expected=0.644118130
+pose[10]=0.478108317 expected=0.478108317
+pose[11]=0.657398939 expected=0.657398939
+pose[12]=0.531231463 expected=0.531231463
+pose[13]=0.657398939 expected=0.657398939
+pose[14]=0.484748721 expected=0.484748721
+pose[15]=0.657398939 expected=0.657398939
+pose[16]=0.564433455 expected=0.564433455
+pose[17]=0.717162490 expected=0.717162490
+pose[18]=0.451546729 expected=0.451546729
+pose[19]=0.710522056 expected=0.710522056
+pose[20]=0.571073830 expected=0.571073830
+pose[21]=0.836689532 expected=0.836689532
+pose[22]=0.451546729 expected=0.451546729
+pose[23]=0.830049157 expected=0.830049157
+RUN: uninstrumented file model
+pose[00]=0.000000000 bits=00000000
+pose[01]=0.000000000 bits=00000000
+pose[02]=0.000000000 bits=00000000
+pose[03]=0.000000000 bits=00000000
+pose[04]=0.000000000 bits=00000000
+pose[05]=0.000000000 bits=00000000
+pose[06]=0.000000000 bits=00000000
+pose[07]=0.000000000 bits=00000000
+pose[08]=0.000000000 bits=00000000
+pose[09]=0.000000000 bits=00000000
+pose[10]=0.000000000 bits=00000000
+pose[11]=0.000000000 bits=00000000
+pose[12]=0.000000000 bits=00000000
+pose[13]=0.000000000 bits=00000000
+pose[14]=0.000000000 bits=00000000
+pose[15]=0.000000000 bits=00000000
+pose[16]=0.000000000 bits=00000000
+pose[17]=0.000000000 bits=00000000
+pose[18]=0.000000000 bits=00000000
+pose[19]=0.000000000 bits=00000000
+pose[20]=0.000000000 bits=00000000
+pose[21]=0.000000000 bits=00000000
+pose[22]=0.000000000 bits=00000000
+pose[23]=0.000000000 bits=00000000
+PASS: file-driven golden pose_count=24 checksum=0.000000000
+RUN: instrumented file model
+pose[00]=0.000000000 bits=00000000
+pose[01]=0.000000000 bits=00000000
+pose[02]=0.000000000 bits=00000000
+pose[03]=0.000000000 bits=00000000
+pose[04]=0.000000000 bits=00000000
+pose[05]=0.000000000 bits=00000000
+pose[06]=0.000000000 bits=00000000
+pose[07]=0.000000000 bits=00000000
+pose[08]=0.000000000 bits=00000000
+pose[09]=0.000000000 bits=00000000
+pose[10]=0.000000000 bits=00000000
+pose[11]=0.000000000 bits=00000000
+pose[12]=0.000000000 bits=00000000
+pose[13]=0.000000000 bits=00000000
+pose[14]=0.000000000 bits=00000000
+pose[15]=0.000000000 bits=00000000
+pose[16]=0.000000000 bits=00000000
+pose[17]=0.000000000 bits=00000000
+pose[18]=0.000000000 bits=00000000
+pose[19]=0.000000000 bits=00000000
+pose[20]=0.000000000 bits=00000000
+pose[21]=0.000000000 bits=00000000
+pose[22]=0.000000000 bits=00000000
+pose[23]=0.000000000 bits=00000000
+PASS: file-driven golden pose_count=24 checksum=0.000000000
+PASS: G-01 flatten=3072 bytes/384 words FC_acc=128+128+24 pose=24 baseline_bits_equal=24 expected_sample=False max_abs_err=None

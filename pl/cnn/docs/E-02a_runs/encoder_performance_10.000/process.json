@@ -1,0 +1,25 @@
+{
+  "pid": 36668,
+  "tag": "encoder_performance_10.000",
+  "command": [
+    "C:\\Xilinx\\Vivado\\2020.2\\bin\\vivado.bat",
+    "-mode",
+    "batch",
+    "-source",
+    "D:/2609_final_project/cnn_rtl/syn/impl_check.tcl",
+    "-nojournal",
+    "-nolog",
+    "-tclargs",
+    "CNN_Encoder",
+    "xc7z020clg400-1",
+    "10.000",
+    "performance",
+    "D:/2609_final_project/cnn_rtl/docs/E-02a_runs/encoder_performance_10.000",
+    "D:/2609_final_project/cnn_rtl/rtl/encoder/Buffer.v",
+    "D:/2609_final_project/cnn_rtl/rtl/encoder/Conv_MAC.v",
+    "D:/2609_final_project/cnn_rtl/rtl/encoder/requant_stage.v",
+    "D:/2609_final_project/cnn_rtl/rtl/encoder/gelu_stage.v",
+    "D:/2609_final_project/cnn_rtl/rtl/encoder/Pool.v",
+    "D:/2609_final_project/cnn_rtl/rtl/encoder/CNN_Encoder.v"
+  ]
+}

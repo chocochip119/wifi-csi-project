@@ -1,0 +1,392 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_S00_AXI.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_S00_AXI
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.746602
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\loader_stub.v D:\2609_final_project\cnn_rtl\tb\in_ram_stub.v D:\2609_final_project\cnn_rtl\tb\enc_stub.v D:\2609_final_project\cnn_rtl\tb\fc_stub.v D:\2609_final_project\cnn_rtl\tb\tb_top_full.v D:\2609_final_project\cnn_rtl\tb\tb_top_infer.v D:\2609_final_project\cnn_rtl\tb\tb_ctrl_status.v D:\2609_final_project\cnn_rtl\tb\tb_csr_ctrl_link.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/loader_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module loader_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/in_ram_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module in_ram_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/enc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module enc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_top_full.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_full
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_top_infer.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_infer
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_ctrl_status.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_ctrl_status
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_csr_ctrl_link.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_csr_ctrl_link
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.768983
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_top_full -s t06_tb_top_full
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_top_full -s t06_tb_top_full 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.pose_cnn_ctrl
+Compiling module work.loader_stub
+Compiling module work.in_ram_stub
+Compiling module work.enc_stub
+Compiling module work.fc_stub
+Compiling module work.tb_top_full
+Built simulation snapshot t06_tb_top_full
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t06/sim/xsim.dir/t06_tb_top_full/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:50:50 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.980413
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_tb_top_full -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_tb_top_full/xsim_script.tcl
+# xsim {t06_tb_top_full} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-06 LOAD case=0 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-06 INFER case=0 leg=0 name=normal_repeat cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e000000 done=1 error=0 violations=0
+PASS: T-06 INFER case=0 leg=1 name=normal_repeat cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e000040 done=1 error=0 violations=0
+PASS: T-06 Q6 case=0 restart_without_reset=PASS input_words=1440 FC_words=49152 pose_bytes=24
+PASS: T-06 LOAD case=1 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-06 INFER case=1 leg=0 name=minimum_FC_delay cycles=56937 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55298/2/2 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e002000 done=1 error=0 violations=0
+PASS: T-06 LOAD case=2 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-06 INFER case=2 leg=0 name=delayed_FC cycles=57110 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55323/51/101 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e004000 done=1 error=0 violations=0
+PASS: T-06 LOAD case=3 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-06 INFER case=3 leg=0 name=level_done_repeat cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e006000 done=1 error=0 violations=0
+PASS: T-06 INFER case=3 leg=1 name=level_done_repeat cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e006040 done=1 error=0 violations=0
+PASS: T-06 Q6 case=3 restart_without_reset=PASS input_words=1440 FC_words=49152 pose_bytes=24
+PASS: T-06 LOAD case=4 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-06 INFER case=4 leg=0 name=write_stall_page_end cycles=56977 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=1 B=1 B_after_last_W=21 pose_bytes=24 output=1e01ffe0 done=1 error=0 violations=0
+PASS: T-06 LOAD case=5 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-06 INFER case=5 leg=0 name=input_error_restart cycles=1623 enc_delay=5 input_words=21 FC_words=0 FC_starts=0 FC_cycles=0/0/0 input_AR=90 FC_AR=0 full=0 AW=0 W=0 ready_samples=0 ready_max_run=0 B=0 B_after_last_W=0 pose_bytes=0 output=1e00a000 done=0 error=4 violations=0
+PASS: T-06 INFER case=5 leg=1 name=input_error_restart cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e00a040 done=1 error=0 violations=0
+PASS: T-06 Q6 case=5 restart_without_reset=PASS input_words=1440 FC_words=49152 pose_bytes=24
+PASS: T-06 LOAD case=6 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-06 INFER case=6 leg=0 name=FC1_error_reset_recovery cycles=58572 enc_delay=5 input_words=1440 FC_words=1285 FC_starts=1 FC_cycles=56943/0/0 input_AR=90 FC_AR=3072 full=1718 AW=0 W=0 ready_samples=0 ready_max_run=0 B=0 B_after_last_W=0 pose_bytes=0 output=1e00c000 done=0 error=4 violations=0
+OBS: expected FC non-idle START rejected; selected=0 active=1 count=0 pushes=1285 pops=1285
+PASS: T-06 Q6 FC1_error restart_contract=REJECTED active=1 consumed=1285 expected=49152 rejected_starts=1 reset_required=1
+PASS: T-06 LOAD case=6 leg=2 cycles=4195 AR=47+187 words=3722
+PASS: T-06 INFER case=6 leg=2 name=FC1_error_reset_recovery cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e00c080 done=1 error=0 violations=0
+PASS: T-06 Q6 FC1_error recovery=common_reset_then_LOAD_then_INFER words=49152 pose_bytes=24
+PASS: T-06 LOAD case=7 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-06 INFER case=7 leg=0 name=write_error_restart cycles=56959 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=13 pose_bytes=24 output=1e00e000 done=0 error=5 violations=0
+PASS: T-06 INFER case=7 leg=1 name=write_error_restart cycles=56959 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=13 pose_bytes=24 output=1e00e040 done=1 error=0 violations=0
+PASS: T-06 Q6 case=7 restart_without_reset=PASS input_words=1440 FC_words=49152 pose_bytes=24
+PASS: T-06 LOAD case=8 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-06 INFER case=8 leg=0 name=measured_Encoder_delay cycles=1335832 enc_delay=1278890 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e010000 done=1 error=0 violations=0
+PASS: T-06 LOAD case=9 leg=0 cycles=9313 AR=47+187 words=3722
+PASS: T-06 INFER case=9 leg=0 name=FIFO_and_read_stall cycles=200237 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=196614/4/5 input_AR=90 FC_AR=3072 full=119484 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e012000 done=1 error=0 violations=0
+PASS: T-06 Q1-Q6 ALL SELECTED cases=10 INFER_runs=15 selector=-1 AXI_C12_violations=0
+$finish called at time : 22759540 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_full.v" Line 535
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:00:15 . Memory (MB): peak = 917.832 ; gain = 0.039
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:51:08 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 18.215005
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_top_infer -s t06_tb_top_infer
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_top_infer -s t06_tb_top_infer 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.pose_cnn_ctrl
+Compiling module work.loader_stub
+Compiling module work.in_ram_stub
+Compiling module work.enc_stub
+Compiling module work.fc_stub
+Compiling module work.tb_top_infer
+Built simulation snapshot t06_tb_top_infer
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t06/sim/xsim.dir/t06_tb_top_infer/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:51:12 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.772137
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_tb_top_infer -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_tb_top_infer/xsim_script.tcl
+# xsim {t06_tb_top_infer} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-04 case=0 leg=0 name=aligned_delay0 base=1d000000 total_cycles=56944 input_cycles=1621 enc_delay=0 enc_cycles=1 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=0 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 case=1 leg=0 name=aligned_delay5 base=1d000000 total_cycles=56949 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=1 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 case=2 leg=0 name=aligned_delay100 base=1d000000 total_cycles=57044 input_cycles=1621 enc_delay=100 enc_cycles=101 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=2 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 case=3 leg=0 name=aligned_delay1000 base=1d000000 total_cycles=57944 input_cycles=1621 enc_delay=1000 enc_cycles=1001 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=3 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 case=4 leg=0 name=unaligned_008 base=1d000008 total_cycles=56951 input_cycles=1623 enc_delay=5 enc_cycles=6 commands=1 AR=91 expected_AR=91 boundary_shorts=1 R=1440 RAM_words=1440 enc_start=1 equations=1623 no_valid=183 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=4 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 case=5 leg=0 name=boundary_ff8_stalls base=1d000ff8 total_cycles=151822 input_cycles=4330 enc_delay=5 enc_cycles=6 commands=1 AR=91 expected_AR=91 boundary_shorts=1 R=1440 RAM_words=1440 enc_start=1 equations=4330 no_valid=2890 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=5 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 case=6 leg=0 name=random_AR_and_R_gaps base=1d000000 total_cycles=107444 input_cycles=3069 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=3069 no_valid=1629 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=6 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 case=7 leg=0 name=level_done base=1d000000 total_cycles=56949 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=7 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 case=8 leg=0 name=NO_CFG base=1d000000 total_cycles=2 input_cycles=0 enc_delay=5 enc_cycles=0 commands=0 AR=0 expected_AR=0 boundary_shorts=0 R=0 RAM_words=0 enc_start=0 equations=0 no_valid=0 drain_cycles=0 discarded=0 done=0 error=2 violations=0
+PASS: T-06 input regression case=8 leg=0 FC_commands=0 FC_pushes=0 FC_pops=0 violations=0
+PASS: T-04 case=9 leg=0 name=RRESP_middle base=1d000000 total_cycles=1623 input_cycles=1621 enc_delay=5 enc_cycles=0 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=21 enc_start=0 equations=25 no_valid=4 drain_cycles=1596 discarded=1419 done=0 error=4 violations=0
+PASS: T-06 input regression case=9 leg=0 FC_commands=0 FC_pushes=0 FC_pops=0 violations=0
+PASS: T-04 case=10 leg=0 name=RRESP_last base=1d000000 total_cycles=1623 input_cycles=1621 enc_delay=5 enc_cycles=0 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=0 equations=1620 no_valid=180 drain_cycles=1 discarded=0 done=0 error=4 violations=0
+PASS: T-06 input regression case=10 leg=0 FC_commands=0 FC_pushes=0 FC_pops=0 violations=0
+PASS: T-04 case=11 leg=0 name=level_done_repeat base=1d000000 total_cycles=56949 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=11 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 case=11 leg=1 name=level_done_repeat base=1d000000 total_cycles=56949 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=11 leg=1 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 case=12 leg=0 name=error_then_restart base=1d000000 total_cycles=1623 input_cycles=1621 enc_delay=5 enc_cycles=0 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=21 enc_start=0 equations=25 no_valid=4 drain_cycles=1596 discarded=1419 done=0 error=4 violations=0
+PASS: T-06 input regression case=12 leg=0 FC_commands=0 FC_pushes=0 FC_pops=0 violations=0
+PASS: T-04 case=12 leg=1 name=error_then_restart base=1d000000 total_cycles=56949 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=12 leg=1 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 N1-N8 ALL SELECTED CHECKS cases=13 runs=15 selector=-1 AXI_C12_violations=0 RAM_violations=0
+$finish called at time : 8431520 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_infer.v" Line 527
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:00:06 . Memory (MB): peak = 916.859 ; gain = 0.000
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:51:22 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 9.527523
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_ctrl_status -s t06_tb_ctrl_status
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_ctrl_status -s t06_tb_ctrl_status 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_ctrl
+Compiling module work.tb_ctrl_status
+Built simulation snapshot t06_tb_ctrl_status
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t06/sim/xsim.dir/t06_tb_ctrl_status/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:51:24 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.232196
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_tb_ctrl_status -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_tb_ctrl_status/xsim_script.tcl
+# xsim {t06_tb_ctrl_status} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: thirteen named states and four-bit state registers match the target FSM
+PASS: reset clears status, snapshots and pending result
+PASS: LOAD succeeds with cfg=0 after two modeled reads and Loader completion
+PASS: INFER cfg=1 succeeds; START clears done; live cmd/address changes do not replace snapshots
+PASS: IDLE CLEAR removes sticky done without changing snapshots/internal result
+PASS: INFER cfg=0 at DECODE reports NO_CFG; cfg changes in FINISH cannot change it
+PASS: INFER cfg 0 at START -> 1 at DECODE succeeds
+PASS: INFER cfg 1 at START -> 0 at DECODE reports NO_CFG
+PASS: cmd=2 reports BAD_CMD; new START clears previous NO_CFG
+PASS: cmd=FFFFFFFF reports BAD_CMD; consecutive errors are recorded anew
+PASS: cmd=80000000 reports BAD_CMD (full 32-bit decode, independent of cfg)
+PASS: IDLE CLEAR removes sticky error without erasing internal failure
+PASS: BUSY CLEAR cannot cancel success; completion wins over same-edge CLEAR
+PASS: BUSY CLEAR preserves NO_CFG; error wins over same-edge CLEAR
+PASS: IDLE START+CLEAR accepts START and clears old error before new completion
+PASS: START is ignored in both DECODE and FINISH; success and all four snapshots survive
+PASS: BUSY START+CLEAR cannot overwrite original BAD_CMD at completion
+PASS: one unimplemented and three illegal states recover without changing results/snapshots (4 checks)
+PASS: synchronous reset in FINISH waits for the edge, clears all state, and produces no phantom completion
+PASS: unused outputs stayed zero for 201 sampled cycles while unused inputs toggled
+PASS: T-06 ALL CTRL STATUS CHECKS PASSED (14 START snapshots checked)
+$finish called at time : 2016 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_ctrl_status.v" Line 400
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:51:28 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.792562
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_csr_ctrl_link -s t06_tb_csr_ctrl_link
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_csr_ctrl_link -s t06_tb_csr_ctrl_link 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.pose_cnn_ctrl
+Compiling module work.tb_csr_ctrl_link
+Built simulation snapshot t06_tb_csr_ctrl_link
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t06/sim/xsim.dir/t06_tb_csr_ctrl_link/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:51:30 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.296879
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_tb_csr_ctrl_link -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_tb_csr_ctrl_link/xsim_script.tcl
+# xsim {t06_tb_csr_ctrl_link} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: AXI reset STATUS=0 and three aligned address writes/readbacks
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000001
+TRACE: STATUS poll 3 = 0x00000001
+TRACE: STATUS poll 4 = 0x00000001
+TRACE: STATUS poll 5 = 0x00000001
+TRACE: STATUS poll 6 = 0x00000001
+TRACE: STATUS poll 7 = 0x00000002
+PASS: AXI COMMAND=1 -> START -> busy snapshot 0x01 -> sticky done 0x02
+PASS: AXI CLEAR removes done; STATUS reads have no clear side effect
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000014
+PASS: AXI COMMAND=2 -> START -> BAD_CMD STATUS=0x14 (writes still OKAY)
+PASS: AXI CLEAR removes error and error_code
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000024
+PASS: AXI INFER cfg=0 -> NO_CFG STATUS=0x24
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000024
+PASS: AXI repeated failing START clears old error during busy and records new NO_CFG
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x00000009
+TRACE: STATUS poll 3 = 0x00000009
+TRACE: STATUS poll 4 = 0x00000009
+TRACE: STATUS poll 5 = 0x00000009
+TRACE: STATUS poll 6 = 0x00000009
+TRACE: STATUS poll 7 = 0x00000009
+TRACE: STATUS poll 8 = 0x00000009
+TRACE: STATUS poll 9 = 0x00000009
+TRACE: STATUS poll 10 = 0x00000009
+TRACE: STATUS poll 11 = 0x00000009
+TRACE: STATUS poll 12 = 0x00000009
+TRACE: STATUS poll 13 = 0x00000009
+TRACE: STATUS poll 14 = 0x00000009
+TRACE: STATUS poll 15 = 0x00000009
+TRACE: STATUS poll 16 = 0x00000009
+TRACE: STATUS poll 17 = 0x00000009
+TRACE: STATUS poll 18 = 0x00000009
+TRACE: STATUS poll 19 = 0x0000000a
+PASS: AXI INFER cfg=1 -> busy 0x09 -> done 0x0A; Loader scale passes through CSR
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x00000009
+TRACE: STATUS poll 3 = 0x00000009
+TRACE: STATUS poll 4 = 0x00000009
+TRACE: STATUS poll 5 = 0x00000009
+TRACE: STATUS poll 6 = 0x00000009
+TRACE: STATUS poll 7 = 0x00000009
+TRACE: STATUS poll 8 = 0x00000009
+TRACE: STATUS poll 9 = 0x00000009
+TRACE: STATUS poll 10 = 0x00000009
+TRACE: STATUS poll 11 = 0x00000009
+TRACE: STATUS poll 12 = 0x00000009
+TRACE: STATUS poll 13 = 0x00000009
+TRACE: STATUS poll 14 = 0x00000009
+TRACE: STATUS poll 15 = 0x00000009
+TRACE: STATUS poll 16 = 0x00000009
+TRACE: STATUS poll 17 = 0x00000009
+TRACE: STATUS poll 18 = 0x00000009
+TRACE: STATUS poll 19 = 0x0000000a
+PASS: AXI idle START+CLEAR works with the real ctrl
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x00000009
+TRACE: STATUS poll 3 = 0x00000009
+TRACE: STATUS poll 4 = 0x00000009
+TRACE: STATUS poll 5 = 0x0000000a
+PASS: fastest COMMAND commits at START+3 with LOAD busy=1, returns SLVERR and preserves CSR/snapshot
+PASS: totals START=7 busy_cycles=100 AXI_busy_reads=49 busy_COMMAND_commits=1
+PASS: T-06 ALL REACHABLE CSR/CTRL LINK CHECKS PASSED
+$finish called at time : 1906 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_csr_ctrl_link.v" Line 305
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:51:34 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.738347

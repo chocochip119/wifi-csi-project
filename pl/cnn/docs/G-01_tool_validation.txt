@@ -1,0 +1,14 @@
+PASS: repeat seconds=5.600
+PASS: repeated generation all 13 text dumps byte-identical
+PASS: changed_blob seconds=7.112
+PASS: different blob -> FC3 acc/int8/float all 24 zero; upstream unchanged; stale expected skipped
+PASS: changed_input seconds=5.004
+PASS: supplied input file consumed; feature changes=2957/3072
+PASS: exporter boundary lower below scale=1.1641532179982975e-10 multiplier=2147483647 shift=64
+PASS: exporter boundary lower at scale=1.1641532179982976e-10 multiplier=1073741824 shift=63
+PASS: exporter boundary lower above scale=1.1641532179982977e-10 multiplier=1073741824 shift=63
+PASS: exporter boundary upper below scale=4.6116860173536456e+18 multiplier=2147483647 shift=-31
+PASS: exporter boundary upper at scale=4.6116860173536461e+18 multiplier=1073741824 shift=-32
+PASS: exporter boundary upper above scale=4.6116860173536466e+18 multiplier=1073741824 shift=-32
+PASS: invalid shift and changed instrumentation anchors rejected
+PASS: G-01 TOOL VALIDATION COMPLETE

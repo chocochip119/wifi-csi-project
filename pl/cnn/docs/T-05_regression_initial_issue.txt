@@ -1,0 +1,185 @@
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_S00_AXI.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_S00_AXI
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.882809
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\tb_ctrl_status.v D:\2609_final_project\cnn_rtl\tb\tb_csr_ctrl_link.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_write.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_regs.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_read.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_ctrl.v D:\2609_final_project\cnn_rtl\tb\tb_m00_read.v D:\2609_final_project\cnn_rtl\tb\tb_m00_read_perf.v D:\2609_final_project\cnn_rtl\tb\tb_m00_write.v D:\2609_final_project\cnn_rtl\tb\tb_m00_err.v D:\2609_final_project\cnn_rtl\tb\tb_axi4_slave_mem_model.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_ctrl_status.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_ctrl_status
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_csr_ctrl_link.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_csr_ctrl_link
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_write.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_write
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_regs.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_regs
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_read.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_read
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_ctrl
+INFO: [VRFC 10-311] analyzing module s00_ctrl_case
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_read.v" into library work
+INFO: [VRFC 10-311] analyzing module m00_read_fixture
+INFO: [VRFC 10-311] analyzing module tb_m00_read
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_read_perf.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_m00_read_perf
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_write.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_m00_write
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_err.v" into library work
+INFO: [VRFC 10-311] analyzing module m00_err_fixture
+INFO: [VRFC 10-311] analyzing module tb_m00_err
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_axi4_slave_mem_model
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.927583
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_ctrl_status -s t05_tb_ctrl_status
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_ctrl_status -s t05_tb_ctrl_status 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_ctrl
+Compiling module work.tb_ctrl_status
+Built simulation snapshot t05_tb_ctrl_status
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t05-f7uz10xw/regression/xsim.dir/t05_tb_ctrl_status/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:16:17 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.395124
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t05_tb_ctrl_status -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t05_tb_ctrl_status/xsim_script.tcl
+# xsim {t05_tb_ctrl_status} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: thirteen named states and four-bit state registers match the target FSM
+PASS: reset clears status, snapshots and pending result
+PASS: LOAD succeeds with cfg=0 after two modeled reads and Loader completion
+PASS: INFER cfg=1 succeeds; START clears done; live cmd/address changes do not replace snapshots
+PASS: IDLE CLEAR removes sticky done without changing snapshots/internal result
+PASS: INFER cfg=0 at DECODE reports NO_CFG; cfg changes in FINISH cannot change it
+PASS: INFER cfg 0 at START -> 1 at DECODE succeeds
+PASS: INFER cfg 1 at START -> 0 at DECODE reports NO_CFG
+PASS: cmd=2 reports BAD_CMD; new START clears previous NO_CFG
+PASS: cmd=FFFFFFFF reports BAD_CMD; consecutive errors are recorded anew
+PASS: cmd=80000000 reports BAD_CMD (full 32-bit decode, independent of cfg)
+PASS: IDLE CLEAR removes sticky error without erasing internal failure
+PASS: BUSY CLEAR cannot cancel success; completion wins over same-edge CLEAR
+PASS: BUSY CLEAR preserves NO_CFG; error wins over same-edge CLEAR
+PASS: IDLE START+CLEAR accepts START and clears old error before new completion
+PASS: START is ignored in both DECODE and FINISH; success and all four snapshots survive
+PASS: BUSY START+CLEAR cannot overwrite original BAD_CMD at completion
+PASS: four unimplemented and three illegal states recover without changing results/snapshots (7 checks)
+PASS: synchronous reset in FINISH waits for the edge, clears all state, and produces no phantom completion
+PASS: unused outputs stayed zero for 166 sampled cycles while unused inputs toggled
+PASS: T-05 ALL CTRL STATUS CHECKS PASSED (14 START snapshots checked)
+$finish called at time : 1666 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_ctrl_status.v" Line 390
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:16:21 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.100858
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_csr_ctrl_link -s t05_tb_csr_ctrl_link
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_csr_ctrl_link -s t05_tb_csr_ctrl_link 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.pose_cnn_ctrl
+Compiling module work.tb_csr_ctrl_link
+Built simulation snapshot t05_tb_csr_ctrl_link
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t05-f7uz10xw/regression/xsim.dir/t05_tb_csr_ctrl_link/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:16:23 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.478642
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t05_tb_csr_ctrl_link -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t05_tb_csr_ctrl_link/xsim_script.tcl
+# xsim {t05_tb_csr_ctrl_link} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: AXI reset STATUS=0 and three aligned address writes/readbacks
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000001
+TRACE: STATUS poll 3 = 0x00000001
+TRACE: STATUS poll 4 = 0x00000001
+TRACE: STATUS poll 5 = 0x00000001
+TRACE: STATUS poll 6 = 0x00000001
+TRACE: STATUS poll 7 = 0x00000002
+PASS: AXI COMMAND=1 -> START -> busy snapshot 0x01 -> sticky done 0x02
+PASS: AXI CLEAR removes done; STATUS reads have no clear side effect
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000014
+PASS: AXI COMMAND=2 -> START -> BAD_CMD STATUS=0x14 (writes still OKAY)
+PASS: AXI CLEAR removes error and error_code
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000024
+PASS: AXI INFER cfg=0 -> NO_CFG STATUS=0x24
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000024
+PASS: AXI repeated failing START clears old error during busy and records new NO_CFG
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x00000009
+TRACE: STATUS poll 3 = 0x00000009
+TRACE: STATUS poll 4 = 0x00000009
+TRACE: STATUS poll 5 = 0x00000009
+TRACE: STATUS poll 6 = 0x00000009
+TRACE: STATUS poll 7 = 0x00000009
+TRACE: STATUS poll 8 = 0x00000009
+FAIL: bounded STATUS polling reaches !busy && (done || error) at 1016000
+Fatal: T-05 CSR/ctrl integration mismatch
+Time: 1016 ns  Iteration: 0  Process: /tb_csr_ctrl_link/check  Scope: tb_csr_ctrl_link.check  File: D:/2609_final_project/cnn_rtl/tb/tb_csr_ctrl_link.v Line: 114
+$finish called at time : 1016 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:16:27 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.940755

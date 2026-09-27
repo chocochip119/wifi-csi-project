@@ -1,0 +1,167 @@
+--- before/tb_top_infer.v
++++ after/tb_top_infer.v
+@@ -1,6 +1,7 @@
+ `timescale 1ns / 1ps
+ 
+-// T-04 Top/real-M00 integration fixture. Existing memory RTL/model unchanged.
++// T-04 input/Encoder regression with T-05 FC1 completion connected.
++// Input cases/checks remain independent of the later FC1 read.
+ module tb_top_infer;
+     reg clk = 0, resetn = 0;
+     always #5 clk = ~clk;
+@@ -161,12 +162,10 @@
+     wire [63:0] in_wdata;
+     wire  fc_start;
+     wire  fc_done;
+-    assign fc_done = '0;
+     wire [1:0] fc_sel;
+     wire  fifo_we;
+     wire [63:0] fifo_wdata;
+     wire  fifo_full;
+-    assign fifo_full = '0;
+     wire [191:0] pose_data;
+     assign pose_data = '0;
+     pose_cnn_ctrl ctrl (
+@@ -223,13 +222,19 @@
+     in_ram_stub input_ram(.clk(clk),.resetn(resetn),.in_we(in_we),
+         .in_waddr(in_waddr),.in_wdata(in_wdata));
+     enc_stub encoder(.clk(clk),.resetn(resetn),.enc_start(enc_start),.enc_done(enc_done));
++    fc_stub fc(.clk(clk),.resetn(resetn),.fc_start(fc_start),.fc_sel(fc_sel),
++        .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done));
+ 
+     localparam integer LAST_CASE=12;
+     localparam [31:0] SEED=32'h24681357, BEFORE_SEED=32'hbaad0001, AFTER_SEED=32'hbaad0002;
++    // This input-only fixture drives cfg_ok directly, without a LOAD. Saved base
++    // is reset zero; the LOAD/D06 contract is tested separately in tb_top_fc1.
++    localparam [31:0] FC_BASE=32'd5936, FC_SEED=32'hfc04face;
+     reg [31:0] base, next_ar;
+     integer selected=-1, case_id, leg=0, cycle=0, tests=0, completed_cases=0;
+     integer start_edge, finish_edge, read_edge, read_end, enc_edge, done_edge;
+     integer commands, enc_pulses, ar_count, raw_beats, writes, enc_cycles;
++    integer fc_commands, fc_before;
+     integer ar_left, expected_beats, expected_bursts, boundary_shorts;
+     integer equations, no_valid_checks, drain_cycles, error_at_word, expected_counter;
+     integer fault_mode=0, injection_before, encoder_before, done_before, trace_file;
+@@ -279,11 +284,22 @@
+             check(!(prior_enc_start && enc_start),"Encoder START one-cycle pulse");
+             prior_start=mem_rd_start; prior_enc_start=enc_start;
+             check({mem_wr_start,mem_wr_addr,mem_wr_bytes,mem_wr_data,loader_start,ld_valid,ld_data,
+-                   fc_start,fc_sel,fifo_we,fifo_wdata}==='0,"LOAD/FC/write outputs remain zero");
++                   fc_sel}==='0,"LOAD/write outputs and FC1 selector remain zero");
++            if (ctrl.state_reg!=7)
++                check({fifo_we,fifo_wdata}==='0,"FIFO outputs remain zero outside FC1");
++            if (ctrl.state_reg!=6 || !enc_done)
++                check(!fc_start,"FC START only on completed Encoder transition");
+             if (mem_rd_start) begin
+-                check(commands==0 && ctrl.state_reg==1 && !mem_rd_busy,"one read from DECODE while M00 idle");
+-                check(mem_rd_addr===base && mem_rd_bytes==11520,"input START snapshot and exact bytes");
+-                commands=commands+1; read_edge=cycle; expected_counter=0;
++                if (ctrl.state_reg==1) begin
++                    check(commands==0 && fc_commands==0 && !mem_rd_busy,"one input read from DECODE while M00 idle");
++                    check(mem_rd_addr===base && mem_rd_bytes==11520,"input START snapshot and exact bytes");
++                    commands=commands+1; read_edge=cycle; expected_counter=0;
++                end else begin
++                    check(ctrl.state_reg==6 && enc_done && fc_start && !mem_rd_busy && fc_commands==0,
++                        "one FC1 read on Encoder completion while M00 idle");
++                    check(mem_rd_addr===FC_BASE && mem_rd_bytes==393216,"FC1 fixture address and exact bytes");
++                    fc_commands=fc_commands+1;
++                end
+             end
+             if (ctrl.state_reg==5) begin
+                 check(status_busy && mem_rd_ready===1'b1,"IN_RD always READY=1 even with Loader READY=0");
+@@ -306,12 +322,15 @@
+                 end
+             end else if (ctrl.state_reg==6) begin
+                 enc_cycles=enc_cycles+1;
+-                check(status_busy && {mem_rd_start,mem_rd_addr,mem_rd_bytes,mem_rd_ready,
+-                    in_we,in_waddr,in_wdata,enc_start}==='0,"ENC busy with all transfer outputs zero");
+-                check(ctrl.state_next==(enc_done?12:6),"ENC waits for done including a one-cycle pulse");
++                check(status_busy && {mem_rd_ready,in_we,in_waddr,in_wdata,enc_start}==='0,
++                    "ENC busy without input RAM activity");
++                if (!enc_done)
++                    check({mem_rd_start,mem_rd_addr,mem_rd_bytes}==='0,"ENC has no read command while waiting");
++                else check(mem_rd_start && fc_start,"ENC done starts the FC1 fixture");
++                check(ctrl.state_next==(enc_done?7:6),"ENC waits for done including a one-cycle pulse");
+                 if (enc_done && done_edge==0) done_edge=cycle;
+             end
+-            if (M_AXI_ARVALID && M_AXI_ARREADY) begin
++            if (fc_commands==0 && M_AXI_ARVALID && M_AXI_ARREADY) begin
+                 expected_beats=ar_left/8;
+                 if (expected_beats>16) expected_beats=16;
+                 if (expected_beats>(4096-next_ar%4096)/8) expected_beats=(4096-next_ar%4096)/8;
+@@ -323,7 +342,7 @@
+                 end
+                 ar_left=ar_left-8*expected_beats; next_ar=next_ar+8*expected_beats; ar_count=ar_count+1;
+             end
+-            if (M_AXI_RVALID && M_AXI_RREADY) raw_beats=raw_beats+1;
++            if (fc_commands==0 && M_AXI_RVALID && M_AXI_RREADY) raw_beats=raw_beats+1;
+             if (in_we) begin
+                 check(writes<1440 && int'(in_waddr)==writes,"write addresses ordered 0..1439");
+                 check(in_wdata===pattern(base+8*writes,SEED),"all written words match address-dependent pattern");
+@@ -331,7 +350,7 @@
+                       in_wdata[63:32]!=(AFTER_SEED^32'hA5C39E71),"neither guard pattern enters RAM");
+                 writes=writes+1;
+             end
+-            if (prior_busy && !mem_rd_busy) read_end=cycle;
++            if (ctrl.state_reg==5 && prior_busy && !mem_rd_busy) read_end=cycle;
+             if (enc_start) begin
+                 enc_pulses=enc_pulses+1; enc_edge=cycle;
+                 check(ctrl.state_reg==5 && !mem_rd_err && prior_busy && !mem_rd_busy,
+@@ -357,6 +376,7 @@
+             // Falling-edge setup avoids any sampling race with RAM/model monitors.
+             input_ram.begin_transfer;
+             commands=0; enc_pulses=0; ar_count=0; raw_beats=0; writes=0; enc_cycles=0;
++            fc_commands=0; fc_before=fc.accepted_starts;
+             equations=0; no_valid_checks=0; drain_cycles=0; error_at_word=-1;
+             start_edge=0; finish_edge=0; read_edge=0; read_end=0; enc_edge=0; done_edge=0;
+             ar_left=11520; next_ar=base; boundary_shorts=0;
+@@ -366,13 +386,14 @@
+             memory.mem_fill(base-8,8,BEFORE_SEED);
+             memory.mem_fill(base,11520,SEED);
+             memory.mem_fill(base+11520,8,AFTER_SEED);
++            memory.mem_fill(FC_BASE,393216,FC_SEED);
+             reg_cmd=0; reg_input_addr=base; reg_start=1; active=1;
+             @(posedge clk); #2;
+             check(status_busy && ctrl.state_reg==1 && !status_done && status_error==0,"accepted START clears display and enters DECODE");
+             @(negedge clk); reg_start=0; reg_input_addr=32'hbad00000; reg_cmd=32'hdeadbeef;
+             while (status_busy) begin
+                 @(posedge clk); #2;
+-                check(cycle-start_edge<30000,"bounded INFER completion");
++                check(cycle-start_edge<300000,"bounded INFER completion including FC1");
+             end
+             check(!mem_rd_busy,"Top cannot finish before M00 drains");
+             repeat(3) begin @(posedge clk); #2; end
+@@ -411,9 +432,14 @@
+                     check(writes==(fault_mode==1?21:1440),"registered M00 error includes faulting beat, suppresses subsequent writes");
+                 end
+             end
++            check(fc_commands==(expected_error==0?1:0) &&
++                  fc.accepted_starts-fc_before==fc_commands,"FC1 only runs after successful input/Encoder");
++            if (expected_error==0)
++                check(fc.push_count==49152 && fc.pop_count==49152 && fc.count==0 && !fc.active,
++                    "FC1 completion fixture consumed all words before Top finished");
+             check(memory.mem_word(base-8)===pattern(base-8,BEFORE_SEED) &&
+                   memory.mem_word(base+11520)===pattern(base+11520,AFTER_SEED),"both guard words preserved");
+-            check(encoder.ignored_starts==0 && input_ram.violations==0 && memory.violation_count==0,
++            check(encoder.ignored_starts==0 && input_ram.violations==0 && memory.violation_count==0 && fc.violations==0,
+                 "no repeated Encoder starts or RAM/AXI/C12 violations");
+             memory.check_quiescent;
+             tests=tests+1;
+@@ -421,6 +447,8 @@
+                 case_id,leg,case_name,base,finish_edge-start_edge,read_end-read_edge,
+                 encoder.delay_cycles,enc_cycles,commands,ar_count,cfg_ok?expected_bursts:0,boundary_shorts,
+                 raw_beats,writes,enc_pulses,equations,no_valid_checks,drain_cycles,raw_beats-writes,status_done,status_error);
++            $display("PASS: T-05 input regression case=%0d leg=%0d FC_commands=%0d FC_pushes=%0d FC_pops=%0d violations=%0d",
++                case_id,leg,fc_commands,fc.push_count,fc.pop_count,fc.violations);
+         end
+     endtask
+ 
+@@ -461,7 +489,7 @@
+         end
+     endtask
+ 
+-    initial begin #5000000; $fatal(1,"FAIL: T-04 global deadline"); end
++    initial begin #20000000; $fatal(1,"FAIL: T-04 global deadline including FC1"); end
+     initial begin
+         trace_file=$fopen("top_infer_events.csv","w");
+         check(trace_file!=0,"open trace");

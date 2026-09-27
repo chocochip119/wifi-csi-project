@@ -1,0 +1,101 @@
+Compiler:
+g++.exe (Rev5, Built by MSYS2 project) 16.1.0
+Copyright (C) 2026 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+[build original_test] cache hit C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\original_test.exe; command=C:\msys64\ucrt64\bin\g++.exe -O2 -std=c++14 -IC:\Xilinx\Vivado\2020.2\include -IC:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden\src\original -IC:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden -o C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\original_test.exe C:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden\src\original\testbench.cpp C:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden\src\original\full_pose.cpp
+[build baseline] cache hit C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\baseline.exe; command=C:\msys64\ucrt64\bin\g++.exe -O2 -std=c++14 -IC:\Xilinx\Vivado\2020.2\include -IC:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden\src\original -IC:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden -o C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\baseline.exe C:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden\golden_runner.cpp C:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden\src\original\full_pose.cpp
+[build instrumented] cache hit C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\instrumented.exe; command=C:\msys64\ucrt64\bin\g++.exe -O2 -std=c++14 -IC:\Xilinx\Vivado\2020.2\include -IC:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden\src\original -IC:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden -o C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\instrumented.exe C:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden\golden_runner.cpp C:\Users\kccistc\AppData\Local\Temp\codex-g02\tool_copy\cnn_rtl\golden\src\full_pose_instrumented.cpp
+[original sample] cwd=C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f
+C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\original_test.exe
+int8 fast cnn checksum=14.190520287 max_abs_err=0.000000000 invalid=0
+pose[00]=0.551152647 expected=0.551152647
+pose[01]=0.557793021 expected=0.557793021
+pose[02]=0.464827538 expected=0.464827538
+pose[03]=0.551152647 expected=0.551152647
+pose[04]=0.557793021 expected=0.557793021
+pose[05]=0.637477756 expected=0.637477756
+pose[06]=0.458187133 expected=0.458187133
+pose[07]=0.637477756 expected=0.637477756
+pose[08]=0.531231463 expected=0.531231463
+pose[09]=0.644118130 expected=0.644118130
+pose[10]=0.478108317 expected=0.478108317
+pose[11]=0.657398939 expected=0.657398939
+pose[12]=0.531231463 expected=0.531231463
+pose[13]=0.657398939 expected=0.657398939
+pose[14]=0.484748721 expected=0.484748721
+pose[15]=0.657398939 expected=0.657398939
+pose[16]=0.564433455 expected=0.564433455
+pose[17]=0.717162490 expected=0.717162490
+pose[18]=0.451546729 expected=0.451546729
+pose[19]=0.710522056 expected=0.710522056
+pose[20]=0.571073830 expected=0.571073830
+pose[21]=0.836689532 expected=0.836689532
+pose[22]=0.451546729 expected=0.451546729
+pose[23]=0.830049157 expected=0.830049157
+
+exit=0 wall_seconds=1.094
+
+[uninstrumented file model] cwd=C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\run-pb7fykhh\baseline_output
+C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\baseline.exe C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\run-pb7fykhh\blob.bin C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\run-pb7fykhh\input.bin
+pose[00]=0.478108317 bits=3ef4ca9d
+pose[01]=0.378502429 bits=3ec1cb12
+pose[02]=0.438265949 bits=3ee06465
+pose[03]=0.391783208 bits=3ec897cf
+pose[04]=0.484748721 bits=3ef830fc
+pose[05]=0.458187133 bits=3eea9781
+pose[06]=0.411704391 bits=3ed2caeb
+pose[07]=0.444906354 bits=3ee3cac4
+pose[08]=0.471467912 bits=3ef1643e
+pose[09]=0.358581245 bits=3eb797f6
+pose[10]=0.438265949 bits=3ee06465
+pose[11]=0.438265949 bits=3ee06465
+pose[12]=0.464827538 bits=3eedfde0
+pose[13]=0.517950654 bits=3f04986a
+pose[14]=0.451546729 bits=3ee73122
+pose[15]=0.524591088 bits=3f064b9a
+pose[16]=0.471467912 bits=3ef1643e
+pose[17]=0.590995014 bits=3f174b73
+pose[18]=0.444906354 bits=3ee3cac4
+pose[19]=0.590995014 bits=3f174b73
+pose[20]=0.458187133 bits=3eea9781
+pose[21]=0.690600872 bits=3f30cb38
+pose[22]=0.438265949 bits=3ee06465
+pose[23]=0.677320123 bits=3f2d64da
+PASS: file-driven golden pose_count=24 checksum=11.514441490
+
+exit=0 wall_seconds=0.949
+
+[instrumented file model] cwd=C:\Users\kccistc\AppData\Local\Temp\codex-g02\golden_zero
+C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\instrumented.exe C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\run-pb7fykhh\blob.bin C:\Users\kccistc\AppData\Local\Temp\codex-g01-build\28cce75246f8f48f\run-pb7fykhh\input.bin
+pose[00]=0.478108317 bits=3ef4ca9d
+pose[01]=0.378502429 bits=3ec1cb12
+pose[02]=0.438265949 bits=3ee06465
+pose[03]=0.391783208 bits=3ec897cf
+pose[04]=0.484748721 bits=3ef830fc
+pose[05]=0.458187133 bits=3eea9781
+pose[06]=0.411704391 bits=3ed2caeb
+pose[07]=0.444906354 bits=3ee3cac4
+pose[08]=0.471467912 bits=3ef1643e
+pose[09]=0.358581245 bits=3eb797f6
+pose[10]=0.438265949 bits=3ee06465
+pose[11]=0.438265949 bits=3ee06465
+pose[12]=0.464827538 bits=3eedfde0
+pose[13]=0.517950654 bits=3f04986a
+pose[14]=0.451546729 bits=3ee73122
+pose[15]=0.524591088 bits=3f064b9a
+pose[16]=0.471467912 bits=3ef1643e
+pose[17]=0.590995014 bits=3f174b73
+pose[18]=0.444906354 bits=3ee3cac4
+pose[19]=0.590995014 bits=3f174b73
+pose[20]=0.458187133 bits=3eea9781
+pose[21]=0.690600872 bits=3f30cb38
+pose[22]=0.438265949 bits=3ee06465
+pose[23]=0.677320123 bits=3f2d64da
+PASS: file-driven golden pose_count=24 checksum=11.514441490
+
+exit=0 wall_seconds=0.948
+
+PASS: G-01 flatten=3072 bytes/384 words FC_acc=128+128+24 pose=24 baseline_bits_equal=24 expected_sample=False max_abs_err=None

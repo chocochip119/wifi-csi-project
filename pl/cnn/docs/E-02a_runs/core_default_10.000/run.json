@@ -1,0 +1,10 @@
+{
+  "tag": "core_default_10.000",
+  "block": "core",
+  "top": "pose_cnn",
+  "mode": "default",
+  "period_ns": 10.0,
+  "exit": 1,
+  "seconds": 18.050178,
+  "complete": false
+}

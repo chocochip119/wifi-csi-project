@@ -1,0 +1,141 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\equiv_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat C:\Users\kccistc\AppData\Local\Temp\codex-f03a\reference\Buffer.v C:\Users\kccistc\AppData\Local\Temp\codex-f03a\reference\Conv_MAC.v C:\Users\kccistc\AppData\Local\Temp\codex-f03a\reference\requant_stage.v C:\Users\kccistc\AppData\Local\Temp\codex-f03a\reference\gelu_stage.v C:\Users\kccistc\AppData\Local\Temp\codex-f03a\reference\Pool.v C:\Users\kccistc\AppData\Local\Temp\codex-f03a\reference\CNN_Encoder.v D:\2609_final_project\cnn_rtl\rtl\encoder\Buffer.v D:\2609_final_project\cnn_rtl\rtl\encoder\Conv_MAC.v D:\2609_final_project\cnn_rtl\rtl\encoder\requant_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\gelu_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\Pool.v D:\2609_final_project\cnn_rtl\rtl\encoder\CNN_Encoder.v D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\weight_param_loader.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/kccistc/AppData/Local/Temp/codex-f03a/reference/Buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module Buffer_e01_ref
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/kccistc/AppData/Local/Temp/codex-f03a/reference/Conv_MAC.v" into library work
+INFO: [VRFC 10-311] analyzing module Conv_MAC_e01_ref
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/kccistc/AppData/Local/Temp/codex-f03a/reference/requant_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module requant_stage_e01_ref
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/kccistc/AppData/Local/Temp/codex-f03a/reference/gelu_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_stage_e01_ref
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/kccistc/AppData/Local/Temp/codex-f03a/reference/Pool.v" into library work
+INFO: [VRFC 10-311] analyzing module Pool_e01_ref
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/kccistc/AppData/Local/Temp/codex-f03a/reference/CNN_Encoder.v" into library work
+INFO: [VRFC 10-311] analyzing module CNN_Encoder_e01_ref
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module Buffer
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Conv_MAC.v" into library work
+INFO: [VRFC 10-311] analyzing module Conv_MAC
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/requant_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module requant_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/gelu_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Pool.v" into library work
+INFO: [VRFC 10-311] analyzing module Pool
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/CNN_Encoder.v" into library work
+INFO: [VRFC 10-311] analyzing module CNN_Encoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/conv_weight_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module conv_weight_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/param_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module param_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/gelu_lut_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_lut_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module weight_param_loader
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.417948
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\equiv_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\tb_encoder_equiv.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_encoder_equiv.v" into library work
+INFO: [VRFC 10-311] analyzing module e01_buffer_case
+INFO: [VRFC 10-311] analyzing module tb_encoder_equiv
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.301329
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\equiv_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_encoder_equiv -s e01_equiv
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_encoder_equiv -s e01_equiv 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.Buffer_e01_ref_default
+Compiling module work.Buffer_default
+Compiling module work.e01_buffer_case(BYTES=11520)
+Compiling module work.Buffer_e01_ref(W_DATA_WIDTH=8,DE...
+Compiling module work.Buffer(W_DATA_WIDTH=8,DEPTH_BYTE...
+Compiling module work.e01_buffer_case(W=8,BYTES=20480,...
+Compiling module work.Buffer_e01_ref(W_DATA_WIDTH=8,R_...
+Compiling module work.Buffer(W_DATA_WIDTH=8,R_DATA_WID...
+Compiling module work.e01_buffer_case(W=8,R=64,ID=2)
+Compiling module work.Buffer_e01_ref(W_DATA_WIDTH=24,D...
+Compiling module work.Buffer(W_DATA_WIDTH=24,DEPTH_BYT...
+Compiling module work.e01_buffer_case(W=24,BYTES=60,ID...
+Compiling module work.Buffer_e01_ref(R_DATA_WIDTH=16,D...
+Compiling module work.Buffer(R_DATA_WIDTH=16,DEPTH_BYT...
+Compiling module work.e01_buffer_case(R=16,ID=4)
+Compiling module work.blob_decoder
+Compiling module work.conv_weight_ram
+Compiling module work.param_ram
+Compiling module work.gelu_lut_ram
+Compiling module work.fcw_ram
+Compiling module work.weight_param_loader
+Compiling module work.Conv_MAC_e01_ref
+Compiling module work.requant_stage_e01_ref
+Compiling module work.gelu_stage_e01_ref
+Compiling module work.Pool_e01_ref
+Compiling module work.CNN_Encoder_e01_ref
+Compiling module work.Conv_MAC
+Compiling module work.requant_stage
+Compiling module work.gelu_stage
+Compiling module work.Pool
+Compiling module work.CNN_Encoder
+Compiling module work.tb_encoder_equiv
+Built simulation snapshot e01_equiv
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-f03a/equiv_sim/xsim.dir/e01_equiv/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 19:10:14 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 8.378320
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\equiv_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat e01_equiv -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/e01_equiv/xsim_script.tcl
+# xsim {e01_equiv} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: E-01 BUFFER id=2 W=8 R=64 bytes=64 checks=288 read_first_collisions=29 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BUFFER id=4 W=64 R=16 bytes=64 checks=304 read_first_collisions=52 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BUFFER id=3 W=24 R=8 bytes=60 checks=400 read_first_collisions=68 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BLOB path=D:/2609_final_project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6_weights.bin bytes=422992 LOAD_beats=3722 LOAD_cycles=9772 pool_mult=783b66b4 pool_shift=31
+PASS: E-01 BUFFER id=0 W=64 R=8 bytes=11520 checks=36200 read_first_collisions=11521 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BUFFER id=1 W=8 R=8 bytes=20480 checks=82120 read_first_collisions=20481 latency=1 lane_order=LSB_at_low_address mismatches=0
+OBS: E-01 ENCODER case=0 pattern=deterministic seed=00000000 sampled_done_cycles=1278889 first_assert_cycles=1278888 compared_cycles=1278890 output_signals=5 output_bits=93 extra_buffer_signals=2 known_feat_samples=440704 unknown_feat_samples=838186 done_pulses=1 mismatches=0
+OBS: E-01 CYCLE_DEFINITION case=0 spec=1278890 elapsed_edges=1278889 inclusive_edges=1278890 original_and_new_finish_together=1
+PASS: E-01 FEATURES case=0 swept_addresses=512 valid_words=384 known_bytes=3072 out_of_range_X=128 nonzero_words=384 changed_from_pattern0=0 mismatches=0 latency=1
+OBS: E-01 ENCODER case=1 pattern=   xorshift32 seed=6e01cafe sampled_done_cycles=1278889 first_assert_cycles=1278888 compared_cycles=1278890 output_signals=5 output_bits=93 extra_buffer_signals=2 known_feat_samples=959231 unknown_feat_samples=319659 done_pulses=1 mismatches=0
+OBS: E-01 CYCLE_DEFINITION case=1 spec=1278890 elapsed_edges=1278889 inclusive_edges=1278890 original_and_new_finish_together=1
+PASS: E-01 FEATURES case=1 swept_addresses=512 valid_words=384 known_bytes=3072 out_of_range_X=128 nonzero_words=384 changed_from_pattern0=384 mismatches=0 latency=1
+PASS: E-01 ALL cases=2 full_run_compared_cycles=2557780 output_signals_per_cycle=5 extra_buffer_signals_per_cycle=2 final_valid_feature_words=768 buffer_variants=5 mismatches=0
+$finish called at time : 26438156 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_encoder_equiv.v" Line 270
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:01:12 . Memory (MB): peak = 917.820 ; gain = 0.031
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 19:11:31 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 77.086427

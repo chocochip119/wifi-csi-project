@@ -1,0 +1,11 @@
+{
+  "compile_elaborate": "zero errors/warnings",
+  "normal_run": "PASS",
+  "negative_cases": 13,
+  "mandatory_negative_cases": 6,
+  "injections": 6,
+  "repeat_semantic_lines_identical": 49,
+  "FATAL_UNEXPECTED": "PASS: expected fatal observed (xsim exits 0; log checked)",
+  "FATAL_ONESHOT": "PASS: expected fatal observed (xsim exits 0; log checked)",
+  "protected_original_file_count": 9
+}

@@ -1,0 +1,337 @@
+{
+  "stage": "L-01",
+  "protected_sources_unchanged": 37,
+  "protected_hashes": {
+    "cnn_rtl/rtl/pose_cnn_ctrl.v": {
+      "before": "de0326cb2f07eb3e9ac251594886c5727dc8b781db91c2b0770245b6ef62723d",
+      "after": "de0326cb2f07eb3e9ac251594886c5727dc8b781db91c2b0770245b6ef62723d"
+    },
+    "cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v": {
+      "before": "9c5ee22c6d25602e97032c337ad437032f99e94ea883f55c231a2d4d71e998d0",
+      "after": "9c5ee22c6d25602e97032c337ad437032f99e94ea883f55c231a2d4d71e998d0"
+    },
+    "cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v": {
+      "before": "78adb298e83ae2c4ab023748aff78104a237648364579729d951a5b597e1a65e",
+      "after": "78adb298e83ae2c4ab023748aff78104a237648364579729d951a5b597e1a65e"
+    },
+    "cnn_rtl/tb/axi4_slave_mem_model.v": {
+      "before": "02813e9d5789189b27464dad307d39c0c2eaae56106d28d437afe731b9bea348",
+      "after": "02813e9d5789189b27464dad307d39c0c2eaae56106d28d437afe731b9bea348"
+    },
+    "cnn_rtl/tb/enc_stub.v": {
+      "before": "34794641743be6d2de3138cc90eec4dd6fe370199d2dbb5384fdb4f4c48ba333",
+      "after": "34794641743be6d2de3138cc90eec4dd6fe370199d2dbb5384fdb4f4c48ba333"
+    },
+    "cnn_rtl/tb/fc_stub.v": {
+      "before": "48b4bd7c02d8c0ecb29527107615ea54160384d19273c6c46c8aab851abca26a",
+      "after": "48b4bd7c02d8c0ecb29527107615ea54160384d19273c6c46c8aab851abca26a"
+    },
+    "cnn_rtl/tb/in_ram_stub.v": {
+      "before": "5e0cd6bab4a93cf602d86720d2698d5e30b9a9398370f0db259b351849a2c45d",
+      "after": "5e0cd6bab4a93cf602d86720d2698d5e30b9a9398370f0db259b351849a2c45d"
+    },
+    "cnn_rtl/tb/loader_stub.v": {
+      "before": "5bc7d249ed1cd89adbc041b4c8e950575259bd10f670ccff93338d3e00285e9b",
+      "after": "5bc7d249ed1cd89adbc041b4c8e950575259bd10f670ccff93338d3e00285e9b"
+    },
+    "cnn_rtl/tb/tb_axi4_slave_mem_model.v": {
+      "before": "170ca4b8ab67996c6c4bb52d9112acbac4aec292311aa9893ee8d20c9d6e7944",
+      "after": "170ca4b8ab67996c6c4bb52d9112acbac4aec292311aa9893ee8d20c9d6e7944"
+    },
+    "cnn_rtl/tb/tb_csr_ctrl_link.v": {
+      "before": "bddec9002951ff2636e107ba38973afce666c3ca671c1584f0c52b1119ccbf00",
+      "after": "bddec9002951ff2636e107ba38973afce666c3ca671c1584f0c52b1119ccbf00"
+    },
+    "cnn_rtl/tb/tb_ctrl_status.v": {
+      "before": "5f02331834abb6e2deefc2ad51945ec1c2dc0c60e1f96abc174b1e2644c8c217",
+      "after": "5f02331834abb6e2deefc2ad51945ec1c2dc0c60e1f96abc174b1e2644c8c217"
+    },
+    "cnn_rtl/tb/tb_m00_err.v": {
+      "before": "02e1e0a88b16168ce0734b34faff7ac2344a86fbe330be227703177da4f90486",
+      "after": "02e1e0a88b16168ce0734b34faff7ac2344a86fbe330be227703177da4f90486"
+    },
+    "cnn_rtl/tb/tb_m00_read.v": {
+      "before": "99705f116077c108dc7d3799057b8d637395ba2783f84187d8a4b916b682e101",
+      "after": "99705f116077c108dc7d3799057b8d637395ba2783f84187d8a4b916b682e101"
+    },
+    "cnn_rtl/tb/tb_m00_read_perf.v": {
+      "before": "4e29a74bf287b001a73c91d5e49af606c32cb2db6c9f97c1b43a87ac1a309439",
+      "after": "4e29a74bf287b001a73c91d5e49af606c32cb2db6c9f97c1b43a87ac1a309439"
+    },
+    "cnn_rtl/tb/tb_m00_write.v": {
+      "before": "bda8ff6685076323e5d138061bfca6a6b3e58b345b4bbca527efbf43283e713c",
+      "after": "bda8ff6685076323e5d138061bfca6a6b3e58b345b4bbca527efbf43283e713c"
+    },
+    "cnn_rtl/tb/tb_s00_axi_ctrl.v": {
+      "before": "72bcd126b4e6ca0e1a1b129973ff65c0c1f6f40c2b3d691c568da15041206d2f",
+      "after": "72bcd126b4e6ca0e1a1b129973ff65c0c1f6f40c2b3d691c568da15041206d2f"
+    },
+    "cnn_rtl/tb/tb_s00_axi_read.v": {
+      "before": "1733a639ed4d2299dd8b1f72f4d282b5b3535b3f033f41c00f49707f2a42c0f5",
+      "after": "1733a639ed4d2299dd8b1f72f4d282b5b3535b3f033f41c00f49707f2a42c0f5"
+    },
+    "cnn_rtl/tb/tb_s00_axi_regs.v": {
+      "before": "773760f459f582096d1644b06cd0a85cdd37db33bfa190bb3ff7fc46ef60cab2",
+      "after": "773760f459f582096d1644b06cd0a85cdd37db33bfa190bb3ff7fc46ef60cab2"
+    },
+    "cnn_rtl/tb/tb_s00_axi_write.v": {
+      "before": "aff01c63ad24a35ca122c912b6a781e5e5a623b9341f26ed7c4fcbf16f1e7170",
+      "after": "aff01c63ad24a35ca122c912b6a781e5e5a623b9341f26ed7c4fcbf16f1e7170"
+    },
+    "cnn_rtl/tb/tb_top_fc1.v": {
+      "before": "eb1eb95ce807c53c2d49de875bc642f3da0bc1856cb5c9c578a2dfd07d91a196",
+      "after": "eb1eb95ce807c53c2d49de875bc642f3da0bc1856cb5c9c578a2dfd07d91a196"
+    },
+    "cnn_rtl/tb/tb_top_full.v": {
+      "before": "3ca96be988f4665207665b1e9d16ce2a709c5f5f871b16437a2812635ea0a6e4",
+      "after": "3ca96be988f4665207665b1e9d16ce2a709c5f5f871b16437a2812635ea0a6e4"
+    },
+    "cnn_rtl/tb/tb_top_infer.v": {
+      "before": "1943b354af97fd74bb3a5eac102a7a09b6cf0f19038e5937ab5b02ac46334387",
+      "after": "1943b354af97fd74bb3a5eac102a7a09b6cf0f19038e5937ab5b02ac46334387"
+    },
+    "cnn_rtl/tb/tb_top_load.v": {
+      "before": "7b8ab4ff457254c5a6e52b9b65a4644a676e07ffe19bce9620e9be3ae6df8746",
+      "after": "7b8ab4ff457254c5a6e52b9b65a4644a676e07ffe19bce9620e9be3ae6df8746"
+    },
+    "cnn_rtl/others/CNN_Encoder/.gitignore": {
+      "before": "d7781a48c2622cb11c981a7940e472275d093c681a539c8c1ec32db2a52b5e73",
+      "after": "d7781a48c2622cb11c981a7940e472275d093c681a539c8c1ec32db2a52b5e73"
+    },
+    "cnn_rtl/others/CNN_Encoder/Buffer.v": {
+      "before": "78be32c2b479055d4b2bbbbd46a7cc8cb142f8c758ba09c637f3b57bf1d164f3",
+      "after": "78be32c2b479055d4b2bbbbd46a7cc8cb142f8c758ba09c637f3b57bf1d164f3"
+    },
+    "cnn_rtl/others/CNN_Encoder/CNN_Encoder.v": {
+      "before": "9543ccaa26e77e453903a999d06520f86b6cd61a2d14e9c31436e6c86351f17e",
+      "after": "9543ccaa26e77e453903a999d06520f86b6cd61a2d14e9c31436e6c86351f17e"
+    },
+    "cnn_rtl/others/CNN_Encoder/Conv_MAC.v": {
+      "before": "c6328db582b6c435ff05849eb8644fa0bd2364858c0954fe713b1d361000ba18",
+      "after": "c6328db582b6c435ff05849eb8644fa0bd2364858c0954fe713b1d361000ba18"
+    },
+    "cnn_rtl/others/CNN_Encoder/gelu_stage.v": {
+      "before": "14cd1cd2cd19ee7b76873f91dd7c169176382daf161582726564ece258934d89",
+      "after": "14cd1cd2cd19ee7b76873f91dd7c169176382daf161582726564ece258934d89"
+    },
+    "cnn_rtl/others/CNN_Encoder/gen_CNN_Encoder.py": {
+      "before": "bcfa0b82d181599145114ee5e11c55d76be05348c8f7bf4048ec4a870e703399",
+      "after": "bcfa0b82d181599145114ee5e11c55d76be05348c8f7bf4048ec4a870e703399"
+    },
+    "cnn_rtl/others/CNN_Encoder/gen_Conv_MAC.py": {
+      "before": "f13d406c132834b6a39c0b560fb104b966c6f00694b200471253756d36c8012a",
+      "after": "f13d406c132834b6a39c0b560fb104b966c6f00694b200471253756d36c8012a"
+    },
+    "cnn_rtl/others/CNN_Encoder/gen_requant_stage.py": {
+      "before": "3593e141e9a98b46a163c7808aa108d4052e5dff8c8370a7dff6039b9bb53a0e",
+      "after": "3593e141e9a98b46a163c7808aa108d4052e5dff8c8370a7dff6039b9bb53a0e"
+    },
+    "cnn_rtl/others/CNN_Encoder/Pool.v": {
+      "before": "42414baea311e6e28ecf429bea445ec4c0d23de2839bb499088f34b654dcfbbe",
+      "after": "42414baea311e6e28ecf429bea445ec4c0d23de2839bb499088f34b654dcfbbe"
+    },
+    "cnn_rtl/others/CNN_Encoder/README.md": {
+      "before": "5c98572dda9df1a40093831872c2366b123a5d63ceb190a075a5dffaff02e045",
+      "after": "5c98572dda9df1a40093831872c2366b123a5d63ceb190a075a5dffaff02e045"
+    },
+    "cnn_rtl/others/CNN_Encoder/requant_stage.v": {
+      "before": "4e11cf526482b43c448c9c7bf843c33c8802f74235da8d5ed31a7a9d2a80b7f0",
+      "after": "4e11cf526482b43c448c9c7bf843c33c8802f74235da8d5ed31a7a9d2a80b7f0"
+    },
+    "cnn_rtl/others/CNN_Encoder/tb_CNN_Encoder.v": {
+      "before": "d5aacb862c942a289250a3bee79c92587cea361097869c049385ff2de9d17d61",
+      "after": "d5aacb862c942a289250a3bee79c92587cea361097869c049385ff2de9d17d61"
+    },
+    "cnn_rtl/others/CNN_Encoder/tb_Conv_MAC.v": {
+      "before": "a0c8fc0084cce0ed1c59577baa08b1b8e8dc0ba926e5d2281cad7dfe886c9e50",
+      "after": "a0c8fc0084cce0ed1c59577baa08b1b8e8dc0ba926e5d2281cad7dfe886c9e50"
+    },
+    "cnn_rtl/others/CNN_Encoder/tb_requant_stage.v": {
+      "before": "a1b4990eea3aaeccc851030d3a68439d44fb0b2e02e5283b09cf75b9071e433a",
+      "after": "a1b4990eea3aaeccc851030d3a68439d44fb0b2e02e5283b09cf75b9071e433a"
+    }
+  },
+  "ports_matched_05_Loader_rows_36_61": {
+    "clk": {
+      "direction": "IN",
+      "width": 1
+    },
+    "rst_n": {
+      "direction": "IN",
+      "width": 1
+    },
+    "loader_start": {
+      "direction": "IN",
+      "width": 1
+    },
+    "loader_done": {
+      "direction": "OUT",
+      "width": 1
+    },
+    "loader_err": {
+      "direction": "OUT",
+      "width": 1
+    },
+    "ld_data": {
+      "direction": "IN",
+      "width": 64
+    },
+    "ld_valid": {
+      "direction": "IN",
+      "width": 1
+    },
+    "ld_ready": {
+      "direction": "OUT",
+      "width": 1
+    },
+    "cfg_ok": {
+      "direction": "OUT",
+      "width": 1
+    },
+    "output_scale_bits": {
+      "direction": "OUT",
+      "width": 32
+    },
+    "pool_mult": {
+      "direction": "OUT",
+      "width": 32
+    },
+    "pool_shift": {
+      "direction": "OUT",
+      "width": 32
+    },
+    "conv_we": {
+      "direction": "OUT",
+      "width": 1
+    },
+    "conv_waddr": {
+      "direction": "OUT",
+      "width": 9
+    },
+    "conv_wdata": {
+      "direction": "OUT",
+      "width": 128
+    },
+    "conv_wstrb": {
+      "direction": "OUT",
+      "width": 16
+    },
+    "param_we": {
+      "direction": "OUT",
+      "width": 1
+    },
+    "param_waddr": {
+      "direction": "OUT",
+      "width": 9
+    },
+    "param_wdata": {
+      "direction": "OUT",
+      "width": 96
+    },
+    "param_wstrb": {
+      "direction": "OUT",
+      "width": 3
+    },
+    "lut_we": {
+      "direction": "OUT",
+      "width": 1
+    },
+    "lut_waddr": {
+      "direction": "OUT",
+      "width": 10
+    },
+    "lut_wdata": {
+      "direction": "OUT",
+      "width": 8
+    },
+    "fcw_we": {
+      "direction": "OUT",
+      "width": 1
+    },
+    "fcw_waddr": {
+      "direction": "OUT",
+      "width": 12
+    },
+    "fcw_wdata": {
+      "direction": "OUT",
+      "width": 64
+    }
+  },
+  "zero_ram_write_outputs": [
+    "conv_we",
+    "conv_waddr",
+    "conv_wdata",
+    "conv_wstrb",
+    "param_we",
+    "param_waddr",
+    "param_wdata",
+    "param_wstrb",
+    "lut_we",
+    "lut_waddr",
+    "lut_wdata",
+    "fcw_we",
+    "fcw_waddr",
+    "fcw_wdata"
+  ],
+  "forbidden_RTL_constructs": [],
+  "new_sources_sha256": {
+    "cnn_rtl/rtl/blob_decoder.v": "d3789fb6487101e0ac28b989fcfde8948dbc1894351d7aedc0e2fbfd1f3d5d38",
+    "cnn_rtl/tb/tb_blob_decoder.v": "429590840c7a915073e7566ef3dc1f4f2241af4aa07794c5992ad91806059e4b"
+  },
+  "simulation_log_checks": {
+    "L-01_decoder_run.txt": {
+      "errors_warnings_fails_fatals": 0,
+      "commands_exit_0": 4,
+      "finish_markers": 1,
+      "wall_seconds_sum": 12.647252
+    },
+    "L-01_existing_top_run.txt": {
+      "errors_warnings_fails_fatals": 0,
+      "commands_exit_0": 14,
+      "finish_markers": 6,
+      "wall_seconds_sum": 100.750059
+    },
+    "L-01_regression_run.txt": {
+      "errors_warnings_fails_fatals": 0,
+      "commands_exit_0": 20,
+      "finish_markers": 9,
+      "wall_seconds_sum": 81.362865
+    }
+  },
+  "protected_TB_success_markers": {
+    "tb_axi4_slave_mem_model_output": "PASS: T-02a ALL A/B/C/D CHECKS PASSED; mandatory negatives=6/6 total negatives=13 injections=6",
+    "tb_csr_ctrl_link_output": "PASS: T-06 ALL REACHABLE CSR/CTRL LINK CHECKS PASSED",
+    "tb_ctrl_status_output": "PASS: T-06 ALL CTRL STATUS CHECKS PASSED (14 START snapshots checked)",
+    "tb_m00_err_output": "PASS: T-02d E1-E9 ALL CHECKS cases=22 normal_injections=8 watchdog_injections=0 master_violations=0 expected_checker_violations=0 C12=0 RD_FAULT_hold=2000_each reset_recovery=PASS",
+    "tb_m00_read_output": "PASS: T-02b FUNCTIONAL 12/12 CASES, ALL COLLECTED WORDS AND AR RANGES CHECKED; protocol violations=0",
+    "tb_m00_read_perf_output": "PASS: T-02b PERFORMANCE MEASUREMENT COMPLETE; all words checked, C11 enabled, violations=0",
+    "tb_m00_write_output": "PASS: T-02c ALL W1-W8 CHECKS",
+    "tb_s00_axi_ctrl_output": "PASS: S00-05 ALL CONTROL CHECKS PASSED (15a/15b/15c included)",
+    "tb_s00_axi_read_output": "PASS: S00-04 ALL READ CHECKS PASSED",
+    "tb_s00_axi_regs_output": "PASS: S00-03 ALL REGISTER CHECKS PASSED",
+    "tb_s00_axi_write_output": "PASS: S00-02 ALL CHECKS PASSED",
+    "tb_top_fc1_output": "PASS: T-05 ALL SELECTED cases=11 INFER_runs=14 selector=-1 violations=0",
+    "tb_top_full_output": "PASS: T-06 Q1-Q6 ALL SELECTED cases=13 INFER_runs=18 selector=-1 AXI_C12_violations=0",
+    "tb_top_infer_output": "PASS: T-04 N1-N8 ALL SELECTED CHECKS cases=13 runs=15 selector=-1 AXI_C12_violations=0 RAM_violations=0",
+    "tb_top_load_output": "PASS: T-07 LOAD ALL SELECTED cases=10 selector=-1"
+  },
+  "completed_streams": 25,
+  "accepted_beats_completed_streams": 93050,
+  "region_observations": 275,
+  "region_cost_sum": 9772,
+  "specification_sum_typo": 9388,
+  "blob_reference": {
+    "path": "D:\\2609_final_project\\wifi-csi-pose-main\\HLS\\pl_accel_v6\\pl_accel_v6_weights.bin",
+    "bytes": 422992,
+    "header_uint32_le": [
+      911690832,
+      2,
+      105748,
+      1018653403,
+      1004115880,
+      2017158836,
+      31,
+      0
+    ]
+  }
+}

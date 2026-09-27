@@ -1,0 +1,182 @@
+단계 ID : T-03
+제목    : Top FSM LOAD 경로 (LD_RD1 / LD_RD2 / LD_WAIT) + 실물 M00 결합
+
+■ 목표
+  T-01R 골격의 DECODE 에서 FINISH 로 임시 분기하던 LOAD 경로를
+  도면대로 LD_RD1 → LD_RD2 → LD_WAIT → FINISH 로 채운다.
+  **Top FSM + 실물 M00_AXI + AXI4 슬레이브 모형이 처음으로 함께 돈다.**
+
+■ 수정 범위
+  - cnn_rtl/rtl/pose_cnn_ctrl.v        (수정)
+  - cnn_rtl/tb/loader_stub.v           신규. Loader 자리를 채울 TB 모형
+  - cnn_rtl/tb/tb_top_load.v           신규. 통합 TB
+  - cnn_rtl/tb/tb_ctrl_status.v        (busy 길이·LOAD 경로 기대값 갱신)
+  - cnn_rtl/tb/tb_csr_ctrl_link.v      (같은 이유의 최소 수정)
+  * M00_AXI / S00_AXI / axi4_slave_mem_model / CNN_Encoder 는 **건드리지 않는다.**
+  * tb_m00_read / tb_m00_write / tb_m00_err / tb_axi4_slave_mem_model 도 수정 금지.
+    문제 발견 시 **고치지 말고 보고한다.**
+
+■ 확정 계약 (도면 + 명세. 임의로 바꾸지 말 것)
+
+  주소·크기 — 명세 09_Loader_주소맵 r7~r9, 04_pose_cnn r48
+    load_base = **weight_addr snapshot** (WEIGHT_ADDR 0x10, START 에지 latch)
+    구간 1 : addr = weight_addr + 0        bytes = 5,936    (blob word [0,1484))
+    구간 2 : addr = weight_addr + 399,152  bytes = 23,840   (blob word [99788,105748))
+    사이의 393,216 B(FC1 weight)는 **LOAD 에서 건너뛴다.** INFER 때 스트리밍한다.
+
+  도면 ASM - 공통, DECODE → LD_RD1 전이의 조건 출력:
+    loader_start = 1
+    mem_rd_start = 1
+    addr = load_base + 0
+    bytes = 5,936
+    (전부 같은 에지의 1-cycle 펄스 / 값)
+
+  도면 ASM - LOAD:
+    LD_RD1 (4'b0010) 상태 등식:
+      status_busy = 1
+      ld_valid     = mem_rd_valid
+      mem_rd_ready = ld_ready
+      ld_data      = mem_rd_data
+    LD_RD1 판정 순서 — **mem_rd_err? 를 먼저 본다**:
+      mem_rd_err?            T → err_code ← 4 (MEM_RD_ERR), [D08 경로]
+                             F → mem_rd_busy 1→0?
+                                   T → mem_rd_start = 1
+                                       addr = load_base + 399,152
+                                       bytes = 23,840
+                                       → LD_RD2
+                                   F → LD_RD1 유지
+    LD_RD2 (4'b0011): 상태 등식·판정 구조 동일. 완료 시 **새 read 없이** LD_WAIT
+    LD_WAIT (4'b0100):
+      status_busy = 1  (그 외 출력 없음)
+      loader_done?  F → LD_WAIT 유지
+                    T → loader_err?  T → err_code ← 3 (BLOB_ERR) → FINISH
+                                     F → FINISH
+
+  Loader 계약 — 명세 04_pose_cnn r71~r76, 09_Loader_주소맵 r45
+    loader_start : 1-cycle pulse, 해당 블록이 idle 일 때만
+    loader_done  : 1-cycle pulse (성공·실패 공통)
+    loader_err   : loader_done 과 **같은 cycle** 에 유효
+    ld_ready     : **레벨.** beat 하나의 RAM 쓰기가 끝나야 1
+                   Conv weight·GELU LUT 8 cycle, Param 2 cycle, FCW 1 cycle
+                   → **ld_ready 가 최대 8 cycle 연속 0 일 수 있다**
+    ld_data/ld_valid : ld_valid && ld_ready 인 cycle 에 수락. 수락 전까지 유지
+
+■ ERR_DRAIN 은 이번에 만들지 않는다 (D08 미결)
+  mem_rd_err 분기의 목적지는 **임시로 FINISH** 로 둔다.
+  err_code ← 4 는 정상적으로 기록한다.
+  T-01R 에서 LOAD/INFER 를 임시로 FINISH 에 보낸 것과 같은 방식이며,
+  해당 자리에 "T-07 에서 ERR_DRAIN 으로 교체" 주석을 남긴다.
+  **근거**: T-02d 실측으로 정상 오류는 M00 이 스스로 drain 하고 busy 를
+  정상적으로 내린다는 것이 확인됐다. 다만 ERR_DRAIN 의 "소비 블록 구동 중지"와
+  RD_FAULT 대응은 D08 결정이 필요하므로 이번 범위가 아니다.
+
+■ loader_stub.v — TB 모형 요구 사항
+  실제 Loader 가 아니라 **Top FSM 의 LOAD 경로를 시험하기 위한 자리**다.
+
+  · loader_start 를 받으면 beat 수신을 시작한다
+  · ld_ready 를 **설정 가능한 패턴**으로 낮춘다:
+      항상 1 / 고정 N cycle 낮춤 / beat 종류별(8·2·1 cycle) / 의사난수(seed)
+    최소한 **8 cycle 연속 0** 을 만들 수 있어야 한다 (r45 최악 조건)
+  · 받은 beat 를 순서대로 모아 둔다. TB 가 전량 대조할 수 있게 한다
+  · 예상 beat 수(구간1 742 + 구간2 2,980 = **3,722**)를 받으면
+    loader_done 을 **1-cycle 펄스**로 낸다
+  · loader_err 를 **주입할 수 있다** (성공/실패 양쪽 시험용)
+  · loader_done 을 **지연**시킬 수 있다 (LD_WAIT 가 실제로 기다리는지 보려면 필요)
+  · 계약 위반을 스스로 잡는다:
+      - loader_start 가 idle 이 아닐 때 오면 오류
+      - ld_valid 가 1 인데 ld_data 가 수락 전에 바뀌면 오류
+      - 예상보다 많은 beat 가 오면 오류
+
+■ 검증 항목 (tb_top_load.v)
+
+  연결: pose_cnn_ctrl ↔ pose_cnn_v1_0_M00_AXI ↔ axi4_slave_mem_model
+        pose_cnn_ctrl ↔ loader_stub
+        reg_* 는 TB 가 직접 구동 (S00 은 이번에 넣지 않는다)
+
+  L1  DECODE → LD_RD1 전이
+      · loader_start 가 **정확히 1 cycle**
+      · mem_rd_start 가 **정확히 1 cycle**, 같은 에지
+      · mem_rd_addr == weight_addr + 0, mem_rd_bytes == 5,936
+      · weight_addr 는 **START 에지 snapshot** 이다.
+        START 이후 reg_weight_addr 를 바꿔도 발행 주소가 안 바뀐다
+
+  L2  LD_RD1 상태 등식
+      · ld_valid == mem_rd_valid, ld_data == mem_rd_data,
+        mem_rd_ready == ld_ready 가 **매 cycle** 성립
+      · **ld_ready 를 8 cycle 낮춰도 beat 가 유실·중복되지 않는다**
+      · 슬레이브 stall 과 겹쳐도 동일
+
+  L3  LD_RD1 → LD_RD2 전이
+      · mem_rd_busy 1→0 에서만 전이한다 (그 전에 나가지 않는다)
+      · 두 번째 mem_rd_start 가 정확히 1 cycle
+      · addr == weight_addr + 399,152, bytes == 23,840
+      · **구간 1 의 마지막 beat 가 수락된 뒤에** 두 번째 read 가 나간다
+
+  L4  LD_RD2 → LD_WAIT
+      · 새 mem_rd_start 가 **나가지 않는다**
+      · mem_rd_busy 1→0 에서만 전이
+
+  L5  LD_WAIT
+      · loader_done 이 늦게 와도 계속 기다린다 (지연 주입으로 확인)
+      · 기다리는 동안 status_busy = 1
+      · loader_done && !loader_err → FINISH, 결과 done=1 error=0
+      · loader_done &&  loader_err → FINISH, 결과 done=0 error=3 (BLOB_ERR)
+
+  L6  데이터 무결성 — **end-to-end**
+      · 모형 메모리에 blob 형태로 결정적 패턴을 채운다
+        (구간1·건너뛰는 구간·구간2 를 **서로 다른 패턴**으로 채운다)
+      · loader_stub 이 받은 3,722 beat 를 전량 대조한다
+      · **건너뛰는 393,216 B 구간의 데이터가 하나도 섞이지 않았는지** 확인한다
+        → 두 번째 read 의 주소 오프셋이 틀리면 여기서 잡힌다
+
+  L7  오류 경로
+      · 구간 1 중간 beat 에 RRESP 오류 주입 → err_code 4, FINISH 도달
+      · 구간 2 중간 beat 에 주입 → 같음
+      · **오류 시에도 M00 busy 가 정상적으로 내려간다** (T-02d ① 재확인)
+      · 이때 loader_stub 은 beat 를 덜 받은 상태로 끝난다.
+        loader_done 이 오지 않아도 LD_WAIT 로 가지 않고 FINISH 로 빠진다
+
+  L8  전체 LOAD 타이밍
+      · START 부터 status_busy 하강까지 총 cycle 수를 보고한다
+      · ld_ready 패턴별(항상 1 / 8 cycle 낮춤)로 각각
+      · **AR burst 수** 를 센다. 구간1 47 + 구간2 187 = **234** 예상
+
+  L9  회귀
+      · tb_ctrl_status / tb_csr_ctrl_link 를 LOAD 경로 변경에 맞게 갱신하고 통과
+      · **S00 기존 TB 4개는 수정 없이 통과**해야 한다
+      · tb_m00_read / write / err / 모형 자체시험도 수정 없이 통과
+
+■ 완료 조건
+  1. L1~L9 전부 통과. PASS 줄에 관측값을 찍는다 (beat 수, burst 수, cycle 수)
+  2. 상태 인코딩이 도면의 4-bit 값과 계속 일치한다 (LD_RD1/LD_RD2/LD_WAIT 포함)
+  3. **판정 순서가 도면과 같다** — `mem_rd_err?` 를 `mem_rd_busy 1→0?` **보다 먼저**
+  4. L6 의 전량 대조에서 **건너뛴 구간 데이터가 하나도 섞이지 않았음**을 보인다
+  5. 모형 프로토콜 위반 **0**, C12 위반 **0**
+  6. 미구현 상태(IN_RD/ENC/FC1~3/WR/ERR_DRAIN)는 계속 IDLE 복구를 유지한다
+  7. 합성 점검 1회 — `pose_cnn_ctrl` 단독, `xc7z020clg400-1`.
+     래치 0 / 조합 루프 0 확인하고 syn/README.md 에 한 행 추가
+  8. xvlog / xvlog -sv / xelab 오류·경고 0
+
+■ 최소 확인 방법
+  Vivado 2020.2. RTL 은 xvlog, TB·모형은 xvlog -sv.
+  **xsim 은 runtime fatal 에도 exit code 0 을 낼 수 있다.**
+  성공 표식과 함께 FAIL/Fatal 출력이 없는지 반드시 확인한다 (T-02d 교훈).
+  실행 명령과 출력 전문을 붙인다.
+
+■ 보고에 포함할 것
+  - 도면 ASM-LOAD 와 구현의 대조 (상태 등식·판정 순서·전이 출력)
+  - L1~L9 관측값
+  - LOAD 전체 소요 cycle 과 AR burst 수
+  - 기존 TB 회귀 결과 (어느 것을 고쳤고 왜 고쳤는지)
+  - 합성 결과
+  - M00/모형에 문제가 있다고 판단되면 **고치지 말고** 위치·근거·재현 방법
+  - Notion 복사용 요약
+
+■ 미결 사항
+  ERR_DRAIN 과 RD_FAULT 대응은 **D08** 이며 T-07 이다.
+  이번에는 err 분기를 FINISH 로 임시 연결하고 주석으로 표시한다.
+  실제 Loader(L-01~L-07)는 별도이며 이번에는 stub 을 쓴다.
+  Loader 의 상주 RAM 포트 공유는 **D09** 로 여전히 미결이다.
+
+■ 다음 단계 예고 (제목만)
+  T-04 : INFER 입력 단계와 Encoder 구동 (IN_RD / ENC)

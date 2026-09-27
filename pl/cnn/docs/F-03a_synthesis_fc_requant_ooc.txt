@@ -1,0 +1,1463 @@
+CWD: D:\2609_final_project\cnn_rtl\syn
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\vivado.bat -mode batch -source C:\Users\kccistc\AppData\Local\Temp\codex-f03a\check.tcl -nojournal -nolog -tclargs fc_requant_ooc xc7z020clg400-1 D:\2609_final_project\cnn_rtl\rtl\encoder\requant_stage.v C:\Users\kccistc\AppData\Local\Temp\codex-f03a\fc_requant_ooc.v
+
+****** Vivado v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+CRITICAL WARNING: [Common 17-741] No write access right to the local Tcl store at 'C'. XilinxTclStore is reverted to the installation area. If you want to use local Tcl Store, please change the access right and relaunch Vivado.
+source {C:\Users\kccistc\AppData\Local\Temp\codex-f03a\check.tcl}
+# source {D:/2609_final_project/cnn_rtl/syn/syn_check.tcl}
+## set top   [lindex $argv 0]
+## set part  [lindex $argv 1]
+## set srcs  [lrange $argv 2 end]
+## foreach f $srcs { read_verilog $f }
+## read_xdc [file join [file dirname [info script]] timing_100mhz.xdc]
+## synth_design -top $top -part $part -mode out_of_context
+Command: synth_design -top fc_requant_ooc -part xc7z020clg400-1 -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 53648
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1105.438 ; gain = 0.000
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'fc_requant_ooc' [C:/Users/kccistc/AppData/Local/Temp/codex-f03a/fc_requant_ooc.v:3]
+INFO: [Synth 8-6157] synthesizing module 'requant_stage' [D:/2609_final_project/cnn_rtl/rtl/encoder/requant_stage.v:3]
+	Parameter TAG_WIDTH bound to: 9 - type: integer 
+	Parameter FC_MODE bound to: 1 - type: integer 
+	Parameter PARAM_BASE0 bound to: 9'b000110000 
+	Parameter PARAM_BASE1 bound to: 9'b010110000 
+	Parameter PARAM_BASE2 bound to: 9'b100110000 
+INFO: [Synth 8-6155] done synthesizing module 'requant_stage' (1#1) [D:/2609_final_project/cnn_rtl/rtl/encoder/requant_stage.v:3]
+INFO: [Synth 8-6155] done synthesizing module 'fc_requant_ooc' (2#1) [C:/Users/kccistc/AppData/Local/Temp/codex-f03a/fc_requant_ooc.v:3]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 1105.438 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 1105.438 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 1105.438 ; gain = 0.000
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.010 . Memory (MB): peak = 1105.438 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [D:/2609_final_project/cnn_rtl/syn/timing_100mhz.xdc]
+Finished Parsing XDC File [D:/2609_final_project/cnn_rtl/syn/timing_100mhz.xdc]
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1197.844 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 1197.844 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 1197.844 ; gain = 92.406
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z020clg400-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 1197.844 ; gain = 92.406
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 1197.844 ; gain = 92.406
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1197.844 ; gain = 92.406
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   64 Bit       Adders := 2     
+	   3 Input   64 Bit       Adders := 1     
+	   2 Input    9 Bit       Adders := 2     
+	   2 Input    8 Bit       Adders := 1     
+	   2 Input    6 Bit       Adders := 1     
++---Registers : 
+	               96 Bit    Registers := 2     
+	               64 Bit    Registers := 3     
+	                9 Bit    Registers := 4     
+	                8 Bit    Registers := 1     
+	                1 Bit    Registers := 4     
++---Multipliers : 
+	              32x64  Multipliers := 1     
++---Muxes : 
+	   2 Input   64 Bit        Muxes := 2     
+	   3 Input    9 Bit        Muxes := 1     
+	   3 Input    8 Bit        Muxes := 1     
+	   2 Input    8 Bit        Muxes := 2     
+	   2 Input    1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 220 (col length:60)
+BRAMs: 280 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+DSP Report: Generating DSP acc_mult, operation Mode is: A2*B2.
+DSP Report: register acc_mult is absorbed into DSP acc_mult.
+DSP Report: register acc_mult is absorbed into DSP acc_mult.
+DSP Report: operator acc_mult is absorbed into DSP acc_mult.
+DSP Report: operator acc_mult is absorbed into DSP acc_mult.
+DSP Report: Generating DSP acc_r3_reg, operation Mode is: (PCIN>>17)+A2*B2.
+DSP Report: register acc_r3_reg is absorbed into DSP acc_r3_reg.
+DSP Report: register acc_r3_reg is absorbed into DSP acc_r3_reg.
+DSP Report: register acc_r3_reg is absorbed into DSP acc_r3_reg.
+DSP Report: operator acc_mult is absorbed into DSP acc_r3_reg.
+DSP Report: operator acc_mult is absorbed into DSP acc_r3_reg.
+DSP Report: Generating DSP acc_mult, operation Mode is: A2*B2.
+DSP Report: register acc_mult is absorbed into DSP acc_mult.
+DSP Report: register acc_mult is absorbed into DSP acc_mult.
+DSP Report: operator acc_mult is absorbed into DSP acc_mult.
+DSP Report: operator acc_mult is absorbed into DSP acc_mult.
+DSP Report: Generating DSP acc_mult, operation Mode is: PCIN+A2*B2.
+DSP Report: register acc_mult is absorbed into DSP acc_mult.
+DSP Report: register acc_mult is absorbed into DSP acc_mult.
+DSP Report: operator acc_mult is absorbed into DSP acc_mult.
+DSP Report: operator acc_mult is absorbed into DSP acc_mult.
+DSP Report: Generating DSP acc_r3_reg, operation Mode is: (PCIN>>17)+A2*B2.
+DSP Report: register acc_r3_reg is absorbed into DSP acc_r3_reg.
+DSP Report: register acc_r3_reg is absorbed into DSP acc_r3_reg.
+DSP Report: register acc_r3_reg is absorbed into DSP acc_r3_reg.
+DSP Report: operator acc_mult is absorbed into DSP acc_r3_reg.
+DSP Report: operator acc_mult is absorbed into DSP acc_r3_reg.
+DSP Report: Generating DSP acc_mult, operation Mode is: A2*B2.
+DSP Report: register acc_mult is absorbed into DSP acc_mult.
+DSP Report: register acc_mult is absorbed into DSP acc_mult.
+DSP Report: operator acc_mult is absorbed into DSP acc_mult.
+DSP Report: operator acc_mult is absorbed into DSP acc_mult.
+DSP Report: Generating DSP acc_mult, operation Mode is: (PCIN>>17)+A2*B2.
+DSP Report: register acc_mult is absorbed into DSP acc_mult.
+DSP Report: register acc_mult is absorbed into DSP acc_mult.
+DSP Report: operator acc_mult is absorbed into DSP acc_mult.
+DSP Report: operator acc_mult is absorbed into DSP acc_mult.
+DSP Report: Generating DSP acc_r3_reg, operation Mode is: (PCIN+A2*B2)'.
+DSP Report: register acc_r3_reg is absorbed into DSP acc_r3_reg.
+DSP Report: register acc_r3_reg is absorbed into DSP acc_r3_reg.
+DSP Report: register acc_r3_reg is absorbed into DSP acc_r3_reg.
+DSP Report: operator acc_mult is absorbed into DSP acc_r3_reg.
+DSP Report: operator acc_mult is absorbed into DSP acc_r3_reg.
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:22 ; elapsed = 00:00:23 . Memory (MB): peak = 1197.844 ; gain = 92.406
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+DSP: Preliminary Mapping	Report (see note below)
++--------------+------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name   | DSP Mapping      | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++--------------+------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|requant_stage | A2*B2            | 18     | 13     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 0    | 
+|requant_stage | (PCIN>>17)+A2*B2 | 15     | 13     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 1    | 
+|requant_stage | A2*B2            | 18     | 15     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 0    | 
+|requant_stage | PCIN+A2*B2       | 18     | 18     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 0    | 
+|requant_stage | (PCIN>>17)+A2*B2 | 18     | 15     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 1    | 
+|requant_stage | A2*B2            | 18     | 18     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 0    | 
+|requant_stage | (PCIN>>17)+A2*B2 | 18     | 15     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 0    | 
+|requant_stage | (PCIN+A2*B2)'    | 18     | 18     | -      | -      | 48     | 1    | 1    | -    | -    | -     | 0    | 1    | 
++--------------+------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:31 ; elapsed = 00:00:32 . Memory (MB): peak = 1230.527 ; gain = 125.090
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:40 ; elapsed = 00:00:41 . Memory (MB): peak = 1393.930 ; gain = 288.492
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:40 ; elapsed = 00:00:42 . Memory (MB): peak = 1394.988 ; gain = 289.551
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:43 ; elapsed = 00:00:44 . Memory (MB): peak = 1394.988 ; gain = 289.551
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:43 ; elapsed = 00:00:44 . Memory (MB): peak = 1394.988 ; gain = 289.551
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:43 ; elapsed = 00:00:45 . Memory (MB): peak = 1394.988 ; gain = 289.551
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:43 ; elapsed = 00:00:45 . Memory (MB): peak = 1394.988 ; gain = 289.551
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:43 ; elapsed = 00:00:45 . Memory (MB): peak = 1394.988 ; gain = 289.551
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:43 ; elapsed = 00:00:45 . Memory (MB): peak = 1394.988 ; gain = 289.551
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Static Shift Register Report:
++---------------+--------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|Module Name    | RTL Name           | Length | Width | Reset Signal | Pull out first Reg | Pull out last Reg | SRL16E | SRLC32E | 
++---------------+--------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+|fc_requant_ooc | u_rq/rq_tag_reg[8] | 4      | 9     | NO           | NO                 | YES               | 9      | 0       | 
++---------------+--------------------+--------+-------+--------------+--------------------+-------------------+--------+---------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+--------+------+
+|      |Cell    |Count |
++------+--------+------+
+|1     |CARRY4  |    77|
+|2     |DSP48E1 |     7|
+|4     |LUT1    |    34|
+|5     |LUT2    |    69|
+|6     |LUT3    |    48|
+|7     |LUT4    |    51|
+|8     |LUT5    |   241|
+|9     |LUT6    |   554|
+|10    |MUXF7   |    47|
+|11    |SRL16E  |     9|
+|12    |FDRE    |   156|
+|13    |FDSE    |     1|
++------+--------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:43 ; elapsed = 00:00:45 . Memory (MB): peak = 1394.988 ; gain = 289.551
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:35 ; elapsed = 00:00:43 . Memory (MB): peak = 1394.988 ; gain = 197.145
+Synthesis Optimization Complete : Time (s): cpu = 00:00:43 ; elapsed = 00:00:45 . Memory (MB): peak = 1394.988 ; gain = 289.551
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.013 . Memory (MB): peak = 1394.988 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 131 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+WARNING: [Netlist 29-101] Netlist 'fc_requant_ooc' is not ideal for floorplanning, since the cellview 'requant_stage' contains a large number of primitives.  Please consider enabling hierarchy in synthesis if you want to do floorplanning.
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [D:/2609_final_project/cnn_rtl/syn/timing_100mhz.xdc]
+Finished Parsing XDC File [D:/2609_final_project/cnn_rtl/syn/timing_100mhz.xdc]
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1394.988 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+18 Infos, 1 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:50 ; elapsed = 00:00:55 . Memory (MB): peak = 1394.988 ; gain = 289.551
+## puts "===== UTILIZATION ====="
+===== UTILIZATION =====
+## report_utilization -hierarchical
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Sat Sep 26 19:10:23 2026
+| Host         : DESKTOP-7CFQ9ND running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical
+| Design       : fc_requant_ooc
+| Device       : 7z020clg400-1
+| Design State : Synthesized
+------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++--------------------+---------------+------------+------------+---------+------+-----+--------+--------+------------+
+|      Instance      |     Module    | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
++--------------------+---------------+------------+------------+---------+------+-----+--------+--------+------------+
+| fc_requant_ooc     |         (top) |        966 |        957 |       0 |    9 | 157 |      0 |      0 |          7 |
+|   (fc_requant_ooc) |         (top) |          3 |          3 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   u_rq             | requant_stage |        963 |        954 |       0 |    9 | 157 |      0 |      0 |          7 |
++--------------------+---------------+------------+------------+---------+------+-----+--------+--------+------------+
+
+
+## puts "===== TIMING ====="
+===== TIMING =====
+## report_timing_summary -delay_type max -max_paths 3
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "clk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Sat Sep 26 19:10:26 2026
+| Host         : DESKTOP-7CFQ9ND running 64-bit major release  (build 9200)
+| Command      : report_timing_summary -delay_type max -max_paths 3
+| Design       : fc_requant_ooc
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+------------------------------------------------------------------------------------
+
+Timing Summary Report
+
+------------------------------------------------------------------------------------------------
+| Timer Settings
+| --------------
+------------------------------------------------------------------------------------------------
+
+  Enable Multi Corner Analysis               :  Yes
+  Enable Pessimism Removal                   :  Yes
+  Pessimism Removal Resolution               :  Nearest Common Node
+  Enable Input Delay Default Clock           :  No
+  Enable Preset / Clear Arcs                 :  No
+  Disable Flight Delays                      :  No
+  Ignore I/O Paths                           :  No
+  Timing Early Launch at Borrowing Latches   :  No
+  Borrow Time for Max Delay Exceptions       :  Yes
+  Merge Timing Exceptions                    :  Yes
+
+  Corner  Analyze    Analyze    
+  Name    Max Paths  Min Paths  
+  ------  ---------  ---------  
+  Slow    Yes        Yes        
+  Fast    Yes        Yes        
+
+
+
+check_timing report
+
+Table of Contents
+-----------------
+1. checking no_clock (0)
+2. checking constant_clock (0)
+3. checking pulse_width_clock (0)
+4. checking unconstrained_internal_endpoints (0)
+5. checking no_input_delay (0)
+6. checking no_output_delay (0)
+7. checking multiple_clock (0)
+8. checking generated_clocks (0)
+9. checking loops (0)
+10. checking partial_input_delay (0)
+11. checking partial_output_delay (0)
+12. checking latch_loops (0)
+
+1. checking no_clock (0)
+------------------------
+ There are 0 register/latch pins with no clock.
+
+
+2. checking constant_clock (0)
+------------------------------
+ There are 0 register/latch pins with constant_clock.
+
+
+3. checking pulse_width_clock (0)
+---------------------------------
+ There are 0 register/latch pins which need pulse_width check
+
+
+4. checking unconstrained_internal_endpoints (0)
+------------------------------------------------
+ There are 0 pins that are not constrained for maximum delay.
+
+ There are 0 pins that are not constrained for maximum delay due to constant clock.
+
+
+5. checking no_input_delay (0)
+------------------------------
+ There are 0 input ports with no input delay specified.
+
+ There are 0 input ports with no input delay but user has a false path constraint.
+
+
+6. checking no_output_delay (0)
+-------------------------------
+ There are 0 ports with no output delay specified.
+
+ There are 0 ports with no output delay but user has a false path constraint
+
+ There are 0 ports with no output delay but with a timing clock defined on it or propagating through it
+
+
+7. checking multiple_clock (0)
+------------------------------
+ There are 0 register/latch pins with multiple clocks.
+
+
+8. checking generated_clocks (0)
+--------------------------------
+ There are 0 generated clocks that are not connected to a clock source.
+
+
+9. checking loops (0)
+---------------------
+ There are 0 combinational loops in the design.
+
+
+10. checking partial_input_delay (0)
+------------------------------------
+ There are 0 input ports with partial input delay specified.
+
+
+11. checking partial_output_delay (0)
+-------------------------------------
+ There are 0 ports with partial output delay specified.
+
+
+12. checking latch_loops (0)
+----------------------------
+ There are 0 combinational latch loops in the design through latch input
+
+
+
+------------------------------------------------------------------------------------------------
+| Design Timing Summary
+| ---------------------
+------------------------------------------------------------------------------------------------
+
+    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+     -3.494      -41.470                     15                  702        4.020        0.000                       0                   169  
+
+
+Timing constraints are not met.
+
+
+------------------------------------------------------------------------------------------------
+| Clock Summary
+| -------------
+------------------------------------------------------------------------------------------------
+
+Clock  Waveform(ns)       Period(ns)      Frequency(MHz)
+-----  ------------       ----------      --------------
+ACLK   {0.000 5.000}      10.000          100.000         
+
+
+------------------------------------------------------------------------------------------------
+| Intra Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+ACLK               -3.494      -41.470                     15                  702        4.020        0.000                       0                   169  
+
+
+------------------------------------------------------------------------------------------------
+| Inter Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+----------    --------          -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Other Path Groups Table
+| -----------------------
+------------------------------------------------------------------------------------------------
+
+Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+----------    ----------    --------          -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Timing Details
+| --------------
+------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  ACLK
+  To Clock:  ACLK
+
+Setup :           15  Failing Endpoints,  Worst Slack       -3.494ns,  Total Violation      -41.470ns
+Hold  :           NA  Failing Endpoints,  Worst Slack           NA  ,  Total Violation           NA
+PW    :            0  Failing Endpoints,  Worst Slack        4.020ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (VIOLATED) :        -3.494ns  (required time - arrival time)
+  Source:                 u_rq/param3_reg[69]/C
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_rq/rq_reg[1]/R
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (ACLK rise@10.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        12.886ns  (logic 5.885ns (45.670%)  route 7.001ns (54.330%))
+  Logic Levels:           31  (CARRY4=23 LUT2=1 LUT5=1 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=172, unset)          0.973     0.973    u_rq/clk
+                         FDRE                                         r  u_rq/param3_reg[69]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_fdre_C_Q)         0.518     1.491 r  u_rq/param3_reg[69]/Q
+                         net (fo=160, unplaced)       1.076     2.567    u_rq/p_0_in[5]
+                         LUT6 (Prop_lut6_I0_O)        0.295     2.862 r  u_rq/i__carry_i_5/O
+                         net (fo=16, unplaced)        0.503     3.365    u_rq/i__carry_i_5_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     3.489 r  u_rq/i__carry_i_3__0/O
+                         net (fo=1, unplaced)         0.000     3.489    u_rq/i__carry_i_3__0_n_0
+                         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     4.022 r  u_rq/acc_sh2_inferred__0/i__carry/CO[3]
+                         net (fo=1, unplaced)         0.009     4.031    u_rq/acc_sh2_inferred__0/i__carry_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.148 r  u_rq/acc_sh2_inferred__0/i__carry__0/CO[3]
+                         net (fo=1, unplaced)         0.000     4.148    u_rq/acc_sh2_inferred__0/i__carry__0_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.265 r  u_rq/acc_sh2_inferred__0/i__carry__1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.265    u_rq/acc_sh2_inferred__0/i__carry__1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.382 r  u_rq/acc_sh2_inferred__0/i__carry__2/CO[3]
+                         net (fo=1, unplaced)         0.000     4.382    u_rq/acc_sh2_inferred__0/i__carry__2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.499 r  u_rq/acc_sh2_inferred__0/i__carry__3/CO[3]
+                         net (fo=1, unplaced)         0.000     4.499    u_rq/acc_sh2_inferred__0/i__carry__3_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.616 r  u_rq/acc_sh2_inferred__0/i__carry__4/CO[3]
+                         net (fo=1, unplaced)         0.000     4.616    u_rq/acc_sh2_inferred__0/i__carry__4_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.733 r  u_rq/acc_sh2_inferred__0/i__carry__5/CO[3]
+                         net (fo=1, unplaced)         0.000     4.733    u_rq/acc_sh2_inferred__0/i__carry__5_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.850 r  u_rq/acc_sh2_inferred__0/i__carry__6/CO[3]
+                         net (fo=1, unplaced)         0.000     4.850    u_rq/acc_sh2_inferred__0/i__carry__6_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.967 r  u_rq/acc_sh2_inferred__0/i__carry__7/CO[3]
+                         net (fo=1, unplaced)         0.000     4.967    u_rq/acc_sh2_inferred__0/i__carry__7_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.084 r  u_rq/acc_sh2_inferred__0/i__carry__8/CO[3]
+                         net (fo=1, unplaced)         0.000     5.084    u_rq/acc_sh2_inferred__0/i__carry__8_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.201 r  u_rq/acc_sh2_inferred__0/i__carry__9/CO[3]
+                         net (fo=1, unplaced)         0.000     5.201    u_rq/acc_sh2_inferred__0/i__carry__9_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.318 r  u_rq/acc_sh2_inferred__0/i__carry__10/CO[3]
+                         net (fo=1, unplaced)         0.000     5.318    u_rq/acc_sh2_inferred__0/i__carry__10_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.435 r  u_rq/acc_sh2_inferred__0/i__carry__11/CO[3]
+                         net (fo=1, unplaced)         0.000     5.435    u_rq/acc_sh2_inferred__0/i__carry__11_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.552 r  u_rq/acc_sh2_inferred__0/i__carry__12/CO[3]
+                         net (fo=1, unplaced)         0.000     5.552    u_rq/acc_sh2_inferred__0/i__carry__12_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.669 r  u_rq/acc_sh2_inferred__0/i__carry__13/CO[3]
+                         net (fo=1, unplaced)         0.000     5.669    u_rq/acc_sh2_inferred__0/i__carry__13_n_0
+                         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.331     6.000 f  u_rq/acc_sh2_inferred__0/i__carry__14/O[3]
+                         net (fo=64, unplaced)        0.706     6.706    u_rq/acc_sh2_inferred__0/i__carry__14_n_4
+                         LUT6 (Prop_lut6_I0_O)        0.307     7.013 f  u_rq/rq[7]_i_59/O
+                         net (fo=4, unplaced)         0.926     7.939    u_rq/rq[7]_i_59_n_0
+                         LUT6 (Prop_lut6_I1_O)        0.124     8.063 f  u_rq/acc_sat2_carry_i_60/O
+                         net (fo=4, unplaced)         0.926     8.989    u_rq/acc_sat2_carry_i_60_n_0
+                         LUT6 (Prop_lut6_I1_O)        0.124     9.113 f  u_rq/acc_sat2_carry_i_36/O
+                         net (fo=1, unplaced)         0.000     9.113    u_rq/acc_sat2_carry_i_36_n_0
+                         MUXF7 (Prop_muxf7_I1_O)      0.247     9.360 f  u_rq/acc_sat2_carry_i_15/O
+                         net (fo=4, unplaced)         0.476     9.836    u_rq/acc_sat2_carry_i_15_n_0
+                         LUT6 (Prop_lut6_I2_O)        0.298    10.134 r  u_rq/acc_sat1_carry__0_i_3/O
+                         net (fo=1, unplaced)         0.639    10.773    u_rq/acc_sat1_carry__0_i_3_n_0
+                         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.520    11.293 r  u_rq/acc_sat1_carry__0/CO[3]
+                         net (fo=1, unplaced)         0.000    11.293    u_rq/acc_sat1_carry__0_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.410 r  u_rq/acc_sat1_carry__1/CO[3]
+                         net (fo=1, unplaced)         0.000    11.410    u_rq/acc_sat1_carry__1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.527 r  u_rq/acc_sat1_carry__2/CO[3]
+                         net (fo=1, unplaced)         0.000    11.527    u_rq/acc_sat1_carry__2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.644 r  u_rq/acc_sat1_carry__3/CO[3]
+                         net (fo=1, unplaced)         0.000    11.644    u_rq/acc_sat1_carry__3_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.761 r  u_rq/acc_sat1_carry__4/CO[3]
+                         net (fo=1, unplaced)         0.000    11.761    u_rq/acc_sat1_carry__4_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.878 r  u_rq/acc_sat1_carry__5/CO[3]
+                         net (fo=1, unplaced)         0.000    11.878    u_rq/acc_sat1_carry__5_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.995 r  u_rq/acc_sat1_carry__6/CO[3]
+                         net (fo=2, unplaced)         0.929    12.924    u_rq/acc_sat1
+                         LUT2 (Prop_lut2_I1_O)        0.124    13.048 r  u_rq/rq[7]_i_1/O
+                         net (fo=7, unplaced)         0.811    13.859    u_rq/rq[7]_i_1_n_0
+                         FDRE                                         r  u_rq/rq_reg[1]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)      10.000    10.000 r  
+                                                      0.000    10.000 r  clk (IN)
+                         net (fo=172, unset)          0.924    10.924    u_rq/clk
+                         FDRE                                         r  u_rq/rq_reg[1]/C
+                         clock pessimism              0.000    10.924    
+                         clock uncertainty           -0.035    10.889    
+                         FDRE (Setup_fdre_C_R)       -0.524    10.365    u_rq/rq_reg[1]
+  -------------------------------------------------------------------
+                         required time                         10.365    
+                         arrival time                         -13.859    
+  -------------------------------------------------------------------
+                         slack                                 -3.494    
+
+Slack (VIOLATED) :        -3.494ns  (required time - arrival time)
+  Source:                 u_rq/param3_reg[69]/C
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_rq/rq_reg[2]/R
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (ACLK rise@10.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        12.886ns  (logic 5.885ns (45.670%)  route 7.001ns (54.330%))
+  Logic Levels:           31  (CARRY4=23 LUT2=1 LUT5=1 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=172, unset)          0.973     0.973    u_rq/clk
+                         FDRE                                         r  u_rq/param3_reg[69]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_fdre_C_Q)         0.518     1.491 r  u_rq/param3_reg[69]/Q
+                         net (fo=160, unplaced)       1.076     2.567    u_rq/p_0_in[5]
+                         LUT6 (Prop_lut6_I0_O)        0.295     2.862 r  u_rq/i__carry_i_5/O
+                         net (fo=16, unplaced)        0.503     3.365    u_rq/i__carry_i_5_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     3.489 r  u_rq/i__carry_i_3__0/O
+                         net (fo=1, unplaced)         0.000     3.489    u_rq/i__carry_i_3__0_n_0
+                         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     4.022 r  u_rq/acc_sh2_inferred__0/i__carry/CO[3]
+                         net (fo=1, unplaced)         0.009     4.031    u_rq/acc_sh2_inferred__0/i__carry_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.148 r  u_rq/acc_sh2_inferred__0/i__carry__0/CO[3]
+                         net (fo=1, unplaced)         0.000     4.148    u_rq/acc_sh2_inferred__0/i__carry__0_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.265 r  u_rq/acc_sh2_inferred__0/i__carry__1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.265    u_rq/acc_sh2_inferred__0/i__carry__1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.382 r  u_rq/acc_sh2_inferred__0/i__carry__2/CO[3]
+                         net (fo=1, unplaced)         0.000     4.382    u_rq/acc_sh2_inferred__0/i__carry__2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.499 r  u_rq/acc_sh2_inferred__0/i__carry__3/CO[3]
+                         net (fo=1, unplaced)         0.000     4.499    u_rq/acc_sh2_inferred__0/i__carry__3_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.616 r  u_rq/acc_sh2_inferred__0/i__carry__4/CO[3]
+                         net (fo=1, unplaced)         0.000     4.616    u_rq/acc_sh2_inferred__0/i__carry__4_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.733 r  u_rq/acc_sh2_inferred__0/i__carry__5/CO[3]
+                         net (fo=1, unplaced)         0.000     4.733    u_rq/acc_sh2_inferred__0/i__carry__5_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.850 r  u_rq/acc_sh2_inferred__0/i__carry__6/CO[3]
+                         net (fo=1, unplaced)         0.000     4.850    u_rq/acc_sh2_inferred__0/i__carry__6_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.967 r  u_rq/acc_sh2_inferred__0/i__carry__7/CO[3]
+                         net (fo=1, unplaced)         0.000     4.967    u_rq/acc_sh2_inferred__0/i__carry__7_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.084 r  u_rq/acc_sh2_inferred__0/i__carry__8/CO[3]
+                         net (fo=1, unplaced)         0.000     5.084    u_rq/acc_sh2_inferred__0/i__carry__8_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.201 r  u_rq/acc_sh2_inferred__0/i__carry__9/CO[3]
+                         net (fo=1, unplaced)         0.000     5.201    u_rq/acc_sh2_inferred__0/i__carry__9_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.318 r  u_rq/acc_sh2_inferred__0/i__carry__10/CO[3]
+                         net (fo=1, unplaced)         0.000     5.318    u_rq/acc_sh2_inferred__0/i__carry__10_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.435 r  u_rq/acc_sh2_inferred__0/i__carry__11/CO[3]
+                         net (fo=1, unplaced)         0.000     5.435    u_rq/acc_sh2_inferred__0/i__carry__11_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.552 r  u_rq/acc_sh2_inferred__0/i__carry__12/CO[3]
+                         net (fo=1, unplaced)         0.000     5.552    u_rq/acc_sh2_inferred__0/i__carry__12_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.669 r  u_rq/acc_sh2_inferred__0/i__carry__13/CO[3]
+                         net (fo=1, unplaced)         0.000     5.669    u_rq/acc_sh2_inferred__0/i__carry__13_n_0
+                         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.331     6.000 f  u_rq/acc_sh2_inferred__0/i__carry__14/O[3]
+                         net (fo=64, unplaced)        0.706     6.706    u_rq/acc_sh2_inferred__0/i__carry__14_n_4
+                         LUT6 (Prop_lut6_I0_O)        0.307     7.013 f  u_rq/rq[7]_i_59/O
+                         net (fo=4, unplaced)         0.926     7.939    u_rq/rq[7]_i_59_n_0
+                         LUT6 (Prop_lut6_I1_O)        0.124     8.063 f  u_rq/acc_sat2_carry_i_60/O
+                         net (fo=4, unplaced)         0.926     8.989    u_rq/acc_sat2_carry_i_60_n_0
+                         LUT6 (Prop_lut6_I1_O)        0.124     9.113 f  u_rq/acc_sat2_carry_i_36/O
+                         net (fo=1, unplaced)         0.000     9.113    u_rq/acc_sat2_carry_i_36_n_0
+                         MUXF7 (Prop_muxf7_I1_O)      0.247     9.360 f  u_rq/acc_sat2_carry_i_15/O
+                         net (fo=4, unplaced)         0.476     9.836    u_rq/acc_sat2_carry_i_15_n_0
+                         LUT6 (Prop_lut6_I2_O)        0.298    10.134 r  u_rq/acc_sat1_carry__0_i_3/O
+                         net (fo=1, unplaced)         0.639    10.773    u_rq/acc_sat1_carry__0_i_3_n_0
+                         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.520    11.293 r  u_rq/acc_sat1_carry__0/CO[3]
+                         net (fo=1, unplaced)         0.000    11.293    u_rq/acc_sat1_carry__0_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.410 r  u_rq/acc_sat1_carry__1/CO[3]
+                         net (fo=1, unplaced)         0.000    11.410    u_rq/acc_sat1_carry__1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.527 r  u_rq/acc_sat1_carry__2/CO[3]
+                         net (fo=1, unplaced)         0.000    11.527    u_rq/acc_sat1_carry__2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.644 r  u_rq/acc_sat1_carry__3/CO[3]
+                         net (fo=1, unplaced)         0.000    11.644    u_rq/acc_sat1_carry__3_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.761 r  u_rq/acc_sat1_carry__4/CO[3]
+                         net (fo=1, unplaced)         0.000    11.761    u_rq/acc_sat1_carry__4_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.878 r  u_rq/acc_sat1_carry__5/CO[3]
+                         net (fo=1, unplaced)         0.000    11.878    u_rq/acc_sat1_carry__5_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.995 r  u_rq/acc_sat1_carry__6/CO[3]
+                         net (fo=2, unplaced)         0.929    12.924    u_rq/acc_sat1
+                         LUT2 (Prop_lut2_I1_O)        0.124    13.048 r  u_rq/rq[7]_i_1/O
+                         net (fo=7, unplaced)         0.811    13.859    u_rq/rq[7]_i_1_n_0
+                         FDRE                                         r  u_rq/rq_reg[2]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)      10.000    10.000 r  
+                                                      0.000    10.000 r  clk (IN)
+                         net (fo=172, unset)          0.924    10.924    u_rq/clk
+                         FDRE                                         r  u_rq/rq_reg[2]/C
+                         clock pessimism              0.000    10.924    
+                         clock uncertainty           -0.035    10.889    
+                         FDRE (Setup_fdre_C_R)       -0.524    10.365    u_rq/rq_reg[2]
+  -------------------------------------------------------------------
+                         required time                         10.365    
+                         arrival time                         -13.859    
+  -------------------------------------------------------------------
+                         slack                                 -3.494    
+
+Slack (VIOLATED) :        -3.494ns  (required time - arrival time)
+  Source:                 u_rq/param3_reg[69]/C
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_rq/rq_reg[3]/R
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (ACLK rise@10.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        12.886ns  (logic 5.885ns (45.670%)  route 7.001ns (54.330%))
+  Logic Levels:           31  (CARRY4=23 LUT2=1 LUT5=1 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=172, unset)          0.973     0.973    u_rq/clk
+                         FDRE                                         r  u_rq/param3_reg[69]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_fdre_C_Q)         0.518     1.491 r  u_rq/param3_reg[69]/Q
+                         net (fo=160, unplaced)       1.076     2.567    u_rq/p_0_in[5]
+                         LUT6 (Prop_lut6_I0_O)        0.295     2.862 r  u_rq/i__carry_i_5/O
+                         net (fo=16, unplaced)        0.503     3.365    u_rq/i__carry_i_5_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     3.489 r  u_rq/i__carry_i_3__0/O
+                         net (fo=1, unplaced)         0.000     3.489    u_rq/i__carry_i_3__0_n_0
+                         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     4.022 r  u_rq/acc_sh2_inferred__0/i__carry/CO[3]
+                         net (fo=1, unplaced)         0.009     4.031    u_rq/acc_sh2_inferred__0/i__carry_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.148 r  u_rq/acc_sh2_inferred__0/i__carry__0/CO[3]
+                         net (fo=1, unplaced)         0.000     4.148    u_rq/acc_sh2_inferred__0/i__carry__0_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.265 r  u_rq/acc_sh2_inferred__0/i__carry__1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.265    u_rq/acc_sh2_inferred__0/i__carry__1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.382 r  u_rq/acc_sh2_inferred__0/i__carry__2/CO[3]
+                         net (fo=1, unplaced)         0.000     4.382    u_rq/acc_sh2_inferred__0/i__carry__2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.499 r  u_rq/acc_sh2_inferred__0/i__carry__3/CO[3]
+                         net (fo=1, unplaced)         0.000     4.499    u_rq/acc_sh2_inferred__0/i__carry__3_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.616 r  u_rq/acc_sh2_inferred__0/i__carry__4/CO[3]
+                         net (fo=1, unplaced)         0.000     4.616    u_rq/acc_sh2_inferred__0/i__carry__4_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.733 r  u_rq/acc_sh2_inferred__0/i__carry__5/CO[3]
+                         net (fo=1, unplaced)         0.000     4.733    u_rq/acc_sh2_inferred__0/i__carry__5_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.850 r  u_rq/acc_sh2_inferred__0/i__carry__6/CO[3]
+                         net (fo=1, unplaced)         0.000     4.850    u_rq/acc_sh2_inferred__0/i__carry__6_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.967 r  u_rq/acc_sh2_inferred__0/i__carry__7/CO[3]
+                         net (fo=1, unplaced)         0.000     4.967    u_rq/acc_sh2_inferred__0/i__carry__7_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.084 r  u_rq/acc_sh2_inferred__0/i__carry__8/CO[3]
+                         net (fo=1, unplaced)         0.000     5.084    u_rq/acc_sh2_inferred__0/i__carry__8_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.201 r  u_rq/acc_sh2_inferred__0/i__carry__9/CO[3]
+                         net (fo=1, unplaced)         0.000     5.201    u_rq/acc_sh2_inferred__0/i__carry__9_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.318 r  u_rq/acc_sh2_inferred__0/i__carry__10/CO[3]
+                         net (fo=1, unplaced)         0.000     5.318    u_rq/acc_sh2_inferred__0/i__carry__10_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.435 r  u_rq/acc_sh2_inferred__0/i__carry__11/CO[3]
+                         net (fo=1, unplaced)         0.000     5.435    u_rq/acc_sh2_inferred__0/i__carry__11_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.552 r  u_rq/acc_sh2_inferred__0/i__carry__12/CO[3]
+                         net (fo=1, unplaced)         0.000     5.552    u_rq/acc_sh2_inferred__0/i__carry__12_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.669 r  u_rq/acc_sh2_inferred__0/i__carry__13/CO[3]
+                         net (fo=1, unplaced)         0.000     5.669    u_rq/acc_sh2_inferred__0/i__carry__13_n_0
+                         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.331     6.000 f  u_rq/acc_sh2_inferred__0/i__carry__14/O[3]
+                         net (fo=64, unplaced)        0.706     6.706    u_rq/acc_sh2_inferred__0/i__carry__14_n_4
+                         LUT6 (Prop_lut6_I0_O)        0.307     7.013 f  u_rq/rq[7]_i_59/O
+                         net (fo=4, unplaced)         0.926     7.939    u_rq/rq[7]_i_59_n_0
+                         LUT6 (Prop_lut6_I1_O)        0.124     8.063 f  u_rq/acc_sat2_carry_i_60/O
+                         net (fo=4, unplaced)         0.926     8.989    u_rq/acc_sat2_carry_i_60_n_0
+                         LUT6 (Prop_lut6_I1_O)        0.124     9.113 f  u_rq/acc_sat2_carry_i_36/O
+                         net (fo=1, unplaced)         0.000     9.113    u_rq/acc_sat2_carry_i_36_n_0
+                         MUXF7 (Prop_muxf7_I1_O)      0.247     9.360 f  u_rq/acc_sat2_carry_i_15/O
+                         net (fo=4, unplaced)         0.476     9.836    u_rq/acc_sat2_carry_i_15_n_0
+                         LUT6 (Prop_lut6_I2_O)        0.298    10.134 r  u_rq/acc_sat1_carry__0_i_3/O
+                         net (fo=1, unplaced)         0.639    10.773    u_rq/acc_sat1_carry__0_i_3_n_0
+                         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.520    11.293 r  u_rq/acc_sat1_carry__0/CO[3]
+                         net (fo=1, unplaced)         0.000    11.293    u_rq/acc_sat1_carry__0_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.410 r  u_rq/acc_sat1_carry__1/CO[3]
+                         net (fo=1, unplaced)         0.000    11.410    u_rq/acc_sat1_carry__1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.527 r  u_rq/acc_sat1_carry__2/CO[3]
+                         net (fo=1, unplaced)         0.000    11.527    u_rq/acc_sat1_carry__2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.644 r  u_rq/acc_sat1_carry__3/CO[3]
+                         net (fo=1, unplaced)         0.000    11.644    u_rq/acc_sat1_carry__3_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.761 r  u_rq/acc_sat1_carry__4/CO[3]
+                         net (fo=1, unplaced)         0.000    11.761    u_rq/acc_sat1_carry__4_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.878 r  u_rq/acc_sat1_carry__5/CO[3]
+                         net (fo=1, unplaced)         0.000    11.878    u_rq/acc_sat1_carry__5_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.995 r  u_rq/acc_sat1_carry__6/CO[3]
+                         net (fo=2, unplaced)         0.929    12.924    u_rq/acc_sat1
+                         LUT2 (Prop_lut2_I1_O)        0.124    13.048 r  u_rq/rq[7]_i_1/O
+                         net (fo=7, unplaced)         0.811    13.859    u_rq/rq[7]_i_1_n_0
+                         FDRE                                         r  u_rq/rq_reg[3]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)      10.000    10.000 r  
+                                                      0.000    10.000 r  clk (IN)
+                         net (fo=172, unset)          0.924    10.924    u_rq/clk
+                         FDRE                                         r  u_rq/rq_reg[3]/C
+                         clock pessimism              0.000    10.924    
+                         clock uncertainty           -0.035    10.889    
+                         FDRE (Setup_fdre_C_R)       -0.524    10.365    u_rq/rq_reg[3]
+  -------------------------------------------------------------------
+                         required time                         10.365    
+                         arrival time                         -13.859    
+  -------------------------------------------------------------------
+                         slack                                 -3.494    
+
+
+
+
+
+Pulse Width Checks
+--------------------------------------------------------------------------------------
+Clock Name:         ACLK
+Waveform(ns):       { 0.000 5.000 }
+Period(ns):         10.000
+Sources:            { clk }
+
+Check Type        Corner  Lib Pin      Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location  Pin
+Min Period        n/a     DSP48E1/CLK  n/a            3.884         10.000      6.116                u_rq/acc_mult/CLK
+Min Period        n/a     DSP48E1/CLK  n/a            3.884         10.000      6.116                u_rq/acc_r3_reg/CLK
+Min Period        n/a     DSP48E1/CLK  n/a            3.884         10.000      6.116                u_rq/acc_r3_reg__0/CLK
+Low Pulse Width   Fast    SRL16E/CLK   n/a            0.980         5.000       4.020                u_rq/tag_r3_reg[0]_srl3/CLK
+Low Pulse Width   Fast    SRL16E/CLK   n/a            0.980         5.000       4.020                u_rq/tag_r3_reg[1]_srl3/CLK
+Low Pulse Width   Fast    SRL16E/CLK   n/a            0.980         5.000       4.020                u_rq/tag_r3_reg[2]_srl3/CLK
+High Pulse Width  Slow    SRL16E/CLK   n/a            0.980         5.000       4.020                u_rq/tag_r3_reg[0]_srl3/CLK
+High Pulse Width  Fast    SRL16E/CLK   n/a            0.980         5.000       4.020                u_rq/tag_r3_reg[0]_srl3/CLK
+High Pulse Width  Slow    SRL16E/CLK   n/a            0.980         5.000       4.020                u_rq/tag_r3_reg[1]_srl3/CLK
+
+
+
+## puts "===== LATCH CHECK ====="
+===== LATCH CHECK =====
+WARNING: [Vivado 12-180] No cells matched 'get_cells -hierarchical -filter {PRIMITIVE_TYPE =~ REGISTER.latch.*}'.
+## set latches [get_cells -hierarchical -filter {PRIMITIVE_TYPE =~ REGISTER.latch.*}]
+## puts "LATCH count = [llength $latches]"
+LATCH count = 0
+## if {[llength $latches] > 0} { puts "LATCHES: $latches" }
+## puts "SYN_CHECK_DONE"
+SYN_CHECK_DONE
+# check_timing -verbose
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Sat Sep 26 19:10:26 2026
+| Host         : DESKTOP-7CFQ9ND running 64-bit major release  (build 9200)
+| Command      : check_timing -verbose
+| Design       : fc_requant_ooc
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+------------------------------------------------------------------------------------
+
+
+check_timing report
+
+Table of Contents
+-----------------
+1. checking no_clock (0)
+2. checking constant_clock (0)
+3. checking pulse_width_clock (0)
+4. checking unconstrained_internal_endpoints (0)
+5. checking no_input_delay (0)
+6. checking no_output_delay (0)
+7. checking multiple_clock (0)
+8. checking generated_clocks (0)
+9. checking loops (0)
+10. checking partial_input_delay (0)
+11. checking partial_output_delay (0)
+12. checking latch_loops (0)
+
+1. checking no_clock (0)
+------------------------
+ There are 0 register/latch pins with no clock.
+
+
+2. checking constant_clock (0)
+------------------------------
+ There are 0 register/latch pins with constant_clock.
+
+
+3. checking pulse_width_clock (0)
+---------------------------------
+ There are 0 register/latch pins which need pulse_width check
+
+
+4. checking unconstrained_internal_endpoints (0)
+------------------------------------------------
+ There are 0 pins that are not constrained for maximum delay.
+
+ There are 0 pins that are not constrained for maximum delay due to constant clock.
+
+
+5. checking no_input_delay (0)
+------------------------------
+ There are 0 input ports with no input delay specified.
+
+ There are 0 input ports with no input delay but user has a false path constraint.
+
+
+6. checking no_output_delay (0)
+-------------------------------
+ There are 0 ports with no output delay specified.
+
+ There are 0 ports with no output delay but user has a false path constraint
+
+ There are 0 ports with no output delay but with a timing clock defined on it or propagating through it
+
+
+7. checking multiple_clock (0)
+------------------------------
+ There are 0 register/latch pins with multiple clocks.
+
+
+8. checking generated_clocks (0)
+--------------------------------
+ There are 0 generated clocks that are not connected to a clock source.
+
+
+9. checking loops (0)
+---------------------
+ There are 0 combinational loops in the design.
+
+
+10. checking partial_input_delay (0)
+------------------------------------
+ There are 0 input ports with partial input delay specified.
+
+
+11. checking partial_output_delay (0)
+-------------------------------------
+ There are 0 ports with partial output delay specified.
+
+
+12. checking latch_loops (0)
+----------------------------
+ There are 0 combinational latch loops in the design through latch input
+
+
+# puts "F03A_CRITICAL_PATH"
+F03A_CRITICAL_PATH
+# report_timing -delay_type max -max_paths 1
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+INFO: [Timing 38-78] ReportTimingParams: -max_paths 1 -nworst 1 -delay_type max -sort_by slack.
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Sat Sep 26 19:10:26 2026
+| Host         : DESKTOP-7CFQ9ND running 64-bit major release  (build 9200)
+| Command      : report_timing -delay_type max -max_paths 1
+| Design       : fc_requant_ooc
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (VIOLATED) :        -3.494ns  (required time - arrival time)
+  Source:                 u_rq/param3_reg[69]/C
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_rq/rq_reg[1]/R
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (ACLK rise@10.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        12.886ns  (logic 5.885ns (45.670%)  route 7.001ns (54.330%))
+  Logic Levels:           31  (CARRY4=23 LUT2=1 LUT5=1 LUT6=5 MUXF7=1)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=172, unset)          0.973     0.973    u_rq/clk
+                         FDRE                                         r  u_rq/param3_reg[69]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_fdre_C_Q)         0.518     1.491 r  u_rq/param3_reg[69]/Q
+                         net (fo=160, unplaced)       1.076     2.567    u_rq/p_0_in[5]
+                         LUT6 (Prop_lut6_I0_O)        0.295     2.862 r  u_rq/i__carry_i_5/O
+                         net (fo=16, unplaced)        0.503     3.365    u_rq/i__carry_i_5_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     3.489 r  u_rq/i__carry_i_3__0/O
+                         net (fo=1, unplaced)         0.000     3.489    u_rq/i__carry_i_3__0_n_0
+                         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     4.022 r  u_rq/acc_sh2_inferred__0/i__carry/CO[3]
+                         net (fo=1, unplaced)         0.009     4.031    u_rq/acc_sh2_inferred__0/i__carry_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.148 r  u_rq/acc_sh2_inferred__0/i__carry__0/CO[3]
+                         net (fo=1, unplaced)         0.000     4.148    u_rq/acc_sh2_inferred__0/i__carry__0_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.265 r  u_rq/acc_sh2_inferred__0/i__carry__1/CO[3]
+                         net (fo=1, unplaced)         0.000     4.265    u_rq/acc_sh2_inferred__0/i__carry__1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.382 r  u_rq/acc_sh2_inferred__0/i__carry__2/CO[3]
+                         net (fo=1, unplaced)         0.000     4.382    u_rq/acc_sh2_inferred__0/i__carry__2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.499 r  u_rq/acc_sh2_inferred__0/i__carry__3/CO[3]
+                         net (fo=1, unplaced)         0.000     4.499    u_rq/acc_sh2_inferred__0/i__carry__3_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.616 r  u_rq/acc_sh2_inferred__0/i__carry__4/CO[3]
+                         net (fo=1, unplaced)         0.000     4.616    u_rq/acc_sh2_inferred__0/i__carry__4_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.733 r  u_rq/acc_sh2_inferred__0/i__carry__5/CO[3]
+                         net (fo=1, unplaced)         0.000     4.733    u_rq/acc_sh2_inferred__0/i__carry__5_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.850 r  u_rq/acc_sh2_inferred__0/i__carry__6/CO[3]
+                         net (fo=1, unplaced)         0.000     4.850    u_rq/acc_sh2_inferred__0/i__carry__6_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.967 r  u_rq/acc_sh2_inferred__0/i__carry__7/CO[3]
+                         net (fo=1, unplaced)         0.000     4.967    u_rq/acc_sh2_inferred__0/i__carry__7_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.084 r  u_rq/acc_sh2_inferred__0/i__carry__8/CO[3]
+                         net (fo=1, unplaced)         0.000     5.084    u_rq/acc_sh2_inferred__0/i__carry__8_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.201 r  u_rq/acc_sh2_inferred__0/i__carry__9/CO[3]
+                         net (fo=1, unplaced)         0.000     5.201    u_rq/acc_sh2_inferred__0/i__carry__9_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.318 r  u_rq/acc_sh2_inferred__0/i__carry__10/CO[3]
+                         net (fo=1, unplaced)         0.000     5.318    u_rq/acc_sh2_inferred__0/i__carry__10_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.435 r  u_rq/acc_sh2_inferred__0/i__carry__11/CO[3]
+                         net (fo=1, unplaced)         0.000     5.435    u_rq/acc_sh2_inferred__0/i__carry__11_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.552 r  u_rq/acc_sh2_inferred__0/i__carry__12/CO[3]
+                         net (fo=1, unplaced)         0.000     5.552    u_rq/acc_sh2_inferred__0/i__carry__12_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.669 r  u_rq/acc_sh2_inferred__0/i__carry__13/CO[3]
+                         net (fo=1, unplaced)         0.000     5.669    u_rq/acc_sh2_inferred__0/i__carry__13_n_0
+                         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.331     6.000 f  u_rq/acc_sh2_inferred__0/i__carry__14/O[3]
+                         net (fo=64, unplaced)        0.706     6.706    u_rq/acc_sh2_inferred__0/i__carry__14_n_4
+                         LUT6 (Prop_lut6_I0_O)        0.307     7.013 f  u_rq/rq[7]_i_59/O
+                         net (fo=4, unplaced)         0.926     7.939    u_rq/rq[7]_i_59_n_0
+                         LUT6 (Prop_lut6_I1_O)        0.124     8.063 f  u_rq/acc_sat2_carry_i_60/O
+                         net (fo=4, unplaced)         0.926     8.989    u_rq/acc_sat2_carry_i_60_n_0
+                         LUT6 (Prop_lut6_I1_O)        0.124     9.113 f  u_rq/acc_sat2_carry_i_36/O
+                         net (fo=1, unplaced)         0.000     9.113    u_rq/acc_sat2_carry_i_36_n_0
+                         MUXF7 (Prop_muxf7_I1_O)      0.247     9.360 f  u_rq/acc_sat2_carry_i_15/O
+                         net (fo=4, unplaced)         0.476     9.836    u_rq/acc_sat2_carry_i_15_n_0
+                         LUT6 (Prop_lut6_I2_O)        0.298    10.134 r  u_rq/acc_sat1_carry__0_i_3/O
+                         net (fo=1, unplaced)         0.639    10.773    u_rq/acc_sat1_carry__0_i_3_n_0
+                         CARRY4 (Prop_carry4_DI[1]_CO[3])
+                                                      0.520    11.293 r  u_rq/acc_sat1_carry__0/CO[3]
+                         net (fo=1, unplaced)         0.000    11.293    u_rq/acc_sat1_carry__0_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.410 r  u_rq/acc_sat1_carry__1/CO[3]
+                         net (fo=1, unplaced)         0.000    11.410    u_rq/acc_sat1_carry__1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.527 r  u_rq/acc_sat1_carry__2/CO[3]
+                         net (fo=1, unplaced)         0.000    11.527    u_rq/acc_sat1_carry__2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.644 r  u_rq/acc_sat1_carry__3/CO[3]
+                         net (fo=1, unplaced)         0.000    11.644    u_rq/acc_sat1_carry__3_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.761 r  u_rq/acc_sat1_carry__4/CO[3]
+                         net (fo=1, unplaced)         0.000    11.761    u_rq/acc_sat1_carry__4_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.878 r  u_rq/acc_sat1_carry__5/CO[3]
+                         net (fo=1, unplaced)         0.000    11.878    u_rq/acc_sat1_carry__5_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.995 r  u_rq/acc_sat1_carry__6/CO[3]
+                         net (fo=2, unplaced)         0.929    12.924    u_rq/acc_sat1
+                         LUT2 (Prop_lut2_I1_O)        0.124    13.048 r  u_rq/rq[7]_i_1/O
+                         net (fo=7, unplaced)         0.811    13.859    u_rq/rq[7]_i_1_n_0
+                         FDRE                                         r  u_rq/rq_reg[1]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)      10.000    10.000 r  
+                                                      0.000    10.000 r  clk (IN)
+                         net (fo=172, unset)          0.924    10.924    u_rq/clk
+                         FDRE                                         r  u_rq/rq_reg[1]/C
+                         clock pessimism              0.000    10.924    
+                         clock uncertainty           -0.035    10.889    
+                         FDRE (Setup_fdre_C_R)       -0.524    10.365    u_rq/rq_reg[1]
+  -------------------------------------------------------------------
+                         required time                         10.365    
+                         arrival time                         -13.859    
+  -------------------------------------------------------------------
+                         slack                                 -3.494    
+
+
+
+
+# puts "F03A_FLAT_UTILIZATION"
+F03A_FLAT_UTILIZATION
+# report_utilization
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Sat Sep 26 19:10:26 2026
+| Host         : DESKTOP-7CFQ9ND running 64-bit major release  (build 9200)
+| Command      : report_utilization
+| Design       : fc_requant_ooc
+| Device       : 7z020clg400-1
+| Design State : Synthesized
+------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Slice Logic
+1.1 Summary of Registers by Type
+2. Memory
+3. DSP
+4. IO and GT Specific
+5. Clocking
+6. Specific Feature
+7. Primitives
+8. Black Boxes
+9. Instantiated Netlists
+
+1. Slice Logic
+--------------
+
++----------------------------+------+-------+-----------+-------+
+|          Site Type         | Used | Fixed | Available | Util% |
++----------------------------+------+-------+-----------+-------+
+| Slice LUTs*                |  966 |     0 |     53200 |  1.82 |
+|   LUT as Logic             |  957 |     0 |     53200 |  1.80 |
+|   LUT as Memory            |    9 |     0 |     17400 |  0.05 |
+|     LUT as Distributed RAM |    0 |     0 |           |       |
+|     LUT as Shift Register  |    9 |     0 |           |       |
+| Slice Registers            |  157 |     0 |    106400 |  0.15 |
+|   Register as Flip Flop    |  157 |     0 |    106400 |  0.15 |
+|   Register as Latch        |    0 |     0 |    106400 |  0.00 |
+| F7 Muxes                   |   47 |     0 |     26600 |  0.18 |
+| F8 Muxes                   |    0 |     0 |     13300 |  0.00 |
++----------------------------+------+-------+-----------+-------+
+* Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
+
+
+1.1 Summary of Registers by Type
+--------------------------------
+
++-------+--------------+-------------+--------------+
+| Total | Clock Enable | Synchronous | Asynchronous |
++-------+--------------+-------------+--------------+
+| 0     |            _ |           - |            - |
+| 0     |            _ |           - |          Set |
+| 0     |            _ |           - |        Reset |
+| 0     |            _ |         Set |            - |
+| 0     |            _ |       Reset |            - |
+| 0     |          Yes |           - |            - |
+| 0     |          Yes |           - |          Set |
+| 0     |          Yes |           - |        Reset |
+| 1     |          Yes |         Set |            - |
+| 156   |          Yes |       Reset |            - |
++-------+--------------+-------------+--------------+
+
+
+2. Memory
+---------
+
++----------------+------+-------+-----------+-------+
+|    Site Type   | Used | Fixed | Available | Util% |
++----------------+------+-------+-----------+-------+
+| Block RAM Tile |    0 |     0 |       140 |  0.00 |
+|   RAMB36/FIFO* |    0 |     0 |       140 |  0.00 |
+|   RAMB18       |    0 |     0 |       280 |  0.00 |
++----------------+------+-------+-----------+-------+
+* Note: Each Block RAM Tile only has one FIFO logic available and therefore can accommodate only one FIFO36E1 or one FIFO18E1. However, if a FIFO18E1 occupies a Block RAM Tile, that tile can still accommodate a RAMB18E1
+
+
+3. DSP
+------
+
++----------------+------+-------+-----------+-------+
+|    Site Type   | Used | Fixed | Available | Util% |
++----------------+------+-------+-----------+-------+
+| DSPs           |    7 |     0 |       220 |  3.18 |
+|   DSP48E1 only |    7 |       |           |       |
++----------------+------+-------+-----------+-------+
+
+
+4. IO and GT Specific
+---------------------
+
++-----------------------------+------+-------+-----------+-------+
+|          Site Type          | Used | Fixed | Available | Util% |
++-----------------------------+------+-------+-----------+-------+
+| Bonded IOB                  |    0 |     0 |       125 |  0.00 |
+| Bonded IPADs                |    0 |     0 |         2 |  0.00 |
+| Bonded IOPADs               |    0 |     0 |       130 |  0.00 |
+| PHY_CONTROL                 |    0 |     0 |         4 |  0.00 |
+| PHASER_REF                  |    0 |     0 |         4 |  0.00 |
+| OUT_FIFO                    |    0 |     0 |        16 |  0.00 |
+| IN_FIFO                     |    0 |     0 |        16 |  0.00 |
+| IDELAYCTRL                  |    0 |     0 |         4 |  0.00 |
+| IBUFDS                      |    0 |     0 |       121 |  0.00 |
+| PHASER_OUT/PHASER_OUT_PHY   |    0 |     0 |        16 |  0.00 |
+| PHASER_IN/PHASER_IN_PHY     |    0 |     0 |        16 |  0.00 |
+| IDELAYE2/IDELAYE2_FINEDELAY |    0 |     0 |       200 |  0.00 |
+| ILOGIC                      |    0 |     0 |       125 |  0.00 |
+| OLOGIC                      |    0 |     0 |       125 |  0.00 |
++-----------------------------+------+-------+-----------+-------+
+
+
+5. Clocking
+-----------
+
++------------+------+-------+-----------+-------+
+|  Site Type | Used | Fixed | Available | Util% |
++------------+------+-------+-----------+-------+
+| BUFGCTRL   |    0 |     0 |        32 |  0.00 |
+| BUFIO      |    0 |     0 |        16 |  0.00 |
+| MMCME2_ADV |    0 |     0 |         4 |  0.00 |
+| PLLE2_ADV  |    0 |     0 |         4 |  0.00 |
+| BUFMRCE    |    0 |     0 |         8 |  0.00 |
+| BUFHCE     |    0 |     0 |        72 |  0.00 |
+| BUFR       |    0 |     0 |        16 |  0.00 |
++------------+------+-------+-----------+-------+
+
+
+6. Specific Feature
+-------------------
+
++-------------+------+-------+-----------+-------+
+|  Site Type  | Used | Fixed | Available | Util% |
++-------------+------+-------+-----------+-------+
+| BSCANE2     |    0 |     0 |         4 |  0.00 |
+| CAPTUREE2   |    0 |     0 |         1 |  0.00 |
+| DNA_PORT    |    0 |     0 |         1 |  0.00 |
+| EFUSE_USR   |    0 |     0 |         1 |  0.00 |
+| FRAME_ECCE2 |    0 |     0 |         1 |  0.00 |
+| ICAPE2      |    0 |     0 |         2 |  0.00 |
+| STARTUPE2   |    0 |     0 |         1 |  0.00 |
+| XADC        |    0 |     0 |         1 |  0.00 |
++-------------+------+-------+-----------+-------+
+
+
+7. Primitives
+-------------
+
++----------+------+---------------------+
+| Ref Name | Used | Functional Category |
++----------+------+---------------------+
+| LUT6     |  554 |                 LUT |
+| LUT5     |  241 |                 LUT |
+| FDRE     |  156 |        Flop & Latch |
+| CARRY4   |   77 |          CarryLogic |
+| LUT2     |   69 |                 LUT |
+| LUT4     |   51 |                 LUT |
+| LUT3     |   48 |                 LUT |
+| MUXF7    |   47 |               MuxFx |
+| LUT1     |   34 |                 LUT |
+| SRL16E   |    9 |  Distributed Memory |
+| DSP48E1  |    7 |    Block Arithmetic |
+| FDSE     |    1 |        Flop & Latch |
++----------+------+---------------------+
+
+
+8. Black Boxes
+--------------
+
++----------+------+
+| Ref Name | Used |
++----------+------+
+
+
+9. Instantiated Netlists
+------------------------
+
++----------+------+
+| Ref Name | Used |
++----------+------+
+
+
+# set paths [get_timing_paths -delay_type max -max_paths 1]
+# puts "F03A_WNS [get_property SLACK $paths]"
+F03A_WNS -3.494
+# puts "F03A_CRITICAL_START [get_property STARTPOINT_PIN $paths]"
+F03A_CRITICAL_START u_rq/param3_reg[69]/C
+# puts "F03A_CRITICAL_END [get_property ENDPOINT_PIN $paths]"
+F03A_CRITICAL_END u_rq/rq_reg[1]/R
+# set loop_drc [get_drc_checks -quiet LUTLP-1]
+# if {[llength $loop_drc] > 0} {report_drc -checks $loop_drc}
+Command: report_drc -checks LUTLP-1
+INFO: [DRC 23-27] Running DRC with 2 threads
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Sat Sep 26 19:10:26 2026
+| Host         : DESKTOP-7CFQ9ND running 64-bit major release  (build 9200)
+| Command      : report_drc -checks LUTLP-1
+| Design       : fc_requant_ooc
+| Device       : xc7z020clg400-1
+| Speed File   : -1
+| Design State : Synthesized
+------------------------------------------------------------------------------------
+
+Report DRC
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: fc_requant_ooc
+          Floorplan: design_1
+      Design limits: <entire design considered>
+
+            Checks: LUTLP-1
+             Max violations: <unlimited>
+             Violations found: 0
++------+----------+-------------+------------+
+| Rule | Severity | Description | Violations |
++------+----------+-------------+------------+
++------+----------+-------------+------------+
+
+2. REPORT DETAILS
+-----------------
+
+report_drc completed successfully
+# puts "F03A_SYN_DONE"
+F03A_SYN_DONE
+INFO: [Common 17-206] Exiting Vivado at Sat Sep 26 19:10:26 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 64.654924

@@ -1,0 +1,118 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l07\existing
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_S00_AXI.v D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\weight_param_loader.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_S00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/conv_weight_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module conv_weight_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/param_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module param_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/gelu_lut_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_lut_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module weight_param_loader
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.878972
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l07\existing
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\loader_stub.v D:\2609_final_project\cnn_rtl\tb\in_ram_stub.v D:\2609_final_project\cnn_rtl\tb\enc_stub.v D:\2609_final_project\cnn_rtl\tb\fc_stub.v D:\2609_final_project\cnn_rtl\tb\tb_ctrl_status.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/loader_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module loader_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/in_ram_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module in_ram_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/enc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module enc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_ctrl_status.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_ctrl_status
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.816063
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l07\existing
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_ctrl_status -s t07_tb_ctrl_status
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_ctrl_status -s t07_tb_ctrl_status 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_ctrl
+Compiling module work.tb_ctrl_status
+Built simulation snapshot t07_tb_ctrl_status
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.800664
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l07\existing
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_ctrl_status -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_ctrl_status/xsim_script.tcl
+# xsim {t07_tb_ctrl_status} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: thirteen named states and four-bit state registers match the target FSM
+PASS: reset clears status, snapshots and pending result
+PASS: LOAD succeeds with cfg=0 after two modeled reads and Loader completion
+PASS: INFER cfg=1 succeeds; START clears done; live cmd/address changes do not replace snapshots
+PASS: IDLE CLEAR removes sticky done without changing snapshots/internal result
+PASS: INFER cfg=0 at DECODE reports NO_CFG; cfg changes in FINISH cannot change it
+PASS: INFER cfg 0 at START -> 1 at DECODE succeeds
+PASS: INFER cfg 1 at START -> 0 at DECODE reports NO_CFG
+PASS: cmd=2 reports BAD_CMD; new START clears previous NO_CFG
+PASS: cmd=FFFFFFFF reports BAD_CMD; consecutive errors are recorded anew
+PASS: cmd=80000000 reports BAD_CMD (full 32-bit decode, independent of cfg)
+PASS: IDLE CLEAR removes sticky error without erasing internal failure
+PASS: BUSY CLEAR cannot cancel success; completion wins over same-edge CLEAR
+PASS: BUSY CLEAR preserves NO_CFG; error wins over same-edge CLEAR
+PASS: IDLE START+CLEAR accepts START and clears old error before new completion
+PASS: START is ignored in both DECODE and FINISH; success and all four snapshots survive
+PASS: BUSY START+CLEAR cannot overwrite original BAD_CMD at completion
+PASS: all thirteen states implemented; three illegal states recover without changing results/snapshots (3 checks)
+PASS: synchronous reset in FINISH waits for the edge, clears all state, and produces no phantom completion
+PASS: L-07 S2 state=0 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=1 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=2 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=3 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=4 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=5 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=6 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=7 param_sel_fc=1 lut_sel_fc=1
+PASS: L-07 S2 state=8 param_sel_fc=1 lut_sel_fc=1
+PASS: L-07 S2 state=9 param_sel_fc=1 lut_sel_fc=1
+PASS: L-07 S2 state=10 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=11 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=12 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=13 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=14 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 state=15 param_sel_fc=0 lut_sel_fc=0
+PASS: L-07 S2 states=13 illegal_codes=3 FC_selected=7,8,9 all_others=0
+PASS: unused outputs stayed zero for 217 sampled cycles while unused inputs toggled
+PASS: T-06 ALL CTRL STATUS CHECKS PASSED (14 START snapshots checked)
+$finish called at time : 2176 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_ctrl_status.v" Line 421
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 03:11:25 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.021287

@@ -1,0 +1,56 @@
+PASS H1: both manifest blob/input/golden hashes match; staged read-only source snapshots
+{
+  "blob.bin": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+  "encoder_sample_u64.hex": "50922ed6746c48c4dda4be98e161152af47d5068c76392300fe5cea8846f0120",
+  "encoder_zero_u64.hex": "752e7b2fe4638be8071d92b34f333b459ab08fc7db1618a4e4de49458261e811",
+  "sample_input.bin": "949915442c9dfcf980d4880e52b4ff6b08b1b5ff75bdccfa346b807ba0c6fffa",
+  "zero_input.bin": "2ddbd07ddfda5d4f9b1c44c8ff16f7e38027d275af6bf57f317b136060d695a9"
+}
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-g02\golden_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\weight_param_loader.v D:\2609_final_project\cnn_rtl\rtl\encoder\Buffer.v D:\2609_final_project\cnn_rtl\rtl\encoder\Conv_MAC.v D:\2609_final_project\cnn_rtl\rtl\encoder\requant_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\gelu_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\Pool.v D:\2609_final_project\cnn_rtl\rtl\encoder\CNN_Encoder.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/conv_weight_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module conv_weight_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/param_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module param_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/gelu_lut_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_lut_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module weight_param_loader
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module Buffer
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Conv_MAC.v" into library work
+INFO: [VRFC 10-311] analyzing module Conv_MAC
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/requant_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module requant_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/gelu_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Pool.v" into library work
+INFO: [VRFC 10-311] analyzing module Pool
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/CNN_Encoder.v" into library work
+INFO: [VRFC 10-311] analyzing module CNN_Encoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.288547
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-g02\golden_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\fc_stub.v D:\2609_final_project\cnn_rtl\tb\tb_golden_encoder.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_golden_encoder.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_golden_encoder
+WARNING: [VRFC 10-3824] variable 'same_words' must explicitly be declared as automatic or static [D:/2609_final_project/cnn_rtl/tb/tb_golden_encoder.v:420]
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.098335

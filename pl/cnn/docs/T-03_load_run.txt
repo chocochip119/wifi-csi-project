@@ -1,0 +1,250 @@
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.821135
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\loader_stub.v D:\2609_final_project\cnn_rtl\tb\tb_top_load.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/loader_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module loader_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_load
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.785516
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_top_load -s t03_load
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_top_load -s t03_load 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.pose_cnn_ctrl
+Compiling module work.loader_stub
+Compiling module work.tb_top_load
+Built simulation snapshot t03_load
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.422969
+
+OPTION_FILE case0.args: -testplusarg "CASE=0"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_load -runall -onerror quit -f case0.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_load/xsim_script.tcl
+# xsim {t03_load} -testplusarg CASE=0 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 always_ready L1-L8 cycles=4204 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=10 max_ready_low=0 held_valid=0 equations=4192 done=1 error=0 violations=0
+$finish called at time : 42110 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:12:54 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.201032
+
+OPTION_FILE case1.args: -testplusarg "CASE=1"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_load -runall -onerror quit -f case1.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_load/xsim_script.tcl
+# xsim {t03_load} -testplusarg CASE=1 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 fixed_8 L1-L8 cycles=33505 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=10 max_ready_low=8 held_valid=29301 equations=33493 done=1 error=0 violations=0
+$finish called at time : 335120 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:12:58 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.185194
+
+OPTION_FILE case2.args: -testplusarg "CASE=2"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_load -runall -onerror quit -f case2.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_load/xsim_script.tcl
+# xsim {t03_load} -testplusarg CASE=2 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 typed_and_slave_stall L1-L8 cycles=19247 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=20 max_ready_low=8 held_valid=7288 equations=19225 done=1 error=0 violations=0
+$finish called at time : 192540 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:13:01 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.077736
+
+OPTION_FILE case3.args: -testplusarg "CASE=3"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_load -runall -onerror quit -f case3.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_load/xsim_script.tcl
+# xsim {t03_load} -testplusarg CASE=3 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 random_and_slave_stall L1-L8 cycles=19484 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=5 max_ready_low=8 held_valid=11589 equations=19477 done=1 error=0 violations=0
+$finish called at time : 194910 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:13:04 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.106596
+
+OPTION_FILE case4.args: -testplusarg "CASE=4"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_load -runall -onerror quit -f case4.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_load/xsim_script.tcl
+# xsim {t03_load} -testplusarg CASE=4 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 blob_error L1-L8 cycles=4201 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=7 max_ready_low=0 held_valid=0 equations=4192 done=0 error=3 violations=0
+$finish called at time : 42080 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:13:07 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.016412
+
+OPTION_FILE case5.args: -testplusarg "CASE=5"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_load -runall -onerror quit -f case5.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_load/xsim_script.tcl
+# xsim {t03_load} -testplusarg CASE=5 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 immediate_done L1-L8 cycles=4195 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=1 max_ready_low=0 held_valid=0 equations=4192 done=1 error=0 violations=0
+$finish called at time : 42020 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:13:10 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.012699
+
+OPTION_FILE case6.args: -testplusarg "CASE=6"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_load -runall -onerror quit -f case6.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_load/xsim_script.tcl
+# xsim {t03_load} -testplusarg CASE=6 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 read_error_part1 L1-L8 cycles=839 commands=1 Loader_start=1 AR1=47 AR2=0 R_beats=742 compared_words=21 LD_WAIT_cycles=0 max_ready_low=0 held_valid=0 equations=25 done=0 error=4 violations=0
+$finish called at time : 8460 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:13:13 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.077056
+
+OPTION_FILE case7.args: -testplusarg "CASE=7"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_load -runall -onerror quit -f case7.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_load/xsim_script.tcl
+# xsim {t03_load} -testplusarg CASE=7 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 read_error_part2 L1-L8 cycles=4194 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=763 LD_WAIT_cycles=0 max_ready_low=0 held_valid=0 equations=862 done=0 error=4 violations=0
+$finish called at time : 42010 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:13:16 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.023405
+
+OPTION_FILE case8.args: -testplusarg "CASE=8"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_load -runall -onerror quit -f case8.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_load/xsim_script.tcl
+# xsim {t03_load} -testplusarg CASE=8 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 read_error_last_part1 L1-L8 cycles=839 commands=1 Loader_start=1 AR1=47 AR2=0 R_beats=742 compared_words=742 LD_WAIT_cycles=0 max_ready_low=0 held_valid=0 equations=836 done=0 error=4 violations=0
+$finish called at time : 8460 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:13:19 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.971848
+
+OPTION_FILE case9.args: -testplusarg "CASE=9"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_load -runall -onerror quit -f case9.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_load/xsim_script.tcl
+# xsim {t03_load} -testplusarg CASE=9 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 immediate_done_error L1-L8 cycles=4195 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=1 max_ready_low=0 held_valid=0 equations=4192 done=0 error=3 violations=0
+$finish called at time : 42020 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:13:22 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.066840

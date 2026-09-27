@@ -1,0 +1,14 @@
+[
+  {
+    "arguments": [
+      "t02b_read",
+      "-runall",
+      "-onerror",
+      "quit",
+      "-f",
+      "functional.args"
+    ],
+    "seconds": 3.1736716000013985,
+    "perf_lines": []
+  }
+]

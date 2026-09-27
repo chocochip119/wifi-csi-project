@@ -1,0 +1,12 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/loader_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module loader_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/in_ram_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module in_ram_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/enc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module enc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_pose_cnn_core.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_pose_cnn_core

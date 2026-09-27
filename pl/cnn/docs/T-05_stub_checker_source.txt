@@ -1,0 +1,28 @@
+`timescale 1ns / 1ps
+module tb_t05_stub_checks;
+ reg clk=0,resetn=0,start=0,we=0;
+ reg [1:0] sel=0;reg [63:0] data=64'h12345678;
+ wire full,done;integer selected=0;
+ always #5 clk=~clk;
+ fc_stub fc(.clk(clk),.resetn(resetn),.fc_start(start),.fc_sel(sel),
+            .fifo_we(we),.fifo_wdata(data),.fifo_full(full),.fc_done(done));
+ initial begin #20000;$fatal(1,"unexpected deadline");end
+ initial begin
+  if(!$value$plusargs("CASE=%d",selected))selected=0;
+  repeat(2)@(negedge clk);
+  fc.consume_mode=3;fc.pause_after=0;fc.pause_cycles=2000;fc.expected_words=1024;
+  if(selected==4)fc.expected_words=2;
+  resetn=1;start=1;
+  if(selected==2)sel=1;
+  @(negedge clk);start=0;
+  if(selected==1)begin @(negedge clk);start=1;end
+  else begin
+   we=1;
+   if(selected==3)data='x;
+   if(selected==0)repeat(513)@(negedge clk);
+   else if(selected==4)repeat(3)@(negedge clk);
+  end
+  repeat(2)@(posedge clk);
+  $fatal(1,"checker failed to detect violation");
+ end
+endmodule

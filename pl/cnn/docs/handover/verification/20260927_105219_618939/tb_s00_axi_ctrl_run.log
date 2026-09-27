@@ -1,0 +1,83 @@
+{
+  "label": "tb_s00_axi_ctrl_run",
+  "argv": [
+    "C:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat",
+    "handover_tb_s00_axi_ctrl",
+    "-runall",
+    "-onerror",
+    "quit"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 6.318,
+  "passed": true,
+  "diagnostics": [],
+  "required_marker": "PASS: S00-05 ALL CONTROL CHECKS PASSED"
+}
+
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/handover_tb_s00_axi_ctrl/xsim_script.tcl
+# xsim {handover_tb_s00_axi_ctrl} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: N=1 reset clears both control pulses and BRESP
+PASS: N=2 reset clears both control pulses and BRESP
+PASS: N=8 reset clears both control pulses and BRESP
+PASS: N=1 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=2 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=8 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=1 idle CLEAR pulses once; TB display clears
+PASS: N=2 idle CLEAR pulses once; TB display clears
+PASS: N=8 idle CLEAR pulses once; TB display clears
+PASS: N=1 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=2 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=8 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=1 busy START and START+CLEAR reject atomically without pulses
+PASS: N=2 busy START and START+CLEAR reject atomically without pulses
+PASS: N=8 busy START and START+CLEAR reject atomically without pulses
+PASS: N=1 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=2 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=8 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=1 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=2 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=8 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=1 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=2 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=8 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=1 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=2 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=8 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=1 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=2 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=8 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=1 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=2 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=8 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=1 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=2 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=8 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=1 rejection samples busy at commit, not at AW/W capture
+PASS: N=2 rejection samples busy at commit, not at AW/W capture
+PASS: N=8 rejection samples busy at commit, not at AW/W capture
+PASS: N=1 core raises busy on START sampling edge and holds exactly N cycles
+PASS: N=2 core raises busy on START sampling edge and holds exactly N cycles
+PASS: N=8 core raises busy on START sampling edge and holds exactly N cycles
+PASS: 15b N=1 fastest second START: commit busy=0 -> OKAY, second 1-cycle pulse
+PASS: N=1 totals commit=52 B=52 START=6 CLEAR=4
+PASS: 15a N=2 fastest second START: commit busy=1 -> SLVERR, no second pulse
+PASS: N=2 totals commit=52 B=52 START=5 CLEAR=4
+PASS: N=8 CLEAR updates display while the core keeps running
+PASS: 15a N=8 fastest second START: commit busy=1 -> SLVERR, no second pulse
+PASS: 15c N=8 early busy START: remaining=7 -> SLVERR, no pulse
+PASS: 15c N=8 middle busy START: remaining=4 -> SLVERR, no pulse
+PASS: 15c N=8 final busy START: remaining=1 -> SLVERR, no pulse after busy drops
+PASS: N=8 totals commit=58 B=58 START=7 CLEAR=5
+PASS: S00-05 ALL CONTROL CHECKS PASSED (15a/15b/15c included)
+$finish called at time : 2426 ns : File "D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/project/cnn_rtl/tb/tb_s00_axi_ctrl.v" Line 21
+exit
+INFO: [Common 17-206] Exiting xsim at Sun Sep 27 10:52:33 2026...

@@ -1,0 +1,70 @@
+WORKING_DIRECTORY: C:\Users\kccistc\AppData\Local\Temp\codex-t03-twpm5b4y\syn
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\vivado.bat -mode batch -source D:\2609_final_project\cnn_rtl\syn\syn_check.tcl -nojournal -nolog -tclargs pose_cnn_ctrl xc7z020clg400-1 D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v
+
+****** Vivado v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+CRITICAL WARNING: [Common 17-741] No write access right to the local Tcl store at 'C'. XilinxTclStore is reverted to the installation area. If you want to use local Tcl Store, please change the access right and relaunch Vivado.
+source {D:\2609_final_project\cnn_rtl\syn\syn_check.tcl}
+# set top   [lindex $argv 0]
+# set part  [lindex $argv 1]
+# set srcs  [lrange $argv 2 end]
+# foreach f $srcs { read_verilog $f }
+# read_xdc [file join [file dirname [info script]] timing_100mhz.xdc]
+# synth_design -top $top -part $part -mode out_of_context
+Command: synth_design -top pose_cnn_ctrl -part xc7z020clg400-1 -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 36836
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 1105.379 ; gain = 0.000
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'pose_cnn_ctrl' [D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v:6]
+	Parameter IDLE bound to: 4'b0000 
+	Parameter DECODE bound to: 4'b0001 
+	Parameter LD_RD1 bound to: 4'b0010 
+	Parameter LD_RD2 bound to: 4'b0011 
+	Parameter LD_WAIT bound to: 4'b0100 
+	Parameter IN_RD bound to: 4'b0101 
+	Parameter ENC bound to: 4'b0110 
+	Parameter FC1 bound to: 4'b0111 
+	Parameter FC2 bound to: 4'b1000 
+	Parameter FC3 bound to: 4'b1001 
+	Parameter WR bound to: 4'b1010 
+	Parameter ERR_DRAIN bound to: 4'b1011 
+	Parameter FINISH bound to: 4'b1100 
+	Parameter CMD_INFER bound to: 0 - type: integer 
+	Parameter CMD_LOAD bound to: 1 - type: integer 
+	Parameter ERR_NONE bound to: 4'b0000 
+	Parameter ERR_BAD_CMD bound to: 4'b0001 
+	Parameter ERR_NO_CFG bound to: 4'b0010 
+	Parameter ERR_BLOB bound to: 4'b0011 
+	Parameter ERR_MEM_RD bound to: 4'b0100 
+INFO: [Synth 8-6155] done synthesizing module 'pose_cnn_ctrl' (1#1) [D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v:6]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 1105.379 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1105.379 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1105.379 ; gain = 0.000
+---------------------------------------------------------------------------------
+error deleting "C:/Users/kccistc/AppData/Local/Temp/codex-t03-twpm5b4y/syn/.Xil/Vivado-47464-DESKTOP-7CFQ9ND/realtime/tmp": no such file or directory
+INFO: [Common 17-83] Releasing license: Synthesis
+8 Infos, 0 Warnings, 0 Critical Warnings and 1 Errors encountered.
+synth_design failed
+ERROR: [Common 17-69] Command failed: Synthesis failed - please see the console or run log file for details
+INFO: [Common 17-206] Exiting Vivado at Fri Sep 25 22:12:14 2026...
+
+EXIT_CODE: 1
+WALL_CLOCK_SECONDS: 16.470236

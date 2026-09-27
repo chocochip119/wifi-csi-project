@@ -1,0 +1,146 @@
+`timescale 1ns / 1ps
+
+// TB-only FC1 consumer and standard 512-word FIFO. No CNN arithmetic.
+module fc_stub (
+    input wire clk, resetn, fc_start,
+    input wire [1:0] fc_sel,
+    input wire fifo_we,
+    input wire [63:0] fifo_wdata,
+    output wire fifo_full,
+    output reg fc_done
+);
+    integer consume_mode=0; // 0 every cycle, 1 fixed period, 2 random, 3 pause/resume
+    integer consume_period=4, pause_after=1024, pause_cycles=2000;
+    integer expected_words=49152, done_delay_cycles=5, done_width_cycles=1;
+    // 0: real completion after all pops. 1/2 are explicit control-test injections:
+    // 1: done on the last push; 2: done after early_done_after pops.
+    integer done_mode=0, early_done_after=1024;
+    reg [31:0] seed=32'h1234abcd, random_state;
+    reg [63:0] fifo [0:511];
+    reg [63:0] pushed [0:49151], consumed [0:49151];
+    reg [1:0] selected_reg;
+    integer count=0, write_ptr=0, read_ptr=0, push_count=0, pop_count=0;
+    integer accepted_starts=0, done_count=0, violations=0;
+    integer cycle_count=0, start_cycle=0, done_cycle=0, last_pop_cycle=0;
+    integer full_cycles=0, full_run=0, max_full_run=0, max_count=0;
+    integer simultaneous=0, sel_changed_cycles=0, cooldown=0, pause_left=0;
+    integer completion_left=0, width_left=0;
+    bit active=0, completing=0, paused_once=0, injected_done=0, prior_start=0;
+    bit pop_now, emit_done;
+
+    assign fifo_full=(count==512);
+    function automatic [31:0] next_random(input reg [31:0] value);
+        reg [31:0] x;
+        begin
+            x=value==0 ? 32'd1:value;
+            x=x^(x<<13); x=x^(x>>17); next_random=x^(x<<5);
+        end
+    endfunction
+    task automatic fail(input string message);
+        begin violations=violations+1; $fatal(1,"FAIL: fc_stub %s",message); end
+    endtask
+
+    always @(posedge clk) begin
+        if (!resetn) begin
+            fc_done<=0; active<=0; completing<=0; prior_start<=0;
+            count<=0; write_ptr<=0; read_ptr<=0; push_count<=0; pop_count<=0;
+            accepted_starts<=0; done_count<=0; selected_reg<=0;
+            cycle_count<=0; start_cycle<=0; done_cycle<=0; last_pop_cycle<=0;
+            full_cycles<=0; full_run<=0; max_full_run<=0; max_count<=0;
+            simultaneous<=0; sel_changed_cycles<=0; cooldown<=0; pause_left<=0;
+            completion_left<=0; width_left<=0; paused_once<=0; injected_done<=0;
+            random_state<=seed;
+        end else begin
+            cycle_count<=cycle_count+1;
+            emit_done=0; pop_now=0;
+            if (fc_start && prior_start) fail("START exceeds one cycle");
+            prior_start<=fc_start;
+            if (fc_done && done_width_cycles!=0) begin
+                if (width_left<=1) fc_done<=0;
+                else width_left<=width_left-1;
+            end
+            if (active && fc_sel!==selected_reg) sel_changed_cycles<=sel_changed_cycles+1;
+            if (fifo_full) begin
+                full_cycles<=full_cycles+1; full_run<=full_run+1;
+                if (full_run+1>max_full_run) max_full_run<=full_run+1;
+            end else full_run<=0;
+            if (count>max_count) max_count<=count;
+            if (fifo_we !== 1'b0 && fifo_we !== 1'b1) fail("unknown FIFO write enable");
+            if (fifo_we && fifo_full) fail("push while full");
+            if (fc_start) begin
+                if (active || count!=0) fail("START while non-idle");
+                if (fc_sel!==2'd0) fail("FC1 START must select zero");
+                if (expected_words<1 || expected_words>49152 || consume_period<1 ||
+                    done_delay_cycles<0 || done_width_cycles<0 || pause_cycles<0)
+                    fail("invalid configuration");
+                active<=1; completing<=0; selected_reg<=fc_sel; fc_done<=0;
+                accepted_starts<=accepted_starts+1; start_cycle<=cycle_count;
+                push_count<=0; pop_count<=0; write_ptr<=0; read_ptr<=0; count<=0;
+                cooldown<=0; pause_left<=0; paused_once<=0; injected_done<=0;
+                random_state<=seed;
+                full_cycles<=0; full_run<=0; max_full_run<=0; max_count<=0;
+                simultaneous<=0; sel_changed_cycles<=0;
+            end else if (active && !completing) begin
+                if (cooldown>0) cooldown<=cooldown-1;
+                if (pause_left>0) pause_left<=pause_left-1;
+                if (consume_mode==3 && !paused_once && push_count>=pause_after) begin
+                    paused_once<=1; pause_left<=pause_cycles;
+                end else if (count>0) begin
+                    case(consume_mode)
+                        0: pop_now=1;
+                        1: pop_now=(cooldown==0);
+                        2: begin
+                            random_state<=next_random(random_state);
+                            pop_now=(next_random(random_state)%4==0);
+                        end
+                        3: pop_now=(pause_left==0);
+                        default: fail("invalid consumer mode");
+                    endcase
+                end
+                // No empty bypass: a push cannot be popped until a later edge.
+                if (pop_now) begin
+                    if (pop_count>=expected_words) fail("more pops than expected");
+                    consumed[pop_count]<=fifo[read_ptr];
+                    pop_count<=pop_count+1; read_ptr<=(read_ptr==511)?0:read_ptr+1;
+                    last_pop_cycle<=cycle_count;
+                    if (consume_mode==1) cooldown<=consume_period-1;
+                    if (pop_count+1==expected_words) begin
+                        if (done_mode==0) begin
+                            if (done_delay_cycles==0) begin emit_done=1; active<=0; end
+                            else begin completing<=1; completion_left<=done_delay_cycles; end
+                        end else active<=0;
+                    end
+                    if (done_mode==2 && !injected_done && pop_count+1==early_done_after) begin
+                        emit_done=1; injected_done<=1;
+                    end
+                end
+                case ({fifo_we,pop_now})
+                    2'b10: count<=count+1;
+                    2'b01: count<=count-1;
+                    2'b11: simultaneous<=simultaneous+1;
+                    default: begin end
+                endcase
+            end
+            if (fifo_we) begin
+                if (!active || completing) fail("push while FC inactive/completing");
+                if ((^fifo_wdata)===1'bx) fail("unknown FIFO data");
+                if (push_count>=expected_words) fail("more pushes than expected");
+                fifo[write_ptr]<=fifo_wdata; pushed[push_count]<=fifo_wdata;
+                write_ptr<=(write_ptr==511)?0:write_ptr+1; push_count<=push_count+1;
+                if (done_mode==1 && !injected_done && push_count+1==expected_words) begin
+                    emit_done=1; injected_done<=1;
+                end
+            end
+            if (completing) begin
+                if (completion_left==1) begin
+                    emit_done=1; active<=0; completing<=0;
+                end else completion_left<=completion_left-1;
+            end
+            if (emit_done) begin
+                fc_done<=1; width_left<=done_width_cycles;
+                done_count<=done_count+1; done_cycle<=cycle_count;
+            end
+            if (count<0 || count>512) fail("FIFO count outside 0..512");
+        end
+    end
+endmodule

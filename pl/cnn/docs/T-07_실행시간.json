@@ -1,0 +1,17 @@
+{
+  "tb_top_load": 4.05646,
+  "tb_top_infer": 9.138146,
+  "tb_top_fc1": 18.558612,
+  "tb_top_full": 28.631246,
+  "tb_ctrl_status": 4.538509,
+  "tb_csr_ctrl_link": 4.689856,
+  "tb_s00_axi_write": 4.068673,
+  "tb_s00_axi_regs": 4.483258,
+  "tb_s00_axi_read": 4.520184,
+  "tb_s00_axi_ctrl": 4.663537,
+  "tb_m00_read": 4.90838,
+  "tb_m00_read_perf": 13.350452,
+  "tb_m00_write": 4.785844,
+  "tb_m00_err": 5.134797,
+  "tb_axi4_slave_mem_model": 4.216699
+}

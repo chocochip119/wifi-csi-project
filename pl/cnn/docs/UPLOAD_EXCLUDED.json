@@ -1,0 +1,937 @@
+[
+  {
+    "source": "project/cnn_rtl/docs/E-01_encoder_candidate.zip",
+    "size": 8143,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/encoder_default_10.000/routed.dcp",
+    "size": 4286419,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/encoder_default_10.000/routed_netlist.v",
+    "size": 3783821,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/encoder_freq1_13.160_retry/routed.dcp",
+    "size": 4343187,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/encoder_freq1_13.160_retry/routed_netlist.v",
+    "size": 3785975,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/encoder_freq2_13.500/routed.dcp",
+    "size": 4296978,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/encoder_freq2_13.500/routed_netlist.v",
+    "size": 3769906,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/encoder_freq3_14.000/routed.dcp",
+    "size": 4396616,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/encoder_freq3_14.000/routed_netlist.v",
+    "size": 3767671,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/encoder_performance_10.000/routed.dcp",
+    "size": 4405866,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/encoder_performance_10.000/routed_netlist.v",
+    "size": 3828136,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/fc_default_10.000/routed.dcp",
+    "size": 1360834,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/fc_default_10.000/routed_netlist.v",
+    "size": 890966,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/fc_performance_10.000/routed.dcp",
+    "size": 1373811,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/cnn_rtl/docs/E-02a_runs/fc_performance_10.000/routed_netlist.v",
+    "size": 905534,
+    "reason": "generated implementation/cache/archive; retained in local handover"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/.apc/autopilot.apfmapping",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/.cproject",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/.project",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/.settings/language.settings.xml",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/.settings/pl_accel_v6.Debug.launch",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/.settings/pl_accel_v6.Release.launch",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/.vitis_hls_log_all.xml",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/component.xml",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/constraints/full_pose_accel_ooc.xdc",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/doc/ReleaseNotes.txt",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/drivers/full_pose_accel_v1_0/data/full_pose_accel.mdd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/drivers/full_pose_accel_v1_0/data/full_pose_accel.tcl",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/drivers/full_pose_accel_v1_0/src/Makefile",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/drivers/full_pose_accel_v1_0/src/xfull_pose_accel.c",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/drivers/full_pose_accel_v1_0/src/xfull_pose_accel.h",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/drivers/full_pose_accel_v1_0/src/xfull_pose_accel_hw.h",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/drivers/full_pose_accel_v1_0/src/xfull_pose_accel_linux.c",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/drivers/full_pose_accel_v1_0/src/xfull_pose_accel_sinit.c",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/ip/full_pose_accel_fmul_32ns_32ns_32_5_max_dsp_1_ip.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/ip/full_pose_accel_sitofp_32s_32_7_no_dsp_1_ip.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_adaptive_pool_flatten_receiver_0_Pipeline_POOL_IH_POOL_IW.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_adaptive_pool_flatten_receiver_0_s.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_adaptive_pool_flatten_receiver_1_Pipeline_POOL_IH_POOL_IW.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_adaptive_pool_flatten_receiver_1_s.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_adaptive_pool_flatten_receiver_2_Pipeline_POOL_IH_POOL_IW.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_adaptive_pool_flatten_receiver_2_s.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_apply_head_gelu1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_apply_head_gelu2.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_control_s_axi.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_conv2_receiver_0_Pipeline_CONV2_IC_CONV2_KH_CONV2_KW.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_conv2_receiver_0_s.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_conv2_receiver_1_Pipeline_CONV2_IC_CONV2_KH_CONV2_KW.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_conv2_receiver_1_s.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_conv2_receiver_2_Pipeline_CONV2_IC_CONV2_KH_CONV2_KW.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_conv2_receiver_2_s.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_0_Pipeline_CONV1_CH_CONV1_KH_CONV1_KW.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_0_Pipeline_GELU1_OC_GELU1_H_GELU1_W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_0_Pipeline_GELU2_OC_GELU2_H_GELU2_W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_0_s.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_0_s_conv1_V_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_0_s_conv2_V_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_1_Pipeline_CONV1_CH_CONV1_KH_CONV1_KW.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_1_Pipeline_GELU1_OC_GELU1_H_GELU1_W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_1_Pipeline_GELU2_OC_GELU2_H_GELU2_W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_1_s.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_1_s_conv2_V_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_2_Pipeline_CONV1_CH_CONV1_KH_CONV1_KW.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_2_Pipeline_GELU1_OC_GELU1_H_GELU1_W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_2_Pipeline_GELU2_OC_GELU2_H_GELU2_W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_2_s.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receiver_path_2_s_conv2_V_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_encode_receivers_parallel_direct.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_fc1_requant_4way_banked.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_fc1_requant_4way_banked_Pipeline_FC1_IN.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_fc2_requant.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_fc2_requant_Pipeline_LINEAR_REQUANT_IN.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_fc3_requant.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_fc3_requant_Pipeline_LINEAR_REQUANT_IN.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_flatten_banks_V_RAM_1WNR_AUTO_1R1W.dat",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_flatten_banks_V_RAM_1WNR_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_flow_control_loop_pipe_sequential_init.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_fmul_32ns_32ns_32_5_max_dsp_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_full_pose_accel_Pipeline_FINAL_LOOP.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_g_fc1_bias_int32_RAM_AUTO_1R1W.dat",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_g_fc1_bias_int32_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_g_fc3_bias_int32_RAM_AUTO_1R1W.dat",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_g_fc3_bias_int32_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_gmem0_m_axi.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_gmem1_m_axi.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_gmem2_m_axi.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_head_fc1_V_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_hls_deadlock_detection_unit.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_hls_deadlock_detector.vh",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_hls_deadlock_report_unit.vh",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_input0_V_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_encoder_bank.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV1_BIAS.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV1_MULT.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV1_SHIFT.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV1_WEIGHT_OC_ENC_LOAD_CONV1_WEIGHT_KH_ENC.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV2_BIAS.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV2_MULT.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV2_SHIFT.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV2_WEIGHT_OC_ENC_LOAD_CONV2_WEIGHT_KH_ENC.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_LUT1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_LUT2.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_i32_array.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_i32_array_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_i32_array_1_Pipeline_LOAD_I32_ARRAY.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_i32_array_Pipeline_LOAD_I32_ARRAY.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_input_copies.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_input_copies_Pipeline_LOAD_INPUT_COPIES.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_weight_blob.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_weight_blob_Pipeline_FC2_LOAD_WEIGHT_OUT_FC2_LOAD_WEIGHT_IN.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_weight_blob_Pipeline_FC3_LOAD_WEIGHT_OUT_FC3_LOAD_WEIGHT_IN.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_weight_blob_Pipeline_LOAD_I8_ARRAY.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_load_weight_blob_Pipeline_LOAD_I8_ARRAY7.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_mac_muladd_8s_8s_22s_22_3_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_mac_muladd_8s_8s_25s_25_3_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_mac_muladd_8s_8s_32s_32_3_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_mul_32s_32s_64_4_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_mul_32s_32s_64_5_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_mul_64ns_4ns_68_3_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_mux_245_8_1_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_mux_32_8_1_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_mux_42_8_1_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_mux_83_8_1_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL17g_fc2_weight_int8_0_RAM_AUTO_1R1W.dat",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL17g_fc2_weight_int8_0_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL17g_fc3_weight_int8_0_RAM_AUTO_1R1W.dat",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL17g_fc3_weight_int8_0_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL18g_conv1_bias_int32_0_RAM_AUTO_1R1W.dat",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL18g_conv1_bias_int32_0_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL18g_conv2_bias_int32_0_RAM_AUTO_1R1W.dat",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL18g_conv2_bias_int32_0_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL19g_conv1_weight_int8_0_RAM_AUTO_1R1W.dat",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL19g_conv1_weight_int8_0_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL19g_conv2_weight_int8_0_0_RAM_AUTO_1R1W.dat",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL19g_conv2_weight_int8_0_0_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL24g_lut_encoder_gelu1_int8_0_RAM_AUTO_1R1W.dat",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_p_ZL24g_lut_encoder_gelu1_int8_0_RAM_AUTO_1R1W.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/verilog/full_pose_accel_sitofp_32s_32_7_no_dsp_1.v",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_adaptive_pool_flatten_receiver_0_Pipeline_POOL_IH_POOL_IW.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_adaptive_pool_flatten_receiver_0_s.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_adaptive_pool_flatten_receiver_1_Pipeline_POOL_IH_POOL_IW.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_adaptive_pool_flatten_receiver_1_s.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_adaptive_pool_flatten_receiver_2_Pipeline_POOL_IH_POOL_IW.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_adaptive_pool_flatten_receiver_2_s.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_apply_head_gelu1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_apply_head_gelu2.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_control_s_axi.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_conv2_receiver_0_Pipeline_CONV2_IC_CONV2_KH_CONV2_KW.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_conv2_receiver_0_s.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_conv2_receiver_1_Pipeline_CONV2_IC_CONV2_KH_CONV2_KW.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_conv2_receiver_1_s.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_conv2_receiver_2_Pipeline_CONV2_IC_CONV2_KH_CONV2_KW.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_conv2_receiver_2_s.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_0_Pipeline_CONV1_CH_CONV1_KH_CONV1_KW.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_0_Pipeline_GELU1_OC_GELU1_H_GELU1_W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_0_Pipeline_GELU2_OC_GELU2_H_GELU2_W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_0_s.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_0_s_conv1_V_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_0_s_conv2_V_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_1_Pipeline_CONV1_CH_CONV1_KH_CONV1_KW.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_1_Pipeline_GELU1_OC_GELU1_H_GELU1_W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_1_Pipeline_GELU2_OC_GELU2_H_GELU2_W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_1_s.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_1_s_conv2_V_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_2_Pipeline_CONV1_CH_CONV1_KH_CONV1_KW.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_2_Pipeline_GELU1_OC_GELU1_H_GELU1_W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_2_Pipeline_GELU2_OC_GELU2_H_GELU2_W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_2_s.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receiver_path_2_s_conv2_V_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_encode_receivers_parallel_direct.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_fc1_requant_4way_banked.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_fc1_requant_4way_banked_Pipeline_FC1_IN.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_fc2_requant.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_fc2_requant_Pipeline_LINEAR_REQUANT_IN.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_fc3_requant.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_fc3_requant_Pipeline_LINEAR_REQUANT_IN.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_flatten_banks_V_RAM_1WNR_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_flow_control_loop_pipe_sequential_init.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_fmul_32ns_32ns_32_5_max_dsp_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_full_pose_accel_Pipeline_FINAL_LOOP.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_g_fc1_bias_int32_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_g_fc3_bias_int32_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_gmem0_m_axi.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_gmem1_m_axi.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_gmem2_m_axi.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_head_fc1_V_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_input0_V_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_encoder_bank.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV1_BIAS.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV1_MULT.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV1_SHIFT.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV1_WEIGHT_OC_ENC_LOAD_CONV1_WEIGHT_KH_ENC.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV2_BIAS.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV2_MULT.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV2_SHIFT.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_CONV2_WEIGHT_OC_ENC_LOAD_CONV2_WEIGHT_KH_ENC.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_LUT1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_encoder_bank_Pipeline_ENC_LOAD_LUT2.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_i32_array.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_i32_array_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_i32_array_1_Pipeline_LOAD_I32_ARRAY.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_i32_array_Pipeline_LOAD_I32_ARRAY.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_input_copies.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_input_copies_Pipeline_LOAD_INPUT_COPIES.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_weight_blob.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_weight_blob_Pipeline_FC2_LOAD_WEIGHT_OUT_FC2_LOAD_WEIGHT_IN.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_weight_blob_Pipeline_FC3_LOAD_WEIGHT_OUT_FC3_LOAD_WEIGHT_IN.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_weight_blob_Pipeline_LOAD_I8_ARRAY.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_load_weight_blob_Pipeline_LOAD_I8_ARRAY7.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_mac_muladd_8s_8s_22s_22_3_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_mac_muladd_8s_8s_25s_25_3_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_mac_muladd_8s_8s_32s_32_3_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_mul_32s_32s_64_4_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_mul_32s_32s_64_5_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_mul_64ns_4ns_68_3_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_mux_245_8_1_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_mux_32_8_1_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_mux_42_8_1_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_mux_83_8_1_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_p_ZL17g_fc2_weight_int8_0_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_p_ZL17g_fc3_weight_int8_0_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_p_ZL18g_conv1_bias_int32_0_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_p_ZL18g_conv2_bias_int32_0_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_p_ZL19g_conv1_weight_int8_0_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_p_ZL19g_conv2_weight_int8_0_0_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_p_ZL24g_lut_encoder_gelu1_int8_0_RAM_AUTO_1R1W.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/hdl/vhdl/full_pose_accel_sitofp_32s_32_7_no_dsp_1.vhd",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/export/xgui/full_pose_accel_v1_0.tcl",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  },
+  {
+    "source": "project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6/hls.app",
+    "reason": "generated nested Vitis HLS project/export; keep C++/blob only"
+  }
+]

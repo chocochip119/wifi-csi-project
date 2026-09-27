@@ -1,0 +1,37 @@
+`timescale 1ns / 1ps
+// F-02 synthesis fixture: MAC plus F-01's three storage blocks.
+// FCW is owned by Loader, so its read interface remains an external port.
+// Pose writes are external: requant/GELU/control are intentionally absent.
+module fc_mac_storage_ooc (
+    input wire clk, input wire rst_n,
+    input wire mac_start, input wire [1:0] mac_sel, output wire mac_done,
+    input wire fifo_we, input wire [63:0] fifo_wdata, output wire fifo_full,
+    output wire [8:0] flat_raddr, input wire [63:0] flat_rdata,
+    output wire [11:0] fcw_raddr, input wire [63:0] fcw_rdata,
+    input wire hidden_we, input wire hidden_wbank,
+    input wire [7:0] hidden_waddr, input wire [7:0] hidden_wdata,
+    input wire pose_we, input wire [4:0] pose_waddr, input wire [7:0] pose_wdata,
+    output wire [191:0] pose_data,
+    output wire signed [31:0] acc, output wire acc_valid, output wire [8:0] acc_tag
+);
+    wire fifo_re, fifo_empty;
+    wire [63:0] fifo_rdata, hidden_rdata;
+    wire [4:0] hidden_raddr;
+    fc_mac u_mac (
+        .clk(clk),.rst_n(rst_n),.mac_start(mac_start),.mac_sel(mac_sel),.mac_done(mac_done),
+        .flat_raddr(flat_raddr),.flat_rdata(flat_rdata),.fifo_re(fifo_re),.fifo_rdata(fifo_rdata),.fifo_empty(fifo_empty),
+        .hidden_raddr(hidden_raddr),.hidden_rdata(hidden_rdata),.fcw_raddr(fcw_raddr),.fcw_rdata(fcw_rdata),
+        .acc(acc),.acc_valid(acc_valid),.acc_tag(acc_tag)
+    );
+    fc1_weight_fifo u_fifo (
+        .clk(clk),.rst_n(rst_n),.fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),
+        .fifo_re(fifo_re),.fifo_rdata(fifo_rdata),.fifo_empty(fifo_empty)
+    );
+    hidden_buffer u_hidden (
+        .clk(clk),.rst_n(rst_n),.hidden_we(hidden_we),.hidden_wbank(hidden_wbank),.hidden_waddr(hidden_waddr),
+        .hidden_wdata(hidden_wdata),.hidden_rbank(hidden_raddr[4]),.hidden_raddr({1'b0,hidden_raddr[3:0]}),.hidden_rdata(hidden_rdata)
+    );
+    pose_buffer u_pose (
+        .clk(clk),.rst_n(rst_n),.pose_we(pose_we),.pose_waddr(pose_waddr),.pose_wdata(pose_wdata),.pose_data(pose_data)
+    );
+endmodule

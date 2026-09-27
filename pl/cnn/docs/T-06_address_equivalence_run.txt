@@ -1,0 +1,540 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_only\pose_cnn_ctrl.v C:\Users\kccistc\AppData\Local\Temp\codex-t06\original\pose_cnn_v1_0_M00_AXI.v C:\Users\kccistc\AppData\Local\Temp\codex-t06\original\pose_cnn_v1_0_S00_AXI.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/addr_only/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/pose_cnn_v1_0_S00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_S00_AXI
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.762733
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv C:\Users\kccistc\AppData\Local\Temp\codex-t06\original\axi4_slave_mem_model.v C:\Users\kccistc\AppData\Local\Temp\codex-t06\original\loader_stub.v C:\Users\kccistc\AppData\Local\Temp\codex-t06\original\in_ram_stub.v C:\Users\kccistc\AppData\Local\Temp\codex-t06\original\enc_stub.v C:\Users\kccistc\AppData\Local\Temp\codex-t06\original\fc_stub.v C:\Users\kccistc\AppData\Local\Temp\codex-t06\original\tb_top_fc1.v C:\Users\kccistc\AppData\Local\Temp\codex-t06\original\tb_top_load.v C:\Users\kccistc\AppData\Local\Temp\codex-t06\original\tb_ctrl_status.v C:\Users\kccistc\AppData\Local\Temp\codex-t06\original\tb_csr_ctrl_link.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/loader_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module loader_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/in_ram_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module in_ram_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/enc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module enc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_fc1.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_fc1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_load.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_load
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_ctrl_status.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_ctrl_status
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_csr_ctrl_link.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_csr_ctrl_link
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.814992
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_top_fc1 -s t06_addr_tb_top_fc1
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_top_fc1 -s t06_addr_tb_top_fc1 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.pose_cnn_ctrl
+Compiling module work.loader_stub
+Compiling module work.in_ram_stub
+Compiling module work.enc_stub
+Compiling module work.fc_stub
+Compiling module work.tb_top_fc1
+Built simulation snapshot t06_addr_tb_top_fc1
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t06/addr_sim/xsim.dir/t06_addr_tb_top_fc1/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:41:49 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.537180
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_top_fc1 -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_top_fc1/xsim_script.tcl
+# xsim {t06_addr_tb_top_fc1} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-05 LOAD case=0 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+PASS: T-05 INFER case=0 leg=0 name=fast_aligned loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56932 FC1_cycles=55303 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=61138 read_end=61132 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=1 leg=0 base=1c000000 saved=1c000000 words=3722 AR1=47 AR2=187 cycles=4195
+PASS: T-05 INFER case=1 leg=0 name=fast_blob_aligned loaded=1c000000 current=1c100050 issued=1c001730 total_cycles=56934 FC1_cycles=55305 read_busy_cycles=55298 AR=3073 expected_AR=3073 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=122283 read_end=122277 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=2 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+PASS: T-05 INFER case=2 leg=0 name=slow_full loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=198243 FC1_cycles=196614 read_busy_cycles=194561 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=145322 max_full_run=3 full_R_stalls=139265 done_relation=after done_edge=324737 read_end=322685 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=3 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+PASS: T-05 INFER case=3 leg=0 name=random_repeat loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=197879 FC1_cycles=196250 read_busy_cycles=194173 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=142828 max_full_run=37 full_R_stalls=138877 done_relation=after done_edge=526827 read_end=524751 done=1 error=0 overflow=0 violations=0
+PASS: T-05 INFER case=3 leg=1 name=random_repeat loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=197879 FC1_cycles=196250 read_busy_cycles=194173 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=142828 max_full_run=37 full_R_stalls=138877 done_relation=after done_edge=724712 read_end=722636 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=4 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+PASS: T-05 INFER case=4 leg=0 name=pause_resume loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=58359 FC1_cycles=56730 read_busy_cycles=56723 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=1427 max_full_run=1427 full_R_stalls=1427 done_relation=after done_edge=787282 read_end=787276 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=5 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+PASS: T-05 INFER case=5 leg=0 name=done_same loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56926 FC1_cycles=55297 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=same done_edge=848419 read_end=848419 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=6 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+PASS: T-05 INFER case=6 leg=0 name=done_before loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56926 FC1_cycles=55297 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=before done_edge=855413 read_end=909556 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=7 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+PASS: T-05 INFER case=7 leg=0 name=level_repeat loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56932 FC1_cycles=55303 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=970699 read_end=970693 done=1 error=0 overflow=0 violations=0
+PASS: T-05 INFER case=7 leg=1 name=level_repeat loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56932 FC1_cycles=55303 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=1027637 read_end=1027631 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=8 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=9313
+PASS: T-05 INFER case=8 leg=0 name=full_and_slave_stall loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=200221 FC1_cycles=196614 read_busy_cycles=194561 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=119484 max_full_run=3 full_R_stalls=71688 done_relation=after done_edge=1237187 read_end=1235135 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=9 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+PASS: T-05 INFER case=9 leg=0 name=reload_base loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56932 FC1_cycles=55303 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=1298330 read_end=1298324 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=9 leg=1 base=1c100050 saved=1c100050 words=3722 AR1=47 AR2=187 cycles=4195
+PASS: T-05 INFER case=9 leg=1 name=reload_base loaded=1c100050 current=1c000050 issued=1c101780 total_cycles=56932 FC1_cycles=55303 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=1359469 read_end=1359463 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=10 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+PASS: T-05 INFER case=10 leg=0 name=RRESP_with_full loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=58572 FC1_cycles=56943 read_busy_cycles=56942 AR=3072 expected_AR=3072 pushes=1285 pops=1285 full_cycles=1718 max_full_run=3 full_R_stalls=1646 done_relation=error_no_done done_edge=0 read_end=1422252 done=0 error=4 overflow=0 violations=0
+PASS: T-05 ALL SELECTED cases=11 INFER_runs=14 selector=-1 violations=0
+$finish called at time : 14222570 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_fc1.v" Line 499
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:00:14 . Memory (MB): peak = 916.961 ; gain = 0.047
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:06 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 17.735373
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_ctrl_status -s t06_addr_tb_ctrl_status
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_ctrl_status -s t06_addr_tb_ctrl_status 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_ctrl
+Compiling module work.tb_ctrl_status
+Built simulation snapshot t06_addr_tb_ctrl_status
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t06/addr_sim/xsim.dir/t06_addr_tb_ctrl_status/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:42:08 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.112188
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_ctrl_status -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_ctrl_status/xsim_script.tcl
+# xsim {t06_addr_tb_ctrl_status} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: thirteen named states and four-bit state registers match the target FSM
+PASS: reset clears status, snapshots and pending result
+PASS: LOAD succeeds with cfg=0 after two modeled reads and Loader completion
+PASS: INFER cfg=1 succeeds; START clears done; live cmd/address changes do not replace snapshots
+PASS: IDLE CLEAR removes sticky done without changing snapshots/internal result
+PASS: INFER cfg=0 at DECODE reports NO_CFG; cfg changes in FINISH cannot change it
+PASS: INFER cfg 0 at START -> 1 at DECODE succeeds
+PASS: INFER cfg 1 at START -> 0 at DECODE reports NO_CFG
+PASS: cmd=2 reports BAD_CMD; new START clears previous NO_CFG
+PASS: cmd=FFFFFFFF reports BAD_CMD; consecutive errors are recorded anew
+PASS: cmd=80000000 reports BAD_CMD (full 32-bit decode, independent of cfg)
+PASS: IDLE CLEAR removes sticky error without erasing internal failure
+PASS: BUSY CLEAR cannot cancel success; completion wins over same-edge CLEAR
+PASS: BUSY CLEAR preserves NO_CFG; error wins over same-edge CLEAR
+PASS: IDLE START+CLEAR accepts START and clears old error before new completion
+PASS: START is ignored in both DECODE and FINISH; success and all four snapshots survive
+PASS: BUSY START+CLEAR cannot overwrite original BAD_CMD at completion
+PASS: four unimplemented and three illegal states recover without changing results/snapshots (7 checks)
+PASS: synchronous reset in FINISH waits for the edge, clears all state, and produces no phantom completion
+PASS: unused outputs stayed zero for 166 sampled cycles while unused inputs toggled
+PASS: T-05 ALL CTRL STATUS CHECKS PASSED (14 START snapshots checked)
+$finish called at time : 1666 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_ctrl_status.v" Line 390
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:12 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.722506
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_csr_ctrl_link -s t06_addr_tb_csr_ctrl_link
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_csr_ctrl_link -s t06_addr_tb_csr_ctrl_link 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.pose_cnn_ctrl
+Compiling module work.tb_csr_ctrl_link
+Built simulation snapshot t06_addr_tb_csr_ctrl_link
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t06/addr_sim/xsim.dir/t06_addr_tb_csr_ctrl_link/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:42:14 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.271404
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_csr_ctrl_link -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_csr_ctrl_link/xsim_script.tcl
+# xsim {t06_addr_tb_csr_ctrl_link} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: AXI reset STATUS=0 and three aligned address writes/readbacks
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000001
+TRACE: STATUS poll 3 = 0x00000001
+TRACE: STATUS poll 4 = 0x00000001
+TRACE: STATUS poll 5 = 0x00000001
+TRACE: STATUS poll 6 = 0x00000001
+TRACE: STATUS poll 7 = 0x00000002
+PASS: AXI COMMAND=1 -> START -> busy snapshot 0x01 -> sticky done 0x02
+PASS: AXI CLEAR removes done; STATUS reads have no clear side effect
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000014
+PASS: AXI COMMAND=2 -> START -> BAD_CMD STATUS=0x14 (writes still OKAY)
+PASS: AXI CLEAR removes error and error_code
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000024
+PASS: AXI INFER cfg=0 -> NO_CFG STATUS=0x24
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000024
+PASS: AXI repeated failing START clears old error during busy and records new NO_CFG
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x00000009
+TRACE: STATUS poll 3 = 0x00000009
+TRACE: STATUS poll 4 = 0x00000009
+TRACE: STATUS poll 5 = 0x00000009
+TRACE: STATUS poll 6 = 0x00000009
+TRACE: STATUS poll 7 = 0x00000009
+TRACE: STATUS poll 8 = 0x00000009
+TRACE: STATUS poll 9 = 0x0000000a
+PASS: AXI INFER cfg=1 -> busy 0x09 -> done 0x0A; Loader scale passes through CSR
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x00000009
+TRACE: STATUS poll 3 = 0x00000009
+TRACE: STATUS poll 4 = 0x00000009
+TRACE: STATUS poll 5 = 0x00000009
+TRACE: STATUS poll 6 = 0x00000009
+TRACE: STATUS poll 7 = 0x00000009
+TRACE: STATUS poll 8 = 0x00000009
+TRACE: STATUS poll 9 = 0x0000000a
+PASS: AXI idle START+CLEAR works with the real ctrl
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x00000009
+TRACE: STATUS poll 3 = 0x00000009
+TRACE: STATUS poll 4 = 0x00000009
+TRACE: STATUS poll 5 = 0x0000000a
+PASS: fastest COMMAND commits at START+3 with LOAD busy=1, returns SLVERR and preserves CSR/snapshot
+PASS: totals START=7 busy_cycles=62 AXI_busy_reads=29 busy_COMMAND_commits=1
+PASS: T-05 ALL REACHABLE CSR/CTRL LINK CHECKS PASSED
+$finish called at time : 1506 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_csr_ctrl_link.v" Line 295
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:18 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.778253
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_top_load -s t06_addr_tb_top_load
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_top_load -s t06_addr_tb_top_load 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.pose_cnn_ctrl
+Compiling module work.loader_stub
+Compiling module work.tb_top_load
+Built simulation snapshot t06_addr_tb_top_load
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t06/addr_sim/xsim.dir/t06_addr_tb_top_load/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:42:21 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.153687
+
+OPTION_FILE case.args: -testplusarg "CASE=0"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_top_load -runall -onerror quit -f case.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_top_load/xsim_script.tcl
+# xsim {t06_addr_tb_top_load} -testplusarg CASE=0 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 always_ready L1-L8 cycles=4204 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=10 max_ready_low=0 held_valid=0 equations=4192 done=1 error=0 violations=0
+$finish called at time : 42110 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:25 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.840904
+
+OPTION_FILE case.args: -testplusarg "CASE=1"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_top_load -runall -onerror quit -f case.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_top_load/xsim_script.tcl
+# xsim {t06_addr_tb_top_load} -testplusarg CASE=1 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 fixed_8 L1-L8 cycles=33505 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=10 max_ready_low=8 held_valid=29301 equations=33493 done=1 error=0 violations=0
+$finish called at time : 335120 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:28 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.132603
+
+OPTION_FILE case.args: -testplusarg "CASE=2"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_top_load -runall -onerror quit -f case.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_top_load/xsim_script.tcl
+# xsim {t06_addr_tb_top_load} -testplusarg CASE=2 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 typed_and_slave_stall L1-L8 cycles=19247 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=20 max_ready_low=8 held_valid=7288 equations=19225 done=1 error=0 violations=0
+$finish called at time : 192540 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:31 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.018887
+
+OPTION_FILE case.args: -testplusarg "CASE=3"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_top_load -runall -onerror quit -f case.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_top_load/xsim_script.tcl
+# xsim {t06_addr_tb_top_load} -testplusarg CASE=3 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 random_and_slave_stall L1-L8 cycles=19484 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=5 max_ready_low=8 held_valid=11589 equations=19477 done=1 error=0 violations=0
+$finish called at time : 194910 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:34 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.025111
+
+OPTION_FILE case.args: -testplusarg "CASE=4"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_top_load -runall -onerror quit -f case.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_top_load/xsim_script.tcl
+# xsim {t06_addr_tb_top_load} -testplusarg CASE=4 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 blob_error L1-L8 cycles=4201 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=7 max_ready_low=0 held_valid=0 equations=4192 done=0 error=3 violations=0
+$finish called at time : 42080 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:38 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.110129
+
+OPTION_FILE case.args: -testplusarg "CASE=5"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_top_load -runall -onerror quit -f case.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_top_load/xsim_script.tcl
+# xsim {t06_addr_tb_top_load} -testplusarg CASE=5 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 immediate_done L1-L8 cycles=4195 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=1 max_ready_low=0 held_valid=0 equations=4192 done=1 error=0 violations=0
+$finish called at time : 42020 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:40 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.954144
+
+OPTION_FILE case.args: -testplusarg "CASE=6"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_top_load -runall -onerror quit -f case.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_top_load/xsim_script.tcl
+# xsim {t06_addr_tb_top_load} -testplusarg CASE=6 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 read_error_part1 L1-L8 cycles=839 commands=1 Loader_start=1 AR1=47 AR2=0 R_beats=742 compared_words=21 LD_WAIT_cycles=0 max_ready_low=0 held_valid=0 equations=25 done=0 error=4 violations=0
+$finish called at time : 8460 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:43 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.885529
+
+OPTION_FILE case.args: -testplusarg "CASE=7"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_top_load -runall -onerror quit -f case.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_top_load/xsim_script.tcl
+# xsim {t06_addr_tb_top_load} -testplusarg CASE=7 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 read_error_part2 L1-L8 cycles=4194 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=763 LD_WAIT_cycles=0 max_ready_low=0 held_valid=0 equations=862 done=0 error=4 violations=0
+$finish called at time : 42010 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:46 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.902913
+
+OPTION_FILE case.args: -testplusarg "CASE=8"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_top_load -runall -onerror quit -f case.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_top_load/xsim_script.tcl
+# xsim {t06_addr_tb_top_load} -testplusarg CASE=8 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 read_error_last_part1 L1-L8 cycles=839 commands=1 Loader_start=1 AR1=47 AR2=0 R_beats=742 compared_words=742 LD_WAIT_cycles=0 max_ready_low=0 held_valid=0 equations=836 done=0 error=4 violations=0
+$finish called at time : 8460 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:49 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.872047
+
+OPTION_FILE case.args: -testplusarg "CASE=9"
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\addr_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_addr_tb_top_load -runall -onerror quit -f case.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_addr_tb_top_load/xsim_script.tcl
+# xsim {t06_addr_tb_top_load} -testplusarg CASE=9 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 immediate_done_error L1-L8 cycles=4195 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=1 max_ready_low=0 held_valid=0 equations=4192 done=0 error=3 violations=0
+$finish called at time : 42020 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t06/original/tb_top_load.v" Line 409
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:42:52 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.940247

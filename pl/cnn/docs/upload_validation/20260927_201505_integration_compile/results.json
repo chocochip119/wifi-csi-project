@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "label": "compile_all_20_rtl",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xvlog.bat",
+        "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_v1_0_S00_AXI.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_v1_0_M00_AXI.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_ctrl.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/blob_decoder.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/conv_weight_ram.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/param_ram.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/gelu_lut_ram.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/fcw_ram.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/weight_param_loader.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/CNN_Encoder/Buffer.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/CNN_Encoder/Conv_MAC.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/CNN_Encoder/requant_stage.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/CNN_Encoder/gelu_stage.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/CNN_Encoder/Pool.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/CNN_Encoder/CNN_Encoder.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/fc_work/fc1_weight_fifo.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/fc_work/hidden_buffer.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/fc_work/pose_buffer.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/fc_work/fc_mac.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn.v"
+      ],
+      "cwd": "D:\\wifi-csi-project\\pl\\cnn\\runs\\20260927_201505_integration_compile",
+      "exit_code": 0,
+      "wall_seconds": 1.116,
+      "passed": true
+    },
+    {
+      "label": "compile_core_tb",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xvlog.bat",
+        "-sv",
+        "D:/wifi-csi-project/pl/cnn/testbench/axi4_slave_mem_model.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/loader_stub.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/in_ram_stub.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/enc_stub.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/fc_stub.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_pose_cnn_core.v"
+      ],
+      "cwd": "D:\\wifi-csi-project\\pl\\cnn\\runs\\20260927_201505_integration_compile",
+      "exit_code": 0,
+      "wall_seconds": 1.04,
+      "passed": true
+    },
+    {
+      "label": "elaborate_pose_cnn_core",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+        "work.tb_pose_cnn_core",
+        "-s",
+        "upload_core_compile"
+      ],
+      "cwd": "D:\\wifi-csi-project\\pl\\cnn\\runs\\20260927_201505_integration_compile",
+      "exit_code": 0,
+      "wall_seconds": 7.031,
+      "passed": true
+    }
+  ]
+}

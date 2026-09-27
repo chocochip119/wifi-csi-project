@@ -1,0 +1,141 @@
+{
+  "files": [
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_ctrl.v",
+      "sha256": "A351C8B652EC72669C2E1F4C3F14B4CA3C5E8C149FFEEF1B0DF1626B56CFF76A",
+      "after_sha256": "a351c8b652ec72669c2e1f4c3f14b4ca3c5e8c149ffeef1b0df1626b56cff76a",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_M00_AXI.v",
+      "sha256": "9C5EE22C6D25602E97032C337AD437032F99E94EA883F55C231A2D4D71E998D0",
+      "after_sha256": "9c5ee22c6d25602e97032c337ad437032f99e94ea883f55c231a2d4d71e998d0",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_S00_AXI.v",
+      "sha256": "78ADB298E83AE2C4AB023748AFF78104A237648364579729D951A5B597E1A65E",
+      "after_sha256": "78adb298e83ae2c4ab023748aff78104a237648364579729d951a5b597e1a65e",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\axi4_slave_mem_model.v",
+      "sha256": "02813E9D5789189B27464DAD307D39C0C2EAAE56106D28D437AFE731B9BEA348",
+      "after_sha256": "02813e9d5789189b27464dad307d39c0c2eaae56106d28d437afe731b9bea348",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\enc_stub.v",
+      "sha256": "34794641743BE6D2DE3138CC90EEC4DD6FE370199D2DBB5384FDB4F4C48BA333",
+      "after_sha256": "34794641743be6d2de3138cc90eec4dd6fe370199d2dbb5384fdb4f4c48ba333",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\fc_stub.v",
+      "sha256": "4BF0020CD12A9288AFF2C4CF6653E78ED556196EDB3D26B84498548E762D74C0",
+      "after_sha256": "4bf0020cd12a9288aff2c4cf6653e78ed556196edb3d26b84498548e762d74c0",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\in_ram_stub.v",
+      "sha256": "5E0CD6BAB4A93CF602D86720D2698D5E30B9A9398370F0DB259B351849A2C45D",
+      "after_sha256": "5e0cd6bab4a93cf602d86720d2698d5e30b9a9398370f0db259b351849a2c45d",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\loader_stub.v",
+      "sha256": "5BC7D249ED1CD89ADBC041B4C8E950575259BD10F670CCFF93338D3E00285E9B",
+      "after_sha256": "5bc7d249ed1cd89adbc041b4c8e950575259bd10f670ccff93338d3e00285e9b",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_axi4_slave_mem_model.v",
+      "sha256": "170CA4B8AB67996C6C4BB52D9112ACBAC4AEC292311AA9893EE8D20C9D6E7944",
+      "after_sha256": "170ca4b8ab67996c6c4bb52d9112acbac4aec292311aa9893ee8d20c9d6e7944",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_csr_ctrl_link.v",
+      "sha256": "69357724F22072E848B0003B95ABE710CD98FAD246FF67763A5456B45AC3FA66",
+      "after_sha256": "69357724f22072e848b0003b95abe710cd98fad246ff67763a5456b45ac3fa66",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_ctrl_status.v",
+      "sha256": "D835D262EF466CD422DC9EA88CAB764F1234CBA3BC1FA965349360BC273F834F",
+      "after_sha256": "d835d262ef466cd422dc9ea88cab764f1234cba3bc1fa965349360bc273f834f",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_err.v",
+      "sha256": "02E1E0A88B16168CE0734B34FAFF7AC2344A86FBE330BE227703177DA4F90486",
+      "after_sha256": "02e1e0a88b16168ce0734b34faff7ac2344a86fbe330be227703177da4f90486",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_read_perf.v",
+      "sha256": "4E29A74BF287B001A73C91D5E49AF606C32CB2DB6C9F97C1B43A87AC1A309439",
+      "after_sha256": "4e29a74bf287b001a73c91d5e49af606c32cb2db6c9f97c1b43a87ac1a309439",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_read.v",
+      "sha256": "99705F116077C108DC7D3799057B8D637395BA2783F84187D8A4B916B682E101",
+      "after_sha256": "99705f116077c108dc7d3799057b8d637395ba2783f84187d8a4b916b682e101",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_write.v",
+      "sha256": "BDA8FF6685076323E5D138061BFCA6A6B3E58B345B4BBCA527EFBF43283E713C",
+      "after_sha256": "bda8ff6685076323e5d138061bfca6a6b3e58b345b4bbca527efbf43283e713c",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_ctrl.v",
+      "sha256": "72BCD126B4E6CA0E1A1B129973FF65C0C1F6F40C2B3D691C568DA15041206D2F",
+      "after_sha256": "72bcd126b4e6ca0e1a1b129973ff65c0c1f6f40c2b3d691c568da15041206d2f",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_read.v",
+      "sha256": "1733A639ED4D2299DD8B1F72F4D282B5B3535B3F033F41C00F49707F2A42C0F5",
+      "after_sha256": "1733a639ed4d2299dd8b1f72f4d282b5b3535b3f033f41c00f49707f2a42c0f5",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_regs.v",
+      "sha256": "773760F459F582096D1644B06CD0A85CDD37DB33BFA190BB3FF7FC46EF60CAB2",
+      "after_sha256": "773760f459f582096d1644b06cd0a85cdd37db33bfa190bb3ff7fc46ef60cab2",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_write.v",
+      "sha256": "AFF01C63AD24A35CA122C912B6A781E5E5A623B9341F26ED7C4FCBF16F1E7170",
+      "after_sha256": "aff01c63ad24a35ca122c912b6a781e5e5a623b9341f26ed7c4fcbf16f1e7170",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_top_fc1.v",
+      "sha256": "1286DDA8192E733A8BD4F87017B64185EEF07FE7CF21BEFC547E2898669C8C6F",
+      "after_sha256": "1286dda8192e733a8bd4f87017b64185eef07fe7cf21befc547e2898669c8c6f",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_top_infer.v",
+      "sha256": "BBE812F3616BD0EB1199C45D1CDF9971C1C564A439FAE237AEF2819ED0D70810",
+      "after_sha256": "c68d21965dc025f9bd422ea3890ab0357618ebe60fc493fe50c64b9b3ca01460",
+      "unchanged": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_top_load.v",
+      "sha256": "140E2FDAA1C604EBBB892F4D98B148C2B2D3208D0EC6602BE06B6168C15E2304",
+      "after_sha256": "140e2fdaa1c604ebbb892f4d98b148c2b2d3208d0ec6602be06b6168c15e2304",
+      "unchanged": true
+    }
+  ],
+  "only_changed_source": "tb_top_infer.v",
+  "cases": 13,
+  "runs": 15,
+  "input_observation_fields_identical_except_total_cycles": 21,
+  "notes": "FC1 now extends total execution; all pre-FC1 input/Encoder measurements match T-04. P7 FC-error restart policy not changed."
+}

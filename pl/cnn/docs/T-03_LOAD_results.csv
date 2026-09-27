@@ -1,0 +1,11 @@
+case,cycles,commands,Loader_start,AR1,AR2,R_beats,compared_words,LD_WAIT_cycles,max_ready_low,held_valid,equations,done,error,violations
+always_ready,4204,2,1,47,187,3722,3722,10,0,0,4192,1,0,0
+fixed_8,33505,2,1,47,187,3722,3722,10,8,29301,33493,1,0,0
+typed_and_slave_stall,19247,2,1,47,187,3722,3722,20,8,7288,19225,1,0,0
+random_and_slave_stall,19484,2,1,47,187,3722,3722,5,8,11589,19477,1,0,0
+blob_error,4201,2,1,47,187,3722,3722,7,0,0,4192,0,3,0
+immediate_done,4195,2,1,47,187,3722,3722,1,0,0,4192,1,0,0
+read_error_part1,839,1,1,47,0,742,21,0,0,0,25,0,4,0
+read_error_part2,4194,2,1,47,187,3722,763,0,0,0,862,0,4,0
+read_error_last_part1,839,1,1,47,0,742,742,0,0,0,836,0,4,0
+immediate_done_error,4195,2,1,47,187,3722,3722,1,0,0,4192,0,3,0

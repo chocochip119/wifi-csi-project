@@ -1,0 +1,109 @@
+C:\Users\kccistc\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -X utf8 -u C:\Users\kccistc\AppData\Local\Temp\codex-f01\run_new.py
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\tb_blob_decoder.v D:\2609_final_project\cnn_rtl\tb\tb_loader_rams.v
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_loader_rams -s l02_tb_loader_rams
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat l02_tb_loader_rams -runall -onerror quit
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_blob_decoder -s l02_tb_blob_decoder
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat l02_tb_blob_decoder -runall -onerror quit
+PASS: L-01 IDLE offered_cycles=3 accepted=0 READY=0
+PASS: L-03 C3 BYTE beat=9 k=0 n=40 word=40 lane=0 byte=1b
+PASS: L-03 C3 BYTE beat=9 k=1 n=41 word=41 lane=0 byte=40
+PASS: L-03 C3 BYTE beat=9 k=2 n=42 word=42 lane=0 byte=65
+PASS: L-03 C3 BYTE beat=9 k=3 n=43 word=43 lane=0 byte=8a
+PASS: L-03 C3 BYTE beat=9 k=4 n=44 word=44 lane=0 byte=af
+PASS: L-03 C3 BYTE beat=9 k=5 n=45 word=0 lane=1 byte=d4
+PASS: L-03 C3 BYTE beat=9 k=6 n=46 word=1 lane=1 byte=f9
+PASS: L-03 C3 BYTE beat=9 k=7 n=47 word=2 lane=1 byte=1e
+PASS: L-03 C3 BYTE beat=15 k=0 n=88 word=43 lane=1 byte=0b
+PASS: L-03 C3 BYTE beat=15 k=1 n=89 word=44 lane=1 byte=30
+PASS: L-03 C3 BYTE beat=15 k=2 n=90 word=0 lane=2 byte=55
+PASS: L-03 C3 BYTE beat=15 k=3 n=91 word=1 lane=2 byte=7a
+PASS: L-03 C3 BYTE beat=15 k=4 n=92 word=2 lane=2 byte=9f
+PASS: L-03 C3 BYTE beat=15 k=5 n=93 word=3 lane=2 byte=c4
+PASS: L-03 C3 BYTE beat=15 k=6 n=94 word=4 lane=2 byte=e9
+PASS: L-03 C3 BYTE beat=15 k=7 n=95 word=5 lane=2 byte=0e
+PASS: L-03 C3 BYTE beat=20 k=0 n=128 word=38 lane=2 byte=d3
+PASS: L-03 C3 BYTE beat=20 k=1 n=129 word=39 lane=2 byte=f8
+PASS: L-03 C3 BYTE beat=20 k=2 n=130 word=40 lane=2 byte=1d
+PASS: L-03 C3 BYTE beat=20 k=3 n=131 word=41 lane=2 byte=42
+PASS: L-03 C3 BYTE beat=20 k=4 n=132 word=42 lane=2 byte=67
+PASS: L-03 C3 BYTE beat=20 k=5 n=133 word=43 lane=2 byte=8c
+PASS: L-03 C3 BYTE beat=20 k=6 n=134 word=44 lane=2 byte=b1
+PASS: L-03 C3 BYTE beat=20 k=7 n=135 word=0 lane=3 byte=d6
+PASS: L-03 C4 BOUNDARY layer=1 n=719 word=44 lane=15
+PASS: L-03 C4 BOUNDARY layer=2 n=0 word=45 lane=0
+PASS: L-03 C4 BOUNDARY layer=2 n=2303 word=188 lane=15
+PASS: L-03 C4 BOUNDARY layer=2 n=2304 word=189 lane=0
+PASS: L-03 C4 BOUNDARY layer=2 n=4607 word=332 lane=15
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=0 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-03 C3 EXPECTED_MISMATCH same_lane_per_beat_golden checked_bytes=720 wrong_targets=56 mismatches=56
+PASS: L-01 CASE id=1 name=source_gaps_and_read_boundary version_check=1 accepted=3722 work=9772 supply_wait=543 total_cycles=10315 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=1 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=2 name=seeded_gaps version_check=1 accepted=3722 work=9772 supply_wait=5595 total_cycles=15367 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=2 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=3 name=bad_magic_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 CASE id=4 name=version_policy version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 CASE id=5 name=bad_total_words_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 CASE id=6 name=shift_minus32 version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 CASE id=7 name=shift_64 version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 CASE id=8 name=shift_minus31 version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=8 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=9 name=shift_63 version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=9 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=10 name=ignored_word3_word7 version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=10 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=11 name=busy_START version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=3 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=11 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=12 name=extra_early_final_work version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=1
+PASS: L-03 C1/C2/C5 CONV case=12 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=13 name=extra_last_final_work version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=1
+PASS: L-03 C1/C2/C5 CONV case=13 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=14 name=bad_magic_with_gaps version_check=1 accepted=3722 work=3722 supply_wait=7503 total_cycles=11225 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 CASE id=15 name=shift_INT32_MIN version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 CASE id=16 name=shift_INT32_MAX version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 CASE id=17 name=swapped_payload_words_negative version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=17 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=5328 expected_negative=1
+PASS: L-01 CASE id=18 name=array_shift_layer0_half0 version_check=1 accepted=3722 work=4368 supply_wait=0 total_cycles=4368 ready_low=646 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=18 bytes=720 writes=720 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=19 name=array_shift_layer0_half1 version_check=1 accepted=3722 work=4375 supply_wait=0 total_cycles=4375 ready_low=653 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=19 bytes=720 writes=720 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=20 name=array_shift_layer1_half0 version_check=1 accepted=3722 work=8440 supply_wait=0 total_cycles=8440 ready_low=4718 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=20 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=21 name=array_shift_layer1_half1 version_check=1 accepted=3722 work=8455 supply_wait=0 total_cycles=8455 ready_low=4733 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=21 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=22 name=array_shift_layer2_half0 version_check=1 accepted=3722 work=8584 supply_wait=0 total_cycles=8584 ready_low=4862 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=22 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=23 name=array_shift_layer2_half1 version_check=1 accepted=3722 work=8647 supply_wait=0 total_cycles=8647 ready_low=4925 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=23 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=24 name=array_shift_layer3_half0 version_check=1 accepted=3722 work=8776 supply_wait=0 total_cycles=8776 ready_low=5054 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=24 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=25 name=array_shift_layer3_half1 version_check=1 accepted=3722 work=8839 supply_wait=0 total_cycles=8839 ready_low=5117 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=25 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=26 name=array_shift_layer4_half0 version_check=1 accepted=3722 work=8864 supply_wait=0 total_cycles=8864 ready_low=5142 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=26 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=27 name=array_shift_layer4_half1 version_check=1 accepted=3722 work=8875 supply_wait=0 total_cycles=8875 ready_low=5153 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=27 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=0 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=3 name=bad_magic_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=0 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 RESET interrupted_after_beats=5 synchronous_edge=PASS cfg=0 count=0
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=0 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-03 C1/C2/C5 CONV case=28 bytes=5328 writes=720 coverage_checked=0 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RESET_RAM pending_param_write=blocked preserved_fields=984 preserved_fcw=2432 preserved_lut=1024 cfg=0
+PASS: L-01 CASE id=4 name=version_policy version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 CASE id=4 name=version_policy version_check=0 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=4 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-03 C1/C2/C5 CONV case=0 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 CASE id=4 name=version_policy version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 CASE id=5 name=bad_total_words_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-03 ALL C1-C7 D1-D7 N1-N7 checked_runs=32 default_runs=1 alternate_runs=3 optout_runs=1 selector=-1 ideal_cycles=9772 RAM_writes=5328/984/2432/1024

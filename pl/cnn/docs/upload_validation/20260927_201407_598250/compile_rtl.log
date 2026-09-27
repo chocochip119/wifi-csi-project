@@ -1,0 +1,39 @@
+{
+  "label": "compile_rtl",
+  "argv": [
+    "C:\\Xilinx\\Vivado\\2020.2\\bin\\xvlog.bat",
+    "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_v1_0_S00_AXI.v",
+    "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_v1_0_M00_AXI.v",
+    "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_ctrl.v",
+    "D:/wifi-csi-project/pl/cnn/rtl/blob_decoder.v",
+    "D:/wifi-csi-project/pl/cnn/rtl/conv_weight_ram.v",
+    "D:/wifi-csi-project/pl/cnn/rtl/param_ram.v",
+    "D:/wifi-csi-project/pl/cnn/rtl/gelu_lut_ram.v",
+    "D:/wifi-csi-project/pl/cnn/rtl/fcw_ram.v",
+    "D:/wifi-csi-project/pl/cnn/rtl/weight_param_loader.v"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 1.795,
+  "passed": true,
+  "diagnostics": [],
+  "required_marker": null
+}
+
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_v1_0_S00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_S00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/wifi-csi-project/pl/cnn/rtl/blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/wifi-csi-project/pl/cnn/rtl/conv_weight_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module conv_weight_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/wifi-csi-project/pl/cnn/rtl/param_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module param_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/wifi-csi-project/pl/cnn/rtl/gelu_lut_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_lut_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/wifi-csi-project/pl/cnn/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/wifi-csi-project/pl/cnn/rtl/weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module weight_param_loader

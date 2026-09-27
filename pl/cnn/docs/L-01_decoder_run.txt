@@ -1,0 +1,363 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l01\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.970332
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l01\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\tb_blob_decoder.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder_fixture
+INFO: [VRFC 10-311] analyzing module tb_blob_decoder
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.948076
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l01\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_blob_decoder -s l01_decoder
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_blob_decoder -s l01_decoder 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.blob_decoder(CHECK_VERSION=1)
+Compiling module work.blob_decoder_fixture(VERSION_CHE...
+Compiling module work.blob_decoder
+Compiling module work.blob_decoder_fixture
+Compiling module work.blob_decoder(EXPECTED_MAGIC=32'b...
+Compiling module work.blob_decoder_fixture(VERSION_CHE...
+Compiling module work.tb_blob_decoder
+Built simulation snapshot l01_decoder
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.383786
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-l01\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat l01_decoder -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/l01_decoder/xsim_script.tcl
+# xsim {l01_decoder} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: L-01 IDLE offered_cycles=3 accepted=0 READY=0
+PASS: L-01 REGION case=0 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=0 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=0 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=0 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=0 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=0 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=0 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=0 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=0 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=1 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=1 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=1 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=1 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=1 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=1 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=1 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=1 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=1 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=1 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=1 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=1 name=source_gaps_and_read_boundary version_check=1 accepted=3722 work=9772 supply_wait=543 total_cycles=10315 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=2 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=2 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=2 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=2 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=2 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=2 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=2 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=2 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=2 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=2 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=2 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=2 name=seeded_gaps version_check=1 accepted=3722 work=9772 supply_wait=5595 total_cycles=15367 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=3 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=3 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=3 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=3 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=3 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=3 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=3 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=3 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=3 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=3 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=3 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=3 name=bad_magic_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=4 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=4 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=4 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=4 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=4 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=4 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=4 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=4 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=4 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=4 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=4 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=4 name=version_policy version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=5 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=5 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=5 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=5 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=5 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=5 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=5 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=5 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=5 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=5 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=5 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=5 name=bad_total_words_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=6 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=6 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=6 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=6 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=6 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=6 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=6 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=6 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=6 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=6 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=6 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=6 name=shift_minus32 version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=7 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=7 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=7 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=7 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=7 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=7 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=7 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=7 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=7 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=7 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=7 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=7 name=shift_64 version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=8 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=8 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=8 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=8 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=8 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=8 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=8 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=8 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=8 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=8 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=8 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=8 name=shift_minus31 version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=9 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=9 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=9 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=9 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=9 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=9 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=9 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=9 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=9 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=9 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=9 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=9 name=shift_63 version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=10 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=10 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=10 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=10 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=10 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=10 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=10 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=10 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=10 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=10 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=10 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=10 name=ignored_word3_word7 version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=11 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=11 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=11 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=11 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=11 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=11 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=11 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=11 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=11 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=11 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=11 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=11 name=busy_START version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=3 extra_offered=0
+PASS: L-01 REGION case=12 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=12 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=12 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=12 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=12 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=12 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=12 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=12 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=12 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=12 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=12 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=12 name=extra_early_final_work version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=1
+PASS: L-01 REGION case=13 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=13 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=13 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=13 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=13 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=13 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=13 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=13 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=13 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=13 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=13 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=13 name=extra_last_final_work version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=1
+PASS: L-01 REGION case=14 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=14 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=14 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=14 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=14 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=14 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=14 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=14 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=14 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=14 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=14 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=14 name=bad_magic_with_gaps version_check=1 accepted=3722 work=3722 supply_wait=7503 total_cycles=11225 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=15 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=15 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=15 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=15 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=15 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=15 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=15 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=15 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=15 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=15 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=15 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=15 name=shift_INT32_MIN version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=16 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=16 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=16 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=16 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=16 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=16 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=16 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=16 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=16 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=16 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=16 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=16 name=shift_INT32_MAX version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=0 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=0 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=0 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=0 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=0 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=0 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=0 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=0 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=0 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=3 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=3 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=3 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=3 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=3 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=3 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=3 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=3 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=3 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=3 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=3 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=3 name=bad_magic_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=0 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=0 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=0 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=0 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=0 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=0 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=0 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=0 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=0 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-01 RESET interrupted_after_beats=5 synchronous_edge=PASS cfg=0 count=0
+PASS: L-01 REGION case=0 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=0 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=0 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=0 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=0 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=0 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=0 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=0 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=0 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=4 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=4 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=4 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=4 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=4 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=4 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=4 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=4 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=4 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=4 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=4 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=4 name=version_policy version_check=0 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=0 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=0 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=0 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=0 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=0 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=0 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=0 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=0 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=0 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=4 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=4 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=4 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=4 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=4 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=4 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=4 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=4 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=4 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=4 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=4 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=4 name=version_policy version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 REGION case=5 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=5 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=5 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=5 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=5 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=5 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=5 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=5 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=5 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=5 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=5 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=5 name=bad_total_words_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-01 ALL SELECTED D1-D7 checked_runs=21 default_runs=1 alternate_runs=3 selector=-1 ideal_cycles=9772 specification_9388_delta=384 RAM_writes=0
+$finish called at time : 1915500 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_blob_decoder.v" Line 339
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 01:39:54 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 7.345058

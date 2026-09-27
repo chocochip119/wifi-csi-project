@@ -1,0 +1,26 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_s00_axi_write/xsim_script.tcl
+# xsim {t07_tb_s00_axi_write} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: reset assertion and immediate release keep AWREADY/WREADY/BVALID low
+PASS: simultaneous AW/W -> exactly 1 commit and 1 B response
+PASS: AW first -> AWREADY=0/WREADY=1 while held; 1 commit and 1 B response
+PASS: W first -> WREADY=0/AWREADY=1 while held; 1 commit and 1 B response
+PASS: BREADY delayed 4 cycles -> stable BVALID/BRESP; AWREADY=WREADY=0
+PASS: R-01 b-2 response phase: short reset masks BVALID/RVALID without clearing registers
+PASS: 2 consecutive writes preserve distinct address/data/strobe with no replay
+PASS: concurrent scale/OKAY reads do not disturb writes; control pulses stay zero
+PASS: totals AW=5 W=5 commit=5 B=5
+PASS: R-01 b-2 idle phase: short reset masks READY; registers retained as required by reset contract
+PASS: R-01 b-1: clock-spanning reset clears registers and restart guard preserves channel timing
+PASS: S00-02 ALL CHECKS PASSED
+$finish called at time : 446 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_write.v" Line 381
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 18:22:30 2026...

@@ -1,0 +1,38 @@
+{
+  "label": "tb_m00_read_elab",
+  "argv": [
+    "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+    "work.tb_m00_read",
+    "-s",
+    "handover_tb_m00_read"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 3.706,
+  "passed": true,
+  "diagnostics": [],
+  "required_marker": null
+}
+
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_m00_read -s handover_tb_m00_read 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.m00_read_fixture
+Compiling module work.tb_m00_read
+Built simulation snapshot handover_tb_m00_read
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source D:/wifi-csi-project/pl/cnn/runs/20260927_201407_598250/xsim.dir/handover_tb_m00_read/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sun Sep 27 20:14:34 2026...

@@ -1,0 +1,121 @@
+SHA PREFLIGHT PASS
+{
+  "blob.bin": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+  "fc1_acc_i32.hex": "22b6aca7a6875ef604e8bfbfc5238de14cb78602256cd8d4aaac9f3821fc306d",
+  "fc2_acc_i32.hex": "081119f47e2668b983023ef428ca871900338a4563551ed355e906c0aa2df1f8",
+  "fc3_acc_i32.hex": "31021ea552cac2163495cb6b37789f977a8ccf9f9ec470a1e7e0621f3e0b0ec9",
+  "encoder_flat_u64.hex": "50922ed6746c48c4dda4be98e161152af47d5068c76392300fe5cea8846f0120",
+  "fc1_gelu_i8.hex": "3ed38e4567bac7f9ca5bf9cefecc11471e5cebae3a4ae8bffff66ef04ef6170b",
+  "fc2_gelu_i8.hex": "f741ba38d3adc58a77a93137ee08860b1314fecb5e320f72a47f8d9f633c4ffe",
+  "fc1_requant_i8.hex": "b039e226c4b846d174178cb075e0a3e17324ee341dedfd6a11de82e51ea15c66",
+  "fc2_requant_i8.hex": "5e681962a9b9735400ac3aeb16b3d60295df724978723c321fbe6098db51ec53",
+  "fc3_i8.hex": "fe2e64d09125e251f61d1837285718837af28e07e1a24c78c78b9aa633caa150",
+  "pose_f32.hex": "3645306406f53e8ba909a98821e24277137b7e20c7f71e553f66c9eded0c8e69"
+}
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\requant_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\fc\fc_mac.v D:\2609_final_project\cnn_rtl\rtl\fc\fc1_weight_fifo.v D:\2609_final_project\cnn_rtl\rtl\fc\hidden_buffer.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\encoder\requant_stage.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fc/fc_mac.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_mac
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fc/fc1_weight_fifo.v" into library work
+INFO: [VRFC 10-311] analyzing module fc1_weight_fifo
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fc/hidden_buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module hidden_buffer
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/param_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module param_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/requant_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module requant_stage
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.229036
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\requant_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\tb_fc_requant.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_fc_requant.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_fc_requant
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.348546
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\requant_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_fc_requant -s f03a_requant
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_fc_requant -s f03a_requant 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.fc_mac
+Compiling module work.fc1_weight_fifo
+Compiling module work.hidden_buffer
+Compiling module work.fcw_ram
+Compiling module work.param_ram
+Compiling module work.requant_stage(TAG_WIDTH=9,FC_MOD...
+Compiling module work.tb_fc_requant
+Built simulation snapshot f03a_requant
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.977131
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\requant_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat f03a_requant -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/f03a_requant/xsim_script.tcl
+# xsim {f03a_requant} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: R1-R3/R7 FC1_variant0 outputs=128 mismatch=0 param_addr=48..175 latency=4 rq_min=-76 rq_max=17 saturations=0 changed_outputs=0 cycles_to_last_rq=49162
+PASS: R1-R3/R7 FC2_variant0 outputs=128 mismatch=0 param_addr=176..303 latency=4 rq_min=-104 rq_max=22 saturations=0 changed_outputs=0 cycles_to_last_rq=2058
+PASS: R1-R3/R7 FC3_variant0 outputs=24 mismatch=0 param_addr=304..327 latency=4 rq_min=68 rq_max=126 saturations=0 changed_outputs=0 cycles_to_last_rq=394
+PASS: R1-R3 baseline_golden=280 mismatches=0 saturation_count=0 Param_preverified=280 latency=4
+PASS: R1-R3/R7 FC1_variant1 outputs=128 mismatch=0 param_addr=48..175 latency=4 rq_min=-76 rq_max=127 saturations=1 changed_outputs=1 cycles_to_last_rq=49162
+OBS: R7 layer=1 field=1 out_idx=0 bias=1049186 mult=1288077941 shift=42 golden=8 mutated=127 other_outputs_unchanged=127
+PASS: R1-R3/R7 FC1_variant2 outputs=128 mismatch=0 param_addr=48..175 latency=4 rq_min=-76 rq_max=17 saturations=0 changed_outputs=1 cycles_to_last_rq=49162
+OBS: R7 layer=1 field=2 out_idx=0 bias=610 mult=644038970 shift=42 golden=8 mutated=4 other_outputs_unchanged=127
+PASS: R1-R3/R7 FC1_variant3 outputs=128 mismatch=0 param_addr=48..175 latency=4 rq_min=-76 rq_max=17 saturations=0 changed_outputs=1 cycles_to_last_rq=49162
+OBS: R7 layer=1 field=3 out_idx=0 bias=610 mult=1288077941 shift=43 golden=8 mutated=4 other_outputs_unchanged=127
+PASS: R1-R3/R7 FC2_variant1 outputs=128 mismatch=0 param_addr=176..303 latency=4 rq_min=-104 rq_max=127 saturations=1 changed_outputs=1 cycles_to_last_rq=2058
+OBS: R7 layer=2 field=1 out_idx=0 bias=1043685 mult=1822827887 shift=40 golden=-93 mutated=127 other_outputs_unchanged=127
+PASS: R1-R3/R7 FC2_variant2 outputs=128 mismatch=0 param_addr=176..303 latency=4 rq_min=-104 rq_max=22 saturations=0 changed_outputs=1 cycles_to_last_rq=2058
+OBS: R7 layer=2 field=2 out_idx=0 bias=-4891 mult=911413943 shift=40 golden=-93 mutated=-47 other_outputs_unchanged=127
+PASS: R1-R3/R7 FC2_variant3 outputs=128 mismatch=0 param_addr=176..303 latency=4 rq_min=-104 rq_max=22 saturations=0 changed_outputs=1 cycles_to_last_rq=2058
+OBS: R7 layer=2 field=3 out_idx=0 bias=-4891 mult=1822827887 shift=41 golden=-93 mutated=-47 other_outputs_unchanged=127
+PASS: R1-R3/R7 FC3_variant1 outputs=24 mismatch=0 param_addr=304..327 latency=4 rq_min=68 rq_max=127 saturations=1 changed_outputs=1 cycles_to_last_rq=394
+OBS: R7 layer=3 field=1 out_idx=0 bias=1258606 mult=1896848957 shift=43 golden=83 mutated=127 other_outputs_unchanged=23
+PASS: R1-R3/R7 FC3_variant2 outputs=24 mismatch=0 param_addr=304..327 latency=4 rq_min=42 rq_max=126 saturations=0 changed_outputs=1 cycles_to_last_rq=394
+OBS: R7 layer=3 field=2 out_idx=0 bias=210030 mult=948424478 shift=43 golden=83 mutated=42 other_outputs_unchanged=23
+PASS: R1-R3/R7 FC3_variant3 outputs=24 mismatch=0 param_addr=304..327 latency=4 rq_min=42 rq_max=126 saturations=0 changed_outputs=1 cycles_to_last_rq=394
+OBS: R7 layer=3 field=3 out_idx=0 bias=210030 mult=1896848957 shift=44 golden=83 mutated=42 other_outputs_unchanged=23
+PASS: R5/R6 positive_saturation acc=256 mult=1 shift=1 raw=128 rq=127 expected=127 latency=4
+PASS: R5/R6 negative_saturation_not_minus128 acc=-254 mult=1 shift=1 raw=-128 rq=-127 expected=-127 latency=4
+PASS: R5/R6 exact_positive127 acc=253 mult=1 shift=1 raw=127 rq=127 expected=127 latency=4
+PASS: R5/R6 exact_negative127 acc=-253 mult=1 shift=1 raw=-127 rq=-127 expected=-127 latency=4
+PASS: R5/R6 zero acc=0 mult=1 shift=1 raw=0 rq=0 expected=0 latency=4
+PASS: R5/R6 round_positive_half acc=3 mult=1 shift=1 raw=2 rq=2 expected=2 latency=4
+PASS: R5/R6 round_negative_half acc=-3 mult=1 shift=1 raw=-2 rq=-2 expected=-2 latency=4
+PASS: R5/R6 round_positive_even acc=2 mult=1 shift=1 raw=1 rq=1 expected=1 latency=4
+PASS: R5/R6 round_negative_even_minus_half acc=-2 mult=1 shift=1 raw=-2 rq=-2 expected=-2 latency=4
+PASS: R5/R6 round_positive_quarter acc=5 mult=1 shift=2 raw=1 rq=1 expected=1 latency=4
+PASS: R5/R6 round_negative_quarter acc=-5 mult=1 shift=2 raw=-2 rq=-2 expected=-2 latency=4
+PASS: R5/R6 zero_shift_positive acc=7 mult=1 shift=0 raw=7 rq=7 expected=7 latency=4
+PASS: R5/R6 zero_shift_negative acc=-7 mult=1 shift=0 raw=-7 rq=-7 expected=-7 latency=4
+PASS: R5/R6 left_shift_positive acc=3 mult=1 shift=-1 raw=6 rq=6 expected=6 latency=4
+PASS: R5/R6 left_shift_negative acc=-3 mult=1 shift=-1 raw=-6 rq=-6 expected=-6 latency=4
+PASS: F-03a ALL cases=27 outputs_compared=1135 checks=208354 cycles=222847
+$finish called at time : 2228467 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_fc_requant.v" Line 299
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 19:07:45 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 5.674928

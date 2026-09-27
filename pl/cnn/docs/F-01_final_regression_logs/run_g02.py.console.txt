@@ -1,0 +1,26 @@
+C:\Users\kccistc\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -X utf8 -u C:\Users\kccistc\AppData\Local\Temp\codex-f01-fifo\run_g02.py
+xvlog seconds=0.946
+
+xvlog seconds=0.897
+
+xelab seconds=6.341
+
+xsim seconds=71.689
+PASS: G-02 H1 blob_bytes=422992 input_bytes=11520 golden_words=384 host_blob_SHA=063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb host_input_SHA=949915442c9dfcf980d4880e52b4ff6b08b1b5ff75bdccfa346b807ba0c6fffa zero_SHA=2ddbd07ddfda5d4f9b1c44c8ff16f7e38027d275af6bf57f317b136060d695a9
+PASS: G-02 H2 LOAD cycles=10114 X02a=10114 delta=0 cfg=1 error=0 scale=3bd997a8
+PASS: G-02 H3 run=0 input_words=1440 starts=1 dones=1 enc_elapsed=1278889 X02a=1278889 delta=0 infer_cycles=1335832 flat_reads=384
+RESULT: G-02 H4 run=0 words_equal=384 words_mismatch=0 bytes_equal=3072 bytes_mismatch=0
+OBS: G-02 H5 run=0 raw_param_range=0..47 valid_param_range=0..47 raw_lut_range=1..497 valid_lut_range=1..497 param_outside=0 lut_outside=0 valid_X_param/lut=0/0 D09_bad=0 pool_param_bad=0
+OBS: G-02 H5 run=0 runtime_conv/param/lut_checks=1278889/1278841/1278836 bad=0/0/0
+PASS: G-02 H3 run=1 input_words=1440 starts=1 dones=1 enc_elapsed=1278889 X02a=1278889 delta=0 infer_cycles=1335832 flat_reads=384
+RESULT: G-02 H4 run=1 words_equal=384 words_mismatch=0 bytes_equal=3072 bytes_mismatch=0
+OBS: G-02 H5 run=1 raw_param_range=0..47 valid_param_range=0..47 raw_lut_range=1..497 valid_lut_range=1..497 param_outside=0 lut_outside=0 valid_X_param/lut=0/0 D09_bad=0 pool_param_bad=0
+OBS: G-02 H5 run=1 runtime_conv/param/lut_checks=1278889/1278889/1278889 bad=0/0/0
+PASS: G-02 H3 run=2 input_words=1440 starts=1 dones=1 enc_elapsed=1278889 X02a=1278889 delta=0 infer_cycles=1335832 flat_reads=384
+RESULT: G-02 H4 run=2 words_equal=384 words_mismatch=0 bytes_equal=3072 bytes_mismatch=0
+OBS: G-02 H5 run=2 raw_param_range=0..47 valid_param_range=0..47 raw_lut_range=92..431 valid_lut_range=92..431 param_outside=0 lut_outside=0 valid_X_param/lut=0/0 D09_bad=0 pool_param_bad=0
+OBS: G-02 H5 run=2 runtime_conv/param/lut_checks=1278889/1278889/1278889 bad=0/0/0
+RESULT: G-02 H6 repeated_input_different_words=0 changed_input_RTL_words=384 bytes=2957 golden_words=384 bytes=2957
+PASS: G-02 H5 full diagnostics skipped: all three comparisons matched
+RESULT: G-02 COMPLETE cases=3 total_word_mismatches=0 H4_pass=1 H6_pass=1 AXI_violations=0 FC_violations=0
+EXECUTION COMPLETE: inspect H4_pass separately; a mismatch is not hidden or repaired.

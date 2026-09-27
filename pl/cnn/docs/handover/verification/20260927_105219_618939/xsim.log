@@ -1,0 +1,23 @@
+#-----------------------------------------------------------
+# xsim v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Sun Sep 27 10:53:02 2026
+# Process ID: 26524
+# Current directory: D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/runs/20260927_105219_618939
+# Command line: xsim.exe -mode tcl -source {xsim.dir/handover_tb_loader_real_blob/xsim_script.tcl}
+# Log file: D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/runs/20260927_105219_618939/xsim.log
+# Journal file: D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/runs/20260927_105219_618939\xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/handover_tb_loader_real_blob/xsim_script.tcl
+# xsim {handover_tb_loader_real_blob} -testplusarg BLOB=D:/2609_final_project/CNN_RTL_?씤?닔?씤怨?_2026-09-27/project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6_weights.bin -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+WARNING: file D:/2609_final_project/CNN_RTL_?씤?닔?씤怨?_2026-09-27/project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6_weights.bin could not be opened
+FAIL: L-05 cycle=0 accepted=0 open reference binary read-only
+Fatal: reference blob verification failed; do not change RTL or contract to pass
+Time: 0 ps  Iteration: 0  Process: /tb_loader_real_blob/check  Scope: tb_loader_real_blob.check  File: D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/tb/tb_loader_real_blob.v Line: 48
+$finish called at time : 0 fs : File "D:/2609_final_project/CNN_RTL_인수인계_2026-09-27/project/cnn_rtl/rtl/gelu_lut_ram.v" Line 19
+exit
+INFO: [Common 17-206] Exiting xsim at Sun Sep 27 10:53:06 2026...

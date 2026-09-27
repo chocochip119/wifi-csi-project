@@ -1,0 +1,67 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_m00_read/xsim_script.tcl
+# xsim {t07_tb_m00_read} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: size_8 R1/R2 snapshot+busy words=1 bursts=1 expected=1 cycles=3 busy_samples=3 accepted_start=1 ignored_start=0
+PASS: size_8 R3/R4/R5 cover_bytes=8 compared_words=1 AR_constant_checks=1 nonfinal_boundary_short=0
+PASS: size_8 R6 transfer/stall ready_checks=1 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: size_8 literal_RREADY_direct_mismatch_cycles=3 (state-qualified RTL; data-phase equality passed)
+PASS: size_128 R1/R2 snapshot+busy words=16 bursts=1 expected=1 cycles=18 busy_samples=18 accepted_start=1 ignored_start=0
+PASS: size_128 R3/R4/R5 cover_bytes=128 compared_words=16 AR_constant_checks=1 nonfinal_boundary_short=0
+PASS: size_128 R6 transfer/stall ready_checks=16 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: size_128 literal_RREADY_direct_mismatch_cycles=3 (state-qualified RTL; data-phase equality passed)
+PASS: size_136_snapshot_busy_start R1/R2 snapshot+busy words=17 bursts=2 expected=2 cycles=21 busy_samples=21 accepted_start=1 ignored_start=1
+PASS: size_136_snapshot_busy_start R3/R4/R5 cover_bytes=136 compared_words=17 AR_constant_checks=2 nonfinal_boundary_short=0
+PASS: size_136_snapshot_busy_start R6 transfer/stall ready_checks=17 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: size_136_snapshot_busy_start literal_RREADY_direct_mismatch_cycles=5 (state-qualified RTL; data-phase equality passed)
+PASS: boundary_before R1/R2 snapshot+busy words=17 bursts=2 expected=2 cycles=21 busy_samples=21 accepted_start=1 ignored_start=0
+PASS: boundary_before R3/R4/R5 cover_bytes=136 compared_words=17 AR_constant_checks=2 nonfinal_boundary_short=1
+PASS: boundary_before R6 transfer/stall ready_checks=17 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: boundary_before literal_RREADY_direct_mismatch_cycles=5 (state-qualified RTL; data-phase equality passed)
+SPEC_NOTE: boundary_before has 1 legal non-final short burst(s) ending at 4-KiB boundaries
+PASS: boundary_exact R1/R2 snapshot+busy words=17 bursts=2 expected=2 cycles=21 busy_samples=21 accepted_start=1 ignored_start=0
+PASS: boundary_exact R3/R4/R5 cover_bytes=136 compared_words=17 AR_constant_checks=2 nonfinal_boundary_short=0
+PASS: boundary_exact R6 transfer/stall ready_checks=17 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: boundary_exact literal_RREADY_direct_mismatch_cycles=5 (state-qualified RTL; data-phase equality passed)
+PASS: boundary_after R1/R2 snapshot+busy words=512 bursts=33 expected=33 cycles=578 busy_samples=578 accepted_start=1 ignored_start=0
+PASS: boundary_after R3/R4/R5 cover_bytes=4096 compared_words=512 AR_constant_checks=33 nonfinal_boundary_short=1
+PASS: boundary_after R6 transfer/stall ready_checks=512 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: boundary_after literal_RREADY_direct_mismatch_cycles=67 (state-qualified RTL; data-phase equality passed)
+SPEC_NOTE: boundary_after has 1 legal non-final short burst(s) ending at 4-KiB boundaries
+PASS: load_part1 R1/R2 snapshot+busy words=742 bursts=47 expected=47 cycles=836 busy_samples=836 accepted_start=1 ignored_start=0
+PASS: load_part1 R3/R4/R5 cover_bytes=5936 compared_words=742 AR_constant_checks=47 nonfinal_boundary_short=0
+PASS: load_part1 R6 transfer/stall ready_checks=742 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: load_part1 literal_RREADY_direct_mismatch_cycles=95 (state-qualified RTL; data-phase equality passed)
+PASS: load_part2 R1/R2 snapshot+busy words=2980 bursts=187 expected=187 cycles=3354 busy_samples=3354 accepted_start=1 ignored_start=0
+PASS: load_part2 R3/R4/R5 cover_bytes=23840 compared_words=2980 AR_constant_checks=187 nonfinal_boundary_short=1
+PASS: load_part2 R6 transfer/stall ready_checks=2980 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: load_part2 literal_RREADY_direct_mismatch_cycles=375 (state-qualified RTL; data-phase equality passed)
+SPEC_NOTE: load_part2 has 1 legal non-final short burst(s) ending at 4-KiB boundaries
+PASS: ready_hold_8 R1/R2 snapshot+busy words=17 bursts=2 expected=2 cycles=29 busy_samples=29 accepted_start=1 ignored_start=0
+PASS: ready_hold_8 R3/R4/R5 cover_bytes=136 compared_words=17 AR_constant_checks=2 nonfinal_boundary_short=0
+PASS: ready_hold_8 R6 transfer/stall ready_checks=25 held_valid_cycles=8 ar_wait=0 protocol_violations=0
+OBSERVATION: ready_hold_8 literal_RREADY_direct_mismatch_cycles=5 (state-qualified RTL; data-phase equality passed)
+PASS: ready_alternate R1/R2 snapshot+busy words=64 bursts=4 expected=4 cycles=135 busy_samples=135 accepted_start=1 ignored_start=0
+PASS: ready_alternate R3/R4/R5 cover_bytes=512 compared_words=64 AR_constant_checks=4 nonfinal_boundary_short=0
+PASS: ready_alternate R6 transfer/stall ready_checks=127 held_valid_cycles=63 ar_wait=0 protocol_violations=0
+OBSERVATION: ready_alternate literal_RREADY_direct_mismatch_cycles=4 (state-qualified RTL; data-phase equality passed)
+PASS: combined_periodic_stalls R1/R2 snapshot+busy words=64 bursts=4 expected=4 cycles=257 busy_samples=257 accepted_start=1 ignored_start=0
+PASS: combined_periodic_stalls R3/R4/R5 cover_bytes=512 compared_words=64 AR_constant_checks=5 nonfinal_boundary_short=0
+PASS: combined_periodic_stalls R6 transfer/stall ready_checks=128 held_valid_cycles=64 ar_wait=1 protocol_violations=0
+OBSERVATION: combined_periodic_stalls literal_RREADY_direct_mismatch_cycles=5 (state-qualified RTL; data-phase equality passed)
+PASS: combined_random_stalls R1/R2 snapshot+busy words=64 bursts=4 expected=4 cycles=255 busy_samples=255 accepted_start=1 ignored_start=0
+PASS: combined_random_stalls R3/R4/R5 cover_bytes=512 compared_words=64 AR_constant_checks=6 nonfinal_boundary_short=0
+PASS: combined_random_stalls R6 transfer/stall ready_checks=125 held_valid_cycles=61 ar_wait=2 protocol_violations=0
+OBSERVATION: combined_random_stalls literal_RREADY_direct_mismatch_cycles=4 (state-qualified RTL; data-phase equality passed)
+PASS: T-02b FUNCTIONAL 12/12 CASES, ALL COLLECTED WORDS AND AR RANGES CHECKED; protocol violations=0
+REVIEW: literal R3 last-short-only excludes necessary 4-KiB splits; literal R6 direct RREADY differs outside RD_DATA; no RTL/model edits
+$finish called at time : 55947 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_m00_read.v" Line 419
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 19:08:21 2026...

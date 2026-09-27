@@ -1,0 +1,11 @@
+# Local build outputs; do not alter the repository-wide ignore policy.
+/runs/
+__pycache__/
+.Xil/
+xsim.dir/
+# Deliberately versioned verification inputs and historical text logs.
+!reference/pl_accel_v6/pl_accel_v6_weights.bin
+!golden/golden_current/input_i8.bin
+!docs/G-02_zero_golden/input_i8.bin
+!docs/**/*.log
+!golden/golden_current/run.log

@@ -1,0 +1,104 @@
+CWD: D:\2609_final_project\cnn_rtl\syn
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\vivado.bat -mode batch -source D:/2609_final_project/cnn_rtl/syn/impl_check.tcl -nojournal -nolog -tclargs CNN_Encoder xc7z020clg400-1 13.160 performance D:/2609_final_project/cnn_rtl/docs/E-02a_runs/encoder_freq1_13.160 D:/2609_final_project/cnn_rtl/rtl/encoder/Buffer.v D:/2609_final_project/cnn_rtl/rtl/encoder/Conv_MAC.v D:/2609_final_project/cnn_rtl/rtl/encoder/requant_stage.v D:/2609_final_project/cnn_rtl/rtl/encoder/gelu_stage.v D:/2609_final_project/cnn_rtl/rtl/encoder/Pool.v D:/2609_final_project/cnn_rtl/rtl/encoder/CNN_Encoder.v
+
+****** Vivado v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+CRITICAL WARNING: [Common 17-741] No write access right to the local Tcl store at 'C'. XilinxTclStore is reverted to the installation area. If you want to use local Tcl Store, please change the access right and relaunch Vivado.
+source D:/2609_final_project/cnn_rtl/syn/impl_check.tcl
+# if {$argc < 6} {error "Expected top part period mode output_directory source..."}
+# set top [lindex $argv 0]
+# set part [lindex $argv 1]
+# set period [lindex $argv 2]
+# set mode [lindex $argv 3]
+# set out_dir [file normalize [lindex $argv 4]]
+# set srcs [lrange $argv 5 end]
+# if {$part ne "xc7z020clg400-1"} {error "E-02a part must be xc7z020clg400-1"}
+# if {$mode ni {default performance}} {error "Unsupported implementation mode"}
+# if {![string is double -strict $period] || $period <= 0} {error "Invalid period"}
+# file mkdir $out_dir
+# proc e02a_stage {stage out_dir} {
+#     report_timing_summary -delay_type min_max -max_paths 3 -file [file join $out_dir ${stage}_summary.rpt]
+#     report_timing -max_paths 3 -nworst 1 -input_pins -delay_type max -file [file join $out_dir ${stage}_paths.rpt]
+#     set p [lindex [get_timing_paths -delay_type max -max_paths 1] 0]
+#     set h [lindex [get_timing_paths -delay_type min -max_paths 1] 0]
+#     if {$p eq ""} {error "No constrained setup timing path at $stage"}
+#     set wns [get_property SLACK $p]
+#     set whs [get_property SLACK $h]
+#     set start [get_property STARTPOINT_PIN $p]
+#     set end [get_property ENDPOINT_PIN $p]
+#     set line "$stage\t$wns\t$whs\t$start\t$end"
+#     set f [open [file join $out_dir stages.tsv] a]
+#     puts $f $line
+#     close $f
+#     puts "E02A_STAGE $line"
+#     flush stdout
+# }
+E02A_CONFIG top=CNN_Encoder part=xc7z020clg400-1 period=13.160 mode=performance
+E02A_VERSION 2020.2
+# set status [catch {
+#     puts "E02A_CONFIG top=$top part=$part period=$period mode=$mode"
+#     puts "E02A_VERSION [version -short]"
+#     foreach source $srcs {
+#         # The optional E5 TB stub contains SystemVerilog, read unmodified.
+#         if {[file tail $source] eq "fc_stub.v"} {read_verilog -sv $source} else {read_verilog $source}
+#     }
+#     read_xdc [file join [file dirname [info script]] timing_100mhz.xdc]
+#     if {$period != 10.000} {
+#         create_clock -period $period -name ACLK [get_ports -filter {NAME =~ *ACLK || NAME == clk}]
+#     }
+#     synth_design -top $top -part $part -mode out_of_context
+#     report_clocks -file [file join $out_dir clocks.rpt]
+#     e02a_stage post_synth $out_dir
+#     if {$mode eq "performance"} {
+#         opt_design -directive Explore
+#         place_design -directive ExtraTimingOpt
+#     } else {
+#         opt_design
+#         place_design
+#     }
+#     e02a_stage post_place $out_dir
+#     if {$mode eq "performance"} {phys_opt_design -directive AggressiveExplore} else {phys_opt_design}
+#     e02a_stage post_phys_opt $out_dir
+#     if {$mode eq "performance"} {route_design -directive Explore} else {route_design}
+#     e02a_stage post_route $out_dir
+#     report_route_status -file [file join $out_dir route_status.rpt]
+#     report_utilization -file [file join $out_dir utilization.rpt]
+#     report_drc -file [file join $out_dir drc.rpt]
+#     check_timing -verbose -file [file join $out_dir check_timing.rpt]
+#     write_checkpoint -force [file join $out_dir routed.dcp]
+#     write_verilog -force -mode funcsim [file join $out_dir routed_netlist.v]
+#     # Preserve path properties for E6. Vivado 2020.2 has no TIMING_POINTS
+#     # property; per-pin increments are in report_timing -input_pins above.
+#     set p [lindex [get_timing_paths -delay_type max -max_paths 1] 0]
+#     set f [open [file join $out_dir path_properties.txt] w]
+#     foreach prop [list_property $p] {puts $f "$prop\t[get_property $prop $p]"}
+#     close $f
+#     set f [open [file join $out_dir failing_paths.tsv] w]
+#     foreach p [get_timing_paths -delay_type max -slack_lesser_than 0 -max_paths 5000 -nworst 1] {
+#         puts $f "[get_property SLACK $p]\t[get_property STARTPOINT_PIN $p]\t[get_property ENDPOINT_PIN $p]"
+#     }
+#     close $f
+#     puts "E02A_IMPL_DONE top=$top period=$period mode=$mode"
+# } detail options]
+# if {$status} {
+#     puts "E02A_IMPL_FAILED $detail"
+#     puts [dict get $options -errorinfo]
+#     exit 1
+# }
+E02A_IMPL_FAILED ERROR: [Common 17-53] User Exception: No open design. Please open an elaborated, synthesized or implemented design before executing this command.
+
+ERROR: [Common 17-53] User Exception: No open design. Please open an elaborated, synthesized or implemented design before executing this command.
+
+    while executing
+"get_ports -filter {NAME =~ *ACLK || NAME == clk}"
+    invoked from within
+"if {$period != 10.000} {
+        create_clock -period $period -name ACLK [get_ports -filter {NAME =~ *ACLK || NAME == clk}]
+    }"
+INFO: [Common 17-206] Exiting Vivado at Sat Sep 26 20:03:39 2026...
+
+EXIT_CODE: 1
+WALL_CLOCK_SECONDS: 4.413186

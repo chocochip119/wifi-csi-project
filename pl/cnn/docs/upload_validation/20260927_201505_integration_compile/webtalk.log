@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# Webtalk v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Sun Sep 27 20:15:14 2026
+# Process ID: 52472
+# Current directory: D:/wifi-csi-project/pl/cnn/runs/20260927_201505_integration_compile
+# Command line: wbtcv.exe -mode batch -source D:/wifi-csi-project/pl/cnn/runs/20260927_201505_integration_compile/xsim.dir/upload_core_compile/webtalk/xsim_webtalk.tcl -notrace
+# Log file: D:/wifi-csi-project/pl/cnn/runs/20260927_201505_integration_compile/webtalk.log
+# Journal file: D:/wifi-csi-project/pl/cnn/runs/20260927_201505_integration_compile\webtalk.jou
+#-----------------------------------------------------------
+source D:/wifi-csi-project/pl/cnn/runs/20260927_201505_integration_compile/xsim.dir/upload_core_compile/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sun Sep 27 20:15:14 2026...

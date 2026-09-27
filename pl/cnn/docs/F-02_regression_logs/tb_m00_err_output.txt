@@ -1,0 +1,184 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_m00_err/xsim_script.tcl
+# xsim {t07_tb_m00_err} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: E1_E3_RRESP_middle reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E1_E3_RRESP_middle expected_checker_codes=NONE; slave injections counted separately
+PASS: E1_E3_RRESP_middle START rd=1 wr=0 old_err=00 clear_edge=6 err_after=00 busy_after=10
+PASS: E1_E3_RRESP_middle READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=29 first_err_edge=31 bad_beats=1 bad_burst=2 first_bad_word_1based=21 remaining_after_first_bad=27 finish_edge=60
+PASS: E1_E3_RRESP_middle  read sticky_idle_cycles=5 err=1 last_edge=65
+PASS: E1_E3_RRESP_middle START rd=1 wr=0 old_err=10 clear_edge=66 err_after=00 busy_after=10
+PASS: E1_E3_RRESP_middle READ beats=1 AR=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=69
+PASS: E1_E3_RRESP_middle END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E2_E3_RID_middle reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E2_E3_RID_middle expected_checker_codes=NONE; slave injections counted separately
+PASS: E2_E3_RID_middle START rd=1 wr=0 old_err=00 clear_edge=79 err_after=00 busy_after=10
+PASS: E2_E3_RID_middle READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=33 first_err_edge=100 bad_beats=16 bad_burst=2 first_bad_word_1based=17 remaining_after_first_bad=31 finish_edge=133
+PASS: E2_E3_RID_middle  read sticky_idle_cycles=5 err=1 last_edge=138
+PASS: E2_E3_RID_middle START rd=1 wr=0 old_err=10 clear_edge=139 err_after=00 busy_after=10
+PASS: E2_E3_RID_middle READ beats=1 AR=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=142
+PASS: E2_E3_RID_middle END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E4_BRESP_middle reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E4_BRESP_middle expected_checker_codes=NONE; slave injections counted separately
+PASS: E4_BRESP_middle START rd=0 wr=1 old_err=00 clear_edge=152 err_after=00 busy_after=01
+PASS: E4_BRESP_middle WRITE beats=48 AW=3 B=3 busy_cycles=54 err_high_sample_cycles=18 first_err_edge=188 bad_B=1 bad_burst=2 words_at_bad_B=32 remaining_after_bad_B=16 finish_edge=206 mem_mismatches=0
+PASS: E4_BRESP_middle START rd=1 wr=0 old_err=01 clear_edge=208 err_after=01 busy_after=10
+PASS: E4_BRESP_middle READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=262
+PASS: E4_BRESP_middle write_readback_words=48 mismatches=0
+PASS: E4_BRESP_middle write sticky_idle_cycles=5 err=1 last_edge=267
+PASS: E4_BRESP_middle START rd=0 wr=1 old_err=01 clear_edge=268 err_after=00 busy_after=01
+PASS: E4_BRESP_middle WRITE beats=1 AW=1 B=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=271 mem_mismatches=0
+PASS: E4_BRESP_middle END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E4_BID_middle reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E4_BID_middle expected_checker_codes=NONE; slave injections counted separately
+PASS: E4_BID_middle START rd=0 wr=1 old_err=00 clear_edge=281 err_after=00 busy_after=01
+PASS: E4_BID_middle WRITE beats=48 AW=3 B=3 busy_cycles=54 err_high_sample_cycles=18 first_err_edge=317 bad_B=1 bad_burst=2 words_at_bad_B=32 remaining_after_bad_B=16 finish_edge=335 mem_mismatches=0
+PASS: E4_BID_middle START rd=1 wr=0 old_err=01 clear_edge=337 err_after=01 busy_after=10
+PASS: E4_BID_middle READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=391
+PASS: E4_BID_middle write_readback_words=48 mismatches=0
+PASS: E4_BID_middle write sticky_idle_cycles=5 err=1 last_edge=396
+PASS: E4_BID_middle START rd=0 wr=1 old_err=01 clear_edge=397 err_after=00 busy_after=01
+PASS: E4_BID_middle WRITE beats=1 AW=1 B=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=400 mem_mismatches=0
+PASS: E4_BID_middle END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E6_zero_length reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E6_zero_length expected_checker_codes=NONE; slave injections counted separately
+PASS: E6_zero_length START rd=1 wr=1 old_err=00 clear_edge=410 err_after=00 busy_after=11
+PASS: E6_zero_length addr=18200000 bytes=0 AR=0 AW=0 W=0 B=0 rd_busy_cycles=1 wr_busy_cycles=1 err_edge=411 start_edge=410 sticky_idle_cycles=5
+PASS: E6_zero_length END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E6_unaligned_address reset_pair sampled_edges=2 busy_before=00 err_before=11 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E6_unaligned_address expected_checker_codes=NONE; slave injections counted separately
+PASS: E6_unaligned_address START rd=1 wr=1 old_err=00 clear_edge=421 err_after=00 busy_after=11
+PASS: E6_unaligned_address addr=18200001 bytes=8 AR=0 AW=0 W=0 B=0 rd_busy_cycles=1 wr_busy_cycles=1 err_edge=422 start_edge=421 sticky_idle_cycles=5
+PASS: E6_unaligned_address END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E6_unaligned_length reset_pair sampled_edges=2 busy_before=00 err_before=11 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E6_unaligned_length expected_checker_codes=NONE; slave injections counted separately
+PASS: E6_unaligned_length START rd=1 wr=1 old_err=00 clear_edge=432 err_after=00 busy_after=11
+PASS: E6_unaligned_length addr=18200000 bytes=10 AR=0 AW=0 W=0 B=0 rd_busy_cycles=1 wr_busy_cycles=1 err_edge=433 start_edge=432 sticky_idle_cycles=5
+PASS: E6_unaligned_length END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E6_address_overflow reset_pair sampled_edges=2 busy_before=00 err_before=11 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E6_address_overflow expected_checker_codes=NONE; slave injections counted separately
+PASS: E6_address_overflow START rd=1 wr=1 old_err=00 clear_edge=443 err_after=00 busy_after=11
+PASS: E6_address_overflow addr=fffffff8 bytes=16 AR=0 AW=0 W=0 B=0 rd_busy_cycles=1 wr_busy_cycles=1 err_edge=444 start_edge=443 sticky_idle_cycles=5
+PASS: E6_address_overflow END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E6_end_exactly_2pow32_is_valid reset_pair sampled_edges=2 busy_before=00 err_before=11 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E6_end_exactly_2pow32_is_valid expected_checker_codes=NONE; slave injections counted separately
+PASS: E6_end_exactly_2pow32_is_valid START rd=1 wr=1 old_err=00 clear_edge=454 err_after=00 busy_after=11
+PASS: E6_end_exactly_2pow32_is_valid READ beats=1 AR=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=457
+PASS: E6_end_exactly_2pow32_is_valid WRITE beats=1 AW=1 B=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=457 mem_mismatches=0
+PASS: E6_end_exactly_2pow32_is_valid END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E8_clean_W_finishes_first reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E8_clean_W_finishes_first expected_checker_codes=NONE; slave injections counted separately
+PASS: E8_clean_W_finishes_first START rd=1 wr=1 old_err=00 clear_edge=463 err_after=00 busy_after=11
+PASS: E8_clean_W_finishes_first READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=517
+PASS: E8_clean_W_finishes_first WRITE beats=3 AW=1 B=1 busy_cycles=5 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=468 mem_mismatches=0
+PASS: E8_clean_W_finishes_first simultaneous_start=463 read_finish=517 write_finish=468 read_err=0 write_err=0 clean_side_error_contamination=0
+PASS: E8_clean_W_finishes_first START rd=1 wr=0 old_err=00 clear_edge=519 err_after=00 busy_after=10
+PASS: E8_clean_W_finishes_first READ beats=3 AR=1 busy_cycles=5 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=524
+PASS: E8_clean_W_finishes_first write_readback_words=3 mismatches=0
+PASS: E8_clean_W_finishes_first END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E8_R_error_R_finishes_first reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E8_R_error_R_finishes_first expected_checker_codes=NONE; slave injections counted separately
+PASS: E8_R_error_R_finishes_first START rd=1 wr=1 old_err=00 clear_edge=530 err_after=00 busy_after=11
+PASS: E8_R_error_R_finishes_first READ beats=48 AR=3 busy_cycles=54 err_high_sample_cycles=29 first_err_edge=555 bad_beats=1 bad_burst=2 first_bad_word_1based=21 remaining_after_first_bad=27 finish_edge=584
+PASS: E8_R_error_R_finishes_first WRITE beats=3 AW=1 B=1 busy_cycles=85 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=615 mem_mismatches=0
+PASS: E8_R_error_R_finishes_first simultaneous_start=530 read_finish=584 write_finish=615 read_err=1 write_err=0 clean_side_error_contamination=0
+PASS: E8_R_error_R_finishes_first START rd=1 wr=0 old_err=10 clear_edge=617 err_after=00 busy_after=10
+PASS: E8_R_error_R_finishes_first READ beats=3 AR=1 busy_cycles=5 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=622
+PASS: E8_R_error_R_finishes_first write_readback_words=3 mismatches=0
+PASS: E8_R_error_R_finishes_first END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E8_W_error_W_finishes_first reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E8_W_error_W_finishes_first expected_checker_codes=NONE; slave injections counted separately
+PASS: E8_W_error_W_finishes_first START rd=1 wr=1 old_err=00 clear_edge=628 err_after=00 busy_after=11
+PASS: E8_W_error_W_finishes_first READ beats=48 AR=3 busy_cycles=234 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=862
+PASS: E8_W_error_W_finishes_first WRITE beats=48 AW=3 B=3 busy_cycles=54 err_high_sample_cycles=18 first_err_edge=664 bad_B=1 bad_burst=2 words_at_bad_B=32 remaining_after_bad_B=16 finish_edge=682 mem_mismatches=0
+PASS: E8_W_error_W_finishes_first simultaneous_start=628 read_finish=862 write_finish=682 read_err=0 write_err=1 clean_side_error_contamination=0
+PASS: E8_W_error_W_finishes_first START rd=1 wr=0 old_err=01 clear_edge=864 err_after=01 busy_after=10
+PASS: E8_W_error_W_finishes_first READ beats=48 AR=3 busy_cycles=234 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1098
+PASS: E8_W_error_W_finishes_first write_readback_words=48 mismatches=0
+PASS: E8_W_error_W_finishes_first END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E7_AR_stall reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=8 E7_AR_stall expected_checker_codes=NONE; slave injections counted separately
+PASS: E7_AR_stall START rd=1 wr=0 old_err=00 clear_edge=1106 err_after=00 busy_after=10
+PASS: E7_AR_stall WATCHDOG=8 observed_waits_at_error=8 first_err_edge=1115 hold_observed=24 busy_preserved=1 valid_or_outstanding_preserved=1 AR=0 AW=0 R=0 W=0 B=0
+PASS: E7_AR_stall READ beats=16 AR=1 busy_cycles=43 err_high_sample_cycles=34 first_err_edge=1115 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1149
+PASS: E7_AR_stall START rd=1 wr=0 old_err=10 clear_edge=1151 err_after=00 busy_after=10
+PASS: E7_AR_stall READ beats=1 AR=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1154
+PASS: E7_AR_stall END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E7_R_stall reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=8 E7_R_stall expected_checker_codes=NONE; slave injections counted separately
+PASS: E7_R_stall START rd=1 wr=0 old_err=00 clear_edge=1162 err_after=00 busy_after=10
+PASS: E7_R_stall WATCHDOG=8 observed_waits_at_error=8 first_err_edge=1172 hold_observed=24 busy_preserved=1 valid_or_outstanding_preserved=1 AR=1 AW=0 R=0 W=0 B=0
+PASS: E7_R_stall READ beats=16 AR=1 busy_cycles=82 err_high_sample_cycles=72 first_err_edge=1172 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1244
+PASS: E7_R_stall START rd=1 wr=0 old_err=10 clear_edge=1246 err_after=00 busy_after=10
+PASS: E7_R_stall READ beats=1 AR=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1249
+PASS: E7_R_stall END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E7_AW_W_stall reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=8 E7_AW_W_stall expected_checker_codes=NONE; slave injections counted separately
+PASS: E7_AW_W_stall START rd=0 wr=1 old_err=00 clear_edge=1257 err_after=00 busy_after=01
+PASS: E7_AW_W_stall WATCHDOG=8 observed_waits_at_error=8 first_err_edge=1266 hold_observed=24 busy_preserved=1 valid_or_outstanding_preserved=1 AR=0 AW=0 R=0 W=0 B=0
+PASS: E7_AW_W_stall WRITE beats=16 AW=1 B=1 busy_cycles=43 err_high_sample_cycles=34 first_err_edge=1266 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=1300 mem_mismatches=0
+PASS: E7_AW_W_stall START rd=1 wr=0 old_err=01 clear_edge=1302 err_after=01 busy_after=10
+PASS: E7_AW_W_stall READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1320
+PASS: E7_AW_W_stall write_readback_words=16 mismatches=0
+PASS: E7_AW_W_stall START rd=0 wr=1 old_err=01 clear_edge=1322 err_after=00 busy_after=01
+PASS: E7_AW_W_stall WRITE beats=1 AW=1 B=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=1325 mem_mismatches=0
+PASS: E7_AW_W_stall END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E7_B_stall reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=8 E7_B_stall expected_checker_codes=NONE; slave injections counted separately
+PASS: E7_B_stall START rd=0 wr=1 old_err=00 clear_edge=1333 err_after=00 busy_after=01
+PASS: E7_B_stall WATCHDOG=8 observed_waits_at_error=8 first_err_edge=1358 hold_observed=24 busy_preserved=1 valid_or_outstanding_preserved=1 AR=0 AW=1 R=0 W=16 B=0
+PASS: E7_B_stall WRITE beats=16 AW=1 B=1 busy_cycles=82 err_high_sample_cycles=57 first_err_edge=1358 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=1415 mem_mismatches=0
+PASS: E7_B_stall START rd=1 wr=0 old_err=01 clear_edge=1417 err_after=01 busy_after=10
+PASS: E7_B_stall READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1435
+PASS: E7_B_stall write_readback_words=16 mismatches=0
+PASS: E7_B_stall START rd=0 wr=1 old_err=01 clear_edge=1437 err_after=00 busy_after=01
+PASS: E7_B_stall WRITE beats=1 AW=1 B=1 busy_cycles=3 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=1440 mem_mismatches=0
+PASS: E7_B_stall END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E9_read_mid_reset reset_pair sampled_edges=2 busy_before=00 err_before=01 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E9_read_mid_reset expected_checker_codes=NONE; slave injections counted separately
+PASS: E9_read_mid_reset START rd=1 wr=0 old_err=00 clear_edge=1446 err_after=00 busy_after=10
+PASS: E9_read_mid_reset reset_pair sampled_edges=2 busy_before=10 err_before=00 busy_after=00 err_after=00 C12_violations=0
+PASS: E9_read_mid_reset aborted_beats=5 requested_beats=16 reset_edges=2 busy=00 err=00 VALID=000 partial_write_rollback=none
+PASS: E9_read_mid_reset START rd=1 wr=0 old_err=00 clear_edge=1458 err_after=00 busy_after=10
+PASS: E9_read_mid_reset READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1476
+PASS: E9_read_mid_reset END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E9_write_mid_reset reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E9_write_mid_reset expected_checker_codes=NONE; slave injections counted separately
+PASS: E9_write_mid_reset START rd=0 wr=1 old_err=00 clear_edge=1482 err_after=00 busy_after=01
+PASS: E9_write_mid_reset reset_pair sampled_edges=2 busy_before=01 err_before=00 busy_after=00 err_after=00 C12_violations=0
+PASS: E9_write_mid_reset aborted_beats=5 requested_beats=16 reset_edges=2 busy=00 err=00 VALID=000 partial_write_rollback=none
+PASS: E9_write_mid_reset START rd=0 wr=1 old_err=00 clear_edge=1493 err_after=00 busy_after=01
+PASS: E9_write_mid_reset WRITE beats=16 AW=1 B=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_B=0 bad_burst=0 words_at_bad_B=0 remaining_after_bad_B=0 finish_edge=1511 mem_mismatches=0
+PASS: E9_write_mid_reset START rd=1 wr=0 old_err=00 clear_edge=1513 err_after=00 busy_after=10
+PASS: E9_write_mid_reset READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=1531
+PASS: E9_write_mid_reset write_readback_words=16 mismatches=0
+PASS: E9_write_mid_reset END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E5_E9_early_RLAST reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E5_E9_early_RLAST expected_checker_codes=NONE; slave injections counted separately
+PASS: E5_E9_early_RLAST START rd=1 wr=0 old_err=00 clear_edge=1537 err_after=00 busy_after=10
+PASS: E5_E9_early_RLAST mode=1 entry_edge=1554 state=4 busy_hold_cycles=2000 received_beats=15 pending_words=1 err_high_sample_cycles=2000 busy_samples=2017 START_while_fault=ignored READY_toggle=no_effect master_violations=0 quiescent=SKIPPED
+PASS: E5_E9_early_RLAST reset_pair sampled_edges=2 busy_before=10 err_before=10 busy_after=00 err_after=00 C12_violations=0
+PASS: E5_E9_early_RLAST recovery=coordinated_reset state=IDLE err=0 busy=0 expected_checker_codes=NONE injections=1
+PASS: E5_recovery_after_early START rd=1 wr=0 old_err=00 clear_edge=3560 err_after=00 busy_after=10
+PASS: E5_recovery_after_early READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=3578
+PASS: E5_recovery_after_early END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: E5_E9_missing_RLAST reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 E5_E9_missing_RLAST expected_checker_codes=NONE; slave injections counted separately
+PASS: E5_E9_missing_RLAST START rd=1 wr=0 old_err=00 clear_edge=3584 err_after=00 busy_after=10
+PASS: E5_E9_missing_RLAST mode=2 entry_edge=3602 state=4 busy_hold_cycles=2000 received_beats=16 pending_words=0 err_high_sample_cycles=2000 busy_samples=2018 START_while_fault=ignored READY_toggle=no_effect master_violations=0 quiescent=SKIPPED
+PASS: E5_E9_missing_RLAST reset_pair sampled_edges=2 busy_before=10 err_before=10 busy_after=00 err_after=00 C12_violations=0
+PASS: E5_E9_missing_RLAST recovery=coordinated_reset state=IDLE err=0 busy=0 expected_checker_codes=NONE injections=1
+PASS: E5_recovery_after_missing START rd=1 wr=0 old_err=00 clear_edge=5608 err_after=00 busy_after=10
+PASS: E5_recovery_after_missing READ beats=16 AR=1 busy_cycles=18 err_high_sample_cycles=0 first_err_edge=0 bad_beats=0 bad_burst=0 first_bad_word_1based=0 remaining_after_first_bad=0 finish_edge=5626
+PASS: E5_recovery_after_missing END injections=0 expected_checker_codes=NONE master_violations=0 quiescent=1
+PASS: T-02d E1-E9 ALL CHECKS cases=22 normal_injections=8 watchdog_injections=0 master_violations=0 expected_checker_violations=0 C12=0 RD_FAULT_hold=2000_each reset_recovery=PASS
+$finish called at time : 56260 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_m00_err.v" Line 692
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 18:23:39 2026...

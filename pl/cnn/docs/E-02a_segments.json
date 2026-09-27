@@ -1,0 +1,128 @@
+{
+  "encoder_default_10.000": {
+    "path_ns_absolute": {
+      "param3_reg[68]/C": 0.973,
+      "param3_reg[68]/Q": 1.392,
+      "rq_reg[3]_i_12/S[1]": 3.291,
+      "rq_reg[7]_i_115/O[3]": 5.777,
+      "rq[7]_i_721/O": 10.106,
+      "rq_reg[2]/R": 13.927
+    },
+    "segments": [
+      {
+        "name": "clock-to-Q",
+        "from": "u_enc_rq/param3_reg[68]/C",
+        "to": "u_enc_rq/param3_reg[68]/Q",
+        "ns": 0.419,
+        "cumulative_from_C_ns": 0.419
+      },
+      {
+        "name": "half/decode + carry-propagate preparation",
+        "from": "u_enc_rq/param3_reg[68]/Q",
+        "to": "u_enc_rq/rq_reg[3]_i_12/S[1]",
+        "ns": 1.899,
+        "cumulative_from_C_ns": 2.318
+      },
+      {
+        "name": "rounding carry chain",
+        "from": "u_enc_rq/rq_reg[3]_i_12/S[1]",
+        "to": "u_enc_rq/rq_reg[7]_i_115/O[3]",
+        "ns": 2.486,
+        "cumulative_from_C_ns": 4.804
+      },
+      {
+        "name": "variable shift + sign mux",
+        "from": "u_enc_rq/rq_reg[7]_i_115/O[3]",
+        "to": "u_enc_rq/rq[7]_i_721/O",
+        "ns": 4.329,
+        "cumulative_from_C_ns": 9.133
+      },
+      {
+        "name": "saturation compare + output/reset select",
+        "from": "u_enc_rq/rq[7]_i_721/O",
+        "to": "u_enc_rq/rq_reg[2]/R",
+        "ns": 3.821,
+        "cumulative_from_C_ns": 12.954
+      }
+    ],
+    "total_data_ns": 12.954,
+    "Q_to_barrel_shift_boundary_ns": 4.385,
+    "hypothetical_cuts_data_only": [
+      {
+        "at": "u_enc_rq/rq_reg[7]_i_115/O[3]",
+        "prefix_ns": 4.804,
+        "suffix_ns": 8.15,
+        "max_ns": 8.15
+      },
+      {
+        "at": "u_enc_rq/rq[7]_i_721/O",
+        "prefix_ns": 9.133,
+        "suffix_ns": 3.821,
+        "max_ns": 9.133
+      }
+    ]
+  },
+  "fc_default_10.000": {
+    "path_ns_absolute": {
+      "param3_reg[69]/C": 0.973,
+      "param3_reg[69]/Q": 1.491,
+      "rq_reg[7]_i_361/S[0]": 3.36,
+      "rq_reg[7]_i_133/O[3]": 5.688,
+      "rq_reg[7]_i_828/O": 8.922,
+      "rq_reg[1]/R": 12.778
+    },
+    "segments": [
+      {
+        "name": "clock-to-Q",
+        "from": "u_rq/param3_reg[69]/C",
+        "to": "u_rq/param3_reg[69]/Q",
+        "ns": 0.518,
+        "cumulative_from_C_ns": 0.518
+      },
+      {
+        "name": "half/decode + carry-propagate preparation",
+        "from": "u_rq/param3_reg[69]/Q",
+        "to": "u_rq/rq_reg[7]_i_361/S[0]",
+        "ns": 1.869,
+        "cumulative_from_C_ns": 2.387
+      },
+      {
+        "name": "rounding carry chain",
+        "from": "u_rq/rq_reg[7]_i_361/S[0]",
+        "to": "u_rq/rq_reg[7]_i_133/O[3]",
+        "ns": 2.328,
+        "cumulative_from_C_ns": 4.715
+      },
+      {
+        "name": "variable shift + sign mux",
+        "from": "u_rq/rq_reg[7]_i_133/O[3]",
+        "to": "u_rq/rq_reg[7]_i_828/O",
+        "ns": 3.234,
+        "cumulative_from_C_ns": 7.949
+      },
+      {
+        "name": "saturation compare + output/reset select",
+        "from": "u_rq/rq_reg[7]_i_828/O",
+        "to": "u_rq/rq_reg[1]/R",
+        "ns": 3.856,
+        "cumulative_from_C_ns": 11.805
+      }
+    ],
+    "total_data_ns": 11.805,
+    "Q_to_barrel_shift_boundary_ns": 4.197,
+    "hypothetical_cuts_data_only": [
+      {
+        "at": "u_rq/rq_reg[7]_i_133/O[3]",
+        "prefix_ns": 4.715,
+        "suffix_ns": 7.09,
+        "max_ns": 7.09
+      },
+      {
+        "at": "u_rq/rq_reg[7]_i_828/O",
+        "prefix_ns": 7.949,
+        "suffix_ns": 3.856,
+        "max_ns": 7.949
+      }
+    ]
+  }
+}

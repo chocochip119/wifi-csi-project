@@ -1,0 +1,112 @@
+[
+  {
+    "testbench": "tb_axi4_slave_mem_model",
+    "observation_lines": 36,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_blob_decoder",
+    "observation_lines": 557,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_csr_ctrl_link",
+    "observation_lines": 12,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_ctrl_status",
+    "observation_lines": 38,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_encoder_equiv",
+    "observation_lines": 13,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_golden_encoder",
+    "observation_lines": 17,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_loader_rams",
+    "observation_lines": 4,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_loader_real_blob",
+    "observation_lines": 92,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_m00_err",
+    "observation_lines": 150,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_m00_read",
+    "observation_lines": 37,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_m00_read_perf",
+    "observation_lines": 13,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_m00_write",
+    "observation_lines": 60,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_pose_cnn_core",
+    "observation_lines": 30,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_s00_axi_ctrl",
+    "observation_lines": 53,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_s00_axi_read",
+    "observation_lines": 14,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_s00_axi_regs",
+    "observation_lines": 25,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_s00_axi_write",
+    "observation_lines": 12,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_top_fc1",
+    "observation_lines": 41,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_top_full",
+    "observation_lines": 83,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_top_infer",
+    "observation_lines": 46,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_top_load",
+    "observation_lines": 21,
+    "same_as_G02": true
+  },
+  {
+    "testbench": "tb_weight_param_loader",
+    "observation_lines": 48,
+    "same_as_G02": true
+  }
+]

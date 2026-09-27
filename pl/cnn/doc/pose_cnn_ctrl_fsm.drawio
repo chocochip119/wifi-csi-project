@@ -1,0 +1,1225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" type="device" compressed="false">
+  <diagram id="fsm" name="FSM 상태도">
+    <mxGraphModel dx="3050" dy="1490" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3050" pageHeight="1490" math="0" shadow="0" background="#FFFFFF">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="fsm_title" value="pose_cnn_ctrl   FSM 상태도" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=36;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="28" width="2930" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_legend" value="실선: 정상 경로·확정 계약     주황 점선: D08 미결     T = 참, F = 거짓" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=20;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="105" width="2930" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_target_note" value="목표 설계 도면. 현재 RTL 구현 범위는 PROJECT_CONTEXT.md 8절 참조." style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="145" width="2930" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_IDLE" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="160" y="540" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_IDLE" value="IDLE" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_IDLE">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_IDLE" value="4'b0000" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_IDLE">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_IDLE" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_IDLE">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_IDLE" value="status_busy = 0" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_IDLE">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_DECODE" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="570" y="540" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_DECODE" value="DECODE" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_DECODE">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_DECODE" value="4'b0001" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_DECODE">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_DECODE" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_DECODE">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_DECODE" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_DECODE">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_LD_RD1" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="990" y="260" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_LD_RD1" value="LD_RD1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_LD_RD1">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_LD_RD1" value="4'b0010" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_LD_RD1">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_LD_RD1" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_LD_RD1">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_LD_RD1" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_LD_RD1">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_LD_RD2" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="260" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_LD_RD2" value="LD_RD2" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_LD_RD2">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_LD_RD2" value="4'b0011" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_LD_RD2">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_LD_RD2" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_LD_RD2">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_LD_RD2" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_LD_RD2">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_LD_WAIT" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="1850" y="260" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_LD_WAIT" value="LD_WAIT" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_LD_WAIT">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_LD_WAIT" value="4'b0100" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_LD_WAIT">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_LD_WAIT" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_LD_WAIT">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_LD_WAIT" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_LD_WAIT">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_IN_RD" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="570" y="1050" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_IN_RD" value="IN_RD" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_IN_RD">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_IN_RD" value="4'b0101" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_IN_RD">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_IN_RD" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_IN_RD">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_IN_RD" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_IN_RD">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_ENC" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="1050" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_ENC" value="ENC" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_ENC">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_ENC" value="4'b0110" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_ENC">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_ENC" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_ENC">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_ENC" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_ENC">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_FC1" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="1050" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_FC1" value="FC1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FC1">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_FC1" value="4'b0111" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FC1">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_FC1" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_FC1">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_FC1" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FC1">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_FC2" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="1860" y="1050" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_FC2" value="FC2" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FC2">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_FC2" value="4'b1000" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FC2">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_FC2" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_FC2">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_FC2" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FC2">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_FC3" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="2290" y="1050" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_FC3" value="FC3" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FC3">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_FC3" value="4'b1001" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FC3">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_FC3" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_FC3">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_FC3" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FC3">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_WR" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="2720" y="1050" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_WR" value="WR" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_WR">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_WR" value="4'b1010" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_WR">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_WR" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_WR">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_WR" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_WR">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_ERR_DRAIN" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="660" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_ERR_DRAIN" value="ERR_DRAIN" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_ERR_DRAIN">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_ERR_DRAIN" value="4'b1011" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_ERR_DRAIN">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_ERR_DRAIN" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_ERR_DRAIN">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_ERR_DRAIN" value="status_busy = 1&#10;D08 미결" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_ERR_DRAIN">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_state_FINISH" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="2420" y="540" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_name_FINISH" value="FINISH" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=24;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FINISH">
+          <mxGeometry x="20" y="19" width="160" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_code_FINISH" value="4'b1100" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FINISH">
+          <mxGeometry x="20" y="55" width="160" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_divider_FINISH" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;line;strokeWidth=1;" vertex="1" parent="fsm_state_FINISH">
+          <mxGeometry x="8" y="89" width="184" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_body_FINISH" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=center;fontColor=#202020;" vertex="1" parent="fsm_state_FINISH">
+          <mxGeometry x="12" y="98" width="176" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_reset" value="reset" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=18;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="45" y="625" width="75" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_reset_edge" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_reset" target="fsm_state_IDLE">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t01" value="reg_start" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_IDLE" target="fsm_state_DECODE">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-24" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t03" value="cmd != 0 &amp;&amp; cmd != 1 / err_code ← 1 (BAD_CMD)" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.9;exitY=0.15;exitDx=0;exitDy=0;entryX=0.1;entryY=0.15;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_DECODE" target="fsm_state_FINISH">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="495" />
+              <mxPoint x="2350" y="495" />
+            </Array>
+            <mxPoint x="0" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t04" value="cmd == 0 &amp;&amp; !cfg_ok / err_code ← 2 (NO_CFG)" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.4;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_DECODE" target="fsm_state_FINISH">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="830" y="590" />
+              <mxPoint x="2350" y="590" />
+            </Array>
+            <mxPoint x="0" y="22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t05" value="cmd == 1" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_DECODE" target="fsm_state_LD_RD1">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="670" y="360" />
+            </Array>
+            <mxPoint x="0" y="-22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t06" value="cmd == 0 &amp;&amp; cfg_ok" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_DECODE" target="fsm_state_IN_RD">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="134" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t07" value="mem_rd_busy 1→0" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_LD_RD1" target="fsm_state_LD_RD2">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-24" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t08" value="mem_rd_busy 1→0" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_LD_RD2" target="fsm_state_LD_WAIT">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-24" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t09" value="loader_done&#10;loader_err이면 err_code ← 3" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_LD_WAIT" target="fsm_state_FINISH">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2180" y="360" />
+              <mxPoint x="2520" y="360" />
+            </Array>
+            <mxPoint x="0" y="-40" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t10" value="mem_rd_busy 1→0" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_IN_RD" target="fsm_state_ENC">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-27" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t11" value="enc_done" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_ENC" target="fsm_state_FC1">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-27" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t12" value="fc_done &amp;&amp;&#10;!mem_rd_busy" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_FC1" target="fsm_state_FC2">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-27" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t13" value="fc_done" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_FC2" target="fsm_state_FC3">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-27" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t14" value="fc_done" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_FC3" target="fsm_state_WR">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-27" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t15" value="mem_wr_busy 1→0&#10;mem_wr_err이면 err_code ← 5" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.85;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_WR" target="fsm_state_FINISH">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2820" y="885" />
+              <mxPoint x="2710" y="885" />
+            </Array>
+            <mxPoint x="125" y="-45" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t16a" value="mem_rd_err&#10;err_code ← 4 [D08]" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.45;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="fsm_state_LD_RD1" target="fsm_state_ERR_DRAIN">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1090" y="745" />
+            </Array>
+            <mxPoint x="-30" y="20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t16b" value="mem_rd_err&#10;err_code ← 4 [D08]" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="fsm_state_LD_RD2" target="fsm_state_ERR_DRAIN">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="125" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t16c" value="mem_rd_err / err_code ← 4 [D08]" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=0.85;exitY=0.1;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="fsm_state_IN_RD" target="fsm_state_ERR_DRAIN">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="975" />
+              <mxPoint x="1270" y="975" />
+              <mxPoint x="1270" y="810" />
+            </Array>
+            <mxPoint x="-15" y="18" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t16d" value="mem_rd_err&#10;err_code ← 4 [D08]" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="fsm_state_FC1" target="fsm_state_ERR_DRAIN">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="125" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t17" value="!mem_rd_busy &amp;&amp; !mem_wr_busy [D08]" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.85;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="fsm_state_ERR_DRAIN" target="fsm_state_FINISH">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2110" y="760" />
+            </Array>
+            <mxPoint x="0" y="-25" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_t18" value="무조건 (FINISH 1 cycle)" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.9;exitY=0.2;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="fsm_state_FINISH" target="fsm_state_IDLE">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2970" y="540" />
+              <mxPoint x="2970" y="205" />
+              <mxPoint x="260" y="205" />
+            </Array>
+            <mxPoint x="0" y="-18" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fsm_d06" value="D06 확정 (2026-09-25) — FC1 read base&#10;load_base_reg = DECODE→LD_RD1 에서 적재한 LOAD 당시 값. 현재 reg_weight_addr 을 쓰지 않는다" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;align=left;spacing=16;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="1290" width="780" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_counts" value="13 states · 20 transitions · 자기 전이 생략&#10;세부 레벨 출력·전이 동작: ASM 2–4쪽" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1335" width="1120" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="fsm_mapping" value="T-01R  IDLE / DECODE / FINISH     T-03  LD_RD1 / LD_RD2 / LD_WAIT     T-04  IN_RD / ENC&#10;T-05  FC1     T-06  FC2 / FC3 / WR     T-07  ERR_DRAIN·오류 진입 (D08)     ※ T-02 는 M00 단독 검증(상태 없음)" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=20;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1410" width="2900" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="common" name="ASM - 공통">
+    <mxGraphModel dx="3030" dy="1920" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3030" pageHeight="1920" math="0" shadow="0" background="#FFFFFF">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="common_title" value="pose_cnn_ctrl   ASM - 공통" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=36;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="28" width="2910" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="common_legend" value="실선: 정상 경로·확정 계약     주황 점선: D08 미결     T = 참, F = 거짓" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=20;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="105" width="2910" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="common_target_note" value="목표 설계 도면. 현재 RTL 구현 범위는 PROJECT_CONTEXT.md 8절 참조." style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="145" width="2910" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="common_state_IDLE" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="120" y="265" width="420" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="common_name_IDLE" value="IDLE" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="common_state_IDLE">
+          <mxGeometry x="15" y="10" width="275" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="common_code_IDLE" value="4'b0000" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="common_state_IDLE">
+          <mxGeometry x="294" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="common_body_IDLE" value="status_busy = 0" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="common_state_IDLE">
+          <mxGeometry x="16" y="55" width="388" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="common_start_q" value="reg_start?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="210" y="485" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="common_idle_start" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_state_IDLE" target="common_start_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_t02" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_start_q" target="common_state_IDLE">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="65" y="545" />
+              <mxPoint x="65" y="322" />
+            </Array>
+            <mxPoint x="-20" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_snapshot" value="cmd ← reg_cmd&#10;input_addr ← reg_input_addr&#10;weight_addr ← reg_weight_addr&#10;output_addr ← reg_output_addr&#10;err_code ← 0" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="100" y="710" width="460" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="common_start_snapshot" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_start_q" target="common_snapshot">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="26" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_to_decode" value="DECODE" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="274" y="1050" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="common_t01" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_snapshot" target="common_to_decode">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_snapshot_note" value="START 수락 에지에 snapshot&#10;같은 에지에 DECODE 진입 → busy = 1&#10;표시 해제는 오른쪽 독립 갱신 표 참조" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;align=left;spacing=16;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="95" y="1230" width="485" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="common_state_DECODE" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="780" y="265" width="410" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="common_name_DECODE" value="DECODE" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="common_state_DECODE">
+          <mxGeometry x="15" y="10" width="265" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="common_code_DECODE" value="4'b0001" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="common_state_DECODE">
+          <mxGeometry x="284" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="common_body_DECODE" value="status_busy = 1&#10;1 cycle 고정" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="common_state_DECODE">
+          <mxGeometry x="16" y="55" width="378" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="common_cmd1_q" value="cmd == 1?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="875" y="475" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="common_decode_cmd1" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_state_DECODE" target="common_cmd1_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_start_load" value="loader_start = 1&#10;mem_rd_start = 1&#10;addr = load_base + 0&#10;bytes = 5,936" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="442" width="380" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="common_cmd1_load" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_cmd1_q" target="common_start_load">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-24" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_to_ld1" value="LD_RD1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="475" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="common_t05" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_start_load" target="common_to_ld1">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_cmd0_q" value="cmd == 0?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="875" y="765" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="common_not_load" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_cmd1_q" target="common_cmd0_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_bad_cmd" value="err_code ← 1&#10;BAD_CMD" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="752" width="340" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="common_bad_branch" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_cmd0_q" target="common_bad_cmd">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_bad_finish" value="FINISH" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="760" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="common_t03" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_bad_cmd" target="common_bad_finish">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_cfg_q" value="cfg_ok?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="875" y="1060" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="common_infer_check" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_cmd0_q" target="common_cfg_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="26" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_start_input" value="mem_rd_start = 1&#10;addr = input_addr&#10;bytes = 11,520&#10;beat ← 0" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="1020" width="380" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="common_cfg_input" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_cfg_q" target="common_start_input">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-24" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_to_inrd" value="IN_RD" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1055" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="common_t06" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_start_input" target="common_to_inrd">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_no_cfg" value="err_code ← 2&#10;NO_CFG" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="800" y="1300" width="370" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="common_cfg_error" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_cfg_q" target="common_no_cfg">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_no_cfg_finish" value="FINISH" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="929" y="1510" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="common_t04" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_no_cfg" target="common_no_cfg_finish">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_state_FINISH" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1840" y="265" width="410" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="common_name_FINISH" value="FINISH" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="common_state_FINISH">
+          <mxGeometry x="15" y="10" width="265" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="common_code_FINISH" value="4'b1100" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="common_state_FINISH">
+          <mxGeometry x="284" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="common_body_FINISH" value="status_busy = 1&#10;1 cycle 고정" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="common_state_FINISH">
+          <mxGeometry x="16" y="55" width="378" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="common_to_idle" value="IDLE" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="1989" y="550" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="common_t18" value="무조건" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="common_state_FINISH" target="common_to_idle">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="62" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_finish_note" value="FINISH를 떠나는 에지에 결과 기록&#10;(아래 독립 갱신 표)" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;align=left;spacing=16;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1790" y="755" width="510" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="common_state_ERR_DRAIN" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="2440" y="265" width="470" height="215" as="geometry" />
+        </mxCell>
+        <mxCell id="common_name_ERR_DRAIN" value="ERR_DRAIN" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="common_state_ERR_DRAIN">
+          <mxGeometry x="15" y="10" width="325" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="common_code_ERR_DRAIN" value="4'b1011" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="common_state_ERR_DRAIN">
+          <mxGeometry x="344" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="common_body_ERR_DRAIN" value="status_busy = 1&#10;mem_rd_ready = 1&#10;수신 데이터 폐기&#10;소비 블록 구동 중지 [D08]" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="common_state_ERR_DRAIN">
+          <mxGeometry x="16" y="55" width="438" height="148" as="geometry" />
+        </mxCell>
+        <mxCell id="common_drain_q" value="!mem_rd_busy&#10;&amp;&amp; !mem_wr_busy?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="2530" y="610" width="290" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="common_drain_check" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="common_state_ERR_DRAIN" target="common_drain_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_drain_wait" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="common_drain_q" target="common_state_ERR_DRAIN">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2970" y="683" />
+              <mxPoint x="2970" y="372" />
+            </Array>
+            <mxPoint x="22" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_drain_finish" value="FINISH" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="2619" y="900" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="common_t17" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="common_drain_q" target="common_drain_finish">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="28" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="common_status_table" value="status_done / status_error 갱신 — 상태 흐름과 독립&#10;&#10;reg_start 수락 edge   : done ← 0, error ← 0                         [D02 R1]&#10;&#10;reg_clear_status         : done ← 0, error ← 0                         [D02 R3]&#10;                                  실행과 내부 err_code는 불변&#10;&#10;FINISH를 떠나는 edge : err_code == 0 → done ← 1, error ← 0&#10;                                  그 외 → done ← 0, error ← err_code [D02 R2]&#10;&#10;같은 edge 경합          : 기록 &gt; 해제                                     [D02 R4]&#10;이벤트가 없으면         : 이전 done / error 유지 (sticky)&#10;&#10;R1 해제와 R2 기록은 서로 다른 edge에서 수행된다.&#10;따라서 새 결과가 START의 해제에 덮이지 않는다 (D02 R2 구조적 보장)." style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;align=left;spacing=16;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1780" y="1125" width="1170" height="620" as="geometry" />
+        </mxCell>
+        <mxCell id="common_asm_legend" value="직사각형: 상태 동안 유지되는 레벨·등식   /   마름모: 판정   /   둥근 박스: 전이 시 펄스·적재&#10;작은 원: 다른 상태로 이어지는 연결자(추가 상태 아님). 각 판정의 F 대기 경로는 상태로 복귀한다." style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=20;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1805" width="2850" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="load" name="ASM - LOAD">
+    <mxGraphModel dx="2720" dy="1660" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2720" pageHeight="1660" math="0" shadow="0" background="#FFFFFF">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="load_title" value="pose_cnn_ctrl   ASM - LOAD" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=36;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="28" width="2600" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="load_legend" value="실선: 정상 경로·확정 계약     주황 점선: D08 미결     T = 참, F = 거짓" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=20;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="105" width="2600" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="load_target_note" value="목표 설계 도면. 현재 RTL 구현 범위는 PROJECT_CONTEXT.md 8절 참조." style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="145" width="2600" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="load_state_LD_RD1" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="140" y="245" width="510" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="load_name_LD_RD1" value="LD_RD1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="load_state_LD_RD1">
+          <mxGeometry x="15" y="10" width="365" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="load_code_LD_RD1" value="4'b0010" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="load_state_LD_RD1">
+          <mxGeometry x="384" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="load_body_LD_RD1" value="status_busy = 1&#10;ld_valid = mem_rd_valid&#10;mem_rd_ready = ld_ready&#10;ld_data = mem_rd_data" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="load_state_LD_RD1">
+          <mxGeometry x="16" y="55" width="478" height="143" as="geometry" />
+        </mxCell>
+        <mxCell id="load_LD_RD1_errq" value="mem_rd_err?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="275.0" y="545" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="load_LD_RD1_to_errq" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_state_LD_RD1" target="load_LD_RD1_errq">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_LD_RD1_erract" value="err_code ← 4&#10;MEM_RD_ERR&#10;[D08]" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="705" y="530" width="205" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="load_LD_RD1_err_true" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="load_LD_RD1_errq" target="load_LD_RD1_erract">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_LD_RD1_errlink" value="ERR_DRAIN" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=14;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="751" y="745" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="load_t16a" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="load_LD_RD1_erract" target="load_LD_RD1_errlink">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_LD_RD1_doneq" value="mem_rd_busy&#10;1→0?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="245.0" y="855" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="load_LD_RD1_err_false" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_LD_RD1_errq" target="load_LD_RD1_doneq">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="24" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_LD_RD1_wait" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_LD_RD1_doneq" target="load_state_LD_RD1">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="80" y="925" />
+              <mxPoint x="80" y="350.0" />
+            </Array>
+            <mxPoint x="-20" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_LD_RD1_nextact" value="mem_rd_start = 1&#10;addr = load_base + 399,152&#10;bytes = 23,840" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="135" y="1105" width="520" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="load_LD_RD1_done_true" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_LD_RD1_doneq" target="load_LD_RD1_nextact">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_LD_RD1_nextlink" value="LD_RD2" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="339.0" y="1360" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="load_t07" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_LD_RD1_nextact" target="load_LD_RD1_nextlink">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_state_LD_RD2" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="245" width="510" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="load_name_LD_RD2" value="LD_RD2" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="load_state_LD_RD2">
+          <mxGeometry x="15" y="10" width="365" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="load_code_LD_RD2" value="4'b0011" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="load_state_LD_RD2">
+          <mxGeometry x="384" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="load_body_LD_RD2" value="status_busy = 1&#10;ld_valid = mem_rd_valid&#10;mem_rd_ready = ld_ready&#10;ld_data = mem_rd_data" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="load_state_LD_RD2">
+          <mxGeometry x="16" y="55" width="478" height="143" as="geometry" />
+        </mxCell>
+        <mxCell id="load_LD_RD2_errq" value="mem_rd_err?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="1165.0" y="545" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="load_LD_RD2_to_errq" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_state_LD_RD2" target="load_LD_RD2_errq">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_LD_RD2_erract" value="err_code ← 4&#10;MEM_RD_ERR&#10;[D08]" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="1595" y="530" width="205" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="load_LD_RD2_err_true" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="load_LD_RD2_errq" target="load_LD_RD2_erract">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_LD_RD2_errlink" value="ERR_DRAIN" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=14;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="1641" y="745" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="load_t16b" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="load_LD_RD2_erract" target="load_LD_RD2_errlink">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_LD_RD2_doneq" value="mem_rd_busy&#10;1→0?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1135.0" y="855" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="load_LD_RD2_err_false" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_LD_RD2_errq" target="load_LD_RD2_doneq">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="24" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_LD_RD2_wait" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_LD_RD2_doneq" target="load_state_LD_RD2">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="970" y="925" />
+              <mxPoint x="970" y="350.0" />
+            </Array>
+            <mxPoint x="-20" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_LD_RD2_nextlink" value="LD_WAIT" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="1229.0" y="1105" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="load_t08" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_LD_RD2_doneq" target="load_LD_RD2_nextlink">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_state_LD_WAIT" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1920" y="245" width="500" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="load_name_LD_WAIT" value="LD_WAIT" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="load_state_LD_WAIT">
+          <mxGeometry x="15" y="10" width="355" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="load_code_LD_WAIT" value="4'b0100" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="load_state_LD_WAIT">
+          <mxGeometry x="374" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="load_body_LD_WAIT" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="load_state_LD_WAIT">
+          <mxGeometry x="16" y="55" width="468" height="53" as="geometry" />
+        </mxCell>
+        <mxCell id="load_loader_done_q" value="loader_done?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2040" y="550" width="260" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="load_wait_done" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_state_LD_WAIT" target="load_loader_done_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_loader_wait" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_loader_done_q" target="load_state_LD_WAIT">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2580" y="610" />
+              <mxPoint x="2580" y="305" />
+            </Array>
+            <mxPoint x="20" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_loader_err_q" value="loader_err?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2040" y="830" width="260" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="load_loader_complete" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_loader_done_q" target="load_loader_err_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_blob_err" value="err_code ← 3&#10;BLOB_ERR" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1820" y="1090" width="300" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="load_loader_bad" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_loader_err_q" target="load_blob_err">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1970" y="1000" />
+            </Array>
+            <mxPoint x="-28" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_loader_finish" value="FINISH" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="2114" y="1350" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="load_loader_err_finish" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_blob_err" target="load_loader_finish">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1970" y="1290" />
+            </Array>
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_t09" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="load_loader_err_q" target="load_loader_finish">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2350" y="1020" />
+              <mxPoint x="2350" y="1406" />
+            </Array>
+            <mxPoint x="25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load_pulse_note" value="진입 read 발행: DECODE → LD_RD1의 조건 출력 박스(공통 페이지).&#10;ld_valid/ld_data와 mem_rd_ready는 상태 동안 연결되는 등식이며, 다음 상태 진입 펄스와 구분한다." style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=20;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1550" width="2560" height="65" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="infer" name="ASM - INFER">
+    <mxGraphModel dx="3100" dy="2890" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3100" pageHeight="2890" math="0" shadow="0" background="#FFFFFF">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="infer_title" value="pose_cnn_ctrl   ASM - INFER" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=36;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="28" width="2980" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_legend" value="실선: 정상 경로·확정 계약     주황 점선: D08 미결     T = 참, F = 거짓" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=20;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="105" width="2980" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_target_note" value="목표 설계 도면. 현재 RTL 구현 범위는 PROJECT_CONTEXT.md 8절 참조." style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="60" y="145" width="2980" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_state_IN_RD" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="130" y="245" width="510" height="245" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_name_IN_RD" value="IN_RD" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="infer_state_IN_RD">
+          <mxGeometry x="15" y="10" width="365" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_code_IN_RD" value="4'b0101" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="infer_state_IN_RD">
+          <mxGeometry x="384" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_body_IN_RD" value="status_busy = 1&#10;mem_rd_ready = 1&#10;in_we = mem_rd_valid&#10;in_waddr = beat&#10;in_wdata = mem_rd_data" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="infer_state_IN_RD">
+          <mxGeometry x="16" y="55" width="478" height="178" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_in_errq" value="mem_rd_err?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="265" y="580" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_in_error_check" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_state_IN_RD" target="infer_in_errq">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_in_err4" value="err_code ← 4&#10;MEM_RD_ERR [D08]" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="710" y="570" width="285" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_in_error_true" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="infer_in_errq" target="infer_in_err4">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_in_drain" value="ERR_DRAIN" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=14;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="797" y="770" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_t16c" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="infer_in_err4" target="infer_in_drain">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_in_valid_q" value="mem_rd_valid?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="265" y="850" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_in_error_false" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_in_errq" target="infer_in_valid_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_in_beat_inc" value="beat ← beat + 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="690" y="980" width="320" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_in_beat_accepted" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_in_valid_q" target="infer_in_beat_inc">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="600" y="910" />
+              <mxPoint x="600" y="1030" />
+            </Array>
+            <mxPoint x="0" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_in_done_q" value="mem_rd_busy&#10;1→0?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="235" y="1110" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_in_no_beat" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_in_valid_q" target="infer_in_done_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="-25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_in_after_beat" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_in_beat_inc" target="infer_in_done_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="1180" />
+            </Array>
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_in_wait" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_in_done_q" target="infer_state_IN_RD">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="70" y="1180" />
+              <mxPoint x="70" y="367" />
+            </Array>
+            <mxPoint x="-20" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_in_enc_start" value="enc_start = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="185" y="1330" width="400" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_in_complete" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_in_done_q" target="infer_in_enc_start">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_in_to_enc" value="ENC" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="329" y="1510" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_t10" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_in_enc_start" target="infer_in_to_enc">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_state_ENC" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="245" width="500" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_name_ENC" value="ENC" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="infer_state_ENC">
+          <mxGeometry x="15" y="10" width="355" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_code_ENC" value="4'b0110" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="infer_state_ENC">
+          <mxGeometry x="374" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_body_ENC" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="infer_state_ENC">
+          <mxGeometry x="16" y="55" width="468" height="53" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_enc_done_q" value="enc_done?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="555" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_enc_check" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_state_ENC" target="infer_enc_done_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_enc_wait" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_enc_done_q" target="infer_state_ENC">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1090" y="615" />
+              <mxPoint x="1090" y="305" />
+            </Array>
+            <mxPoint x="-22" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_enc_to_fc1" value="fc_start = 1 (fc_sel = 0)&#10;mem_rd_start = 1&#10;addr = load_base_reg + 5,936&#10;bytes = 393,216" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="845" width="600" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_enc_complete" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_enc_done_q" target="infer_enc_to_fc1">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="24" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_to_fc1" value="FC1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="1344" y="1170" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_t11" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_enc_to_fc1" target="infer_to_fc1">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_d06" value="D06 확정 (2026-09-25) — FC1 read base&#10;load_base_reg 는 DECODE→LD_RD1 에서 적재한&#10;LOAD 당시 weight_addr 이다. 현재 reg_weight_addr 을&#10;쓰지 않는다. 공통 문서 5.3절" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;align=left;spacing=16;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="1375" width="640" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_state_FC1" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2190" y="245" width="555" height="245" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_name_FC1" value="FC1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="infer_state_FC1">
+          <mxGeometry x="15" y="10" width="410" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_code_FC1" value="4'b0111" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="infer_state_FC1">
+          <mxGeometry x="429" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_body_FC1" value="status_busy = 1&#10;fifo_we = mem_rd_valid &amp;&amp; !fifo_full&#10;mem_rd_ready = !fifo_full&#10;fifo_wdata = mem_rd_data" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="infer_state_FC1">
+          <mxGeometry x="16" y="55" width="523" height="178" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_FC1_errq" value="mem_rd_err?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="2347.5" y="580" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_FC1_to_errq" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_state_FC1" target="infer_FC1_errq">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC1_erract" value="err_code ← 4&#10;MEM_RD_ERR&#10;[D08]" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="2800" y="565" width="205" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_FC1_err_true" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="infer_FC1_errq" target="infer_FC1_erract">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC1_errlink" value="ERR_DRAIN" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=14;dashed=1;dashPattern=7 5;strokeColor=#B86A15;" vertex="1" parent="1">
+          <mxGeometry x="2846" y="780" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_t16d" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#B86A15;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#B86A15;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;dashPattern=7 5;" edge="1" parent="1" source="infer_FC1_erract" target="infer_FC1_errlink">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC1_doneq" value="fc_done &amp;&amp;&#10;!mem_rd_busy?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2317.5" y="890" width="300" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_FC1_err_false" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_FC1_errq" target="infer_FC1_doneq">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="24" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC1_wait" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_FC1_doneq" target="infer_state_FC1">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2130" y="960" />
+              <mxPoint x="2130" y="367.5" />
+            </Array>
+            <mxPoint x="-20" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC1_nextact" value="fc_start = 1 (fc_sel = 1)" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="2185" y="1140" width="565" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_FC1_done_true" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_FC1_doneq" target="infer_FC1_nextact">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC1_nextlink" value="FC2" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="2411.5" y="1395" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_t12" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_FC1_nextact" target="infer_FC1_nextlink">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_state_FC2" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1710" width="510" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_name_FC2" value="FC2" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="infer_state_FC2">
+          <mxGeometry x="15" y="10" width="365" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_code_FC2" value="4'b1000" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="infer_state_FC2">
+          <mxGeometry x="384" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_body_FC2" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="infer_state_FC2">
+          <mxGeometry x="16" y="55" width="478" height="73" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_FC2_doneq" value="fc_done?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="265" y="2040" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_FC2_check" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_state_FC2" target="infer_FC2_doneq">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC2_wait" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_FC2_doneq" target="infer_state_FC2">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="70" y="2100" />
+              <mxPoint x="70" y="1780" />
+            </Array>
+            <mxPoint x="-20" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC2_action" value="fc_start = 1 (fc_sel = 2)" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="125" y="2350" width="520" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_FC2_complete" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_FC2_doneq" target="infer_FC2_action">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC2_next" value="FC3" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="329" y="2630" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_t13" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_FC2_action" target="infer_FC2_next">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_state_FC3" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="1710" width="510" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_name_FC3" value="FC3" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="infer_state_FC3">
+          <mxGeometry x="15" y="10" width="365" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_code_FC3" value="4'b1001" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="infer_state_FC3">
+          <mxGeometry x="384" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_body_FC3" value="status_busy = 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="infer_state_FC3">
+          <mxGeometry x="16" y="55" width="478" height="73" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_FC3_doneq" value="fc_done?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1285" y="2040" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_FC3_check" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_state_FC3" target="infer_FC3_doneq">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC3_wait" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_FC3_doneq" target="infer_state_FC3">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1090" y="2100" />
+              <mxPoint x="1090" y="1780" />
+            </Array>
+            <mxPoint x="-20" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC3_action" value="mem_wr_start = 1&#10;addr = output_addr&#10;bytes = 24&#10;beat ← 0" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1145" y="2350" width="520" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_FC3_complete" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_FC3_doneq" target="infer_FC3_action">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_FC3_next" value="WR" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="1349" y="2630" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_t14" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_FC3_action" target="infer_FC3_next">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_state_WR" value="" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2175" y="1690" width="585" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_name_WR" value="WR" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=23;align=left;fontColor=#202020;" vertex="1" parent="infer_state_WR">
+          <mxGeometry x="15" y="10" width="440" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_code_WR" value="4'b1010" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=19;align=right;fontColor=#202020;" vertex="1" parent="infer_state_WR">
+          <mxGeometry x="459" y="11" width="109" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_body_WR" value="status_busy = 1&#10;mem_wr_data = pose_data[64*beat +: 64]" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=21;align=center;fontColor=#202020;" vertex="1" parent="infer_state_WR">
+          <mxGeometry x="16" y="55" width="553" height="98" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_wr_ready_q" value="mem_wr_ready?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2230" y="1945" width="255" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_wr_beat_check" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_state_WR" target="infer_wr_ready_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_wr_beat_inc" value="beat ← beat + 1" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="2710" y="1942" width="310" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_wr_advance" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_wr_ready_q" target="infer_wr_beat_inc">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_wr_done_q" value="mem_wr_busy&#10;1→0?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2230" y="2190" width="255" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_wr_no_advance" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_wr_ready_q" target="infer_wr_done_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="-28" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_wr_after_advance" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_wr_beat_inc" target="infer_wr_done_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2865" y="2252" />
+            </Array>
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_wr_wait" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_wr_done_q" target="infer_state_WR">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2090" y="2252" />
+              <mxPoint x="2090" y="1772" />
+            </Array>
+            <mxPoint x="-22" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_wr_err_q" value="mem_wr_err?" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rhombus;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2230" y="2410" width="255" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_wr_complete" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_wr_done_q" target="infer_wr_err_q">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="-27" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_wr_err5" value="err_code ← 5&#10;MEM_WR_ERR" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;rounded=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="2710" y="2410" width="310" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_wr_bad" value="T" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_wr_err_q" target="infer_wr_err5">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="0" y="-22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_wr_finish" value="FINISH" style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;ellipse;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="2301" y="2670" width="112" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="infer_t15" value="F" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_wr_err_q" target="infer_wr_finish">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <mxPoint x="-25" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_wr_err_finish" value="" style="edgeStyle=none;rounded=0;html=0;endArrow=classic;endFill=1;endSize=9;strokeColor=#202020;strokeWidth=1.3;fontFamily=Malgun Gothic;fontSize=20;fontColor=#202020;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="infer_wr_err5" target="infer_wr_finish">
+          <mxGeometry x="0" y="0" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2865" y="2726" />
+            </Array>
+            <mxPoint x="0" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="infer_infer_footer" value="작은 원은 다음 상태 연결자. ERR_DRAIN 진입은 IN_RD / FC1에서만 표시.&#10;WR 오류는 마지막 write 완료 후 FINISH로 직행하며, ENC / FC2 / FC3에는 오류 출처가 없다.&#10;fc_sel은 fc_start 샘플링 시점에 올바른 값이어야 한다 (08_FC r12·r45). 이후 값 유지도 허용하며, 도면에는 시작 전이의 값으로 표기한다." style="html=0;whiteSpace=wrap;fontFamily=Malgun Gothic;fontSize=21;fontColor=#202020;strokeColor=#202020;strokeWidth=1.3;fillColor=#FFFFFF;align=center;verticalAlign=middle;spacing=8;text;strokeColor=none;fillColor=none;spacing=0;fontSize=20;align=left;fontColor=#202020;" vertex="1" parent="1">
+          <mxGeometry x="70" y="2800" width="2950" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

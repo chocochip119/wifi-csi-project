@@ -1,0 +1,29 @@
+`timescale 1ns / 1ps
+// Synthesis-only wrapper. Every storage port remains externally observable.
+module fc_storage_ooc (
+    input wire clk, input wire rst_n,
+    input wire fifo_we, input wire [63:0] fifo_wdata,
+    input wire fifo_re, output wire [63:0] fifo_rdata,
+    output wire fifo_full, output wire fifo_empty,
+    input wire hidden_we, input wire hidden_wbank,
+    input wire [7:0] hidden_waddr, input wire [7:0] hidden_wdata,
+    input wire hidden_rbank, input wire [4:0] hidden_raddr,
+    output wire [63:0] hidden_rdata,
+    input wire pose_we, input wire [4:0] pose_waddr,
+    input wire [7:0] pose_wdata, output wire [191:0] pose_data
+);
+    fc1_weight_fifo u_fifo (
+        .clk(clk), .rst_n(rst_n), .fifo_we(fifo_we), .fifo_wdata(fifo_wdata),
+        .fifo_re(fifo_re), .fifo_rdata(fifo_rdata),
+        .fifo_full(fifo_full), .fifo_empty(fifo_empty)
+    );
+    hidden_buffer u_hidden (
+        .clk(clk), .rst_n(rst_n), .hidden_we(hidden_we),
+        .hidden_wbank(hidden_wbank), .hidden_waddr(hidden_waddr), .hidden_wdata(hidden_wdata),
+        .hidden_rbank(hidden_rbank), .hidden_raddr(hidden_raddr), .hidden_rdata(hidden_rdata)
+    );
+    pose_buffer u_pose (
+        .clk(clk), .rst_n(rst_n), .pose_we(pose_we), .pose_waddr(pose_waddr),
+        .pose_wdata(pose_wdata), .pose_data(pose_data)
+    );
+endmodule

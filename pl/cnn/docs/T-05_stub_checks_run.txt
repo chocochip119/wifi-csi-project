@@ -1,0 +1,136 @@
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\fc_stub.v C:\Users\kccistc\AppData\Local\Temp\codex-t05-f7uz10xw\stub_checks\tb_t05_stub_checks.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t05-f7uz10xw/stub_checks/tb_t05_stub_checks.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_t05_stub_checks
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.824196
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_t05_stub_checks -s t05_stub_checks
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_t05_stub_checks -s t05_stub_checks 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.fc_stub
+Compiling module work.tb_t05_stub_checks
+Built simulation snapshot t05_stub_checks
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.242950
+
+OPTION_FILE case0.args: -testplusarg "CASE=0"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t05_stub_checks -runall -onerror quit -f case0.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t05_stub_checks/xsim_script.tcl
+# xsim {t05_stub_checks} -testplusarg CASE=0 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: fc_stub push while full
+Time: 5155 ns  Iteration: 0  Process: /tb_t05_stub_checks/fc/fail  Scope: tb_t05_stub_checks.fc.fail  File: D:/2609_final_project/cnn_rtl/tb/fc_stub.v Line: 40
+$finish called at time : 5155 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:18:46 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.185237
+
+OPTION_FILE case1.args: -testplusarg "CASE=1"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t05_stub_checks -runall -onerror quit -f case1.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t05_stub_checks/xsim_script.tcl
+# xsim {t05_stub_checks} -testplusarg CASE=1 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: fc_stub START while non-idle
+Time: 45 ns  Iteration: 0  Process: /tb_t05_stub_checks/fc/fail  Scope: tb_t05_stub_checks.fc.fail  File: D:/2609_final_project/cnn_rtl/tb/fc_stub.v Line: 40
+$finish called at time : 45 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:18:49 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.005197
+
+OPTION_FILE case2.args: -testplusarg "CASE=2"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t05_stub_checks -runall -onerror quit -f case2.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t05_stub_checks/xsim_script.tcl
+# xsim {t05_stub_checks} -testplusarg CASE=2 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: fc_stub FC1 START must select zero
+Time: 25 ns  Iteration: 0  Process: /tb_t05_stub_checks/fc/fail  Scope: tb_t05_stub_checks.fc.fail  File: D:/2609_final_project/cnn_rtl/tb/fc_stub.v Line: 40
+$finish called at time : 25 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:18:52 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.015441
+
+OPTION_FILE case3.args: -testplusarg "CASE=3"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t05_stub_checks -runall -onerror quit -f case3.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t05_stub_checks/xsim_script.tcl
+# xsim {t05_stub_checks} -testplusarg CASE=3 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: fc_stub unknown FIFO data
+Time: 35 ns  Iteration: 0  Process: /tb_t05_stub_checks/fc/fail  Scope: tb_t05_stub_checks.fc.fail  File: D:/2609_final_project/cnn_rtl/tb/fc_stub.v Line: 40
+$finish called at time : 35 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:18:55 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.119276
+
+OPTION_FILE case4.args: -testplusarg "CASE=4"
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t05_stub_checks -runall -onerror quit -f case4.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t05_stub_checks/xsim_script.tcl
+# xsim {t05_stub_checks} -testplusarg CASE=4 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: fc_stub more pushes than expected
+Time: 55 ns  Iteration: 0  Process: /tb_t05_stub_checks/fc/fail  Scope: tb_t05_stub_checks.fc.fail  File: D:/2609_final_project/cnn_rtl/tb/fc_stub.v Line: 40
+$finish called at time : 55 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:18:58 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.054967

@@ -1,0 +1,36 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_m00_read_perf/xsim_script.tcl
+# xsim {t07_tb_m00_read_perf} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: fc1_latency_0 R1/R2 snapshot+busy words=49152 bursts=3072 expected=3072 cycles=55296 busy_samples=55296 accepted_start=1 ignored_start=0
+PASS: fc1_latency_0 R3/R4/R5 cover_bytes=393216 compared_words=49152 AR_constant_checks=3072 nonfinal_boundary_short=0
+PASS: fc1_latency_0 R6 transfer/stall ready_checks=49152 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: fc1_latency_0 literal_RREADY_direct_mismatch_cycles=6145 (state-qualified RTL; data-phase equality passed)
+PERF: latency=0 bytes=393216 beats=49152 bursts=3072 cycles=55296 cycles_per_beat=1.125000 inter_burst_idle=6142 startup_idle=2 time_us_100mhz=552.96 judgement=one_outstanding_sufficient_under_this_latency
+PASS: fc1_latency_16 R1/R2 snapshot+busy words=49152 bursts=3072 expected=3072 cycles=104448 busy_samples=104448 accepted_start=1 ignored_start=0
+PASS: fc1_latency_16 R3/R4/R5 cover_bytes=393216 compared_words=49152 AR_constant_checks=3072 nonfinal_boundary_short=0
+PASS: fc1_latency_16 R6 transfer/stall ready_checks=49152 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: fc1_latency_16 literal_RREADY_direct_mismatch_cycles=6145 (state-qualified RTL; data-phase equality passed)
+PERF: latency=16 bytes=393216 beats=49152 bursts=3072 cycles=104448 cycles_per_beat=2.125000 inter_burst_idle=55278 startup_idle=18 time_us_100mhz=1044.48 judgement=review_2_to_4_outstanding
+PASS: fc1_latency_32 R1/R2 snapshot+busy words=49152 bursts=3072 expected=3072 cycles=153600 busy_samples=153600 accepted_start=1 ignored_start=0
+PASS: fc1_latency_32 R3/R4/R5 cover_bytes=393216 compared_words=49152 AR_constant_checks=3072 nonfinal_boundary_short=0
+PASS: fc1_latency_32 R6 transfer/stall ready_checks=49152 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: fc1_latency_32 literal_RREADY_direct_mismatch_cycles=6145 (state-qualified RTL; data-phase equality passed)
+PERF: latency=32 bytes=393216 beats=49152 bursts=3072 cycles=153600 cycles_per_beat=3.125000 inter_burst_idle=104414 startup_idle=34 time_us_100mhz=1536.00 judgement=review_2_to_4_outstanding
+PASS: fc1_latency_64 R1/R2 snapshot+busy words=49152 bursts=3072 expected=3072 cycles=251904 busy_samples=251904 accepted_start=1 ignored_start=0
+PASS: fc1_latency_64 R3/R4/R5 cover_bytes=393216 compared_words=49152 AR_constant_checks=3072 nonfinal_boundary_short=0
+PASS: fc1_latency_64 R6 transfer/stall ready_checks=49152 held_valid_cycles=0 ar_wait=0 protocol_violations=0
+OBSERVATION: fc1_latency_64 literal_RREADY_direct_mismatch_cycles=6145 (state-qualified RTL; data-phase equality passed)
+PERF: latency=64 bytes=393216 beats=49152 bursts=3072 cycles=251904 cycles_per_beat=5.125000 inter_burst_idle=202686 startup_idle=66 time_us_100mhz=2519.04 judgement=review_2_to_4_outstanding
+PASS: T-02b PERFORMANCE MEASUREMENT COMPLETE; all words checked, C11 enabled, violations=0
+$finish called at time : 5652747 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_m00_read_perf.v" Line 41
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:00:07 . Memory (MB): peak = 916.719 ; gain = 0.000
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 16:37:15 2026...

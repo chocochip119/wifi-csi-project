@@ -1,0 +1,698 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/conv_weight_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module conv_weight_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/param_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module param_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/gelu_lut_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_lut_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.024926
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\tb_blob_decoder.v D:\2609_final_project\cnn_rtl\tb\tb_loader_rams.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder_fixture
+INFO: [VRFC 10-311] analyzing module blob_default_version_probe
+INFO: [VRFC 10-311] analyzing module tb_blob_decoder
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_loader_rams.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_loader_rams
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.021235
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_loader_rams -s l02_tb_loader_rams
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_loader_rams -s l02_tb_loader_rams 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.conv_weight_ram
+Compiling module work.param_ram
+Compiling module work.gelu_lut_ram
+Compiling module work.fcw_ram
+Compiling module work.tb_loader_rams
+Built simulation snapshot l02_tb_loader_rams
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-f03a/sim/xsim.dir/l02_tb_loader_rams/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 19:09:12 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.747250
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat l02_tb_loader_rams -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/l02_tb_loader_rams/xsim_script.tcl
+# xsim {l02_tb_loader_rams} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: L-02 RAM M1/M3/M4 full_readback conv=333 param=328 lut=1024 fcw=2432 boundaries=332/327/1023/2431 latency_edges=1
+PASS: L-02 RAM M2 conv_byte_masks=16 param_field_masks=3 zero_mask=2 untouched_lanes=preserved
+PASS: L-02 RAM M5 no_reset_ports control_reset_edges=2 full_contents_preserved=333/328/1024/2432
+PASS: L-02 RAM M1-M6 ALL checks_read_cycles=4884 shared_outputs_equal=1
+$finish called at time : 73606 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_loader_rams.v" Line 91
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 19:09:16 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.543585
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_blob_decoder -s l02_tb_blob_decoder
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_blob_decoder -s l02_tb_blob_decoder 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.blob_decoder(CHECK_VERSION=1)
+Compiling module work.conv_weight_ram
+Compiling module work.param_ram
+Compiling module work.gelu_lut_ram
+Compiling module work.fcw_ram
+Compiling module work.blob_decoder_fixture(VERSION_CHE...
+Compiling module work.blob_decoder
+Compiling module work.blob_decoder_fixture
+Compiling module work.blob_decoder(CHECK_VERSION=0)
+Compiling module work.blob_decoder_fixture(VERSION_CHE...
+Compiling module work.blob_default_version_probe
+Compiling module work.blob_decoder(EXPECTED_MAGIC=32'b...
+Compiling module work.blob_decoder_fixture(VERSION_CHE...
+Compiling module work.tb_blob_decoder
+Built simulation snapshot l02_tb_blob_decoder
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-f03a/sim/xsim.dir/l02_tb_blob_decoder/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 19:09:27 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 10.485057
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat l02_tb_blob_decoder -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/l02_tb_blob_decoder/xsim_script.tcl
+# xsim {l02_tb_blob_decoder} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: L-01 IDLE offered_cycles=3 accepted=0 READY=0
+PASS: L-03 C3 BYTE beat=9 k=0 n=40 word=40 lane=0 byte=1b
+PASS: L-03 C3 BYTE beat=9 k=1 n=41 word=41 lane=0 byte=40
+PASS: L-03 C3 BYTE beat=9 k=2 n=42 word=42 lane=0 byte=65
+PASS: L-03 C3 BYTE beat=9 k=3 n=43 word=43 lane=0 byte=8a
+PASS: L-03 C3 BYTE beat=9 k=4 n=44 word=44 lane=0 byte=af
+PASS: L-03 C3 BYTE beat=9 k=5 n=45 word=0 lane=1 byte=d4
+PASS: L-03 C3 BYTE beat=9 k=6 n=46 word=1 lane=1 byte=f9
+PASS: L-03 C3 BYTE beat=9 k=7 n=47 word=2 lane=1 byte=1e
+PASS: L-03 C3 BYTE beat=15 k=0 n=88 word=43 lane=1 byte=0b
+PASS: L-03 C3 BYTE beat=15 k=1 n=89 word=44 lane=1 byte=30
+PASS: L-03 C3 BYTE beat=15 k=2 n=90 word=0 lane=2 byte=55
+PASS: L-03 C3 BYTE beat=15 k=3 n=91 word=1 lane=2 byte=7a
+PASS: L-03 C3 BYTE beat=15 k=4 n=92 word=2 lane=2 byte=9f
+PASS: L-03 C3 BYTE beat=15 k=5 n=93 word=3 lane=2 byte=c4
+PASS: L-03 C3 BYTE beat=15 k=6 n=94 word=4 lane=2 byte=e9
+PASS: L-03 C3 BYTE beat=15 k=7 n=95 word=5 lane=2 byte=0e
+PASS: L-03 C3 BYTE beat=20 k=0 n=128 word=38 lane=2 byte=d3
+PASS: L-03 C3 BYTE beat=20 k=1 n=129 word=39 lane=2 byte=f8
+PASS: L-03 C3 BYTE beat=20 k=2 n=130 word=40 lane=2 byte=1d
+PASS: L-03 C3 BYTE beat=20 k=3 n=131 word=41 lane=2 byte=42
+PASS: L-03 C3 BYTE beat=20 k=4 n=132 word=42 lane=2 byte=67
+PASS: L-03 C3 BYTE beat=20 k=5 n=133 word=43 lane=2 byte=8c
+PASS: L-03 C3 BYTE beat=20 k=6 n=134 word=44 lane=2 byte=b1
+PASS: L-03 C3 BYTE beat=20 k=7 n=135 word=0 lane=3 byte=d6
+PASS: L-03 C4 BOUNDARY layer=1 n=719 word=44 lane=15
+PASS: L-03 C4 BOUNDARY layer=2 n=0 word=45 lane=0
+PASS: L-03 C4 BOUNDARY layer=2 n=2303 word=188 lane=15
+PASS: L-03 C4 BOUNDARY layer=2 n=2304 word=189 lane=0
+PASS: L-03 C4 BOUNDARY layer=2 n=4607 word=332 lane=15
+PASS: L-01 REGION case=0 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=0 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=0 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=0 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=0 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=0 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=0 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=0 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=0 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=0 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=0 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-03 C3 EXPECTED_MISMATCH same_lane_per_beat_golden checked_bytes=720 wrong_targets=56 mismatches=56
+PASS: L-02 RAM_READBACK case=0 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-01 REGION case=1 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=1 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=1 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=1 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=1 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=1 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=1 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=1 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=1 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=1 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=1 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=1 name=source_gaps_and_read_boundary version_check=1 accepted=3722 work=9772 supply_wait=543 total_cycles=10315 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=1 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=1 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=1 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-01 REGION case=2 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=2 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=2 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=2 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=2 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=2 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=2 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=2 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=2 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=2 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=2 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=2 name=seeded_gaps version_check=1 accepted=3722 work=9772 supply_wait=5595 total_cycles=15367 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=2 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=2 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=2 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-01 REGION case=3 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=3 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=3 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=3 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=3 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=3 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=3 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=3 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=3 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=3 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=3 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=3 name=bad_magic_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=3 param=0 fcw=0 lut=0 error_at=0 no_write_after_error=PASS
+PASS: L-01 REGION case=4 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=4 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=4 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=4 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=4 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=4 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=4 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=4 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=4 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=4 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=4 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=4 name=version_policy version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=4 param=0 fcw=0 lut=0 error_at=0 no_write_after_error=PASS
+PASS: L-01 REGION case=5 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=5 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=5 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=5 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=5 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=5 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=5 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=5 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=5 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=5 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=5 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=5 name=bad_total_words_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=5 param=0 fcw=0 lut=0 error_at=1 no_write_after_error=PASS
+PASS: L-01 REGION case=6 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=6 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=6 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=6 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=6 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=6 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=6 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=6 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=6 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=6 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=6 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=6 name=shift_minus32 version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=6 param=0 fcw=0 lut=0 error_at=3 no_write_after_error=PASS
+PASS: L-01 REGION case=7 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=7 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=7 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=7 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=7 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=7 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=7 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=7 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=7 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=7 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=7 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=7 name=shift_64 version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=7 param=0 fcw=0 lut=0 error_at=3 no_write_after_error=PASS
+PASS: L-01 REGION case=8 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=8 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=8 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=8 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=8 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=8 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=8 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=8 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=8 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=8 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=8 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=8 name=shift_minus31 version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=8 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=8 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=8 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-01 REGION case=9 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=9 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=9 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=9 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=9 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=9 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=9 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=9 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=9 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=9 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=9 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=9 name=shift_63 version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=9 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=9 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=9 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-01 REGION case=10 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=10 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=10 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=10 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=10 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=10 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=10 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=10 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=10 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=10 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=10 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=10 name=ignored_word3_word7 version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=10 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=10 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=10 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-01 REGION case=11 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=11 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=11 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=11 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=11 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=11 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=11 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=11 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=11 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=11 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=11 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=11 name=busy_START version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=3 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=11 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=11 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=11 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-01 REGION case=12 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=12 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=12 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=12 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=12 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=12 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=12 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=12 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=12 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=12 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=12 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=12 name=extra_early_final_work version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=1
+PASS: L-02 WRITE_COUNTS case=12 param=984 fcw=2432 lut=1017 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=12 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=13 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=13 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=13 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=13 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=13 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=13 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=13 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=13 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=13 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=13 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=13 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=13 name=extra_last_final_work version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=1
+PASS: L-02 WRITE_COUNTS case=13 param=984 fcw=2432 lut=1023 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=13 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=14 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=14 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=14 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=14 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=14 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=14 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=14 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=14 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=14 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=14 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=14 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=14 name=bad_magic_with_gaps version_check=1 accepted=3722 work=3722 supply_wait=7503 total_cycles=11225 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=14 param=0 fcw=0 lut=0 error_at=0 no_write_after_error=PASS
+PASS: L-01 REGION case=15 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=15 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=15 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=15 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=15 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=15 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=15 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=15 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=15 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=15 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=15 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=15 name=shift_INT32_MIN version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=15 param=0 fcw=0 lut=0 error_at=3 no_write_after_error=PASS
+PASS: L-01 REGION case=16 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=16 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=16 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=16 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=16 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=16 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=16 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=16 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=16 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=16 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=16 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=16 name=shift_INT32_MAX version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=16 param=0 fcw=0 lut=0 error_at=3 no_write_after_error=PASS
+PASS: L-01 REGION case=17 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=17 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=17 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=17 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=17 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=17 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=17 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=17 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=17 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=17 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=17 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=17 name=swapped_payload_words_negative version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=17 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=17 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=5328 expected_negative=1
+PASS: L-02 N3 EXPECTED_MISMATCH param_fields=984 fcw_words=2432 lut_bytes=1024 checked=984/2432/1024 header_ok=1
+PASS: L-02 RAM_READBACK case=17 negative=1 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=4440
+PASS: L-01 REGION case=18 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=18 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=18 region=2 first=94 last=117 beats=24 work_cycles=40 ready_low=16
+PASS: L-01 REGION case=18 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=18 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=18 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=18 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=18 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=18 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=18 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=18 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=18 name=array_shift_layer0_half0 version_check=1 accepted=3722 work=4368 supply_wait=0 total_cycles=4368 ready_low=646 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=18 param=32 fcw=0 lut=0 error_at=110 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=18 bytes=720 writes=720 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=19 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=19 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=19 region=2 first=94 last=117 beats=24 work_cycles=47 ready_low=23
+PASS: L-01 REGION case=19 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=19 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=19 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=19 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=19 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=19 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=19 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=19 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=19 name=array_shift_layer0_half1 version_check=1 accepted=3722 work=4375 supply_wait=0 total_cycles=4375 ready_low=653 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=19 param=46 fcw=0 lut=0 error_at=117 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=19 bytes=720 writes=720 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=20 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=20 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=20 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=20 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=20 region=4 first=694 last=741 beats=48 work_cycles=80 ready_low=32
+PASS: L-01 REGION case=20 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=20 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=20 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=20 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=20 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=20 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=20 name=array_shift_layer1_half0 version_check=1 accepted=3722 work=8440 supply_wait=0 total_cycles=8440 ready_low=4718 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=20 param=112 fcw=0 lut=0 error_at=726 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=20 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=21 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=21 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=21 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=21 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=21 region=4 first=694 last=741 beats=48 work_cycles=95 ready_low=47
+PASS: L-01 REGION case=21 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=21 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=21 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=21 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=21 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=21 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=21 name=array_shift_layer1_half1 version_check=1 accepted=3722 work=8455 supply_wait=0 total_cycles=8455 ready_low=4733 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=21 param=142 fcw=0 lut=0 error_at=741 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=21 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=22 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=22 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=22 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=22 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=22 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=22 region=5 first=742 last=933 beats=192 work_cycles=320 ready_low=128
+PASS: L-01 REGION case=22 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=22 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=22 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=22 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=22 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=22 name=array_shift_layer2_half0 version_check=1 accepted=3722 work=8584 supply_wait=0 total_cycles=8584 ready_low=4862 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=22 param=400 fcw=0 lut=0 error_at=870 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=22 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=23 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=23 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=23 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=23 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=23 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=23 region=5 first=742 last=933 beats=192 work_cycles=383 ready_low=191
+PASS: L-01 REGION case=23 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=23 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=23 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=23 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=23 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=23 name=array_shift_layer2_half1 version_check=1 accepted=3722 work=8647 supply_wait=0 total_cycles=8647 ready_low=4925 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=23 param=526 fcw=0 lut=0 error_at=933 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=23 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=24 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=24 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=24 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=24 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=24 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=24 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=24 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=24 region=7 first=2982 last=3173 beats=192 work_cycles=320 ready_low=128
+PASS: L-01 REGION case=24 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=24 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=24 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=24 name=array_shift_layer3_half0 version_check=1 accepted=3722 work=8776 supply_wait=0 total_cycles=8776 ready_low=5054 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=24 param=784 fcw=2048 lut=0 error_at=3110 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=24 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=25 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=25 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=25 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=25 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=25 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=25 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=25 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=25 region=7 first=2982 last=3173 beats=192 work_cycles=383 ready_low=191
+PASS: L-01 REGION case=25 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=25 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=25 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=25 name=array_shift_layer3_half1 version_check=1 accepted=3722 work=8839 supply_wait=0 total_cycles=8839 ready_low=5117 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=25 param=910 fcw=2048 lut=0 error_at=3173 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=25 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=26 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=26 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=26 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=26 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=26 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=26 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=26 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=26 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=26 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=26 region=9 first=3558 last=3593 beats=36 work_cycles=60 ready_low=24
+PASS: L-01 REGION case=26 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=26 name=array_shift_layer4_half0 version_check=1 accepted=3722 work=8864 supply_wait=0 total_cycles=8864 ready_low=5142 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=26 param=960 fcw=2432 lut=0 error_at=3582 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=26 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=27 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=27 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=27 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=27 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=27 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=27 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=27 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=27 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=27 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=27 region=9 first=3558 last=3593 beats=36 work_cycles=71 ready_low=35
+PASS: L-01 REGION case=27 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=27 name=array_shift_layer4_half1 version_check=1 accepted=3722 work=8875 supply_wait=0 total_cycles=8875 ready_low=5153 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=27 param=982 fcw=2432 lut=0 error_at=3593 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=27 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-01 REGION case=0 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=0 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=0 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=0 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=0 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=0 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=0 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=0 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=0 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=0 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=0 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=0 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-01 REGION case=3 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=3 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=3 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=3 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=3 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=3 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=3 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=3 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=3 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=3 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=3 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=3 name=bad_magic_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=3 param=0 fcw=0 lut=0 error_at=0 no_write_after_error=PASS
+PASS: L-01 REGION case=0 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=0 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=0 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=0 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=0 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=0 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=0 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=0 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=0 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=0 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=0 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=0 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-01 RESET interrupted_after_beats=5 synchronous_edge=PASS cfg=0 count=0
+PASS: L-01 REGION case=0 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=0 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=0 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=0 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=0 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=0 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=0 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=0 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=0 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=0 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=0 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=0 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-03 C1/C2/C5 CONV case=28 bytes=5328 writes=720 coverage_checked=0 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=28 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-02 RESET_RAM pending_param_write=blocked preserved_fields=984 preserved_fcw=2432 preserved_lut=1024 cfg=0
+PASS: L-02 N7 RTL_DEFAULT no_parameter_override=1 CHECK_VERSION=1 EXPECTED_VERSION=2 blob_version=3 accepted=3722 done=1 err=1 cfg=0
+PASS: L-01 REGION case=4 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=4 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=4 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=4 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=4 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=4 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=4 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=4 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=4 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=4 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=4 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=4 name=version_policy version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=4 param=0 fcw=0 lut=0 error_at=0 no_write_after_error=PASS
+PASS: L-01 REGION case=4 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=4 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=4 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=4 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=4 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=4 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=4 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=4 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=4 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=4 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=4 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=4 name=version_policy version_check=0 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=4 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=4 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=4 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-01 REGION case=0 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=0 region=1 first=4 last=93 beats=90 work_cycles=720 ready_low=630
+PASS: L-01 REGION case=0 region=2 first=94 last=117 beats=24 work_cycles=48 ready_low=24
+PASS: L-01 REGION case=0 region=3 first=118 last=693 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-01 REGION case=0 region=4 first=694 last=741 beats=48 work_cycles=96 ready_low=48
+PASS: L-01 REGION case=0 region=5 first=742 last=933 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=0 region=7 first=2982 last=3173 beats=192 work_cycles=384 ready_low=192
+PASS: L-01 REGION case=0 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=0 region=9 first=3558 last=3593 beats=36 work_cycles=72 ready_low=36
+PASS: L-01 REGION case=0 region=10 first=3594 last=3721 beats=128 work_cycles=1024 ready_low=896
+PASS: L-01 CASE id=0 name=normal version_check=1 accepted=3722 work=9772 supply_wait=0 total_cycles=9772 ready_low=6050 done_pulses=1 error=0 cfg=1 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=0 param=984 fcw=2432 lut=1024 error_at=4000 no_write_after_error=PASS
+PASS: L-03 C1/C2/C5 CONV case=0 bytes=5328 writes=5328 coverage_checked=1 missing=0 duplicates=0 data_mismatches=0 expected_negative=0
+PASS: L-02 RAM_READBACK case=0 negative=0 param_addresses=328 fields=984 fcw_words=2432 lut_bytes=1024 conv_checked_bytes=5328 mismatches=0
+PASS: L-01 REGION case=4 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=4 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=4 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=4 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=4 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=4 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=4 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=4 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=4 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=4 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=4 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=4 name=version_policy version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=4 param=0 fcw=0 lut=0 error_at=0 no_write_after_error=PASS
+PASS: L-01 REGION case=5 region=0 first=0 last=3 beats=4 work_cycles=4 ready_low=0
+PASS: L-01 REGION case=5 region=1 first=4 last=93 beats=90 work_cycles=90 ready_low=0
+PASS: L-01 REGION case=5 region=2 first=94 last=117 beats=24 work_cycles=24 ready_low=0
+PASS: L-01 REGION case=5 region=3 first=118 last=693 beats=576 work_cycles=576 ready_low=0
+PASS: L-01 REGION case=5 region=4 first=694 last=741 beats=48 work_cycles=48 ready_low=0
+PASS: L-01 REGION case=5 region=5 first=742 last=933 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=5 region=6 first=934 last=2981 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-01 REGION case=5 region=7 first=2982 last=3173 beats=192 work_cycles=192 ready_low=0
+PASS: L-01 REGION case=5 region=8 first=3174 last=3557 beats=384 work_cycles=384 ready_low=0
+PASS: L-01 REGION case=5 region=9 first=3558 last=3593 beats=36 work_cycles=36 ready_low=0
+PASS: L-01 REGION case=5 region=10 first=3594 last=3721 beats=128 work_cycles=128 ready_low=0
+PASS: L-01 CASE id=5 name=bad_total_words_drain version_check=1 accepted=3722 work=3722 supply_wait=0 total_cycles=3722 ready_low=0 done_pulses=1 error=1 cfg=0 ignored_START=0 extra_offered=0
+PASS: L-02 WRITE_COUNTS case=5 param=0 fcw=0 lut=0 error_at=1 no_write_after_error=PASS
+PASS: L-03 ALL C1-C7 D1-D7 N1-N7 checked_runs=32 default_runs=1 alternate_runs=3 optout_runs=1 selector=-1 ideal_cycles=9772 RAM_writes=5328/984/2432/1024
+$finish called at time : 3494760 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_blob_decoder.v" Line 614
+run: Time (s): cpu = 00:00:02 ; elapsed = 00:00:12 . Memory (MB): peak = 917.734 ; gain = 0.047
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 19:09:45 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 18.454979

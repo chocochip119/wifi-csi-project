@@ -1,0 +1,10 @@
+case,cycle,state,top_busy,mem_busy,mem_err,mem_start,loader_done,raw_R,loader_words,AR1,AR2
+random_and_slave_stall,6,1,1,0,0,1,0,0,0,0,0
+random_and_slave_stall,7,2,1,1,0,0,0,0,0,0,0
+random_and_slave_stall,3860,2,1,0,0,1,0,742,742,47,0
+random_and_slave_stall,3861,3,1,1,0,0,0,742,742,47,0
+random_and_slave_stall,19483,3,1,0,0,0,0,3722,3722,47,187
+random_and_slave_stall,19484,4,1,0,0,0,0,3722,3722,47,187
+random_and_slave_stall,19488,4,1,0,0,0,1,3722,3722,47,187
+random_and_slave_stall,19489,12,1,0,0,0,0,3722,3722,47,187
+random_and_slave_stall,19490,0,0,0,0,0,0,3722,3722,47,187

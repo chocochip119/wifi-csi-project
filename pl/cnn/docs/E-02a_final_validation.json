@@ -1,0 +1,11 @@
+{
+  "protected_files_unchanged": 394,
+  "valid_routed_runs": 7,
+  "E4_confirmations": 3,
+  "stage_WNS_crosschecks": 28,
+  "all_report_links_exist": true,
+  "passing_period_ns": 14,
+  "passing_WNS_ns": 0.182,
+  "passing_WHS_ns": 0.082,
+  "README_result_rows": 7
+}

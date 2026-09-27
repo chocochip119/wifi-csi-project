@@ -1,0 +1,12 @@
+case,addr,bytes,bursts,ready_high_cycles,high_runs,max_high_run,adjacent_high_pairs,busy_cycles,postW_busy_cycles,b_delay,readback_words,mem_mismatches,unwritten_guards,AW_stall,W_stall,W_before_AW,AW_before_W
+pose_24,1d000020,24,1,3,1,3,2,5,1,0,3,0,2,0,0,0,0
+size_8,1d010020,8,1,1,1,1,0,3,1,0,1,0,2,0,0,0,0
+size_128,1d020020,128,1,16,1,16,15,18,1,0,16,0,2,0,0,0,0
+size_136_busy,1d030020,136,2,17,2,16,15,21,1,0,17,0,2,0,0,0,0
+boundary_ff8,1d040ff8,136,2,17,2,16,15,21,1,0,17,0,2,0,0,0,0
+size_4096,1d050008,4096,33,512,33,16,479,578,1,0,512,0,2,0,0,0,0
+pose_Bdelay12,1d060020,24,1,3,1,3,2,17,13,12,3,0,2,0,0,0,0
+W_before_AW,1d070020,128,1,16,1,16,15,64,47,0,16,0,2,61,0,16,0
+AW_before_W,1d080020,24,1,3,3,1,0,192,1,0,3,0,2,0,187,0,1
+W_periodic,1d090020,136,2,17,17,1,0,51,1,0,17,0,2,0,30,0,0
+W_random,1d0a0020,512,4,64,29,7,35,127,1,0,64,0,2,0,55,0,0

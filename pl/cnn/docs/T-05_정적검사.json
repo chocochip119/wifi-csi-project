@@ -1,0 +1,512 @@
+{
+  "files": [
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\.gitignore",
+      "sha256": "d7781a48c2622cb11c981a7940e472275d093c681a539c8c1ec32db2a52b5e73",
+      "after_sha256": "d7781a48c2622cb11c981a7940e472275d093c681a539c8c1ec32db2a52b5e73",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\Buffer.v",
+      "sha256": "78be32c2b479055d4b2bbbbd46a7cc8cb142f8c758ba09c637f3b57bf1d164f3",
+      "after_sha256": "78be32c2b479055d4b2bbbbd46a7cc8cb142f8c758ba09c637f3b57bf1d164f3",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\CNN_Encoder.v",
+      "sha256": "9543ccaa26e77e453903a999d06520f86b6cd61a2d14e9c31436e6c86351f17e",
+      "after_sha256": "9543ccaa26e77e453903a999d06520f86b6cd61a2d14e9c31436e6c86351f17e",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\Conv_MAC.v",
+      "sha256": "c6328db582b6c435ff05849eb8644fa0bd2364858c0954fe713b1d361000ba18",
+      "after_sha256": "c6328db582b6c435ff05849eb8644fa0bd2364858c0954fe713b1d361000ba18",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\gelu_stage.v",
+      "sha256": "14cd1cd2cd19ee7b76873f91dd7c169176382daf161582726564ece258934d89",
+      "after_sha256": "14cd1cd2cd19ee7b76873f91dd7c169176382daf161582726564ece258934d89",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\gen_CNN_Encoder.py",
+      "sha256": "bcfa0b82d181599145114ee5e11c55d76be05348c8f7bf4048ec4a870e703399",
+      "after_sha256": "bcfa0b82d181599145114ee5e11c55d76be05348c8f7bf4048ec4a870e703399",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\gen_Conv_MAC.py",
+      "sha256": "f13d406c132834b6a39c0b560fb104b966c6f00694b200471253756d36c8012a",
+      "after_sha256": "f13d406c132834b6a39c0b560fb104b966c6f00694b200471253756d36c8012a",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\gen_requant_stage.py",
+      "sha256": "3593e141e9a98b46a163c7808aa108d4052e5dff8c8370a7dff6039b9bb53a0e",
+      "after_sha256": "3593e141e9a98b46a163c7808aa108d4052e5dff8c8370a7dff6039b9bb53a0e",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\Pool.v",
+      "sha256": "42414baea311e6e28ecf429bea445ec4c0d23de2839bb499088f34b654dcfbbe",
+      "after_sha256": "42414baea311e6e28ecf429bea445ec4c0d23de2839bb499088f34b654dcfbbe",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\README.md",
+      "sha256": "5c98572dda9df1a40093831872c2366b123a5d63ceb190a075a5dffaff02e045",
+      "after_sha256": "5c98572dda9df1a40093831872c2366b123a5d63ceb190a075a5dffaff02e045",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\requant_stage.v",
+      "sha256": "4e11cf526482b43c448c9c7bf843c33c8802f74235da8d5ed31a7a9d2a80b7f0",
+      "after_sha256": "4e11cf526482b43c448c9c7bf843c33c8802f74235da8d5ed31a7a9d2a80b7f0",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\tb_CNN_Encoder.v",
+      "sha256": "d5aacb862c942a289250a3bee79c92587cea361097869c049385ff2de9d17d61",
+      "after_sha256": "d5aacb862c942a289250a3bee79c92587cea361097869c049385ff2de9d17d61",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\tb_Conv_MAC.v",
+      "sha256": "a0c8fc0084cce0ed1c59577baa08b1b8e8dc0ba926e5d2281cad7dfe886c9e50",
+      "after_sha256": "a0c8fc0084cce0ed1c59577baa08b1b8e8dc0ba926e5d2281cad7dfe886c9e50",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\others\\CNN_Encoder\\tb_requant_stage.v",
+      "sha256": "a1b4990eea3aaeccc851030d3a68439d44fb0b2e02e5283b09cf75b9071e433a",
+      "after_sha256": "a1b4990eea3aaeccc851030d3a68439d44fb0b2e02e5283b09cf75b9071e433a",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_ctrl.v",
+      "sha256": "c408628779a2975a59dcc357cce868f67605c8f7564f6b61fd5a35a7b9f229e5",
+      "after_sha256": "a351c8b652ec72669c2e1f4c3f14b4ca3c5e8c149ffeef1b0df1626b56cff76a",
+      "unchanged": false,
+      "authorized_edit": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_M00_AXI.v",
+      "sha256": "9c5ee22c6d25602e97032c337ad437032f99e94ea883f55c231a2d4d71e998d0",
+      "after_sha256": "9c5ee22c6d25602e97032c337ad437032f99e94ea883f55c231a2d4d71e998d0",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_S00_AXI.v",
+      "sha256": "78adb298e83ae2c4ab023748aff78104a237648364579729d951a5b597e1a65e",
+      "after_sha256": "78adb298e83ae2c4ab023748aff78104a237648364579729d951a5b597e1a65e",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\axi4_slave_mem_model.v",
+      "sha256": "02813e9d5789189b27464dad307d39c0c2eaae56106d28d437afe731b9bea348",
+      "after_sha256": "02813e9d5789189b27464dad307d39c0c2eaae56106d28d437afe731b9bea348",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\enc_stub.v",
+      "sha256": "34794641743be6d2de3138cc90eec4dd6fe370199d2dbb5384fdb4f4c48ba333",
+      "after_sha256": "34794641743be6d2de3138cc90eec4dd6fe370199d2dbb5384fdb4f4c48ba333",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\in_ram_stub.v",
+      "sha256": "5e0cd6bab4a93cf602d86720d2698d5e30b9a9398370f0db259b351849a2c45d",
+      "after_sha256": "5e0cd6bab4a93cf602d86720d2698d5e30b9a9398370f0db259b351849a2c45d",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\loader_stub.v",
+      "sha256": "5bc7d249ed1cd89adbc041b4c8e950575259bd10f670ccff93338d3e00285e9b",
+      "after_sha256": "5bc7d249ed1cd89adbc041b4c8e950575259bd10f670ccff93338d3e00285e9b",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_axi4_slave_mem_model.v",
+      "sha256": "170ca4b8ab67996c6c4bb52d9112acbac4aec292311aa9893ee8d20c9d6e7944",
+      "after_sha256": "170ca4b8ab67996c6c4bb52d9112acbac4aec292311aa9893ee8d20c9d6e7944",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_csr_ctrl_link.v",
+      "sha256": "fd366c43132aa6c86b88865b28be75d5a5e84bb3e3425cc9ccf7f4cdeff124d7",
+      "after_sha256": "69357724f22072e848b0003b95abe710cd98fad246ff67763a5456b45ac3fa66",
+      "unchanged": false,
+      "authorized_edit": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_ctrl_status.v",
+      "sha256": "d3e30f6d9e5ae7950a5634eecb02a788c90c4fd986d1c50230acd34e06fa6cd1",
+      "after_sha256": "d835d262ef466cd422dc9ea88cab764f1234cba3bc1fa965349360bc273f834f",
+      "unchanged": false,
+      "authorized_edit": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_err.v",
+      "sha256": "02e1e0a88b16168ce0734b34faff7ac2344a86fbe330be227703177da4f90486",
+      "after_sha256": "02e1e0a88b16168ce0734b34faff7ac2344a86fbe330be227703177da4f90486",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_read.v",
+      "sha256": "99705f116077c108dc7d3799057b8d637395ba2783f84187d8a4b916b682e101",
+      "after_sha256": "99705f116077c108dc7d3799057b8d637395ba2783f84187d8a4b916b682e101",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_read_perf.v",
+      "sha256": "4e29a74bf287b001a73c91d5e49af606c32cb2db6c9f97c1b43a87ac1a309439",
+      "after_sha256": "4e29a74bf287b001a73c91d5e49af606c32cb2db6c9f97c1b43a87ac1a309439",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_write.v",
+      "sha256": "bda8ff6685076323e5d138061bfca6a6b3e58b345b4bbca527efbf43283e713c",
+      "after_sha256": "bda8ff6685076323e5d138061bfca6a6b3e58b345b4bbca527efbf43283e713c",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_ctrl.v",
+      "sha256": "72bcd126b4e6ca0e1a1b129973ff65c0c1f6f40c2b3d691c568da15041206d2f",
+      "after_sha256": "72bcd126b4e6ca0e1a1b129973ff65c0c1f6f40c2b3d691c568da15041206d2f",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_read.v",
+      "sha256": "1733a639ed4d2299dd8b1f72f4d282b5b3535b3f033f41c00f49707f2a42c0f5",
+      "after_sha256": "1733a639ed4d2299dd8b1f72f4d282b5b3535b3f033f41c00f49707f2a42c0f5",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_regs.v",
+      "sha256": "773760f459f582096d1644b06cd0a85cdd37db33bfa190bb3ff7fc46ef60cab2",
+      "after_sha256": "773760f459f582096d1644b06cd0a85cdd37db33bfa190bb3ff7fc46ef60cab2",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_write.v",
+      "sha256": "aff01c63ad24a35ca122c912b6a781e5e5a623b9341f26ed7c4fcbf16f1e7170",
+      "after_sha256": "aff01c63ad24a35ca122c912b6a781e5e5a623b9341f26ed7c4fcbf16f1e7170",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_top_infer.v",
+      "sha256": "bbe812f3616bd0eb1199c45d1cdf9971c1c564a439fae237aef2819ed0d70810",
+      "after_sha256": "bbe812f3616bd0eb1199c45d1cdf9971c1c564a439fae237aef2819ed0d70810",
+      "unchanged": true,
+      "authorized_edit": false
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_top_load.v",
+      "sha256": "140e2fdaa1c604ebbb892f4d98b148c2b2d3208d0ec6602be06b6168c15e2304",
+      "after_sha256": "140e2fdaa1c604ebbb892f4d98b148c2b2d3208d0ec6602be06b6168c15e2304",
+      "unchanged": true,
+      "authorized_edit": false
+    }
+  ],
+  "protected_unchanged": 31,
+  "authorized_existing_edits": 3,
+  "new_sources": [
+    "fc_stub.v",
+    "tb_top_fc1.v"
+  ],
+  "ports": [
+    [
+      "input",
+      "",
+      "clk"
+    ],
+    [
+      "input",
+      "",
+      "rst_n"
+    ],
+    [
+      "input",
+      "",
+      "reg_start"
+    ],
+    [
+      "input",
+      "",
+      "reg_clear_status"
+    ],
+    [
+      "input",
+      "[31:0]",
+      "reg_cmd"
+    ],
+    [
+      "input",
+      "[31:0]",
+      "reg_input_addr"
+    ],
+    [
+      "input",
+      "[31:0]",
+      "reg_weight_addr"
+    ],
+    [
+      "input",
+      "[31:0]",
+      "reg_output_addr"
+    ],
+    [
+      "output",
+      "",
+      "status_busy"
+    ],
+    [
+      "output",
+      "",
+      "status_done"
+    ],
+    [
+      "output",
+      "[3:0]",
+      "status_error"
+    ],
+    [
+      "input",
+      "",
+      "cfg_ok"
+    ],
+    [
+      "output",
+      "",
+      "mem_rd_start"
+    ],
+    [
+      "output",
+      "[31:0]",
+      "mem_rd_addr"
+    ],
+    [
+      "output",
+      "[19:0]",
+      "mem_rd_bytes"
+    ],
+    [
+      "input",
+      "",
+      "mem_rd_busy"
+    ],
+    [
+      "input",
+      "[63:0]",
+      "mem_rd_data"
+    ],
+    [
+      "input",
+      "",
+      "mem_rd_valid"
+    ],
+    [
+      "output",
+      "",
+      "mem_rd_ready"
+    ],
+    [
+      "input",
+      "",
+      "mem_rd_err"
+    ],
+    [
+      "output",
+      "",
+      "mem_wr_start"
+    ],
+    [
+      "output",
+      "[31:0]",
+      "mem_wr_addr"
+    ],
+    [
+      "output",
+      "[19:0]",
+      "mem_wr_bytes"
+    ],
+    [
+      "input",
+      "",
+      "mem_wr_busy"
+    ],
+    [
+      "output",
+      "[63:0]",
+      "mem_wr_data"
+    ],
+    [
+      "input",
+      "",
+      "mem_wr_ready"
+    ],
+    [
+      "input",
+      "",
+      "mem_wr_err"
+    ],
+    [
+      "output",
+      "",
+      "loader_start"
+    ],
+    [
+      "input",
+      "",
+      "loader_done"
+    ],
+    [
+      "input",
+      "",
+      "loader_err"
+    ],
+    [
+      "output",
+      "[63:0]",
+      "ld_data"
+    ],
+    [
+      "output",
+      "",
+      "ld_valid"
+    ],
+    [
+      "input",
+      "",
+      "ld_ready"
+    ],
+    [
+      "output",
+      "",
+      "enc_start"
+    ],
+    [
+      "input",
+      "",
+      "enc_done"
+    ],
+    [
+      "output",
+      "",
+      "in_we"
+    ],
+    [
+      "output",
+      "[10:0]",
+      "in_waddr"
+    ],
+    [
+      "output",
+      "[63:0]",
+      "in_wdata"
+    ],
+    [
+      "output",
+      "",
+      "fc_start"
+    ],
+    [
+      "input",
+      "",
+      "fc_done"
+    ],
+    [
+      "output",
+      "[1:0]",
+      "fc_sel"
+    ],
+    [
+      "output",
+      "",
+      "fifo_we"
+    ],
+    [
+      "output",
+      "[63:0]",
+      "fifo_wdata"
+    ],
+    [
+      "input",
+      "",
+      "fifo_full"
+    ],
+    [
+      "input",
+      "[191:0]",
+      "pose_data"
+    ]
+  ],
+  "ports_match": true,
+  "rtl_state_encoding": {
+    "IDLE": "0000",
+    "DECODE": "0001",
+    "LD_RD1": "0010",
+    "LD_RD2": "0011",
+    "LD_WAIT": "0100",
+    "IN_RD": "0101",
+    "ENC": "0110",
+    "FC1": "0111",
+    "FC2": "1000",
+    "FC3": "1001",
+    "WR": "1010",
+    "ERR_DRAIN": "1011",
+    "FINISH": "1100"
+  },
+  "diagram_state_encoding": {
+    "IDLE": "0000",
+    "DECODE": "0001",
+    "LD_RD1": "0010",
+    "LD_RD2": "0011",
+    "LD_WAIT": "0100",
+    "IN_RD": "0101",
+    "ENC": "0110",
+    "FC1": "0111",
+    "FC2": "1000",
+    "FC3": "1001",
+    "WR": "1010",
+    "ERR_DRAIN": "1011",
+    "FINISH": "1100"
+  },
+  "all_13_match": true,
+  "synchronous_active_low_reset": true,
+  "prohibited_direct_rtl_constructs": 0,
+  "FC1_error_priority": true,
+  "load_base_read_consumption_sites": 1,
+  "note": "tb_top_infer is preserved; its T-04 expectation conflicts with the new T-05 path. P7/P9 clarification pending."
+}

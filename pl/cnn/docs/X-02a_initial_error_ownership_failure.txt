@@ -1,0 +1,124 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\core_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\weight_param_loader.v D:\2609_final_project\cnn_rtl\rtl\encoder\Buffer.v D:\2609_final_project\cnn_rtl\rtl\encoder\Conv_MAC.v D:\2609_final_project\cnn_rtl\rtl\encoder\requant_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\gelu_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\Pool.v D:\2609_final_project\cnn_rtl\rtl\encoder\CNN_Encoder.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/conv_weight_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module conv_weight_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/param_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module param_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/gelu_lut_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_lut_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module weight_param_loader
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module Buffer
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Conv_MAC.v" into library work
+INFO: [VRFC 10-311] analyzing module Conv_MAC
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/requant_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module requant_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/gelu_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Pool.v" into library work
+INFO: [VRFC 10-311] analyzing module Pool
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/CNN_Encoder.v" into library work
+INFO: [VRFC 10-311] analyzing module CNN_Encoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.025412
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\core_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\fc_stub.v D:\2609_final_project\cnn_rtl\tb\tb_pose_cnn_core.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_pose_cnn_core.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_pose_cnn_core
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.989251
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\core_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_pose_cnn_core -s x02a_core
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_pose_cnn_core -s x02a_core 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.pose_cnn_ctrl
+Compiling module work.blob_decoder
+Compiling module work.conv_weight_ram
+Compiling module work.param_ram
+Compiling module work.gelu_lut_ram
+Compiling module work.fcw_ram
+Compiling module work.weight_param_loader
+Compiling module work.Buffer_default
+Compiling module work.Conv_MAC
+Compiling module work.requant_stage
+Compiling module work.gelu_stage
+Compiling module work.Buffer(W_DATA_WIDTH=8,DEPTH_BYTE...
+Compiling module work.Pool
+Compiling module work.CNN_Encoder
+Compiling module work.fc_stub
+Compiling module work.pose_cnn
+Compiling module work.tb_pose_cnn_core
+Built simulation snapshot x02a_core
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 6.402897
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\core_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat x02a_core -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/x02a_core/xsim_script.tcl
+# xsim {x02a_core} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: X-02a FILE bytes=422992 DDR_words=52874 scale=3bd997a8 independent_gold_conv=333 param=328 lut=1024 fcw=2432
+PASS: X-02a W2 LOAD cycles=10114 standalone_loader=9772 overhead=342 AR=47+187 scale=3bd997a8 cfg=1
+PASS: X-02a W3-W5 INFER cycles=1338265 enc_elapsed=1278889 input_words=1440 FC1_words=49152 AR_input=90 AR_FC1=3073 AW=1 pose_bytes=24 ram_1cycle_checks=8029596
+PASS: X-02a W4 OWNERSHIP enc_cycles=1278889 fc_cycles=57747 differing_data_enc_param/lut=1163269/820662 fc_param/lut=57747/57746 enc_residual_param/lut=32/423 fc_residual_param/lut=327/1023
+PASS: X-02a W5/W7 mode=0 flat_words=384 feature_changes=0 digest_pose=d740b1dcc5777eb6ed2c49081c9280f2a45f75f43c1a738f legacy_FC_arithmetic=0
+PASS: X-02a W3-W5 INFER cycles=1338265 enc_elapsed=1278889 input_words=1440 FC1_words=49152 AR_input=90 AR_FC1=3073 AW=1 pose_bytes=24 ram_1cycle_checks=8029596
+PASS: X-02a W4 OWNERSHIP enc_cycles=1278889 fc_cycles=57747 differing_data_enc_param/lut=1278889/1028756 fc_param/lut=57747/57746 enc_residual_param/lut=32/423 fc_residual_param/lut=327/1023
+PASS: X-02a W5/W7 mode=1 flat_words=384 feature_changes=0 digest_pose=d740b1dcc5777eb6ed2c49081c9280f2a45f75f43c1a738f legacy_FC_arithmetic=0
+PASS: X-02a W3-W5 INFER cycles=1338265 enc_elapsed=1278889 input_words=1440 FC1_words=49152 AR_input=90 AR_FC1=3073 AW=1 pose_bytes=24 ram_1cycle_checks=8029596
+PASS: X-02a W4 OWNERSHIP enc_cycles=1278889 fc_cycles=57747 differing_data_enc_param/lut=1278889/1064180 fc_param/lut=57747/57746 enc_residual_param/lut=32/424 fc_residual_param/lut=327/1023
+PASS: X-02a W5/W7 mode=2 flat_words=384 feature_changes=384 digest_pose=967591aa6a0b5a2586d9563474f1f79af3057bfb95d33d88 legacy_FC_arithmetic=0
+PASS: X-02a CASE id=0 completed=1 AXI_violations=0 FC_violations=0
+PASS: X-02a W6 case=1 error=4 cfg=0 cycles=860 ERR_DRAIN_cycles=826 enc_starts=0 input_writes=0 FC1_pushes=0 write_beats=0 rd_busy=0 wr_busy=0
+PASS: X-02a CASE id=1 completed=2 AXI_violations=0 FC_violations=0
+PASS: X-02a W2 LOAD cycles=10114 standalone_loader=9772 overhead=342 AR=47+187 scale=3bd997a8 cfg=1
+PASS: X-02a W6 case=2 error=4 cfg=1 cycles=1623 ERR_DRAIN_cycles=1610 enc_starts=0 input_writes=8 FC1_pushes=0 write_beats=0 rd_busy=0 wr_busy=0
+PASS: X-02a CASE id=2 completed=3 AXI_violations=0 FC_violations=0
+PASS: X-02a W2 LOAD cycles=10114 standalone_loader=9772 overhead=342 AR=47+187 scale=3bd997a8 cfg=1
+Fatal: FAIL: fc_stub param stage=0 addr=59 expected=0000002b5f9f9b17000004d2 actual=000000276d1c51b7ffffda1f
+Time: 53281846 ns  Iteration: 0  Process: /tb_pose_cnn_core/core/u_fc/fail  Scope: tb_pose_cnn_core.core.u_fc.fail  File: D:/2609_final_project/cnn_rtl/tb/fc_stub.v Line: 71
+$finish called at time : 53281846 ns
+run: Time (s): cpu = 00:00:02 ; elapsed = 00:04:00 . Memory (MB): peak = 917.582 ; gain = 0.047
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 15:35:28 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 243.892459

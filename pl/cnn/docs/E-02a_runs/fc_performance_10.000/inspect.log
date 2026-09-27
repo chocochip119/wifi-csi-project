@@ -1,0 +1,72 @@
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\vivado.bat -mode batch -source C:/Users/kccistc/AppData/Local/Temp/codex-e02a/inspect_route.tcl -nojournal -nolog -tclargs D:/2609_final_project/cnn_rtl/docs/E-02a_runs/fc_performance_10.000
+
+****** Vivado v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+CRITICAL WARNING: [Common 17-741] No write access right to the local Tcl store at 'C'. XilinxTclStore is reverted to the installation area. If you want to use local Tcl Store, please change the access right and relaunch Vivado.
+source C:/Users/kccistc/AppData/Local/Temp/codex-e02a/inspect_route.tcl
+# set dir [lindex $argv 0]
+# open_checkpoint [file join $dir routed.dcp]
+Command: open_checkpoint D:/2609_final_project/cnn_rtl/docs/E-02a_runs/fc_performance_10.000/routed.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.041 . Memory (MB): peak = 1106.848 ; gain = 0.000
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.013 . Memory (MB): peak = 1106.848 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 286 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2020.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF File: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.303 . Memory (MB): peak = 1439.719 ; gain = 8.469
+Restored from archive | CPU: 1.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.305 . Memory (MB): peak = 1439.719 ; gain = 8.469
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1439.719 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2020.2 (64-bit) build 3064766
+open_checkpoint: Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 1439.719 ; gain = 332.871
+# report_route_status -file [file join $dir route_status_reopened.rpt]
+# report_timing -max_paths 3 -nworst 1 -input_pins -delay_type max -file [file join $dir reopened_paths.rpt]
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "clk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+INFO: [Timing 38-78] ReportTimingParams: -max_paths 3 -nworst 1 -delay_type max -sort_by slack.
+# set starts {}
+# foreach p [get_pins -hierarchical -filter {REF_PIN_NAME == C && NAME =~ *param3_reg*}] {
+#     if {[regexp {param3_reg\[69\].*/C$} [get_property NAME $p]]} {lappend starts $p}
+# }
+# if {[llength $starts] > 0} {
+#     report_timing -from $starts -max_paths 3 -nworst 1 -input_pins -delay_type max -file [file join $dir requant_paths.rpt]
+#     puts "E02A_REQUANT_STARTS $starts"
+# }
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+INFO: [Timing 38-78] ReportTimingParams: -from_pins  -max_paths 3 -nworst 1 -delay_type max -sort_by slack.
+E02A_REQUANT_STARTS {u_rq/param3_reg[69]/C} {u_rq/param3_reg[69]_replica/C} {u_rq/param3_reg[69]_replica_1/C} {u_rq/param3_reg[69]_replica_2/C} {u_rq/param3_reg[69]_replica_3/C}
+# set path [lindex [get_timing_paths -delay_type max -max_paths 1] 0]
+# puts "E02A_REOPENED_WNS [get_property SLACK $path]"
+E02A_REOPENED_WNS -2.133
+# set f [open [file join $dir failing_paths.tsv] w]
+# foreach p [get_timing_paths -delay_type max -slack_lesser_than 0 -max_paths 5000 -nworst 1] {
+#     puts $f "[get_property SLACK $p]\t[get_property STARTPOINT_PIN $p]\t[get_property ENDPOINT_PIN $p]"
+# }
+# close $f
+# puts "E02A_CHECKPOINT_VERIFIED"
+E02A_CHECKPOINT_VERIFIED
+# exit 0
+INFO: [Common 17-206] Exiting Vivado at Sat Sep 26 20:01:38 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 21.442211

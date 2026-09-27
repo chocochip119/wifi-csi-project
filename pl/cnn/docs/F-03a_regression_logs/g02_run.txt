@@ -1,0 +1,137 @@
+PASS H1: both manifest blob/input/golden hashes match; staged read-only source snapshots
+{
+  "blob.bin": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+  "encoder_sample_u64.hex": "50922ed6746c48c4dda4be98e161152af47d5068c76392300fe5cea8846f0120",
+  "encoder_zero_u64.hex": "752e7b2fe4638be8071d92b34f333b459ab08fc7db1618a4e4de49458261e811",
+  "sample_input.bin": "949915442c9dfcf980d4880e52b4ff6b08b1b5ff75bdccfa346b807ba0c6fffa",
+  "zero_input.bin": "2ddbd07ddfda5d4f9b1c44c8ff16f7e38027d275af6bf57f317b136060d695a9"
+}
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\golden_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\weight_param_loader.v D:\2609_final_project\cnn_rtl\rtl\encoder\Buffer.v D:\2609_final_project\cnn_rtl\rtl\encoder\Conv_MAC.v D:\2609_final_project\cnn_rtl\rtl\encoder\requant_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\gelu_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\Pool.v D:\2609_final_project\cnn_rtl\rtl\encoder\CNN_Encoder.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/conv_weight_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module conv_weight_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/param_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module param_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/gelu_lut_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_lut_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module weight_param_loader
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module Buffer
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Conv_MAC.v" into library work
+INFO: [VRFC 10-311] analyzing module Conv_MAC
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/requant_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module requant_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/gelu_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/Pool.v" into library work
+INFO: [VRFC 10-311] analyzing module Pool
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/encoder/CNN_Encoder.v" into library work
+INFO: [VRFC 10-311] analyzing module CNN_Encoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.025859
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\golden_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\fc_stub.v D:\2609_final_project\cnn_rtl\tb\tb_golden_encoder.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_golden_encoder.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_golden_encoder
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.979202
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\golden_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_golden_encoder -s g02_encoder
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_golden_encoder -s g02_encoder 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.pose_cnn_ctrl
+Compiling module work.blob_decoder
+Compiling module work.conv_weight_ram
+Compiling module work.param_ram
+Compiling module work.gelu_lut_ram
+Compiling module work.fcw_ram
+Compiling module work.weight_param_loader
+Compiling module work.Buffer_default
+Compiling module work.Conv_MAC
+Compiling module work.requant_stage
+Compiling module work.gelu_stage
+Compiling module work.Buffer(W_DATA_WIDTH=8,DEPTH_BYTE...
+Compiling module work.Pool
+Compiling module work.CNN_Encoder
+Compiling module work.fc_stub
+Compiling module work.pose_cnn
+Compiling module work.tb_golden_encoder
+Built simulation snapshot g02_encoder
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-f03a/golden_sim/xsim.dir/g02_encoder/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 19:11:39 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 6.653621
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f03a\golden_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat g02_encoder -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/g02_encoder/xsim_script.tcl
+# xsim {g02_encoder} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: G-02 H1 blob_bytes=422992 input_bytes=11520 golden_words=384 host_blob_SHA=063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb host_input_SHA=949915442c9dfcf980d4880e52b4ff6b08b1b5ff75bdccfa346b807ba0c6fffa zero_SHA=2ddbd07ddfda5d4f9b1c44c8ff16f7e38027d275af6bf57f317b136060d695a9
+PASS: G-02 H2 LOAD cycles=10114 X02a=10114 delta=0 cfg=1 error=0 scale=3bd997a8
+PASS: G-02 H3 run=0 input_words=1440 starts=1 dones=1 enc_elapsed=1278889 X02a=1278889 delta=0 infer_cycles=1335832 flat_reads=384
+RESULT: G-02 H4 run=0 words_equal=384 words_mismatch=0 bytes_equal=3072 bytes_mismatch=0
+OBS: G-02 H5 run=0 raw_param_range=0..47 valid_param_range=0..47 raw_lut_range=1..497 valid_lut_range=1..497 param_outside=0 lut_outside=0 valid_X_param/lut=0/0 D09_bad=0 pool_param_bad=0
+OBS: G-02 H5 run=0 runtime_conv/param/lut_checks=1278889/1278841/1278836 bad=0/0/0
+PASS: G-02 H3 run=1 input_words=1440 starts=1 dones=1 enc_elapsed=1278889 X02a=1278889 delta=0 infer_cycles=1335832 flat_reads=384
+RESULT: G-02 H4 run=1 words_equal=384 words_mismatch=0 bytes_equal=3072 bytes_mismatch=0
+OBS: G-02 H5 run=1 raw_param_range=0..47 valid_param_range=0..47 raw_lut_range=1..497 valid_lut_range=1..497 param_outside=0 lut_outside=0 valid_X_param/lut=0/0 D09_bad=0 pool_param_bad=0
+OBS: G-02 H5 run=1 runtime_conv/param/lut_checks=1278889/1278889/1278889 bad=0/0/0
+PASS: G-02 H3 run=2 input_words=1440 starts=1 dones=1 enc_elapsed=1278889 X02a=1278889 delta=0 infer_cycles=1335832 flat_reads=384
+RESULT: G-02 H4 run=2 words_equal=384 words_mismatch=0 bytes_equal=3072 bytes_mismatch=0
+OBS: G-02 H5 run=2 raw_param_range=0..47 valid_param_range=0..47 raw_lut_range=92..431 valid_lut_range=92..431 param_outside=0 lut_outside=0 valid_X_param/lut=0/0 D09_bad=0 pool_param_bad=0
+OBS: G-02 H5 run=2 runtime_conv/param/lut_checks=1278889/1278889/1278889 bad=0/0/0
+RESULT: G-02 H6 repeated_input_different_words=0 changed_input_RTL_words=384 bytes=2957 golden_words=384 bytes=2957
+PASS: G-02 H5 full diagnostics skipped: all three comparisons matched
+RESULT: G-02 COMPLETE cases=3 total_word_mismatches=0 H4_pass=1 H6_pass=1 AXI_violations=0 FC_violations=0
+$finish called at time : 40176240 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_golden_encoder.v" Line 448
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:00:54 . Memory (MB): peak = 917.465 ; gain = 0.047
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 19:12:37 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 57.982752

@@ -1,0 +1,4 @@
+post_synth	-3.494	0.219	u_rq/param3_reg[69]/C	u_rq/rq_reg[1]/R
+post_place	-1.241	0.087	u_rq/param3_reg[69]/C	u_rq/rq_reg[1]/R
+post_phys_opt	-0.964	0.087	u_rq/param3_reg[66]_rep_replica_6/C	u_rq/rq_reg[1]/R
+post_route	-2.133	0.111	u_rq/rq[7]_i_343_psdsp/C	u_rq/rq_reg[1]/R

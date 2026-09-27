@@ -1,0 +1,53 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/loader_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module loader_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/in_ram_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module in_ram_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/enc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module enc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_s00_axi_write.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_write
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_s00_axi_regs.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_regs
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_s00_axi_read.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_read
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_s00_axi_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_ctrl
+INFO: [VRFC 10-311] analyzing module s00_ctrl_case
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_ctrl_status.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_ctrl_status
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_csr_ctrl_link.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_csr_ctrl_link
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_top_load.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_load
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_top_infer.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_infer
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_top_fc1.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_fc1
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_top_full.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_full
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_m00_read.v" into library work
+INFO: [VRFC 10-311] analyzing module m00_read_fixture
+INFO: [VRFC 10-311] analyzing module tb_m00_read
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_m00_read_perf.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_m00_read_perf
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_m00_write.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_m00_write
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_m00_err.v" into library work
+INFO: [VRFC 10-311] analyzing module m00_err_fixture
+INFO: [VRFC 10-311] analyzing module tb_m00_err
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder_fixture
+INFO: [VRFC 10-311] analyzing module blob_default_version_probe
+INFO: [VRFC 10-311] analyzing module tb_blob_decoder
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_loader_rams.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_loader_rams
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_weight_param_loader
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/wifi-csi-project/pl/cnn/testbench/tb_loader_real_blob.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_loader_real_blob

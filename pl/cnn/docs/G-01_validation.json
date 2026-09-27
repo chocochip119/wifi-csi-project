@@ -1,0 +1,66 @@
+{
+  "cases": [
+    {
+      "case": "repeat",
+      "command": "C:\\Users\\kccistc\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe -u D:\\2609_final_project\\cnn_rtl\\golden\\build_golden.py --output C:\\Users\\kccistc\\AppData\\Local\\Temp\\codex-g01-validation\\repeat",
+      "seconds": 5.600126,
+      "blob_sha256": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+      "expected_sample_checked": true
+    },
+    {
+      "case": "changed_blob",
+      "command": "C:\\Users\\kccistc\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe -u D:\\2609_final_project\\cnn_rtl\\golden\\build_golden.py --output C:\\Users\\kccistc\\AppData\\Local\\Temp\\codex-g01-validation\\changed_blob --blob C:\\Users\\kccistc\\AppData\\Local\\Temp\\codex-g01-validation\\fc3_zero_weights_bias.bin",
+      "seconds": 7.111681,
+      "blob_sha256": "9215ecd44af3466b910cd826fdf7594816dc0a41145a9117cfeb3af2c1f0a7ce",
+      "expected_sample_checked": false
+    },
+    {
+      "case": "changed_input",
+      "command": "C:\\Users\\kccistc\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe -u D:\\2609_final_project\\cnn_rtl\\golden\\build_golden.py --output C:\\Users\\kccistc\\AppData\\Local\\Temp\\codex-g01-validation\\changed_input --input-bin C:\\Users\\kccistc\\AppData\\Local\\Temp\\codex-g01-validation\\zero_input.bin",
+      "seconds": 5.003593,
+      "blob_sha256": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+      "expected_sample_checked": false
+    }
+  ],
+  "changed_input_feature_bytes": 2957,
+  "shift_boundary_checks": [
+    {
+      "name": "lower below",
+      "real_scale": 1.1641532179982975e-10,
+      "multiplier": 2147483647,
+      "shift": 64
+    },
+    {
+      "name": "lower at",
+      "real_scale": 1.1641532179982976e-10,
+      "multiplier": 1073741824,
+      "shift": 63
+    },
+    {
+      "name": "lower above",
+      "real_scale": 1.1641532179982977e-10,
+      "multiplier": 1073741824,
+      "shift": 63
+    },
+    {
+      "name": "upper below",
+      "real_scale": 4.6116860173536456e+18,
+      "multiplier": 2147483647,
+      "shift": -31
+    },
+    {
+      "name": "upper at",
+      "real_scale": 4.611686017353646e+18,
+      "multiplier": 1073741824,
+      "shift": -32
+    },
+    {
+      "name": "upper above",
+      "real_scale": 4.6116860173536466e+18,
+      "multiplier": 1073741824,
+      "shift": -32
+    }
+  ],
+  "status": "PASS",
+  "scratch": "C:\\Users\\kccistc\\AppData\\Local\\Temp\\codex-g01-validation"
+}

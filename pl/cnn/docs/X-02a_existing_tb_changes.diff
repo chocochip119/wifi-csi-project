@@ -1,0 +1,149 @@
+--- a/tb/fc_stub.v
++++ b/tb/fc_stub.v
+@@ -8,8 +8,34 @@
+     input wire [63:0] fifo_wdata,
+     output wire fifo_full,
+     output reg fc_done,
+-    output reg [191:0] pose_data
++    output reg [191:0] pose_data,
++    output reg [8:0] fc_param_raddr,
++    input wire [95:0] fc_param_rdata,
++    output reg [9:0] fc_lut_raddr,
++    input wire [7:0] fc_lut_rdata,
++    output reg [11:0] fcw_raddr,
++    input wire [63:0] fcw_rdata,
++    output reg [8:0] flat_raddr,
++    input wire [63:0] flat_rdata
+ );
++    initial begin fc_param_raddr=0;fc_lut_raddr=0;fcw_raddr=0;flat_raddr=0;end
++    // X-02a opt-in RAM consumer. Default off preserves all legacy timing/data.
++    // Testbench supplies file-derived RAM goldens and observed Pool write data.
++    // This digest is a wiring stimulus, NOT FC arithmetic or a valid pose model.
++    bit ram_test_enable=0, ram_golden_ready=0;
++    // Checker-only ownership indication from the TB. It never aborts the FC,
++    // stops its addresses/FIFO, or changes done. D08 may revoke shared ports
++    // in ERR_DRAIN while this operation remains active until common reset.
++    bit ram_shared_owned=1;
++    integer unowned_param_reads=0,unowned_lut_reads=0;
++    reg [95:0] golden_param[0:327];
++    reg [7:0] golden_lut[0:1023];
++    reg [63:0] golden_fcw[0:2431], golden_flat[0:383];
++    reg [191:0] feature_digest=0;
++    integer ram_last_start=0,ram_step=0;
++    integer param_reads[0:2],lut_reads[0:2],fcw_reads[0:2],flat_reads=0;
++    bit request_param=0,request_lut=0,request_fcw=0,request_flat=0;
++    integer request_stage=0;
+     integer consume_mode=0; // 0 every cycle, 1 fixed period, 2 random, 3 pause/resume
+     integer consume_period=4, pause_after=1024, pause_cycles=2000;
+     integer expected_words=49152, done_delay_cycles=5, done_width_cycles=1;
+@@ -175,9 +201,70 @@
+                 fc_done<=1; width_left<=pulse_width_reg;
+                 done_count<=done_count+1; done_cycle<=cycle_count;
+                 phase_dones[selected_reg]<=phase_dones[selected_reg]+1;phase_done_cycle[selected_reg]<=cycle_count;
+-                if(selected_reg==2) pose_data<=pose_value;
++                if(selected_reg==2) pose_data<=ram_test_enable ? feature_digest : pose_value;
+             end
+             if (count<0 || count>512) fail("FIFO count outside 0..512");
++        end
++    end
++
++    // Change addresses only during our operation; retain final values in idle.
++    // Drivers run on falling edges, check synchronous RAM results after rising edges.
++    always @(negedge clk) begin
++        request_param=0;request_lut=0;request_fcw=0;request_flat=0;
++        if(!resetn) begin
++            fc_param_raddr=0;fc_lut_raddr=0;fcw_raddr=0;flat_raddr=0;
++            ram_last_start=0;ram_step=0;flat_reads=0;feature_digest=0;
++            unowned_param_reads=0;unowned_lut_reads=0;
++            for(integer k=0;k<3;k=k+1) begin param_reads[k]=0;lut_reads[k]=0;fcw_reads[k]=0;end
++        end else if(ram_test_enable && active) begin
++            if(!ram_golden_ready) fail("RAM test enabled without independent goldens");
++            if(ram_last_start!=accepted_starts) begin
++                ram_last_start=accepted_starts;ram_step=0;
++                param_reads[selected_reg]=0;lut_reads[selected_reg]=0;fcw_reads[selected_reg]=0;
++                if(selected_reg==0) begin flat_reads=0;feature_digest=192'h13579bdf2468ace00123456789abcdef6a09e667bb67ae85;end
++            end
++            request_stage=int'(selected_reg);
++            if(ram_step<(selected_reg==2?24:128)) begin
++                fc_param_raddr=9'((selected_reg==0?48:selected_reg==1?176:304)+ram_step);
++                request_param=1;
++            end
++            if(selected_reg<2 && ram_step<256) begin
++                fc_lut_raddr=10'((selected_reg==0?512:768)+ram_step);request_lut=1;
++            end
++            if(selected_reg>0 && ram_step<(selected_reg==1?2048:384)) begin
++                fcw_raddr=12'((selected_reg==1?0:2048)+ram_step);request_fcw=1;
++            end
++            if(selected_reg==0 && ram_step<384) begin flat_raddr=9'(ram_step);request_flat=1;end
++            ram_step=ram_step+1;
++        end
++    end
++    always @(posedge clk) begin : ram_observer
++        bit owns_shared_at_edge;
++        owns_shared_at_edge=ram_shared_owned;
++        if(resetn && ram_test_enable) begin
++            #1;
++            if(request_param && owns_shared_at_edge) begin
++                if(fc_param_rdata!==golden_param[fc_param_raddr])
++                    fail($sformatf("param stage=%0d addr=%0d expected=%h actual=%h",request_stage,fc_param_raddr,golden_param[fc_param_raddr],fc_param_rdata));
++                param_reads[request_stage]=param_reads[request_stage]+1;
++            end else if(request_param) unowned_param_reads=unowned_param_reads+1;
++            if(request_lut && owns_shared_at_edge) begin
++                if(fc_lut_rdata!==golden_lut[fc_lut_raddr]) fail($sformatf("LUT stage=%0d addr=%0d",request_stage,fc_lut_raddr));
++                lut_reads[request_stage]=lut_reads[request_stage]+1;
++            end else if(request_lut) unowned_lut_reads=unowned_lut_reads+1;
++            if(request_fcw) begin
++                if(fcw_rdata!==golden_fcw[fcw_raddr]) fail($sformatf("FCW stage=%0d addr=%0d",request_stage,fcw_raddr));
++                fcw_reads[request_stage]=fcw_reads[request_stage]+1;
++            end
++            if(request_flat) begin
++                if($isunknown(flat_rdata) || flat_rdata!==golden_flat[flat_raddr])
++                    fail($sformatf("flat addr=%0d expected=%h actual=%h",flat_raddr,golden_flat[flat_raddr],flat_rdata));
++                flat_reads=flat_reads+1;
++                feature_digest[63:0]={feature_digest[56:0],feature_digest[63:57]} ^ flat_rdata;
++                feature_digest[127:64]=feature_digest[127:64]+flat_rdata+64'(flat_raddr);
++                feature_digest[191:128]={feature_digest[180:128],feature_digest[191:181]} ^
++                    (flat_rdata+64'h9e3779b97f4a7c15);
++            end
+         end
+     end
+ endmodule
+--- a/tb/tb_top_fc1.v
++++ b/tb/tb_top_fc1.v
+@@ -228,7 +228,9 @@
+     bit boundary_probe=0;
+     wire model_fc_start=fc_start && (!boundary_probe || fc_sel==0);
+     fc_stub fc(.clk(clk),.resetn(resetn),.fc_start(model_fc_start),.fc_sel(tested_fc_sel),
+-        .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done),.pose_data(pose_data));
++        .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done),.pose_data(pose_data),
++        .fc_param_raddr(),.fc_param_rdata(96'd0),.fc_lut_raddr(),.fc_lut_rdata(8'd0),
++        .fcw_raddr(),.fcw_rdata(64'd0),.flat_raddr(),.flat_rdata(64'd0));
+     localparam integer LAST_CASE=10;
+     localparam [31:0] INPUT_BASE=32'h1d000000, INPUT_SEED=32'h24681357;
+     localparam [31:0] LOAD1_SEED=32'haaaa0001, LOAD2_SEED=32'hcccc0003;
+--- a/tb/tb_top_full.v
++++ b/tb/tb_top_full.v
+@@ -231,7 +231,9 @@
+     enc_stub encoder(.clk(clk),.resetn(resetn),.enc_start(enc_start),.enc_done(enc_done));
+     wire [1:0] tested_sel=fc_start?fc_sel:(fc_sel^2'b11);
+     fc_stub fc(.clk(clk),.resetn(resetn),.fc_start(fc_start),.fc_sel(tested_sel),
+-        .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done),.pose_data(pose_data));
++        .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done),.pose_data(pose_data),
++        .fc_param_raddr(),.fc_param_rdata(96'd0),.fc_lut_raddr(),.fc_lut_rdata(8'd0),
++        .fcw_raddr(),.fcw_rdata(64'd0),.flat_raddr(),.flat_rdata(64'd0));
+ 
+     // L-07 S3: real Loader read-port fixture, separate from the existing
+     // protocol-only loader_stub. Preload via public LOAD ports once; no RAM
+--- a/tb/tb_top_infer.v
++++ b/tb/tb_top_infer.v
+@@ -226,7 +226,9 @@
+         .in_waddr(in_waddr),.in_wdata(in_wdata));
+     enc_stub encoder(.clk(clk),.resetn(resetn),.enc_start(enc_start),.enc_done(enc_done));
+     fc_stub fc(.clk(clk),.resetn(resetn),.fc_start(fc_start),.fc_sel(fc_sel),
+-        .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done),.pose_data(pose_data));
++        .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done),.pose_data(pose_data),
++        .fc_param_raddr(),.fc_param_rdata(96'd0),.fc_lut_raddr(),.fc_lut_rdata(8'd0),
++        .fcw_raddr(),.fcw_rdata(64'd0),.flat_raddr(),.flat_rdata(64'd0));
+ 
+     localparam integer LAST_CASE=12;
+     localparam [31:0] SEED=32'h24681357, BEFORE_SEED=32'hbaad0001, AFTER_SEED=32'hbaad0002;

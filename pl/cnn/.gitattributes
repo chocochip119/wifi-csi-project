@@ -1,0 +1,18 @@
+# Preserve only the imported snapshot paths; leave existing team testbenches alone.
+/README.md -text
+/.gitignore -text
+/.gitattributes -text
+/UPLOAD_MANIFEST_SHA256.json -text
+/rtl/*.v -text
+/rtl/CNN_Encoder/*.v -text
+/rtl/fc_work/** -text
+/testbench/*.v -text
+/docs/** -text
+/doc/** -text
+/golden/** -text
+/reference/** -text
+/spec/** -text
+/syn/** -text
+/tools/** -text
+*.bin binary
+*.xlsx binary

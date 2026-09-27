@@ -1,0 +1,62 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-e01
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\vivado.bat -mode batch -source C:\Users\kccistc\AppData\Local\Temp\codex-e01\encoder_syn.tcl -nojournal -nolog -tclargs CNN_Encoder xc7z020clg400-1 D:\2609_final_project\cnn_rtl\rtl\encoder\Buffer.v D:\2609_final_project\cnn_rtl\rtl\encoder\Conv_MAC.v D:\2609_final_project\cnn_rtl\rtl\encoder\requant_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\gelu_stage.v D:\2609_final_project\cnn_rtl\rtl\encoder\Pool.v D:\2609_final_project\cnn_rtl\rtl\encoder\CNN_Encoder.v
+
+****** Vivado v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+CRITICAL WARNING: [Common 17-741] No write access right to the local Tcl store at 'C'. XilinxTclStore is reverted to the installation area. If you want to use local Tcl Store, please change the access right and relaunch Vivado.
+source {C:\Users\kccistc\AppData\Local\Temp\codex-e01\encoder_syn.tcl}
+# source D:/2609_final_project/cnn_rtl/syn/syn_check.tcl
+## set top   [lindex $argv 0]
+## set part  [lindex $argv 1]
+## set srcs  [lrange $argv 2 end]
+## foreach f $srcs { read_verilog $f }
+## read_xdc [file join [file dirname [info script]] timing_100mhz.xdc]
+## synth_design -top $top -part $part -mode out_of_context
+Command: synth_design -top CNN_Encoder -part xc7z020clg400-1 -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 43148
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1105.070 ; gain = 0.000
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'CNN_Encoder' [D:/2609_final_project/cnn_rtl/rtl/encoder/CNN_Encoder.v:3]
+INFO: [Synth 8-6157] synthesizing module 'Buffer' [D:/2609_final_project/cnn_rtl/rtl/encoder/Buffer.v:2]
+	Parameter W_DATA_WIDTH bound to: 64 - type: integer 
+	Parameter R_DATA_WIDTH bound to: 8 - type: integer 
+	Parameter DEPTH_BYTE bound to: 11520 - type: integer 
+	Parameter W_ADDR_WIDTH bound to: 11 - type: integer 
+	Parameter R_ADDR_WIDTH bound to: 14 - type: integer 
+	Parameter MIN_DATA_W bound to: 8 - type: integer 
+	Parameter MAX_DATA_W bound to: 64 - type: integer 
+	Parameter DEPTH bound to: 11520 - type: integer 
+	Parameter RATIO bound to: 8 - type: integer 
+Reason is one or more of the following :
+	1: RAM has multiple writes via different ports in same process. If RAM inferencing intended, write to one port per process. 
+	2: Unable to determine number of words or word size in RAM. 
+	3: No valid read/write found for RAM. 
+ERROR: [Synth 8-3391] Unable to infer a block/distributed RAM for 'gen_wide_write.mem_reg' because the memory pattern used is not supported. Failed to dissolve the memory into bits because the number of bits (92160) is too large. Use 'set_param synth.elaboration.rodinMoreOptions {rt::set_parameter dissolveMemorySizeLimit 92160}' to allow the memory to be dissolved into individual bits
+ERROR: [Synth 8-6156] failed synthesizing module 'Buffer' [D:/2609_final_project/cnn_rtl/rtl/encoder/Buffer.v:2]
+ERROR: [Synth 8-6156] failed synthesizing module 'CNN_Encoder' [D:/2609_final_project/cnn_rtl/rtl/encoder/CNN_Encoder.v:3]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 1105.070 ; gain = 0.000
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+INFO: [Common 17-83] Releasing license: Synthesis
+8 Infos, 0 Warnings, 0 Critical Warnings and 4 Errors encountered.
+synth_design failed
+ERROR: [Common 17-69] Command failed: Synthesis failed - please see the console or run log file for details
+
+    while executing
+"source D:/2609_final_project/cnn_rtl/syn/syn_check.tcl"
+    (file "C:\Users\kccistc\AppData\Local\Temp\codex-e01\encoder_syn.tcl" line 1)
+INFO: [Common 17-206] Exiting Vivado at Sat Sep 26 03:35:38 2026...
+
+EXIT_CODE: 1
+WALL_CLOCK_SECONDS: 12.760070

@@ -1,0 +1,48 @@
+C:\Users\kccistc\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -X utf8 -u C:\Users\kccistc\AppData\Local\Temp\codex-f02\regression.py
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_S00_AXI.v
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_write.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_regs.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_read.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_ctrl.v D:\2609_final_project\cnn_rtl\tb\tb_m00_read.v D:\2609_final_project\cnn_rtl\tb\tb_m00_read_perf.v D:\2609_final_project\cnn_rtl\tb\tb_m00_write.v D:\2609_final_project\cnn_rtl\tb\tb_m00_err.v D:\2609_final_project\cnn_rtl\tb\tb_axi4_slave_mem_model.v
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_s00_axi_write -s t07_tb_s00_axi_write
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_s00_axi_write -runall -onerror quit
+PASS: totals AW=5 W=5 commit=5 B=5
+PASS: S00-02 ALL CHECKS PASSED
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_s00_axi_regs -s t07_tb_s00_axi_regs
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_s00_axi_regs -runall -onerror quit
+PASS: totals writes=49 commit=49 B=49
+PASS: S00-03 ALL REGISTER CHECKS PASSED
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_s00_axi_read -s t07_tb_s00_axi_read
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_s00_axi_read -runall -onerror quit
+PASS: totals AR=50 R=50 commit=7 B=7
+PASS: S00-04 ALL READ CHECKS PASSED
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_s00_axi_ctrl -s t07_tb_s00_axi_ctrl
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_s00_axi_ctrl -runall -onerror quit
+PASS: N=1 totals commit=52 B=52 START=6 CLEAR=4
+PASS: N=2 totals commit=52 B=52 START=5 CLEAR=4
+PASS: N=8 totals commit=58 B=58 START=7 CLEAR=5
+PASS: S00-05 ALL CONTROL CHECKS PASSED (15a/15b/15c included)
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_m00_read -s t07_tb_m00_read
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_m00_read -runall -onerror quit
+PASS: T-02b FUNCTIONAL 12/12 CASES, ALL COLLECTED WORDS AND AR RANGES CHECKED; protocol violations=0
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_m00_read_perf -s t07_tb_m00_read_perf
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_m00_read_perf -runall -onerror quit
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_m00_write -s t07_tb_m00_write
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_m00_write -runall -onerror quit
+PASS: T-02c ALL W1-W8 CHECKS
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_m00_err -s t07_tb_m00_err
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_m00_err -runall -onerror quit
+PASS: T-02d E1-E9 ALL CHECKS cases=22 normal_injections=8 watchdog_injections=0 master_violations=0 expected_checker_violations=0 C12=0 RD_FAULT_hold=2000_each reset_recovery=PASS
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_axi4_slave_mem_model -s t07_tb_axi4_slave_mem_model
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t07_tb_axi4_slave_mem_model -runall -onerror quit
+PASS: T-02a ALL A/B/C/D CHECKS PASSED; mandatory negatives=6/6 total negatives=13 injections=6
+PASS: L-02 protected regression S00=4 M00=4 model=1

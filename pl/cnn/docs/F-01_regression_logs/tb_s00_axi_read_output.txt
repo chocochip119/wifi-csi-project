@@ -1,0 +1,28 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_s00_axi_read/xsim_script.tcl
+# xsim {t07_tb_s00_axi_read} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: reset assertion and immediate release keep ARREADY/RVALID low
+PASS: all 8 offsets match the read mux; all 4 RW values read back
+PASS: STATUS bit layout in 24 combinations (error=0/5/F, cfg=0/1, busy/done=00/01/10/11)
+PASS: scale returns zero/SLVERR for cfg=0 and scale/OKAY for cfg=1
+PASS: STATUS snapshot survives changed live inputs and 4-cycle R stall with ARVALID low
+PASS: scale RDATA/RRESP snapshots survive cfg 0->1 and 1->0 during stall
+PASS: low address bits ignored (0x0C/0x0E and 0x04/0x07 aliases)
+PASS: a read completes while the write B response is stalled
+PASS: a write completes during R stall without changing the pending read snapshot
+PASS: simultaneous RW commit and AR acceptance return the pre-update value
+PASS: same-edge synchronous status update also returns the pre-update snapshot
+PASS: consecutive reads stay distinct; no AR acceptance on the R handshake edge
+PASS: totals AR=50 R=50 commit=7 B=7
+PASS: S00-04 ALL READ CHECKS PASSED
+$finish called at time : 2706 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_read.v" Line 394
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 16:36:45 2026...

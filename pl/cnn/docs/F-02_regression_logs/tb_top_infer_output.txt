@@ -1,0 +1,61 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_top_infer/xsim_script.tcl
+# xsim {t07_tb_top_infer} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+OBS: R4 tb=infer case=0 leg=0 raw=1440 words=1440 discarded=0 read_fall=56922 cycles=56944 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-04 case=0 leg=0 name=aligned_delay0 base=1d000000 total_cycles=56944 input_cycles=1621 enc_delay=0 enc_cycles=1 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=0 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+OBS: R4 tb=infer case=1 leg=0 raw=1440 words=1440 discarded=0 read_fall=56927 cycles=56949 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-04 case=1 leg=0 name=aligned_delay5 base=1d000000 total_cycles=56949 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=1 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+OBS: R4 tb=infer case=2 leg=0 raw=1440 words=1440 discarded=0 read_fall=57022 cycles=57044 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-04 case=2 leg=0 name=aligned_delay100 base=1d000000 total_cycles=57044 input_cycles=1621 enc_delay=100 enc_cycles=101 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=2 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+OBS: R4 tb=infer case=3 leg=0 raw=1440 words=1440 discarded=0 read_fall=57922 cycles=57944 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-04 case=3 leg=0 name=aligned_delay1000 base=1d000000 total_cycles=57944 input_cycles=1621 enc_delay=1000 enc_cycles=1001 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=3 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+OBS: R4 tb=infer case=4 leg=0 raw=1440 words=1440 discarded=0 read_fall=56929 cycles=56951 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-04 case=4 leg=0 name=unaligned_008 base=1d000008 total_cycles=56951 input_cycles=1623 enc_delay=5 enc_cycles=6 commands=1 AR=91 expected_AR=91 boundary_shorts=1 R=1440 RAM_words=1440 enc_start=1 equations=1623 no_valid=183 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=4 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+OBS: R4 tb=infer case=5 leg=0 raw=1440 words=1440 discarded=0 read_fall=151800 cycles=151822 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-04 case=5 leg=0 name=boundary_ff8_stalls base=1d000ff8 total_cycles=151822 input_cycles=4330 enc_delay=5 enc_cycles=6 commands=1 AR=91 expected_AR=91 boundary_shorts=1 R=1440 RAM_words=1440 enc_start=1 equations=4330 no_valid=2890 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=5 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+OBS: R4 tb=infer case=6 leg=0 raw=1440 words=1440 discarded=0 read_fall=107363 cycles=107385 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-04 case=6 leg=0 name=random_AR_and_R_gaps base=1d000000 total_cycles=107385 input_cycles=3057 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=3057 no_valid=1617 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=6 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+OBS: R4 tb=infer case=7 leg=0 raw=1440 words=1440 discarded=0 read_fall=56927 cycles=56949 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-04 case=7 leg=0 name=level_done base=1d000000 total_cycles=56949 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=7 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+OBS: R4 tb=infer case=8 leg=0 raw=0 words=0 discarded=0 read_fall=0 cycles=2 done=0 error=2 origin=-1 entries=0 residence=0
+PASS: T-04 case=8 leg=0 name=NO_CFG base=1d000000 total_cycles=2 input_cycles=0 enc_delay=5 enc_cycles=0 commands=0 AR=0 expected_AR=0 boundary_shorts=0 R=0 RAM_words=0 enc_start=0 equations=0 no_valid=0 drain_cycles=0 discarded=0 done=0 error=2 violations=0
+PASS: T-06 input regression case=8 leg=0 FC_commands=0 FC_pushes=0 FC_pops=0 violations=0
+OBS: R4 tb=infer case=9 leg=0 raw=1440 words=21 discarded=1419 read_fall=1622 cycles=1623 done=0 error=4 origin=5 entries=1 residence=1595
+PASS: T-04 case=9 leg=0 name=RRESP_middle base=1d000000 total_cycles=1623 input_cycles=1621 enc_delay=5 enc_cycles=0 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=21 enc_start=0 equations=25 no_valid=4 drain_cycles=1596 discarded=1419 done=0 error=4 violations=0
+PASS: T-06 input regression case=9 leg=0 FC_commands=0 FC_pushes=0 FC_pops=0 violations=0
+OBS: R4 tb=infer case=10 leg=0 raw=1440 words=1440 discarded=0 read_fall=1622 cycles=1624 done=0 error=4 origin=5 entries=1 residence=1
+PASS: T-04 case=10 leg=0 name=RRESP_last base=1d000000 total_cycles=1624 input_cycles=1621 enc_delay=5 enc_cycles=0 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=0 equations=1620 no_valid=180 drain_cycles=2 discarded=0 done=0 error=4 violations=0
+PASS: T-06 input regression case=10 leg=0 FC_commands=0 FC_pushes=0 FC_pops=0 violations=0
+OBS: R4 tb=infer case=11 leg=0 raw=1440 words=1440 discarded=0 read_fall=56927 cycles=56949 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-04 case=11 leg=0 name=level_done_repeat base=1d000000 total_cycles=56949 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=11 leg=0 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+OBS: R4 tb=infer case=11 leg=1 raw=1440 words=1440 discarded=0 read_fall=56927 cycles=56949 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-04 case=11 leg=1 name=level_done_repeat base=1d000000 total_cycles=56949 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=11 leg=1 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+OBS: R4 tb=infer case=12 leg=0 raw=1440 words=21 discarded=1419 read_fall=1622 cycles=1623 done=0 error=4 origin=5 entries=1 residence=1595
+PASS: T-04 case=12 leg=0 name=error_then_restart base=1d000000 total_cycles=1623 input_cycles=1621 enc_delay=5 enc_cycles=0 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=21 enc_start=0 equations=25 no_valid=4 drain_cycles=1596 discarded=1419 done=0 error=4 violations=0
+PASS: T-06 input regression case=12 leg=0 FC_commands=0 FC_pushes=0 FC_pops=0 violations=0
+OBS: R4 tb=infer case=12 leg=1 raw=1440 words=1440 discarded=0 read_fall=56927 cycles=56949 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-04 case=12 leg=1 name=error_then_restart base=1d000000 total_cycles=56949 input_cycles=1621 enc_delay=5 enc_cycles=6 commands=1 AR=90 expected_AR=90 boundary_shorts=0 R=1440 RAM_words=1440 enc_start=1 equations=1621 no_valid=181 drain_cycles=0 discarded=0 done=1 error=0 violations=0
+PASS: T-06 input regression case=12 leg=1 FC_commands=1 FC_pushes=49152 FC_pops=49152 violations=0
+PASS: T-04 N1-N8 ALL SELECTED CHECKS cases=13 runs=15 selector=-1 AXI_C12_violations=0 RAM_violations=0
+$finish called at time : 8472950 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_infer.v" Line 586
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:00:10 . Memory (MB): peak = 917.102 ; gain = 0.000
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 18:22:52 2026...

@@ -1,0 +1,87 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_ctrl.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_S00_AXI.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_S00_AXI
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.823060
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\loader_stub.v D:\2609_final_project\cnn_rtl\tb\in_ram_stub.v D:\2609_final_project\cnn_rtl\tb\enc_stub.v D:\2609_final_project\cnn_rtl\tb\fc_stub.v D:\2609_final_project\cnn_rtl\tb\tb_top_fc1.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/loader_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module loader_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/in_ram_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module in_ram_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/enc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module enc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/fc_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_top_fc1.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_top_fc1
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.856392
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-t06\sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_top_fc1 -s t06_tb_top_fc1
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_top_fc1 -s t06_tb_top_fc1 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3645] port 'pose_data' remains unconnected for this instance [D:/2609_final_project/cnn_rtl/tb/tb_top_fc1.v:224]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.pose_cnn_ctrl
+Compiling module work.loader_stub
+Compiling module work.in_ram_stub
+Compiling module work.enc_stub
+Compiling module work.fc_stub
+Compiling module work.tb_top_fc1
+Built simulation snapshot t06_tb_top_fc1
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t06/sim/xsim.dir/t06_tb_top_fc1/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 23:54:57 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.405490
+
+DIAGNOSTIC ONLY: run existing elaborated snapshot after the reported unconnected-port warning; not a passing regression.
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t06_tb_top_fc1 -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t06_tb_top_fc1/xsim_script.tcl
+# xsim {t06_tb_top_fc1} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-05 LOAD case=0 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+FAIL: T-05 fast_aligned case=0 leg=0 phase=2 cycle=61138 state=7 FC1 starts after complete input/Encoder
+Fatal: T-05 FC1 mismatch
+Time: 611375 ns  Iteration: 0  Process: /tb_top_fc1/check  Scope: tb_top_fc1.check  File: D:/2609_final_project/cnn_rtl/tb/tb_top_fc1.v Line: 259
+$finish called at time : 611375 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 23:55:24 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.683776

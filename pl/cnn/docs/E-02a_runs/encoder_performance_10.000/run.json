@@ -1,0 +1,10 @@
+{
+  "tag": "encoder_performance_10.000",
+  "block": "encoder",
+  "top": "CNN_Encoder",
+  "mode": "performance",
+  "period_ns": 10.0,
+  "exit": 0,
+  "seconds": 404.815525,
+  "complete": true
+}

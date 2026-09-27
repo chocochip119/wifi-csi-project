@@ -1,0 +1,39 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_s00_axi_regs/xsim_script.tcl
+# xsim {t07_tb_s00_axi_regs} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: reset clears COMMAND/INPUT_ADDR/WEIGHT_ADDR/OUTPUT_ADDR
+PASS: full writes update only the selected CSR and preserve all 32 COMMAND bits
+PASS: offset 0x08 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x08 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x08 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x08 disabled WDATA lanes are ignored, including X values
+PASS: offset 0x0c single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x0c combined strobes 6/C preserve unselected bytes
+PASS: offset 0x0c idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x0c disabled WDATA lanes are ignored, including X values
+PASS: offset 0x10 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x10 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x10 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x10 disabled WDATA lanes are ignored, including X values
+PASS: offset 0x14 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x14 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x14 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x14 disabled WDATA lanes are ignored, including X values
+PASS: CONTROL reserved bits are ignored; START/CLEAR pulses stay zero
+PASS: writes to 0x00/0x04/0x18/0x1C preserve every CSR and return OKAY
+PASS: 0x0C and 0x0E select the same INPUT_ADDR (D04 confirmed)
+PASS: consecutive writes preserve distinct destinations/data; no pre-commit updates or replay
+PASS: reset also clears all four previously nonzero CSRs
+PASS: totals writes=49 commit=49 B=49
+PASS: S00-03 ALL REGISTER CHECKS PASSED
+$finish called at time : 1556 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_regs.v" Line 284
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 16:36:38 2026...

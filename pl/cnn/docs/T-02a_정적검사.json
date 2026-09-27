@@ -1,0 +1,288 @@
+{
+  "axi_bus_ports": [
+    {
+      "name": "M_AXI_AWID",
+      "width": 1,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_AWADDR",
+      "width": 32,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_AWLEN",
+      "width": 8,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_AWSIZE",
+      "width": 3,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_AWBURST",
+      "width": 2,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_AWLOCK",
+      "width": 1,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_AWCACHE",
+      "width": 4,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_AWPROT",
+      "width": 3,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_AWQOS",
+      "width": 4,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_AWVALID",
+      "width": 1,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_AWREADY",
+      "width": 1,
+      "master": "input",
+      "model": "output"
+    },
+    {
+      "name": "M_AXI_WDATA",
+      "width": 64,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_WSTRB",
+      "width": 8,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_WLAST",
+      "width": 1,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_WVALID",
+      "width": 1,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_WREADY",
+      "width": 1,
+      "master": "input",
+      "model": "output"
+    },
+    {
+      "name": "M_AXI_BID",
+      "width": 1,
+      "master": "input",
+      "model": "output"
+    },
+    {
+      "name": "M_AXI_BRESP",
+      "width": 2,
+      "master": "input",
+      "model": "output"
+    },
+    {
+      "name": "M_AXI_BVALID",
+      "width": 1,
+      "master": "input",
+      "model": "output"
+    },
+    {
+      "name": "M_AXI_BREADY",
+      "width": 1,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_ARID",
+      "width": 1,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_ARADDR",
+      "width": 32,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_ARLEN",
+      "width": 8,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_ARSIZE",
+      "width": 3,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_ARBURST",
+      "width": 2,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_ARLOCK",
+      "width": 1,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_ARCACHE",
+      "width": 4,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_ARPROT",
+      "width": 3,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_ARQOS",
+      "width": 4,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_ARVALID",
+      "width": 1,
+      "master": "output",
+      "model": "input"
+    },
+    {
+      "name": "M_AXI_ARREADY",
+      "width": 1,
+      "master": "input",
+      "model": "output"
+    },
+    {
+      "name": "M_AXI_RID",
+      "width": 1,
+      "master": "input",
+      "model": "output"
+    },
+    {
+      "name": "M_AXI_RDATA",
+      "width": 64,
+      "master": "input",
+      "model": "output"
+    },
+    {
+      "name": "M_AXI_RRESP",
+      "width": 2,
+      "master": "input",
+      "model": "output"
+    },
+    {
+      "name": "M_AXI_RLAST",
+      "width": 1,
+      "master": "input",
+      "model": "output"
+    },
+    {
+      "name": "M_AXI_RVALID",
+      "width": 1,
+      "master": "input",
+      "model": "output"
+    },
+    {
+      "name": "M_AXI_RREADY",
+      "width": 1,
+      "master": "output",
+      "model": "input"
+    }
+  ],
+  "clock_reset_aliases": {
+    "M_AXI_ACLK": "clk",
+    "M_AXI_ARESETN": "resetn"
+  },
+  "checker_locations": {
+    "C1": 264,
+    "C2": 266,
+    "C3": 268,
+    "C4": 207,
+    "C5": 208,
+    "C6": 210,
+    "C7": 212,
+    "C8": 335,
+    "C9": 350,
+    "C10": 346,
+    "C11": 274,
+    "C12": 235
+  },
+  "protected_files_unchanged": [
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_ctrl.v",
+      "Hash": "625B16AEDFCF804CAE50D071FF1E2B6B53DF4396F0CBE5008C16FFF0EE1AB64D"
+    },
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_M00_AXI.v",
+      "Hash": "9C5EE22C6D25602E97032C337AD437032F99E94EA883F55C231A2D4D71E998D0"
+    },
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_S00_AXI.v",
+      "Hash": "78ADB298E83AE2C4AB023748AFF78104A237648364579729D951A5B597E1A65E"
+    },
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_csr_ctrl_link.v",
+      "Hash": "4D00D7BB088ECFFFA58806DD817991F903A4ABE2D356024111262868E09E57E1"
+    },
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_ctrl_status.v",
+      "Hash": "CB75018472BA16B7BBDD20747230D1F157441B4BC737C22A302AE77B56F7ABEF"
+    },
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_ctrl.v",
+      "Hash": "72BCD126B4E6CA0E1A1B129973FF65C0C1F6F40C2B3D691C568DA15041206D2F"
+    },
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_read.v",
+      "Hash": "1733A639ED4D2299DD8B1F72F4D282B5B3535B3F033F41C00F49707F2A42C0F5"
+    },
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_regs.v",
+      "Hash": "773760F459F582096D1644B06CD0A85CDD37DB33BFA190BB3FF7FC46EF60CAB2"
+    },
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_write.v",
+      "Hash": "AFF01C63AD24A35CA122C912B6A781E5E5A623B9341F26ED7C4FCBF16F1E7170"
+    }
+  ],
+  "new_files": {
+    "cnn_rtl\\tb\\axi4_slave_mem_model.v": "02813E9D5789189B27464DAD307D39C0C2EAAE56106D28D437AFE731B9BEA348",
+    "cnn_rtl\\tb\\tb_axi4_slave_mem_model.v": "170CA4B8AB67996C6C4BB52D9112ACBAC4AEC292311AA9893EE8D20C9D6E7944"
+  },
+  "M00_not_instantiated_or_included": true,
+  "timescale_both_files": "1ns / 1ps"
+}

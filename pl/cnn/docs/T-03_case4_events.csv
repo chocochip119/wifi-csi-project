@@ -1,0 +1,10 @@
+case,cycle,state,top_busy,mem_busy,mem_err,mem_start,loader_done,raw_R,loader_words,AR1,AR2
+blob_error,6,1,1,0,0,1,0,0,0,0,0
+blob_error,7,2,1,1,0,0,0,0,0,0,0
+blob_error,843,2,1,0,0,1,0,742,742,47,0
+blob_error,844,3,1,1,0,0,0,742,742,47,0
+blob_error,4198,3,1,0,0,0,0,3722,3722,47,187
+blob_error,4199,4,1,0,0,0,0,3722,3722,47,187
+blob_error,4205,4,1,0,0,0,1,3722,3722,47,187
+blob_error,4206,12,1,0,0,0,0,3722,3722,47,187
+blob_error,4207,0,0,0,0,0,0,3722,3722,47,187

@@ -1,0 +1,209 @@
+{
+  "hashes": {
+    "blob.bin": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+    "fc1_acc_i32.hex": "22b6aca7a6875ef604e8bfbfc5238de14cb78602256cd8d4aaac9f3821fc306d",
+    "fc2_acc_i32.hex": "081119f47e2668b983023ef428ca871900338a4563551ed355e906c0aa2df1f8",
+    "fc3_acc_i32.hex": "31021ea552cac2163495cb6b37789f977a8ccf9f9ec470a1e7e0621f3e0b0ec9",
+    "encoder_flat_u64.hex": "50922ed6746c48c4dda4be98e161152af47d5068c76392300fe5cea8846f0120",
+    "fc1_gelu_i8.hex": "3ed38e4567bac7f9ca5bf9cefecc11471e5cebae3a4ae8bffff66ef04ef6170b",
+    "fc2_gelu_i8.hex": "f741ba38d3adc58a77a93137ee08860b1314fecb5e320f72a47f8d9f633c4ffe",
+    "fc1_requant_i8.hex": "b039e226c4b846d174178cb075e0a3e17324ee341dedfd6a11de82e51ea15c66",
+    "fc2_requant_i8.hex": "5e681962a9b9735400ac3aeb16b3d60295df724978723c321fbe6098db51ec53",
+    "fc3_i8.hex": "fe2e64d09125e251f61d1837285718837af28e07e1a24c78c78b9aa633caa150",
+    "pose_f32.hex": "3645306406f53e8ba909a98821e24277137b7e20c7f71e553f66c9eded0c8e69"
+  },
+  "stats": {
+    "shift_count": 328,
+    "shift_min": 39,
+    "shift_max": 44,
+    "mult_min": 1073796529,
+    "mult_max": 2143967066,
+    "output_scale": 0.006640393286943436,
+    "pose_f32_matches": 24
+  },
+  "layers": [
+    {
+      "layer": 1,
+      "count": 128,
+      "raw_min": -76,
+      "raw_max": 17,
+      "saturation_count": 0,
+      "max_product_abs": 498418559039311,
+      "signed_product_bits": 50
+    },
+    {
+      "layer": 2,
+      "count": 128,
+      "raw_min": -104,
+      "raw_max": 22,
+      "saturation_count": 0,
+      "max_product_abs": 113193422306224,
+      "signed_product_bits": 48
+    },
+    {
+      "layer": 3,
+      "count": 24,
+      "raw_min": 68,
+      "raw_max": 126,
+      "saturation_count": 0,
+      "max_product_abs": 840429470483895,
+      "signed_product_bits": 51
+    }
+  ],
+  "mutations": [
+    {
+      "layer": 1,
+      "field": "bias",
+      "out": 0,
+      "before": [
+        610,
+        1288077941,
+        42
+      ],
+      "after": [
+        1049186,
+        1288077941,
+        42
+      ],
+      "rq_before": 8,
+      "rq_after": 127
+    },
+    {
+      "layer": 1,
+      "field": "mult",
+      "out": 0,
+      "before": [
+        610,
+        1288077941,
+        42
+      ],
+      "after": [
+        610,
+        644038970,
+        42
+      ],
+      "rq_before": 8,
+      "rq_after": 4
+    },
+    {
+      "layer": 1,
+      "field": "shift",
+      "out": 0,
+      "before": [
+        610,
+        1288077941,
+        42
+      ],
+      "after": [
+        610,
+        1288077941,
+        43
+      ],
+      "rq_before": 8,
+      "rq_after": 4
+    },
+    {
+      "layer": 2,
+      "field": "bias",
+      "out": 0,
+      "before": [
+        -4891,
+        1822827887,
+        40
+      ],
+      "after": [
+        1043685,
+        1822827887,
+        40
+      ],
+      "rq_before": -93,
+      "rq_after": 127
+    },
+    {
+      "layer": 2,
+      "field": "mult",
+      "out": 0,
+      "before": [
+        -4891,
+        1822827887,
+        40
+      ],
+      "after": [
+        -4891,
+        911413943,
+        40
+      ],
+      "rq_before": -93,
+      "rq_after": -47
+    },
+    {
+      "layer": 2,
+      "field": "shift",
+      "out": 0,
+      "before": [
+        -4891,
+        1822827887,
+        40
+      ],
+      "after": [
+        -4891,
+        1822827887,
+        41
+      ],
+      "rq_before": -93,
+      "rq_after": -47
+    },
+    {
+      "layer": 3,
+      "field": "bias",
+      "out": 0,
+      "before": [
+        210030,
+        1896848957,
+        43
+      ],
+      "after": [
+        1258606,
+        1896848957,
+        43
+      ],
+      "rq_before": 83,
+      "rq_after": 127
+    },
+    {
+      "layer": 3,
+      "field": "mult",
+      "out": 0,
+      "before": [
+        210030,
+        1896848957,
+        43
+      ],
+      "after": [
+        210030,
+        948424478,
+        43
+      ],
+      "rq_before": 83,
+      "rq_after": 42
+    },
+    {
+      "layer": 3,
+      "field": "shift",
+      "out": 0,
+      "before": [
+        210030,
+        1896848957,
+        43
+      ],
+      "after": [
+        210030,
+        1896848957,
+        44
+      ],
+      "rq_before": 83,
+      "rq_after": 42
+    }
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,26 @@
+--- before/cnn_rtl/tb/tb_s00_axi_regs.v
++++ after/cnn_rtl/tb/tb_s00_axi_regs.v
+@@ -166,8 +166,9 @@
+             bready = 1'b0;
+             #2 rst_n = 1'b0;
+             #1;
++            tick;
++            // Synchronous reset takes effect at the rising edge (R-01).
+             check_regs(128'b0);
+-            tick;
+             @(posedge clk);
+             rst_n <= 1'b1;
+             #1;
+--- before/cnn_rtl/tb/tb_s00_axi_ctrl.v
++++ after/cnn_rtl/tb/tb_s00_axi_ctrl.v
+@@ -375,8 +375,9 @@
+         ro_addr[0] = 5'h04; ro_addr[1] = 5'h18; ro_addr[2] = 5'h1c;
+         #2 rst_n = 1'b0;
+         #1;
++        tick;
++        // Synchronous reset takes effect at the rising edge (R-01).
+         check_condition({reg_start, reg_clear_status, bresp} === 4'b0000, "reset clears pulses and BRESP");
+-        tick;
+         @(posedge clk); rst_n <= 1'b1; #1;
+         check_condition({reg_start, reg_clear_status, awready, wready, bvalid} === 5'b0,
+                         "immediate reset release keeps outputs inactive");

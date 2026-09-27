@@ -1,0 +1,9 @@
+case,cycle,state,top_busy,mem_busy,mem_err,mem_start,loader_done,raw_R,loader_words,AR1,AR2
+immediate_done,80688,1,1,0,0,1,0,0,0,0,0
+immediate_done,80689,2,1,1,0,0,0,0,0,0,0
+immediate_done,81525,2,1,0,0,1,0,742,742,47,0
+immediate_done,81526,3,1,1,0,0,0,742,742,47,0
+immediate_done,84880,3,1,0,0,0,1,3722,3722,47,187
+immediate_done,84881,4,1,0,0,0,0,3722,3722,47,187
+immediate_done,84882,12,1,0,0,0,0,3722,3722,47,187
+immediate_done,84883,0,0,0,0,0,0,3722,3722,47,187

@@ -1,0 +1,29 @@
+CWD: D:\2609_final_project\cnn_rtl\syn
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\vivado.bat -mode batch -source D:\2609_final_project\cnn_rtl\syn\impl_check.tcl -nojournal -nolog -tclargs fc_mac_requant_ooc xc7z020clg400-1 10.000 default C:\Users\kccistc\AppData\Local\Temp\codex-e02a\fc_default_10.000 D:\2609_final_project\cnn_rtl\rtl\fc\fc_mac.v D:\2609_final_project\cnn_rtl\rtl\encoder\requant_stage.v C:\Users\kccistc\AppData\Local\Temp\codex-e02a\fc_mac_requant_ooc.v
+
+****** Vivado v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+CRITICAL WARNING: [Common 17-741] No write access right to the local Tcl store at 'C'. XilinxTclStore is reverted to the installation area. If you want to use local Tcl Store, please change the access right and relaunch Vivado.
+source {D:\2609_final_project\cnn_rtl\syn\impl_check.tcl}
+# if {$argc < 6} {error "Expected top part period mode output_directory source..."}
+# set top [lindex $argv 0]
+# set part [lindex $argv 1]
+# set period [lindex $argv 2]
+# set mode [lindex $argv 3]
+# set out_dir [file normalize [lindex $argv 4]]
+# set srcs [lrange $argv 5 end]
+# if {$part ne "xc7z020clg400-1"} {error "E-02a part must be xc7z020clg400-1"}
+# if {$mode ni {default performance}} {error "Unsupported implementation mode"}
+# if {![string is double -strict $period] || $period <= 0} {error "Invalid period"}
+# file mkdir $out_dir
+can't create directory "C:/Users/kccistc/Local": permission denied
+    while executing
+"file mkdir $out_dir"
+    (file "D:\2609_final_project\cnn_rtl\syn\impl_check.tcl" line 17)
+INFO: [Common 17-206] Exiting Vivado at Sat Sep 26 19:52:37 2026...
+
+EXIT_CODE: 1
+WALL_CLOCK_SECONDS: 3.603958

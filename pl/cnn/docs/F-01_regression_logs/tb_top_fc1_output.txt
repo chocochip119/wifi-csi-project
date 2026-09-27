@@ -1,0 +1,56 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_top_fc1/xsim_script.tcl
+# xsim {t07_tb_top_fc1} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-05 LOAD case=0 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+OBS: R4 tb=fc1 case=0 leg=0 raw=49152 words=49152 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0 scope=  full_INFER
+PASS: T-05 INFER case=0 leg=0 name=fast_aligned loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56947 FC1_cycles=55303 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=61138 read_end=61132 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=1 leg=0 base=1c000000 saved=1c000000 words=3722 AR1=47 AR2=187 cycles=4195
+OBS: R4 tb=fc1 case=1 leg=0 raw=49152 words=49152 discarded=0 read_fall=56927 cycles=56949 done=1 error=0 origin=-1 entries=0 residence=0 scope=  full_INFER
+PASS: T-05 INFER case=1 leg=0 name=fast_blob_aligned loaded=1c000000 current=1c100050 issued=1c001730 total_cycles=56949 FC1_cycles=55305 read_busy_cycles=55298 AR=3073 expected_AR=3073 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=122298 read_end=122292 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=2 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+OBS: R4 tb=fc1 case=2 leg=0 raw=49152 words=49152 discarded=0 read_fall=196190 cycles=198258 done=1 error=0 origin=-1 entries=0 residence=0 scope=  full_INFER
+PASS: T-05 INFER case=2 leg=0 name=slow_full loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=198258 FC1_cycles=196614 read_busy_cycles=194561 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=145322 max_full_run=3 full_R_stalls=139265 done_relation=after done_edge=324767 read_end=322715 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=3 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+OBS: R4 tb=fc1 case=3 leg=0 raw=49152 words=49152 discarded=0 read_fall=195802 cycles=197894 done=1 error=0 origin=-1 entries=0 residence=0 scope=  full_INFER
+PASS: T-05 INFER case=3 leg=0 name=random_repeat loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=197894 FC1_cycles=196250 read_busy_cycles=194173 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=142828 max_full_run=37 full_R_stalls=138877 done_relation=after done_edge=526872 read_end=524796 done=1 error=0 overflow=0 violations=0
+OBS: R4 tb=fc1 case=3 leg=1 raw=49152 words=49152 discarded=0 read_fall=195802 cycles=197894 done=1 error=0 origin=-1 entries=0 residence=0 scope=  full_INFER
+PASS: T-05 INFER case=3 leg=1 name=random_repeat loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=197894 FC1_cycles=196250 read_busy_cycles=194173 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=142828 max_full_run=37 full_R_stalls=138877 done_relation=after done_edge=724772 read_end=722696 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=4 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+OBS: R4 tb=fc1 case=4 leg=0 raw=49152 words=49152 discarded=0 read_fall=58352 cycles=58374 done=1 error=0 origin=-1 entries=0 residence=0 scope=  full_INFER
+PASS: T-05 INFER case=4 leg=0 name=pause_resume loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=58374 FC1_cycles=56730 read_busy_cycles=56723 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=1427 max_full_run=1427 full_R_stalls=1427 done_relation=after done_edge=787357 read_end=787351 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=5 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+OBS: R4 tb=fc1 case=5 leg=0 raw=49152 words=49152 discarded=0 read_fall=56925 cycles=56925 done=0 error=0 origin=-1 entries=0 residence=0 scope=FC1_boundary
+PASS: T-05 INFER case=5 leg=0 name=done_same loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56925 FC1_cycles=55297 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=same done_edge=848509 read_end=848509 done=0 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=6 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+OBS: R4 tb=fc1 case=6 leg=0 raw=49152 words=49152 discarded=0 read_fall=56925 cycles=56925 done=0 error=0 origin=-1 entries=0 residence=0 scope=FC1_boundary
+PASS: T-05 INFER case=6 leg=0 name=done_before loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56925 FC1_cycles=55297 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=before done_edge=855502 read_end=909645 done=0 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=7 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+OBS: R4 tb=fc1 case=7 leg=0 raw=49152 words=49152 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0 scope=  full_INFER
+PASS: T-05 INFER case=7 leg=0 name=level_repeat loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56947 FC1_cycles=55303 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=970787 read_end=970781 done=1 error=0 overflow=0 violations=0
+OBS: R4 tb=fc1 case=7 leg=1 raw=49152 words=49152 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0 scope=  full_INFER
+PASS: T-05 INFER case=7 leg=1 name=level_repeat loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56947 FC1_cycles=55303 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=1027740 read_end=1027734 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=8 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=9313
+OBS: R4 tb=fc1 case=8 leg=0 raw=49152 words=49152 discarded=0 read_fall=198168 cycles=200236 done=1 error=0 origin=-1 entries=0 residence=0 scope=  full_INFER
+PASS: T-05 INFER case=8 leg=0 name=full_and_slave_stall loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=200236 FC1_cycles=196614 read_busy_cycles=194561 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=119484 max_full_run=3 full_R_stalls=71688 done_relation=after done_edge=1237305 read_end=1235253 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=9 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+OBS: R4 tb=fc1 case=9 leg=0 raw=49152 words=49152 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0 scope=  full_INFER
+PASS: T-05 INFER case=9 leg=0 name=reload_base loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=56947 FC1_cycles=55303 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=1298463 read_end=1298457 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=9 leg=1 base=1c100050 saved=1c100050 words=3722 AR1=47 AR2=187 cycles=4195
+OBS: R4 tb=fc1 case=9 leg=1 raw=49152 words=49152 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0 scope=  full_INFER
+PASS: T-05 INFER case=9 leg=1 name=reload_base loaded=1c100050 current=1c000050 issued=1c101780 total_cycles=56947 FC1_cycles=55303 read_busy_cycles=55296 AR=3072 expected_AR=3072 pushes=49152 pops=49152 full_cycles=0 max_full_run=0 full_R_stalls=0 done_relation=after done_edge=1359617 read_end=1359611 done=1 error=0 overflow=0 violations=0
+PASS: T-05 LOAD case=10 leg=0 base=1c000050 saved=1c000050 words=3722 AR1=47 AR2=187 cycles=4195
+OBS: R4 tb=fc1 case=10 leg=0 raw=49152 words=1285 discarded=47867 read_fall=58571 cycles=58572 done=0 error=4 origin=7 entries=1 residence=53849 scope=  full_INFER
+PASS: T-05 INFER case=10 leg=0 name=RRESP_with_full loaded=1c000050 current=1c100050 issued=1c001780 total_cycles=58572 FC1_cycles=3094 read_busy_cycles=3094 AR=3072 expected_AR=3072 pushes=1285 pops=1285 full_cycles=1718 max_full_run=3 full_R_stalls=1646 done_relation=error_no_done done_edge=0 read_end=1422415 done=0 error=4 overflow=0 violations=0
+PASS: T-05 ALL SELECTED cases=11 INFER_runs=14 selector=-1 violations=0
+$finish called at time : 14224200 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_fc1.v" Line 566
+run: Time (s): cpu = 00:00:02 ; elapsed = 00:00:17 . Memory (MB): peak = 917.207 ; gain = 0.047
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 16:37:16 2026...

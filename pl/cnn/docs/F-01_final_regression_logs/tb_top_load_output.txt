@@ -1,0 +1,35 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_top_load/xsim_script.tcl
+# xsim {t07_tb_top_load} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T-03 always_ready L1-L8 cycles=4204 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=10 max_ready_low=0 held_valid=0 equations=4192 done=1 error=0 violations=0
+OBS: R4 tb=load case=0 leg=0 raw=3722 words=3722 discarded=0 read_fall=4193 cycles=4204 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-03 fixed_8 L1-L8 cycles=33505 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=10 max_ready_low=8 held_valid=29301 equations=33493 done=1 error=0 violations=0
+OBS: R4 tb=load case=1 leg=0 raw=3722 words=3722 discarded=0 read_fall=33494 cycles=33505 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-03 typed_and_slave_stall L1-L8 cycles=19247 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=20 max_ready_low=8 held_valid=7288 equations=19225 done=1 error=0 violations=0
+OBS: R4 tb=load case=2 leg=0 raw=3722 words=3722 discarded=0 read_fall=19226 cycles=19247 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-03 random_and_slave_stall L1-L8 cycles=19484 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=5 max_ready_low=8 held_valid=11589 equations=19477 done=1 error=0 violations=0
+OBS: R4 tb=load case=3 leg=0 raw=3722 words=3722 discarded=0 read_fall=19478 cycles=19484 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-03 blob_error L1-L8 cycles=4201 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=7 max_ready_low=0 held_valid=0 equations=4192 done=0 error=3 violations=0
+OBS: R4 tb=load case=4 leg=0 raw=3722 words=3722 discarded=0 read_fall=4193 cycles=4201 done=0 error=3 origin=-1 entries=0 residence=0
+PASS: T-03 immediate_done L1-L8 cycles=4195 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=1 max_ready_low=0 held_valid=0 equations=4192 done=1 error=0 violations=0
+OBS: R4 tb=load case=5 leg=0 raw=3722 words=3722 discarded=0 read_fall=4193 cycles=4195 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-03 read_error_part1 L1-L8 cycles=839 commands=1 Loader_start=1 AR1=47 AR2=0 R_beats=742 compared_words=21 LD_WAIT_cycles=0 max_ready_low=0 held_valid=0 equations=25 done=0 error=4 violations=0
+OBS: R4 tb=load case=6 leg=0 raw=742 words=21 discarded=721 read_fall=838 cycles=839 done=0 error=4 origin=2 entries=1 residence=811
+PASS: T-03 read_error_part2 L1-L8 cycles=4194 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=763 LD_WAIT_cycles=0 max_ready_low=0 held_valid=0 equations=862 done=0 error=4 violations=0
+OBS: R4 tb=load case=7 leg=0 raw=3722 words=763 discarded=2959 read_fall=4193 cycles=4194 done=0 error=4 origin=3 entries=1 residence=3329
+PASS: T-03 read_error_last_part1 L1-L8 cycles=840 commands=1 Loader_start=1 AR1=47 AR2=0 R_beats=742 compared_words=742 LD_WAIT_cycles=0 max_ready_low=0 held_valid=0 equations=836 done=0 error=4 violations=0
+OBS: R4 tb=load case=8 leg=0 raw=742 words=742 discarded=0 read_fall=838 cycles=840 done=0 error=4 origin=2 entries=1 residence=1
+PASS: T-03 immediate_done_error L1-L8 cycles=4195 commands=2 Loader_start=1 AR1=47 AR2=187 R_beats=3722 compared_words=3722 LD_WAIT_cycles=1 max_ready_low=0 held_valid=0 equations=4192 done=0 error=3 violations=0
+OBS: R4 tb=load case=9 leg=0 raw=3722 words=3722 discarded=0 read_fall=4193 cycles=4195 done=0 error=3 origin=-1 entries=0 residence=0
+PASS: T-07 LOAD ALL SELECTED cases=10 selector=-1
+$finish called at time : 949840 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_load.v" Line 474
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 17:56:44 2026...

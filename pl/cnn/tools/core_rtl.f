@@ -1,0 +1,9 @@
+rtl/pose_cnn_v1_0_S00_AXI.v
+rtl/pose_cnn_v1_0_M00_AXI.v
+rtl/pose_cnn_ctrl.v
+rtl/blob_decoder.v
+rtl/conv_weight_ram.v
+rtl/param_ram.v
+rtl/gelu_lut_ram.v
+rtl/fcw_ram.v
+rtl/weight_param_loader.v

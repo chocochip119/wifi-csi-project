@@ -1,0 +1,5 @@
+latency,bytes,beats,bursts,cycles,cycles_per_beat,inter_burst_idle,startup_idle,time_us_100mhz,judgement,wall_clock_seconds
+0,393216,49152,3072,55296,1.125,6142,2,552.96,one_outstanding_sufficient_under_this_latency,4.914337700000033
+16,393216,49152,3072,104448,2.125,55278,18,1044.48,review_2_to_4_outstanding,4.316277100006118
+32,393216,49152,3072,153600,3.125,104414,34,1536.0,review_2_to_4_outstanding,4.439021500002127
+64,393216,49152,3072,251904,5.125,202686,66,2519.04,review_2_to_4_outstanding,5.27863869999419

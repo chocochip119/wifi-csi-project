@@ -1,0 +1,218 @@
+{
+  "suite": "smoke",
+  "cwd": "D:\\wifi-csi-project\\pl\\cnn\\runs\\20260927_201407_598250",
+  "commands": [
+    {
+      "label": "compile_rtl",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xvlog.bat",
+        "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_v1_0_S00_AXI.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_v1_0_M00_AXI.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/pose_cnn_ctrl.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/blob_decoder.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/conv_weight_ram.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/param_ram.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/gelu_lut_ram.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/fcw_ram.v",
+        "D:/wifi-csi-project/pl/cnn/rtl/weight_param_loader.v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 1.795,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "compile_tb",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xvlog.bat",
+        "-sv",
+        "D:/wifi-csi-project/pl/cnn/testbench/axi4_slave_mem_model.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/loader_stub.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/in_ram_stub.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/enc_stub.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/fc_stub.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_s00_axi_write.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_s00_axi_regs.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_s00_axi_read.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_s00_axi_ctrl.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_ctrl_status.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_csr_ctrl_link.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_top_load.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_top_infer.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_top_fc1.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_top_full.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_m00_read.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_m00_read_perf.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_m00_write.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_m00_err.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_axi4_slave_mem_model.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_blob_decoder.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_loader_rams.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_weight_param_loader.v",
+        "D:/wifi-csi-project/pl/cnn/testbench/tb_loader_real_blob.v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.928,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_s00_axi_ctrl_elab",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+        "work.tb_s00_axi_ctrl",
+        "-s",
+        "handover_tb_s00_axi_ctrl"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 5.174,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_s00_axi_ctrl_run",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat",
+        "handover_tb_s00_axi_ctrl",
+        "-runall",
+        "-onerror",
+        "quit"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 7.08,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": "PASS: S00-05 ALL CONTROL CHECKS PASSED"
+    },
+    {
+      "label": "tb_ctrl_status_elab",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+        "work.tb_ctrl_status",
+        "-s",
+        "handover_tb_ctrl_status"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 3.041,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_ctrl_status_run",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat",
+        "handover_tb_ctrl_status",
+        "-runall",
+        "-onerror",
+        "quit"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.75,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": "PASS: T-06 ALL CTRL STATUS CHECKS PASSED"
+    },
+    {
+      "label": "tb_m00_read_elab",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+        "work.tb_m00_read",
+        "-s",
+        "handover_tb_m00_read"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 3.706,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_m00_read_run",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat",
+        "handover_tb_m00_read",
+        "-runall",
+        "-onerror",
+        "quit"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.565,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": "PASS: T-02b FUNCTIONAL 12/12 CASES"
+    },
+    {
+      "label": "tb_top_load_elab",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+        "work.tb_top_load",
+        "-s",
+        "handover_tb_top_load"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 5.006,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_top_load_run",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat",
+        "handover_tb_top_load",
+        "-runall",
+        "-onerror",
+        "quit"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 5.536,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": "PASS: T-07 LOAD ALL SELECTED cases=10 selector=-1"
+    },
+    {
+      "label": "tb_loader_real_blob_elab",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+        "work.tb_loader_real_blob",
+        "-s",
+        "handover_tb_loader_real_blob"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 3.506,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": null
+    },
+    {
+      "label": "tb_loader_real_blob_run",
+      "argv": [
+        "C:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat",
+        "handover_tb_loader_real_blob",
+        "-runall",
+        "-onerror",
+        "quit",
+        "-f",
+        "blob.args"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.409,
+      "passed": true,
+      "diagnostics": [],
+      "required_marker": "PASS: L-05 REAL_BLOB B1-B6 ALL"
+    }
+  ],
+  "tests": {
+    "tb_s00_axi_ctrl": "PASS",
+    "tb_ctrl_status": "PASS",
+    "tb_m00_read": "PASS",
+    "tb_top_load": "PASS",
+    "tb_loader_real_blob": "PASS"
+  },
+  "blob_sha256": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+  "passed": true
+}

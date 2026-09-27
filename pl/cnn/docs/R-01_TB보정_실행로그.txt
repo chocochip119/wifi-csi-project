@@ -1,0 +1,181 @@
+Working directory: C:\Users\kccistc\AppData\Local\Temp\codex-r01-62ed1f7c25ff4f1bbccfff330e748b07\tb_fix\sim
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_S00_AXI.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_S00_AXI
+
+EXIT_CODE: 0
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_regs.v D:\2609_final_project\cnn_rtl\tb\tb_s00_axi_ctrl.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_regs.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_regs
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_ctrl.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_s00_axi_ctrl
+INFO: [VRFC 10-311] analyzing module s00_ctrl_case
+
+EXIT_CODE: 0
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_s00_axi_regs -s r01_fix_tb_s00_axi_regs
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_s00_axi_regs -s r01_fix_tb_s00_axi_regs 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.tb_s00_axi_regs
+Built simulation snapshot r01_fix_tb_s00_axi_regs
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-r01-62ed1f7c25ff4f1bbccfff330e748b07/tb_fix/sim/xsim.dir/r01_fix_tb_s00_axi_regs/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 20:35:26 2026...
+
+EXIT_CODE: 0
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat r01_fix_tb_s00_axi_regs -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/r01_fix_tb_s00_axi_regs/xsim_script.tcl
+# xsim {r01_fix_tb_s00_axi_regs} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: reset clears COMMAND/INPUT_ADDR/WEIGHT_ADDR/OUTPUT_ADDR
+PASS: full writes update only the selected CSR and preserve all 32 COMMAND bits
+PASS: offset 0x08 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x08 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x08 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x08 disabled WDATA lanes are ignored, including X values
+PASS: offset 0x0c single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x0c combined strobes 6/C preserve unselected bytes
+PASS: offset 0x0c idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x0c disabled WDATA lanes are ignored, including X values
+PASS: offset 0x10 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x10 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x10 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x10 disabled WDATA lanes are ignored, including X values
+PASS: offset 0x14 single-lane strobes 1/2/4/8 preserve other lanes and CSRs
+PASS: offset 0x14 combined strobes 6/C preserve unselected bytes
+PASS: offset 0x14 idle zero strobe changes no CSR and returns OKAY
+PASS: offset 0x14 disabled WDATA lanes are ignored, including X values
+PASS: CONTROL reserved bits are ignored; START/CLEAR pulses stay zero
+PASS: writes to 0x00/0x04/0x18/0x1C preserve every CSR and return OKAY
+PASS: 0x0C and 0x0E select the same INPUT_ADDR (D04 confirmed)
+PASS: consecutive writes preserve distinct destinations/data; no pre-commit updates or replay
+PASS: reset also clears all four previously nonzero CSRs
+PASS: totals writes=49 commit=49 B=49
+PASS: S00-03 ALL REGISTER CHECKS PASSED
+$finish called at time : 1556 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_regs.v" Line 284
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 20:35:29 2026...
+
+EXIT_CODE: 0
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_s00_axi_ctrl -s r01_fix_tb_s00_axi_ctrl
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_s00_axi_ctrl -s r01_fix_tb_s00_axi_ctrl 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.s00_ctrl_case
+Compiling module work.tb_s00_axi_ctrl
+Built simulation snapshot r01_fix_tb_s00_axi_ctrl
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-r01-62ed1f7c25ff4f1bbccfff330e748b07/tb_fix/sim/xsim.dir/r01_fix_tb_s00_axi_ctrl/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 20:35:32 2026...
+
+EXIT_CODE: 0
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat r01_fix_tb_s00_axi_ctrl -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/r01_fix_tb_s00_axi_ctrl/xsim_script.tcl
+# xsim {r01_fix_tb_s00_axi_ctrl} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: N=1 reset clears both control pulses and BRESP
+PASS: N=2 reset clears both control pulses and BRESP
+PASS: N=8 reset clears both control pulses and BRESP
+PASS: N=1 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=2 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=8 idle START is one registered cycle after commit; core snapshots configuration
+PASS: N=1 idle CLEAR pulses once; TB display clears
+PASS: N=2 idle CLEAR pulses once; TB display clears
+PASS: N=8 idle CLEAR pulses once; TB display clears
+PASS: N=1 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=2 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=8 idle START+CLEAR emits both pulses in the same cycle
+PASS: N=1 busy START and START+CLEAR reject atomically without pulses
+PASS: N=2 busy START and START+CLEAR reject atomically without pulses
+PASS: N=8 busy START and START+CLEAR reject atomically without pulses
+PASS: N=1 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=2 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=8 busy CLEAR-only is OKAY and emits CLEAR
+PASS: N=1 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=2 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=8 CONTROL lane-0 masking and reserved bits work in idle and busy
+PASS: N=1 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=2 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=8 all 4 busy RW registers reject full and zero strobes; every value preserved
+PASS: N=1 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=2 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=8 busy RO/reserved writes ignore data/strobes and return OKAY
+PASS: N=1 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=2 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=8 DDR full/partial misalignment rejects the entire candidate; COMMAND is exempt
+PASS: N=1 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=2 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=8 alignment uses merged bytes; unselected bad low bits and idle zero strobes are harmless
+PASS: N=1 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=2 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=8 stalled OKAY/SLVERR stay fixed across busy 0<->1; no extended or late pulses
+PASS: N=1 rejection samples busy at commit, not at AW/W capture
+PASS: N=2 rejection samples busy at commit, not at AW/W capture
+PASS: N=8 rejection samples busy at commit, not at AW/W capture
+PASS: N=1 core raises busy on START sampling edge and holds exactly N cycles
+PASS: N=2 core raises busy on START sampling edge and holds exactly N cycles
+PASS: N=8 core raises busy on START sampling edge and holds exactly N cycles
+PASS: 15b N=1 fastest second START: commit busy=0 -> OKAY, second 1-cycle pulse
+PASS: N=1 totals commit=52 B=52 START=6 CLEAR=4
+PASS: 15a N=2 fastest second START: commit busy=1 -> SLVERR, no second pulse
+PASS: N=2 totals commit=52 B=52 START=5 CLEAR=4
+PASS: N=8 CLEAR updates display while the core keeps running
+PASS: 15a N=8 fastest second START: commit busy=1 -> SLVERR, no second pulse
+PASS: 15c N=8 early busy START: remaining=7 -> SLVERR, no pulse
+PASS: 15c N=8 middle busy START: remaining=4 -> SLVERR, no pulse
+PASS: 15c N=8 final busy START: remaining=1 -> SLVERR, no pulse after busy drops
+PASS: N=8 totals commit=58 B=58 START=7 CLEAR=5
+PASS: S00-05 ALL CONTROL CHECKS PASSED (15a/15b/15c included)
+$finish called at time : 2426 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_s00_axi_ctrl.v" Line 21
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 20:35:36 2026...
+
+EXIT_CODE: 0

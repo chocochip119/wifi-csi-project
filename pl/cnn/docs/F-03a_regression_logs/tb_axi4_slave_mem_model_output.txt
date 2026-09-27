@@ -1,0 +1,63 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_axi4_slave_mem_model/xsim_script.tcl
+# xsim {t07_tb_axi4_slave_mem_model} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: A1 single-beat write/read data match
+PASS: A2 16-beat write/read all words match
+PASS: A3 consecutive bursts preserve distinct addresses and data
+PASS: A4 sparse mem_fill/read 40 words; compare=0; wrong-seed compare=1
+PASS: A5 unwritten address returns DEAD_BEEF_BAD0_0001
+PASS: A6 all 4 W beats before AW; no early B; buffered data read back
+PASS: A6-extra AW first, no B while waiting for WLAST, then correct response/data
+PASS: A-extra independent read/write; stable stalled R checks=5 B checks=5
+PASS: B1 ARREADY gap=7 observed address stalls=6 (baseline=0)
+PASS: B2 R beat interval baseline=1 configured-gap=3 observed=4 clocks
+PASS: B3 WLAST-to-B handshake baseline=1 delay=4 observed=5 clocks
+PASS: B3-extra WLAST delay expired before AW; no early B, AW-to-B handshake=1 clock
+PASS: B4 AR-to-first-R handshake baseline=1 latency=5 observed=6 clocks
+PASS: B5 seed=1234ABCD repeated WREADY trace=000000a014168cf9 samples=44 stalls=28
+PASS: C1/C4 RRESP=SLVERR on beat 2 only; next burst OKAY; count=1
+PASS: C2/C4 RID=1 in selected burst; next RID=0; count=1
+PASS: C2/C4 BRESP=SLVERR then next OKAY; count=1
+PASS: C2/C4 BID=1 then next BID=0; count=1
+PASS: C3/C4 early RLAST at beat 2 instead of 3; next burst normal
+PASS: C3/C4/C5 missing RLAST then normal; counters RRESP/RID/BRESP/BID/RLAST=1/1/1/1/2 total=6
+PASS: C12-positive reset masks active master VALID after delta settling; violations=0
+EXPECTED_VIOLATION: C1 AR payload/VALID changed while stalled at 4635000
+PASS: D1 ARADDR changes during AR stall -> C1 detected exactly once; delta=1
+EXPECTED_VIOLATION: C4 AR SIZE/BURST/ID at 4685000
+PASS: D2 ARSIZE=2 -> C4 detected exactly once; delta=1
+EXPECTED_VIOLATION: C5 AR LEN > 15 or X at 4745000
+PASS: D3 ARLEN=16 (17 beats) -> C5 detected exactly once; delta=1
+EXPECTED_VIOLATION: C7 AR burst crosses 4 KiB at 4805000
+PASS: D4 AR burst crosses 4 KiB -> C7 detected exactly once; delta=1
+EXPECTED_VIOLATION: C8 WSTRB is not FF at 4865000
+PASS: D5 WSTRB=0F -> C8 detected exactly once; delta=1
+EXPECTED_VIOLATION: C9 WLAST position disagrees with AWLEN at 4945000
+PASS: D6 WLAST one beat early -> C9 detected exactly once; delta=1
+EXPECTED_VIOLATION: C2 AW payload/VALID changed while stalled at 5015000
+PASS: D-extra AWVALID drops during stall -> C2 detected exactly once; delta=1
+EXPECTED_VIOLATION: C3 W payload/VALID changed while stalled at 5075000
+PASS: D-extra WDATA changes during stall -> C3 detected exactly once; delta=1
+EXPECTED_VIOLATION: C6 AW address must be 8-byte aligned at 5125000
+PASS: D-extra misaligned AWADDR -> C6 detected exactly once; delta=1
+EXPECTED_VIOLATION: C10 test ended with incomplete write beat count at 5190000
+PASS: D-extra declared end with missing W beats -> C10 detected exactly once; delta=1
+EXPECTED_VIOLATION: C10 actual W count exceeds AWLEN+1 at 5275000
+PASS: D-extra buffered W count exceeds AWLEN+1 -> C10 detected exactly once; delta=1
+EXPECTED_VIOLATION: C11 second AR before prior read completion at 5355000
+PASS: D-extra second AR before first R completion -> C11 detected exactly once; delta=1
+EXPECTED_VIOLATION: C12 master VALID asserted during reset at 5401000
+PASS: D-extra AWVALID during reset between clock edges -> C12 detected exactly once; delta=1
+PASS: D-extra C11 switch permits queued address without parallel service
+PASS: T-02a ALL A/B/C/D CHECKS PASSED; mandatory negatives=6/6 total negatives=13 injections=6
+$finish called at time : 5520 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_axi4_slave_mem_model.v" Line 410
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 19:09:07 2026...

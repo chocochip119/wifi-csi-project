@@ -1,0 +1,32 @@
+[
+  {
+    "path": "pl/cnn/rtl/CNN_Encoder/Buffer.v",
+    "before_sha256": "8d921c80c46a462c1bb8c87b3da691abe08579c78a412ff0ea409060f03c4d47",
+    "after_sha256": "91173f7c50df58aee6750ede3a01f5aa64a9ce4f8fb10e032d9aca0ea7b5a602"
+  },
+  {
+    "path": "pl/cnn/rtl/CNN_Encoder/CNN_Encoder.v",
+    "before_sha256": "9543ccaa26e77e453903a999d06520f86b6cd61a2d14e9c31436e6c86351f17e",
+    "after_sha256": "9543ccaa26e77e453903a999d06520f86b6cd61a2d14e9c31436e6c86351f17e"
+  },
+  {
+    "path": "pl/cnn/rtl/CNN_Encoder/Conv_MAC.v",
+    "before_sha256": "c6328db582b6c435ff05849eb8644fa0bd2364858c0954fe713b1d361000ba18",
+    "after_sha256": "c6328db582b6c435ff05849eb8644fa0bd2364858c0954fe713b1d361000ba18"
+  },
+  {
+    "path": "pl/cnn/rtl/CNN_Encoder/gelu_stage.v",
+    "before_sha256": "0c0b90d866198c317f49261fe07c5068c34dd6acbb67c95aede39aa19c5f405c",
+    "after_sha256": "0c0b90d866198c317f49261fe07c5068c34dd6acbb67c95aede39aa19c5f405c"
+  },
+  {
+    "path": "pl/cnn/rtl/CNN_Encoder/Pool.v",
+    "before_sha256": "d173a1b5f95d681e1f2ae052636b1b94db429b20fc72e10c94ce7814351ee063",
+    "after_sha256": "dbf4f5e5f1a64bccf2d5e9190f916302c39153789c2d3ba55575e30c12079aff"
+  },
+  {
+    "path": "pl/cnn/rtl/CNN_Encoder/requant_stage.v",
+    "before_sha256": "4e11cf526482b43c448c9c7bf843c33c8802f74235da8d5ed31a7a9d2a80b7f0",
+    "after_sha256": "71f872adad6e79a04e09111b10b2bc7cc534ea8b48269d24ecccda3c009962db"
+  }
+]

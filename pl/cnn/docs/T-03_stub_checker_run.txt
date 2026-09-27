@@ -1,0 +1,98 @@
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\loader_stub.v C:\Users\kccistc\AppData\Local\Temp\codex-t03-twpm5b4y\tb_loader_contract.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/loader_stub.v" into library work
+INFO: [VRFC 10-311] analyzing module loader_stub
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t03-twpm5b4y/tb_loader_contract.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_loader_contract
+
+EXIT_CODE: 0
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_loader_contract -s t03_stub_contract
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_loader_contract -s t03_stub_contract 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.loader_stub
+Compiling module work.tb_loader_contract
+Built simulation snapshot t03_stub_contract
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t03-twpm5b4y/stub_checks/xsim.dir/t03_stub_contract/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 22:14:44 2026...
+
+EXIT_CODE: 0
+
+OPTION_FILE case0.args: -testplusarg "CASE=0"
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_stub_contract -runall -onerror quit -f case0.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_stub_contract/xsim_script.tcl
+# xsim {t03_stub_contract} -testplusarg CASE=0 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: loader_stub START received while non-idle
+Time: 45 ns  Iteration: 0  Process: /tb_loader_contract/dut/fail  Scope: tb_loader_contract.dut.fail  File: D:/2609_final_project/cnn_rtl/tb/loader_stub.v Line: 38
+$finish called at time : 45 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:14:48 2026...
+
+EXIT_CODE: 0
+
+OPTION_FILE case1.args: -testplusarg "CASE=1"
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_stub_contract -runall -onerror quit -f case1.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_stub_contract/xsim_script.tcl
+# xsim {t03_stub_contract} -testplusarg CASE=1 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: loader_stub VALID/data changed before stalled beat was accepted
+Time: 55 ns  Iteration: 0  Process: /tb_loader_contract/dut/fail  Scope: tb_loader_contract.dut.fail  File: D:/2609_final_project/cnn_rtl/tb/loader_stub.v Line: 38
+$finish called at time : 55 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:14:52 2026...
+
+EXIT_CODE: 0
+
+OPTION_FILE case2.args: -testplusarg "CASE=2"
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_stub_contract -runall -onerror quit -f case2.args
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_stub_contract/xsim_script.tcl
+# xsim {t03_stub_contract} -testplusarg CASE=2 -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+Fatal: FAIL: loader_stub extra beat offered after complete payload
+Time: 45 ns  Iteration: 0  Process: /tb_loader_contract/dut/fail  Scope: tb_loader_contract.dut.fail  File: D:/2609_final_project/cnn_rtl/tb/loader_stub.v Line: 38
+$finish called at time : 45 ns
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:14:55 2026...
+
+EXIT_CODE: 0

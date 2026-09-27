@@ -1,0 +1,88 @@
+{
+  "tb_s00_axi_write": {
+    "status": "PASS",
+    "failures": []
+  },
+  "tb_s00_axi_regs": {
+    "status": "PASS",
+    "pass_lines": 25,
+    "completion": "PASS: S00-03 ALL REGISTER CHECKS PASSED",
+    "failures": [],
+    "source": "R-01_TB보정_실행로그.txt",
+    "initial_run": {
+      "status": "FAIL",
+      "failures": [
+        "FAIL: CSR values at 3000: got=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx expected=00000000000000000000000000000000",
+        "Fatal: S00-03 register mismatch"
+      ]
+    }
+  },
+  "tb_s00_axi_read": {
+    "status": "PASS",
+    "failures": []
+  },
+  "tb_s00_axi_ctrl": {
+    "status": "PASS",
+    "pass_lines": 53,
+    "completion": "PASS: S00-05 ALL CONTROL CHECKS PASSED (15a/15b/15c included)",
+    "failures": [],
+    "source": "R-01_TB보정_실행로그.txt",
+    "initial_run": {
+      "status": "FAIL",
+      "failures": [
+        "FAIL: N=1 reset clears pulses and BRESP at 3000",
+        "Fatal: S00-05 policy mismatch"
+      ]
+    }
+  },
+  "tb_ctrl_status": {
+    "status": "PASS",
+    "failures": []
+  },
+  "tb_csr_ctrl_link": {
+    "status": "PASS",
+    "failures": []
+  },
+  "M00_xvlog": "PASS, zero errors/warnings",
+  "syn_S00_AXI": {
+    "utilization": "| pose_cnn_v1_0_S00_AXI |  (top) |        183 |        183 |       0 |    0 | 208 |      0 |      0 |          0 |",
+    "WNS_ns": "3.895",
+    "source": "S_AXI_ARESETN",
+    "destination": "S_AXI_ARREADY",
+    "latches": 0,
+    "loops": 0,
+    "warnings": [
+      "CRITICAL WARNING: [Common 17-741] No write access right to the local Tcl store at 'C'. XilinxTclStore is reverted to the installation area. If you want to use local Tcl Store, please change the access right and relaunch Vivado.",
+      "WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port \"S_AXI_ACLK\" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew",
+      "WARNING: [Vivado 12-180] No cells matched 'get_cells -hierarchical -filter {PRIMITIVE_TYPE =~ REGISTER.latch.*}'."
+    ]
+  },
+  "syn_M00_AXI": {
+    "utilization": "| pose_cnn_v1_0_M00_AXI |  (top) |        364 |        364 |       0 |    0 | 132 |      0 |      0 |          0 |",
+    "WNS_ns": "2.779",
+    "source": "M_AXI_ARESETN",
+    "destination": "mem_wr_ready",
+    "latches": 0,
+    "loops": 0,
+    "warnings": [
+      "CRITICAL WARNING: [Common 17-741] No write access right to the local Tcl store at 'C'. XilinxTclStore is reverted to the installation area. If you want to use local Tcl Store, please change the access right and relaunch Vivado.",
+      "WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port \"M_AXI_ACLK\" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew",
+      "WARNING: [Vivado 12-180] No cells matched 'get_cells -hierarchical -filter {PRIMITIVE_TYPE =~ REGISTER.latch.*}'."
+    ]
+  },
+  "regression_summary": "6/6 PASS cumulative: four prior PASS tests plus two timing-corrected TB reruns; production RTL unchanged.",
+  "followup_rtl_unchanged": [
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_S00_AXI.v",
+      "Hash": "78ADB298E83AE2C4AB023748AFF78104A237648364579729D951A5B597E1A65E"
+    },
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_M00_AXI.v",
+      "Hash": "9C5EE22C6D25602E97032C337AD437032F99E94EA883F55C231A2D4D71E998D0"
+    },
+    {
+      "Path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_ctrl.v",
+      "Hash": "625B16AEDFCF804CAE50D071FF1E2B6B53DF4396F0CBE5008C16FFF0EE1AB64D"
+    }
+  ]
+}

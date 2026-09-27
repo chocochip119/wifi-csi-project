@@ -1,0 +1,39 @@
+`timescale 1ns / 1ps
+module tb_t04_stub_checks;
+ reg clk=0,resetn=0,we=0,start=0;
+ reg [10:0] addr=0; reg [63:0] data=64'h12345678;
+ wire done;
+ integer selected=0;
+ always #5 clk=~clk;
+ in_ram_stub ram(.clk(clk),.resetn(resetn),.in_we(we),.in_waddr(addr),.in_wdata(data));
+ enc_stub enc(.clk(clk),.resetn(resetn),.enc_start(start),.enc_done(done));
+ initial begin #2000; $fatal(1,"unexpected deadline"); end
+ initial begin
+  if (!$value$plusargs("CASE=%d",selected)) selected=0;
+  repeat(2) @(negedge clk); resetn=1;
+  if (selected<4) begin
+   we=1; @(posedge clk); #1;
+   @(negedge clk);
+   case(selected)
+    0: addr=0;
+    1: addr=2;
+    2: addr=1440;
+    3: begin addr=1; data=64'hxxxxxxxxxxxxxxxx; end
+   endcase
+   @(posedge clk); #2;
+   $fatal(1,"checker failed to detect bad input");
+  end else begin
+   enc.delay_cycles=8; enc.done_width_cycles=2; start=1;
+   @(negedge clk); start=0;
+   @(negedge clk); start=1;
+   @(negedge clk); start=0;
+   while (!done) begin @(posedge clk); #2; end
+   if (enc.accepted_starts!=1 || enc.ignored_starts!=1 || enc.done_count!=1 ||
+       enc.done_cycle-enc.start_cycle!=8) $fatal(1,"Encoder repeated START changed execution");
+   @(posedge clk); #2; if (!done) $fatal(1,"done shorter than width 2");
+   @(posedge clk); #2; if (done) $fatal(1,"done longer than width 2");
+   $display("PASS: Encoder stub busy START ignored=1 accepted=1 delay=8 done_width=2");
+   $finish;
+  end
+ end
+endmodule

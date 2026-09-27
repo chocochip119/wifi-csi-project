@@ -1,0 +1,716 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Sat Sep 26 19:55:16 2026
+| Host         : DESKTOP-7CFQ9ND running 64-bit major release  (build 9200)
+| Command      : report_timing_summary -delay_type min_max -max_paths 3 -file D:/2609_final_project/cnn_rtl/docs/E-02a_runs/encoder_default_10.000/post_phys_opt_summary.rpt
+| Design       : CNN_Encoder
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Summary Report
+
+------------------------------------------------------------------------------------------------
+| Timer Settings
+| --------------
+------------------------------------------------------------------------------------------------
+
+  Enable Multi Corner Analysis               :  Yes
+  Enable Pessimism Removal                   :  Yes
+  Pessimism Removal Resolution               :  Nearest Common Node
+  Enable Input Delay Default Clock           :  No
+  Enable Preset / Clear Arcs                 :  No
+  Disable Flight Delays                      :  No
+  Ignore I/O Paths                           :  No
+  Timing Early Launch at Borrowing Latches   :  No
+  Borrow Time for Max Delay Exceptions       :  Yes
+  Merge Timing Exceptions                    :  Yes
+
+  Corner  Analyze    Analyze    
+  Name    Max Paths  Min Paths  
+  ------  ---------  ---------  
+  Slow    Yes        Yes        
+  Fast    Yes        Yes        
+
+
+
+check_timing report
+
+Table of Contents
+-----------------
+1. checking no_clock (0)
+2. checking constant_clock (0)
+3. checking pulse_width_clock (0)
+4. checking unconstrained_internal_endpoints (0)
+5. checking no_input_delay (0)
+6. checking no_output_delay (0)
+7. checking multiple_clock (0)
+8. checking generated_clocks (0)
+9. checking loops (0)
+10. checking partial_input_delay (0)
+11. checking partial_output_delay (0)
+12. checking latch_loops (0)
+
+1. checking no_clock (0)
+------------------------
+ There are 0 register/latch pins with no clock.
+
+
+2. checking constant_clock (0)
+------------------------------
+ There are 0 register/latch pins with constant_clock.
+
+
+3. checking pulse_width_clock (0)
+---------------------------------
+ There are 0 register/latch pins which need pulse_width check
+
+
+4. checking unconstrained_internal_endpoints (0)
+------------------------------------------------
+ There are 0 pins that are not constrained for maximum delay.
+
+ There are 0 pins that are not constrained for maximum delay due to constant clock.
+
+
+5. checking no_input_delay (0)
+------------------------------
+ There are 0 input ports with no input delay specified.
+
+ There are 0 input ports with no input delay but user has a false path constraint.
+
+
+6. checking no_output_delay (0)
+-------------------------------
+ There are 0 ports with no output delay specified.
+
+ There are 0 ports with no output delay but user has a false path constraint
+
+ There are 0 ports with no output delay but with a timing clock defined on it or propagating through it
+
+
+7. checking multiple_clock (0)
+------------------------------
+ There are 0 register/latch pins with multiple clocks.
+
+
+8. checking generated_clocks (0)
+--------------------------------
+ There are 0 generated clocks that are not connected to a clock source.
+
+
+9. checking loops (0)
+---------------------
+ There are 0 combinational loops in the design.
+
+
+10. checking partial_input_delay (0)
+------------------------------------
+ There are 0 input ports with partial input delay specified.
+
+
+11. checking partial_output_delay (0)
+-------------------------------------
+ There are 0 ports with partial output delay specified.
+
+
+12. checking latch_loops (0)
+----------------------------
+ There are 0 combinational latch loops in the design through latch input
+
+
+
+------------------------------------------------------------------------------------------------
+| Design Timing Summary
+| ---------------------
+------------------------------------------------------------------------------------------------
+
+    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+    -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+     -2.847    -2028.244                   1151                 8310        0.097        0.000                      0                 8310        4.020        0.000                       0                  3692  
+
+
+Timing constraints are not met.
+
+
+------------------------------------------------------------------------------------------------
+| Clock Summary
+| -------------
+------------------------------------------------------------------------------------------------
+
+Clock  Waveform(ns)       Period(ns)      Frequency(MHz)
+-----  ------------       ----------      --------------
+ACLK   {0.000 5.000}      10.000          100.000         
+
+
+------------------------------------------------------------------------------------------------
+| Intra Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+-----             -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+ACLK               -2.847    -2028.244                   1151                 8310        0.097        0.000                      0                 8310        4.020        0.000                       0                  3692  
+
+
+------------------------------------------------------------------------------------------------
+| Inter Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Other Path Groups Table
+| -----------------------
+------------------------------------------------------------------------------------------------
+
+Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+----------    ----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Timing Details
+| --------------
+------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  ACLK
+  To Clock:  ACLK
+
+Setup :         1151  Failing Endpoints,  Worst Slack       -2.847ns,  Total Violation    -2028.244ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.097ns,  Total Violation        0.000ns
+PW    :            0  Failing Endpoints,  Worst Slack        4.020ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (VIOLATED) :        -2.847ns  (required time - arrival time)
+  Source:                 pool_shift[5]
+                            (input port clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_pool/p_r3_reg[3]/S
+                            (rising edge-triggered cell FDSE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (ACLK rise@10.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        11.212ns  (logic 4.870ns (43.436%)  route 6.342ns (56.564%))
+  Logic Levels:           30  (CARRY4=22 LUT2=1 LUT3=1 LUT5=2 LUT6=4)
+  Input Delay:            2.000ns
+  Clock Path Skew:        0.924ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.000ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                         input delay                  2.000     2.000    
+                                                      0.000     2.000 r  pool_shift[5] (IN)
+                         net (fo=211, unset)          0.973     2.973    pool_shift[5]
+    SLICE_X39Y85         LUT6 (Prop_lut6_I5_O)        0.124     3.097 r  p_r3[1]_i_229/O
+                         net (fo=14, estimated)       0.613     3.710    u_pool/p_r3_reg[1]_i_69_0
+    SLICE_X36Y87         LUT5 (Prop_lut5_I3_O)        0.124     3.834 r  u_pool/p_r3[1]_i_152/O
+                         net (fo=1, routed)           0.000     3.834    u_pool/p_r3[1]_i_152_n_0
+    SLICE_X36Y87         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     4.367 r  u_pool/p_r3_reg[1]_i_60/CO[3]
+                         net (fo=1, estimated)        0.000     4.367    u_pool/p_r3_reg[1]_i_60_n_0
+    SLICE_X36Y88         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.484 r  u_pool/p_r3_reg[1]_i_53/CO[3]
+                         net (fo=1, estimated)        0.000     4.484    u_pool/p_r3_reg[1]_i_53_n_0
+    SLICE_X36Y89         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.601 r  u_pool/p_r3_reg[1]_i_56/CO[3]
+                         net (fo=1, estimated)        0.000     4.601    u_pool/p_r3_reg[1]_i_56_n_0
+    SLICE_X36Y90         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.718 r  u_pool/p_r3_reg[1]_i_49/CO[3]
+                         net (fo=1, estimated)        0.000     4.718    u_pool/p_r3_reg[1]_i_49_n_0
+    SLICE_X36Y91         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.835 r  u_pool/p_r3_reg[1]_i_58/CO[3]
+                         net (fo=1, estimated)        0.000     4.835    u_pool/p_r3_reg[1]_i_58_n_0
+    SLICE_X36Y92         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.952 r  u_pool/p_r3_reg[1]_i_51/CO[3]
+                         net (fo=1, estimated)        0.000     4.952    u_pool/p_r3_reg[1]_i_51_n_0
+    SLICE_X36Y93         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.069 r  u_pool/p_r3_reg[1]_i_54/CO[3]
+                         net (fo=1, estimated)        0.000     5.069    u_pool/p_r3_reg[1]_i_54_n_0
+    SLICE_X36Y94         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.186 r  u_pool/p_r3_reg[1]_i_47/CO[3]
+                         net (fo=1, estimated)        0.000     5.186    u_pool/p_r3_reg[1]_i_47_n_0
+    SLICE_X36Y95         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.303 r  u_pool/p_r3_reg[1]_i_59/CO[3]
+                         net (fo=1, estimated)        0.000     5.303    u_pool/p_r3_reg[1]_i_59_n_0
+    SLICE_X36Y96         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.420 r  u_pool/p_r3_reg[1]_i_52/CO[3]
+                         net (fo=1, estimated)        0.000     5.420    u_pool/p_r3_reg[1]_i_52_n_0
+    SLICE_X36Y97         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.537 r  u_pool/p_r3_reg[1]_i_55/CO[3]
+                         net (fo=1, estimated)        0.000     5.537    u_pool/p_r3_reg[1]_i_55_n_0
+    SLICE_X36Y98         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.654 r  u_pool/p_r3_reg[1]_i_48/CO[3]
+                         net (fo=1, estimated)        0.000     5.654    u_pool/p_r3_reg[1]_i_48_n_0
+    SLICE_X36Y99         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.771 r  u_pool/p_r3_reg[1]_i_57/CO[3]
+                         net (fo=1, estimated)        0.000     5.771    u_pool/p_r3_reg[1]_i_57_n_0
+    SLICE_X36Y100        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.888 r  u_pool/p_r3_reg[1]_i_50/CO[3]
+                         net (fo=1, estimated)        0.000     5.888    u_pool/p_r3_reg[1]_i_50_n_0
+    SLICE_X36Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.203 f  u_pool/p_r3_reg[1]_i_46/O[3]
+                         net (fo=64, estimated)       1.038     7.241    u_pool/p_r3_reg[1]_i_46_n_4
+    SLICE_X35Y97         LUT6 (Prop_lut6_I0_O)        0.307     7.548 f  u_pool/p_r3[14]_i_730/O
+                         net (fo=4, estimated)        0.814     8.362    u_pool/p_r3[14]_i_730_n_0
+    SLICE_X34Y97         LUT6 (Prop_lut6_I3_O)        0.124     8.486 f  u_pool/p_r3[14]_i_722/O
+                         net (fo=3, estimated)        0.643     9.129    u_pool/p_r3[14]_i_722_n_0
+    SLICE_X32Y96         LUT3 (Prop_lut3_I0_O)        0.124     9.253 f  u_pool/p_r3[14]_i_645/O
+                         net (fo=2, estimated)        0.943    10.196    u_pool/p_r3[14]_i_645_n_0
+    SLICE_X28Y97         LUT6 (Prop_lut6_I0_O)        0.124    10.320 f  u_pool/p_r3[14]_i_580/O
+                         net (fo=4, estimated)        0.623    10.943    u_pool/p_r3[14]_i_580_n_0
+    SLICE_X30Y97         LUT5 (Prop_lut5_I1_O)        0.124    11.067 r  u_pool/p_r3[14]_i_524/O
+                         net (fo=1, routed)           0.000    11.067    u_pool/p_r3[14]_i_524_n_0
+    SLICE_X30Y97         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    11.443 r  u_pool/p_r3_reg[14]_i_403/CO[3]
+                         net (fo=1, estimated)        0.000    11.443    u_pool/p_r3_reg[14]_i_403_n_0
+    SLICE_X30Y98         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.560 r  u_pool/p_r3_reg[14]_i_273/CO[3]
+                         net (fo=1, estimated)        0.000    11.560    u_pool/p_r3_reg[14]_i_273_n_0
+    SLICE_X30Y99         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.677 r  u_pool/p_r3_reg[14]_i_170/CO[3]
+                         net (fo=1, estimated)        0.000    11.677    u_pool/p_r3_reg[14]_i_170_n_0
+    SLICE_X30Y100        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.794 r  u_pool/p_r3_reg[14]_i_89/CO[3]
+                         net (fo=1, estimated)        0.000    11.794    u_pool/p_r3_reg[14]_i_89_n_0
+    SLICE_X30Y101        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.911 r  u_pool/p_r3_reg[14]_i_35/CO[3]
+                         net (fo=1, estimated)        0.000    11.911    u_pool/p_r3_reg[14]_i_35_n_0
+    SLICE_X30Y102        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.028 r  u_pool/p_r3_reg[14]_i_8/CO[3]
+                         net (fo=1, estimated)        0.000    12.028    u_pool/p_r3_reg[14]_i_8_n_0
+    SLICE_X30Y103        CARRY4 (Prop_carry4_CI_CO[1])
+                                                      0.157    12.185 r  u_pool/p_r3_reg[14]_i_3/CO[1]
+                         net (fo=2, estimated)        0.302    12.487    u_pool/p_sat1
+    SLICE_X29Y103        LUT2 (Prop_lut2_I1_O)        0.332    12.819 r  u_pool/p_r3[14]_i_1/O
+                         net (fo=14, estimated)       0.393    13.212    u_pool/p_r3[14]_i_1_n_0
+    SLICE_X26Y103        FDSE                                         r  u_pool/p_r3_reg[3]/S
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)      10.000    10.000 r  
+                                                      0.000    10.000 r  clk (IN)
+                         net (fo=3700, unset)         0.924    10.924    u_pool/clk
+    SLICE_X26Y103        FDSE                                         r  u_pool/p_r3_reg[3]/C
+                         clock pessimism              0.000    10.924    
+                         clock uncertainty           -0.035    10.889    
+    SLICE_X26Y103        FDSE (Setup_fdse_C_S)       -0.524    10.365    u_pool/p_r3_reg[3]
+  -------------------------------------------------------------------
+                         required time                         10.365    
+                         arrival time                         -13.212    
+  -------------------------------------------------------------------
+                         slack                                 -2.847    
+
+Slack (VIOLATED) :        -2.847ns  (required time - arrival time)
+  Source:                 pool_shift[5]
+                            (input port clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_pool/p_r3_reg[8]/S
+                            (rising edge-triggered cell FDSE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (ACLK rise@10.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        11.212ns  (logic 4.870ns (43.436%)  route 6.342ns (56.564%))
+  Logic Levels:           30  (CARRY4=22 LUT2=1 LUT3=1 LUT5=2 LUT6=4)
+  Input Delay:            2.000ns
+  Clock Path Skew:        0.924ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.000ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                         input delay                  2.000     2.000    
+                                                      0.000     2.000 r  pool_shift[5] (IN)
+                         net (fo=211, unset)          0.973     2.973    pool_shift[5]
+    SLICE_X39Y85         LUT6 (Prop_lut6_I5_O)        0.124     3.097 r  p_r3[1]_i_229/O
+                         net (fo=14, estimated)       0.613     3.710    u_pool/p_r3_reg[1]_i_69_0
+    SLICE_X36Y87         LUT5 (Prop_lut5_I3_O)        0.124     3.834 r  u_pool/p_r3[1]_i_152/O
+                         net (fo=1, routed)           0.000     3.834    u_pool/p_r3[1]_i_152_n_0
+    SLICE_X36Y87         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     4.367 r  u_pool/p_r3_reg[1]_i_60/CO[3]
+                         net (fo=1, estimated)        0.000     4.367    u_pool/p_r3_reg[1]_i_60_n_0
+    SLICE_X36Y88         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.484 r  u_pool/p_r3_reg[1]_i_53/CO[3]
+                         net (fo=1, estimated)        0.000     4.484    u_pool/p_r3_reg[1]_i_53_n_0
+    SLICE_X36Y89         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.601 r  u_pool/p_r3_reg[1]_i_56/CO[3]
+                         net (fo=1, estimated)        0.000     4.601    u_pool/p_r3_reg[1]_i_56_n_0
+    SLICE_X36Y90         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.718 r  u_pool/p_r3_reg[1]_i_49/CO[3]
+                         net (fo=1, estimated)        0.000     4.718    u_pool/p_r3_reg[1]_i_49_n_0
+    SLICE_X36Y91         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.835 r  u_pool/p_r3_reg[1]_i_58/CO[3]
+                         net (fo=1, estimated)        0.000     4.835    u_pool/p_r3_reg[1]_i_58_n_0
+    SLICE_X36Y92         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.952 r  u_pool/p_r3_reg[1]_i_51/CO[3]
+                         net (fo=1, estimated)        0.000     4.952    u_pool/p_r3_reg[1]_i_51_n_0
+    SLICE_X36Y93         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.069 r  u_pool/p_r3_reg[1]_i_54/CO[3]
+                         net (fo=1, estimated)        0.000     5.069    u_pool/p_r3_reg[1]_i_54_n_0
+    SLICE_X36Y94         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.186 r  u_pool/p_r3_reg[1]_i_47/CO[3]
+                         net (fo=1, estimated)        0.000     5.186    u_pool/p_r3_reg[1]_i_47_n_0
+    SLICE_X36Y95         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.303 r  u_pool/p_r3_reg[1]_i_59/CO[3]
+                         net (fo=1, estimated)        0.000     5.303    u_pool/p_r3_reg[1]_i_59_n_0
+    SLICE_X36Y96         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.420 r  u_pool/p_r3_reg[1]_i_52/CO[3]
+                         net (fo=1, estimated)        0.000     5.420    u_pool/p_r3_reg[1]_i_52_n_0
+    SLICE_X36Y97         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.537 r  u_pool/p_r3_reg[1]_i_55/CO[3]
+                         net (fo=1, estimated)        0.000     5.537    u_pool/p_r3_reg[1]_i_55_n_0
+    SLICE_X36Y98         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.654 r  u_pool/p_r3_reg[1]_i_48/CO[3]
+                         net (fo=1, estimated)        0.000     5.654    u_pool/p_r3_reg[1]_i_48_n_0
+    SLICE_X36Y99         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.771 r  u_pool/p_r3_reg[1]_i_57/CO[3]
+                         net (fo=1, estimated)        0.000     5.771    u_pool/p_r3_reg[1]_i_57_n_0
+    SLICE_X36Y100        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.888 r  u_pool/p_r3_reg[1]_i_50/CO[3]
+                         net (fo=1, estimated)        0.000     5.888    u_pool/p_r3_reg[1]_i_50_n_0
+    SLICE_X36Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.203 f  u_pool/p_r3_reg[1]_i_46/O[3]
+                         net (fo=64, estimated)       1.038     7.241    u_pool/p_r3_reg[1]_i_46_n_4
+    SLICE_X35Y97         LUT6 (Prop_lut6_I0_O)        0.307     7.548 f  u_pool/p_r3[14]_i_730/O
+                         net (fo=4, estimated)        0.814     8.362    u_pool/p_r3[14]_i_730_n_0
+    SLICE_X34Y97         LUT6 (Prop_lut6_I3_O)        0.124     8.486 f  u_pool/p_r3[14]_i_722/O
+                         net (fo=3, estimated)        0.643     9.129    u_pool/p_r3[14]_i_722_n_0
+    SLICE_X32Y96         LUT3 (Prop_lut3_I0_O)        0.124     9.253 f  u_pool/p_r3[14]_i_645/O
+                         net (fo=2, estimated)        0.943    10.196    u_pool/p_r3[14]_i_645_n_0
+    SLICE_X28Y97         LUT6 (Prop_lut6_I0_O)        0.124    10.320 f  u_pool/p_r3[14]_i_580/O
+                         net (fo=4, estimated)        0.623    10.943    u_pool/p_r3[14]_i_580_n_0
+    SLICE_X30Y97         LUT5 (Prop_lut5_I1_O)        0.124    11.067 r  u_pool/p_r3[14]_i_524/O
+                         net (fo=1, routed)           0.000    11.067    u_pool/p_r3[14]_i_524_n_0
+    SLICE_X30Y97         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    11.443 r  u_pool/p_r3_reg[14]_i_403/CO[3]
+                         net (fo=1, estimated)        0.000    11.443    u_pool/p_r3_reg[14]_i_403_n_0
+    SLICE_X30Y98         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.560 r  u_pool/p_r3_reg[14]_i_273/CO[3]
+                         net (fo=1, estimated)        0.000    11.560    u_pool/p_r3_reg[14]_i_273_n_0
+    SLICE_X30Y99         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.677 r  u_pool/p_r3_reg[14]_i_170/CO[3]
+                         net (fo=1, estimated)        0.000    11.677    u_pool/p_r3_reg[14]_i_170_n_0
+    SLICE_X30Y100        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.794 r  u_pool/p_r3_reg[14]_i_89/CO[3]
+                         net (fo=1, estimated)        0.000    11.794    u_pool/p_r3_reg[14]_i_89_n_0
+    SLICE_X30Y101        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    11.911 r  u_pool/p_r3_reg[14]_i_35/CO[3]
+                         net (fo=1, estimated)        0.000    11.911    u_pool/p_r3_reg[14]_i_35_n_0
+    SLICE_X30Y102        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.028 r  u_pool/p_r3_reg[14]_i_8/CO[3]
+                         net (fo=1, estimated)        0.000    12.028    u_pool/p_r3_reg[14]_i_8_n_0
+    SLICE_X30Y103        CARRY4 (Prop_carry4_CI_CO[1])
+                                                      0.157    12.185 r  u_pool/p_r3_reg[14]_i_3/CO[1]
+                         net (fo=2, estimated)        0.302    12.487    u_pool/p_sat1
+    SLICE_X29Y103        LUT2 (Prop_lut2_I1_O)        0.332    12.819 r  u_pool/p_r3[14]_i_1/O
+                         net (fo=14, estimated)       0.393    13.212    u_pool/p_r3[14]_i_1_n_0
+    SLICE_X26Y103        FDSE                                         r  u_pool/p_r3_reg[8]/S
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)      10.000    10.000 r  
+                                                      0.000    10.000 r  clk (IN)
+                         net (fo=3700, unset)         0.924    10.924    u_pool/clk
+    SLICE_X26Y103        FDSE                                         r  u_pool/p_r3_reg[8]/C
+                         clock pessimism              0.000    10.924    
+                         clock uncertainty           -0.035    10.889    
+    SLICE_X26Y103        FDSE (Setup_fdse_C_S)       -0.524    10.365    u_pool/p_r3_reg[8]
+  -------------------------------------------------------------------
+                         required time                         10.365    
+                         arrival time                         -13.212    
+  -------------------------------------------------------------------
+                         slack                                 -2.847    
+
+Slack (VIOLATED) :        -2.842ns  (required time - arrival time)
+  Source:                 u_enc_rq/param3_reg[69]/C
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_enc_rq/rq_reg[1]/R
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (ACLK rise@10.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        12.234ns  (logic 5.106ns (41.736%)  route 7.128ns (58.264%))
+  Logic Levels:           29  (CARRY4=21 LUT2=1 LUT3=1 LUT5=2 LUT6=4)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=3700, unset)         0.973     0.973    u_enc_rq/clk
+    SLICE_X35Y127        FDRE                                         r  u_enc_rq/param3_reg[69]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X35Y127        FDRE (Prop_fdre_C_Q)         0.419     1.392 r  u_enc_rq/param3_reg[69]/Q
+                         net (fo=160, estimated)      0.973     2.365    u_enc_rq/p_0_in[5]
+    SLICE_X35Y127        LUT6 (Prop_lut6_I0_O)        0.299     2.664 r  u_enc_rq/rq[7]_i_696/O
+                         net (fo=16, estimated)       0.557     3.221    u_enc_rq/rq[7]_i_696_n_0
+    SLICE_X34Y127        LUT5 (Prop_lut5_I0_O)        0.124     3.345 r  u_enc_rq/rq[7]_i_508/O
+                         net (fo=1, routed)           0.000     3.345    u_enc_rq/rq[7]_i_508_n_0
+    SLICE_X34Y127        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     3.878 r  u_enc_rq/rq_reg[7]_i_313/CO[3]
+                         net (fo=1, estimated)        0.000     3.878    u_enc_rq/rq_reg[7]_i_313_n_0
+    SLICE_X34Y128        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     3.995 r  u_enc_rq/rq_reg[7]_i_312/CO[3]
+                         net (fo=1, estimated)        0.000     3.995    u_enc_rq/rq_reg[7]_i_312_n_0
+    SLICE_X34Y129        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.112 r  u_enc_rq/rq_reg[7]_i_306/CO[3]
+                         net (fo=1, estimated)        0.000     4.112    u_enc_rq/rq_reg[7]_i_306_n_0
+    SLICE_X34Y130        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.229 r  u_enc_rq/rq_reg[7]_i_309/CO[3]
+                         net (fo=1, estimated)        0.000     4.229    u_enc_rq/rq_reg[7]_i_309_n_0
+    SLICE_X34Y131        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.346 r  u_enc_rq/rq_reg[7]_i_303/CO[3]
+                         net (fo=1, estimated)        0.000     4.346    u_enc_rq/rq_reg[7]_i_303_n_0
+    SLICE_X34Y132        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.463 r  u_enc_rq/rq_reg[7]_i_310/CO[3]
+                         net (fo=1, estimated)        0.000     4.463    u_enc_rq/rq_reg[7]_i_310_n_0
+    SLICE_X34Y133        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.580 r  u_enc_rq/rq_reg[7]_i_304/CO[3]
+                         net (fo=1, estimated)        0.000     4.580    u_enc_rq/rq_reg[7]_i_304_n_0
+    SLICE_X34Y134        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.697 r  u_enc_rq/rq_reg[7]_i_307/CO[3]
+                         net (fo=1, estimated)        0.000     4.697    u_enc_rq/rq_reg[7]_i_307_n_0
+    SLICE_X34Y135        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.814 r  u_enc_rq/rq_reg[7]_i_301/CO[3]
+                         net (fo=1, estimated)        0.000     4.814    u_enc_rq/rq_reg[7]_i_301_n_0
+    SLICE_X34Y136        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     4.931 r  u_enc_rq/rq_reg[7]_i_311/CO[3]
+                         net (fo=1, estimated)        0.000     4.931    u_enc_rq/rq_reg[7]_i_311_n_0
+    SLICE_X34Y137        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.048 r  u_enc_rq/rq_reg[7]_i_305/CO[3]
+                         net (fo=1, estimated)        0.000     5.048    u_enc_rq/rq_reg[7]_i_305_n_0
+    SLICE_X34Y138        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.165 r  u_enc_rq/rq_reg[7]_i_308/CO[3]
+                         net (fo=1, estimated)        0.000     5.165    u_enc_rq/rq_reg[7]_i_308_n_0
+    SLICE_X34Y139        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.282 r  u_enc_rq/rq_reg[7]_i_302/CO[3]
+                         net (fo=1, estimated)        0.000     5.282    u_enc_rq/rq_reg[7]_i_302_n_0
+    SLICE_X34Y140        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.399 r  u_enc_rq/rq_reg[7]_i_248/CO[3]
+                         net (fo=1, estimated)        0.000     5.399    u_enc_rq/rq_reg[7]_i_248_n_0
+    SLICE_X34Y141        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     5.714 f  u_enc_rq/rq_reg[7]_i_114/O[3]
+                         net (fo=64, estimated)       1.111     6.825    u_enc_rq/rq_reg[7]_i_114_n_4
+    SLICE_X37Y137        LUT5 (Prop_lut5_I2_O)        0.307     7.132 f  u_enc_rq/rq[7]_i_901/O
+                         net (fo=4, estimated)        0.848     7.980    u_enc_rq/rq[7]_i_901_n_0
+    SLICE_X37Y137        LUT6 (Prop_lut6_I0_O)        0.124     8.104 f  u_enc_rq/rq[7]_i_950/O
+                         net (fo=2, estimated)        0.725     8.829    u_enc_rq/rq[7]_i_950_n_0
+    SLICE_X37Y138        LUT3 (Prop_lut3_I0_O)        0.124     8.953 f  u_enc_rq/rq[7]_i_846/O
+                         net (fo=2, estimated)        0.806     9.759    u_enc_rq/rq[7]_i_846_n_0
+    SLICE_X38Y139        LUT6 (Prop_lut6_I0_O)        0.124     9.883 f  u_enc_rq/rq[7]_i_720/O
+                         net (fo=4, estimated)        0.589    10.472    u_enc_rq/rq[7]_i_720_n_0
+    SLICE_X39Y138        LUT6 (Prop_lut6_I1_O)        0.124    10.596 r  u_enc_rq/rq[7]_i_578/O
+                         net (fo=1, estimated)        0.475    11.071    u_enc_rq/rq[7]_i_578_n_0
+    SLICE_X41Y138        CARRY4 (Prop_carry4_DI[2]_CO[3])
+                                                      0.398    11.469 r  u_enc_rq/rq_reg[7]_i_369/CO[3]
+                         net (fo=1, estimated)        0.000    11.469    u_enc_rq/rq_reg[7]_i_369_n_0
+    SLICE_X41Y139        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.583 r  u_enc_rq/rq_reg[7]_i_208/CO[3]
+                         net (fo=1, estimated)        0.000    11.583    u_enc_rq/rq_reg[7]_i_208_n_0
+    SLICE_X41Y140        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.697 r  u_enc_rq/rq_reg[7]_i_97/CO[3]
+                         net (fo=1, estimated)        0.000    11.697    u_enc_rq/rq_reg[7]_i_97_n_0
+    SLICE_X41Y141        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.811 r  u_enc_rq/rq_reg[7]_i_34/CO[3]
+                         net (fo=1, estimated)        0.000    11.811    u_enc_rq/rq_reg[7]_i_34_n_0
+    SLICE_X41Y142        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    11.925 r  u_enc_rq/rq_reg[7]_i_8/CO[3]
+                         net (fo=1, estimated)        0.000    11.925    u_enc_rq/rq_reg[7]_i_8_n_0
+    SLICE_X41Y143        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    12.039 r  u_enc_rq/rq_reg[7]_i_3/CO[3]
+                         net (fo=2, estimated)        0.480    12.519    u_enc_rq/acc_sat1
+    SLICE_X42Y143        LUT2 (Prop_lut2_I1_O)        0.124    12.643 r  u_enc_rq/rq[7]_i_1/O
+                         net (fo=7, estimated)        0.564    13.207    u_enc_rq/rq[7]_i_1_n_0
+    SLICE_X42Y143        FDRE                                         r  u_enc_rq/rq_reg[1]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)      10.000    10.000 r  
+                                                      0.000    10.000 r  clk (IN)
+                         net (fo=3700, unset)         0.924    10.924    u_enc_rq/clk
+    SLICE_X42Y143        FDRE                                         r  u_enc_rq/rq_reg[1]/C
+                         clock pessimism              0.000    10.924    
+                         clock uncertainty           -0.035    10.889    
+    SLICE_X42Y143        FDRE (Setup_fdre_C_R)       -0.524    10.365    u_enc_rq/rq_reg[1]
+  -------------------------------------------------------------------
+                         required time                         10.365    
+                         arrival time                         -13.207    
+  -------------------------------------------------------------------
+                         slack                                 -2.842    
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.097ns  (arrival time - required time)
+  Source:                 u_conv_mac/acc_tag_r_reg[7]/C
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_enc_rq/rq_tag_reg[7]_srl4/D
+                            (rising edge-triggered cell SRL16E clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (ACLK rise@0.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        0.302ns  (logic 0.141ns (46.751%)  route 0.161ns (53.249%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=3700, unset)         0.410     0.410    u_conv_mac/clk
+    SLICE_X67Y99         FDRE                                         r  u_conv_mac/acc_tag_r_reg[7]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X67Y99         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_conv_mac/acc_tag_r_reg[7]/Q
+                         net (fo=1, estimated)        0.161     0.712    u_enc_rq/rq_tag_r0_reg[18][7]
+    SLICE_X66Y98         SRL16E                                       r  u_enc_rq/rq_tag_reg[7]_srl4/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=3700, unset)         0.432     0.432    u_enc_rq/clk
+    SLICE_X66Y98         SRL16E                                       r  u_enc_rq/rq_tag_reg[7]_srl4/CLK
+                         clock pessimism              0.000     0.432    
+    SLICE_X66Y98         SRL16E (Hold_srl16e_CLK_D)
+                                                      0.183     0.615    u_enc_rq/rq_tag_reg[7]_srl4
+  -------------------------------------------------------------------
+                         required time                         -0.615    
+                         arrival time                           0.712    
+  -------------------------------------------------------------------
+                         slack                                  0.097    
+
+Slack (MET) :             0.113ns  (arrival time - required time)
+  Source:                 u_pool/q_r4_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_pool/res_mem_reg/DIADI[8]
+                            (rising edge-triggered cell RAMB36E1 clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (ACLK rise@0.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        0.290ns  (logic 0.141ns (48.655%)  route 0.149ns (51.345%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=3700, unset)         0.410     0.410    u_pool/clk
+    SLICE_X33Y72         FDRE                                         r  u_pool/q_r4_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y72         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_pool/q_r4_reg[0]/Q
+                         net (fo=9, estimated)        0.149     0.700    u_pool/q_r4_reg_n_0_[0]
+    RAMB36_X2Y14         RAMB36E1                                     r  u_pool/res_mem_reg/DIADI[8]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=3700, unset)         0.432     0.432    u_pool/clk
+    RAMB36_X2Y14         RAMB36E1                                     r  u_pool/res_mem_reg/CLKBWRCLK
+                         clock pessimism              0.000     0.432    
+    RAMB36_X2Y14         RAMB36E1 (Hold_ramb36e1_CLKBWRCLK_DIADI[8])
+                                                      0.155     0.587    u_pool/res_mem_reg
+  -------------------------------------------------------------------
+                         required time                         -0.587    
+                         arrival time                           0.700    
+  -------------------------------------------------------------------
+                         slack                                  0.113    
+
+Slack (MET) :             0.113ns  (arrival time - required time)
+  Source:                 u_pool/q_r4_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_pool/res_mem_reg/DIBDI[8]
+                            (rising edge-triggered cell RAMB36E1 clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (ACLK rise@0.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        0.290ns  (logic 0.141ns (48.655%)  route 0.149ns (51.345%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=3700, unset)         0.410     0.410    u_pool/clk
+    SLICE_X33Y72         FDRE                                         r  u_pool/q_r4_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y72         FDRE (Prop_fdre_C_Q)         0.141     0.551 r  u_pool/q_r4_reg[0]/Q
+                         net (fo=9, estimated)        0.149     0.700    u_pool/q_r4_reg_n_0_[0]
+    RAMB36_X2Y14         RAMB36E1                                     r  u_pool/res_mem_reg/DIBDI[8]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=3700, unset)         0.432     0.432    u_pool/clk
+    RAMB36_X2Y14         RAMB36E1                                     r  u_pool/res_mem_reg/CLKBWRCLK
+                         clock pessimism              0.000     0.432    
+    RAMB36_X2Y14         RAMB36E1 (Hold_ramb36e1_CLKBWRCLK_DIBDI[8])
+                                                      0.155     0.587    u_pool/res_mem_reg
+  -------------------------------------------------------------------
+                         required time                         -0.587    
+                         arrival time                           0.700    
+  -------------------------------------------------------------------
+                         slack                                  0.113    
+
+
+
+
+
+Pulse Width Checks
+--------------------------------------------------------------------------------------
+Clock Name:         ACLK
+Waveform(ns):       { 0.000 5.000 }
+Period(ns):         10.000
+Sources:            { clk }
+
+Check Type        Corner  Lib Pin             Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location      Pin
+Min Period        n/a     RAMB36E1/CLKARDCLK  n/a            2.944         10.000      7.056      RAMB36_X2Y14  u_pool/res_mem_reg/CLKARDCLK
+Min Period        n/a     RAMB36E1/CLKBWRCLK  n/a            2.944         10.000      7.056      RAMB36_X2Y14  u_pool/res_mem_reg/CLKBWRCLK
+Min Period        n/a     RAMB36E1/CLKARDCLK  n/a            2.944         10.000      7.056      RAMB36_X3Y14  u_fmap1_buf/gen_legacy.mem_reg_0_0/CLKARDCLK
+Low Pulse Width   Fast    SRL16E/CLK          n/a            0.980         5.000       4.020      SLICE_X34Y77  u_pool/v_r2_reg_srl2___u_enc_rq_valid_r1_reg_r/CLK
+Low Pulse Width   Fast    SRL16E/CLK          n/a            0.980         5.000       4.020      SLICE_X34Y71  u_pool/idx_r3_reg[0]_srl3/CLK
+Low Pulse Width   Fast    SRL16E/CLK          n/a            0.980         5.000       4.020      SLICE_X34Y71  u_pool/idx_r3_reg[1]_srl3/CLK
+High Pulse Width  Slow    SRL16E/CLK          n/a            0.980         5.000       4.020      SLICE_X34Y77  u_pool/v_r2_reg_srl2___u_enc_rq_valid_r1_reg_r/CLK
+High Pulse Width  Fast    SRL16E/CLK          n/a            0.980         5.000       4.020      SLICE_X34Y77  u_pool/v_r2_reg_srl2___u_enc_rq_valid_r1_reg_r/CLK
+High Pulse Width  Slow    SRL16E/CLK          n/a            0.980         5.000       4.020      SLICE_X34Y71  u_pool/idx_r3_reg[0]_srl3/CLK
+
+
+

@@ -1,0 +1,2 @@
+Initial vs final implementation: all 561 PASS observation lines identical.
+Includes all Loader cases, Conv byte boundary values, RAM readback, timing, errors, resets, and negative-test mismatch counts.

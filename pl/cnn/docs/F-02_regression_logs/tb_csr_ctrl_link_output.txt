@@ -1,0 +1,82 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_csr_ctrl_link/xsim_script.tcl
+# xsim {t07_tb_csr_ctrl_link} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: AXI reset STATUS=0 and three aligned address writes/readbacks
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000001
+TRACE: STATUS poll 3 = 0x00000001
+TRACE: STATUS poll 4 = 0x00000001
+TRACE: STATUS poll 5 = 0x00000001
+TRACE: STATUS poll 6 = 0x00000001
+TRACE: STATUS poll 7 = 0x00000002
+PASS: AXI COMMAND=1 -> START -> busy snapshot 0x01 -> sticky done 0x02
+PASS: AXI CLEAR removes done; STATUS reads have no clear side effect
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000014
+PASS: AXI COMMAND=2 -> START -> BAD_CMD STATUS=0x14 (writes still OKAY)
+PASS: AXI CLEAR removes error and error_code
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000024
+PASS: AXI INFER cfg=0 -> NO_CFG STATUS=0x24
+TRACE: STATUS poll 1 = 0x00000001
+TRACE: STATUS poll 2 = 0x00000024
+PASS: AXI repeated failing START clears old error during busy and records new NO_CFG
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x00000009
+TRACE: STATUS poll 3 = 0x00000009
+TRACE: STATUS poll 4 = 0x00000009
+TRACE: STATUS poll 5 = 0x00000009
+TRACE: STATUS poll 6 = 0x00000009
+TRACE: STATUS poll 7 = 0x00000009
+TRACE: STATUS poll 8 = 0x00000009
+TRACE: STATUS poll 9 = 0x00000009
+TRACE: STATUS poll 10 = 0x00000009
+TRACE: STATUS poll 11 = 0x00000009
+TRACE: STATUS poll 12 = 0x00000009
+TRACE: STATUS poll 13 = 0x00000009
+TRACE: STATUS poll 14 = 0x00000009
+TRACE: STATUS poll 15 = 0x00000009
+TRACE: STATUS poll 16 = 0x00000009
+TRACE: STATUS poll 17 = 0x00000009
+TRACE: STATUS poll 18 = 0x00000009
+TRACE: STATUS poll 19 = 0x0000000a
+PASS: AXI INFER cfg=1 -> busy 0x09 -> done 0x0A; Loader scale passes through CSR
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x00000009
+TRACE: STATUS poll 3 = 0x00000009
+TRACE: STATUS poll 4 = 0x00000009
+TRACE: STATUS poll 5 = 0x00000009
+TRACE: STATUS poll 6 = 0x00000009
+TRACE: STATUS poll 7 = 0x00000009
+TRACE: STATUS poll 8 = 0x00000009
+TRACE: STATUS poll 9 = 0x00000009
+TRACE: STATUS poll 10 = 0x00000009
+TRACE: STATUS poll 11 = 0x00000009
+TRACE: STATUS poll 12 = 0x00000009
+TRACE: STATUS poll 13 = 0x00000009
+TRACE: STATUS poll 14 = 0x00000009
+TRACE: STATUS poll 15 = 0x00000009
+TRACE: STATUS poll 16 = 0x00000009
+TRACE: STATUS poll 17 = 0x00000009
+TRACE: STATUS poll 18 = 0x00000009
+TRACE: STATUS poll 19 = 0x0000000a
+PASS: AXI idle START+CLEAR works with the real ctrl
+TRACE: STATUS poll 1 = 0x00000009
+TRACE: STATUS poll 2 = 0x00000009
+TRACE: STATUS poll 3 = 0x00000009
+TRACE: STATUS poll 4 = 0x00000009
+TRACE: STATUS poll 5 = 0x0000000a
+PASS: fastest COMMAND commits at START+3 with LOAD busy=1, returns SLVERR and preserves CSR/snapshot
+PASS: totals START=7 busy_cycles=100 AXI_busy_reads=49 busy_COMMAND_commits=1
+PASS: T-06 ALL REACHABLE CSR/CTRL LINK CHECKS PASSED
+$finish called at time : 1906 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_csr_ctrl_link.v" Line 307
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 18:24:44 2026...

@@ -1,0 +1,62 @@
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\fc\hidden_buffer.v D:\2609_final_project\cnn_rtl\rtl\fc\pose_buffer.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fc/hidden_buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module hidden_buffer
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fc/pose_buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_buffer
+
+SECONDS: 1.212164299999131
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv C:\Users\kccistc\AppData\Local\Temp\codex-f01\tb_fc_storage_y45.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-f01/tb_fc_storage_y45.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_fc_storage_y45
+
+SECONDS: 1.201976200012723
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_fc_storage_y45 -s y45
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_fc_storage_y45 -s y45 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.hidden_buffer
+Compiling module work.pose_buffer
+Compiling module work.tb_fc_storage_y45
+Built simulation snapshot y45
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-f01/y45_sim/xsim.dir/y45/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 16:39:59 2026...
+
+SECONDS: 3.969841100013582
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat y45 -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/y45/xsim_script.tcl
+# xsim {y45} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: Y4 two banks bytes=256 words=32 lane_order=low_address_low_byte read_latency=1 cycle
+PASS: Y4 same-word read/write collisions=8 read-first=8 next_read_new_data=8
+PASS: Y4 unused address bits invalid_write_ignored=1 invalid_read_zero=1 valid_bytes_unchanged=8
+PASS: Y5 pose bytes=24 parallel_bits=192 byte_k_at_8k=24
+PASS: Y5 partial_writes=3 other_bytes_held=21 idle_hold_cycles=7 invalid_write_ignored=1
+PASS: Y4/Y5 reset hidden_retained_bytes=256 pose_retained_bytes=24 writes_during_reset_ignored=1
+OBS: Y5 parallel pose output shows OLD value before write edge and NEW value after edge; no clocked read port
+PASS: tb_fc_storage_y45 ALL Y4-Y5 cases complete checks=215 cycles=663
+$finish called at time : 6626 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-f01/tb_fc_storage_y45.v" Line 181
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 16:40:04 2026...
+
+SECONDS: 5.930967899999814

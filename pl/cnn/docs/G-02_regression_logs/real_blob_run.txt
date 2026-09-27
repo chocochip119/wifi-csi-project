@@ -1,0 +1,169 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-g02\real_blob_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\weight_param_loader.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/conv_weight_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module conv_weight_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/param_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module param_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/gelu_lut_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_lut_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module weight_param_loader
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.056329
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-g02\real_blob_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\tb_loader_real_blob.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_loader_real_blob.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_loader_real_blob
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.016898
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-g02\real_blob_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_loader_real_blob -s l05_real_blob
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_loader_real_blob -s l05_real_blob 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.blob_decoder
+Compiling module work.conv_weight_ram
+Compiling module work.param_ram
+Compiling module work.gelu_lut_ram
+Compiling module work.fcw_ram
+Compiling module work.weight_param_loader
+Compiling module work.tb_loader_real_blob
+Built simulation snapshot l05_real_blob
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-g02/real_blob_sim/xsim.dir/l05_real_blob/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 16:22:09 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 3.958795
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-g02\real_blob_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat l05_real_blob -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/l05_real_blob/xsim_script.tcl
+# xsim {l05_real_blob} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: L-05 B1 FILE path=D:/2609_final_project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6_weights.bin bytes=422992 words=105748 trailing_bytes=0
+OBS: L-05 HEADER word=0 hex=36574c50 unsigned=911690832 signed=911690832
+OBS: L-05 HEADER word=1 hex=00000002 unsigned=2 signed=2
+OBS: L-05 HEADER word=2 hex=00019d14 unsigned=105748 signed=105748
+OBS: L-05 HEADER word=3 hex=3cb76adb unsigned=1018653403 signed=1018653403
+OBS: L-05 HEADER word=4 hex=3bd997a8 unsigned=1004115880 signed=1004115880
+OBS: L-05 HEADER word=5 hex=783b66b4 unsigned=2017158836 signed=2017158836
+OBS: L-05 HEADER word=6 hex=0000001f unsigned=31 signed=31
+OBS: L-05 HEADER word=7 hex=00000000 unsigned=0 signed=0
+PASS: L-05 B2 first=[0,5936) second=[399152,422992) skipped=393216 FC1_bytes=393216 beats=3722 first_beats=742 second_beats=2980 even_word_low32=1
+OBS: L-05 B5 SHIFT layer=0 count=16 min=39 max=40
+OBS: L-05 B5 SHIFT layer=1 count=32 min=39 max=40
+OBS: L-05 B5 SHIFT layer=2 count=128 min=40 max=44
+OBS: L-05 B5 SHIFT layer=3 count=128 min=39 max=41
+OBS: L-05 B5 SHIFT layer=4 count=24 min=42 max=43
+PASS: L-05 B3 SHIFT_SCAN checked=328 invalid=0
+PASS: L-05 B4 GOLDEN conv_bytes=5328 param_fields=984 lut_bytes=1024 fcw_words=2432 conv_missing=0 conv_duplicates=0
+OBS: L-05 B5 WEIGHT name=Conv1 offset=32 count=720 min=-127 max=127 zeros=4 negative=369 positive=347
+OBS: L-05 B5 WEIGHT name=Conv2 offset=944 count=4608 min=-127 max=127 zeros=30 negative=2294 positive=2284
+OBS: L-05 B5 WEIGHT name=FC1 offset=5936 count=393216 min=-127 max=127 zeros=7312 negative=203377 positive=182527
+OBS: L-05 B5 WEIGHT name=FC2 offset=400688 count=16384 min=-127 max=127 zeros=103 negative=7711 positive=8570
+OBS: L-05 B5 WEIGHT name=FC3 offset=418608 count=3072 min=-127 max=127 zeros=4 negative=1822 positive=1246
+OBS: L-05 B5 LUT_DOWN table=0 index=67 q=-61 value=0 next_value=-1
+OBS: L-05 B5 LUT_DOWN table=0 index=80 q=-48 value=-1 next_value=-2
+OBS: L-05 B5 LUT_DOWN table=0 index=88 q=-40 value=-2 next_value=-3
+OBS: L-05 B5 LUT_DOWN table=0 index=95 q=-33 value=-3 next_value=-4
+OBS: L-05 B5 LUT_DOWN table=0 index=103 q=-25 value=-4 next_value=-5
+OBS: L-05 B5 LUT table=0 count=256 min=-5 max=127 zeros=69 rising=113 equal=137 falling=5 max_drop=1
+OBS: L-05 B5 LUT_DOWN table=1 index=71 q=-57 value=0 next_value=-1
+OBS: L-05 B5 LUT_DOWN table=1 index=82 q=-46 value=-1 next_value=-2
+OBS: L-05 B5 LUT_DOWN table=1 index=88 q=-40 value=-2 next_value=-3
+OBS: L-05 B5 LUT_DOWN table=1 index=92 q=-36 value=-3 next_value=-4
+OBS: L-05 B5 LUT_DOWN table=1 index=96 q=-32 value=-4 next_value=-5
+OBS: L-05 B5 LUT_DOWN table=1 index=100 q=-28 value=-5 next_value=-6
+OBS: L-05 B5 LUT_DOWN table=1 index=105 q=-23 value=-6 next_value=-7
+OBS: L-05 B5 LUT table=1 count=256 min=-7 max=127 zeros=73 rising=73 equal=175 falling=7 max_drop=1
+OBS: L-05 B5 LUT_DOWN table=2 index=84 q=-44 value=0 next_value=-1
+OBS: L-05 B5 LUT_DOWN table=2 index=91 q=-37 value=-1 next_value=-2
+OBS: L-05 B5 LUT_DOWN table=2 index=94 q=-34 value=-2 next_value=-3
+OBS: L-05 B5 LUT_DOWN table=2 index=97 q=-31 value=-3 next_value=-4
+OBS: L-05 B5 LUT_DOWN table=2 index=99 q=-29 value=-4 next_value=-5
+OBS: L-05 B5 LUT_DOWN table=2 index=101 q=-27 value=-5 next_value=-6
+OBS: L-05 B5 LUT_DOWN table=2 index=103 q=-25 value=-6 next_value=-7
+OBS: L-05 B5 LUT_DOWN table=2 index=105 q=-23 value=-7 next_value=-8
+OBS: L-05 B5 LUT_DOWN table=2 index=106 q=-22 value=-8 next_value=-9
+OBS: L-05 B5 LUT_DOWN table=2 index=108 q=-20 value=-9 next_value=-10
+OBS: L-05 B5 LUT_DOWN table=2 index=110 q=-18 value=-10 next_value=-11
+OBS: L-05 B5 LUT_DOWN table=2 index=112 q=-16 value=-11 next_value=-12
+OBS: L-05 B5 LUT table=2 count=256 min=-12 max=127 zeros=86 rising=36 equal=207 falling=12 max_drop=1
+OBS: L-05 B5 LUT_DOWN table=3 index=2 q=-126 value=-16 next_value=-17
+OBS: L-05 B5 LUT_DOWN table=3 index=4 q=-124 value=-17 next_value=-18
+OBS: L-05 B5 LUT_DOWN table=3 index=6 q=-122 value=-18 next_value=-19
+OBS: L-05 B5 LUT_DOWN table=3 index=8 q=-120 value=-19 next_value=-20
+OBS: L-05 B5 LUT_DOWN table=3 index=10 q=-118 value=-20 next_value=-21
+OBS: L-05 B5 LUT_DOWN table=3 index=13 q=-115 value=-21 next_value=-22
+OBS: L-05 B5 LUT_DOWN table=3 index=15 q=-113 value=-22 next_value=-23
+OBS: L-05 B5 LUT_DOWN table=3 index=17 q=-111 value=-23 next_value=-24
+OBS: L-05 B5 LUT_DOWN table=3 index=19 q=-109 value=-24 next_value=-25
+OBS: L-05 B5 LUT_DOWN table=3 index=20 q=-108 value=-25 next_value=-26
+OBS: L-05 B5 LUT_DOWN table=3 index=22 q=-106 value=-26 next_value=-27
+OBS: L-05 B5 LUT_DOWN table=3 index=24 q=-104 value=-27 next_value=-28
+OBS: L-05 B5 LUT_DOWN table=3 index=26 q=-102 value=-28 next_value=-29
+OBS: L-05 B5 LUT_DOWN table=3 index=28 q=-100 value=-29 next_value=-30
+OBS: L-05 B5 LUT_DOWN table=3 index=30 q=-98 value=-30 next_value=-31
+OBS: L-05 B5 LUT_DOWN table=3 index=32 q=-96 value=-31 next_value=-32
+OBS: L-05 B5 LUT_DOWN table=3 index=34 q=-94 value=-32 next_value=-33
+OBS: L-05 B5 LUT_DOWN table=3 index=35 q=-93 value=-33 next_value=-34
+OBS: L-05 B5 LUT_DOWN table=3 index=37 q=-91 value=-34 next_value=-35
+OBS: L-05 B5 LUT_DOWN table=3 index=39 q=-89 value=-35 next_value=-36
+OBS: L-05 B5 LUT_DOWN table=3 index=41 q=-87 value=-36 next_value=-37
+OBS: L-05 B5 LUT_DOWN table=3 index=43 q=-85 value=-37 next_value=-38
+OBS: L-05 B5 LUT_DOWN table=3 index=45 q=-83 value=-38 next_value=-39
+OBS: L-05 B5 LUT_DOWN table=3 index=47 q=-81 value=-39 next_value=-40
+OBS: L-05 B5 LUT_DOWN table=3 index=49 q=-79 value=-40 next_value=-41
+OBS: L-05 B5 LUT_DOWN table=3 index=51 q=-77 value=-41 next_value=-42
+OBS: L-05 B5 LUT_DOWN table=3 index=53 q=-75 value=-42 next_value=-43
+OBS: L-05 B5 LUT_DOWN table=3 index=56 q=-72 value=-43 next_value=-44
+OBS: L-05 B5 LUT_DOWN table=3 index=58 q=-70 value=-44 next_value=-45
+OBS: L-05 B5 LUT_DOWN table=3 index=61 q=-67 value=-45 next_value=-46
+OBS: L-05 B5 LUT_DOWN table=3 index=64 q=-64 value=-46 next_value=-47
+OBS: L-05 B5 LUT_DOWN table=3 index=68 q=-60 value=-47 next_value=-48
+OBS: L-05 B5 LUT table=3 count=256 min=-48 max=127 zeros=1 rising=77 equal=146 falling=32 max_drop=1
+OBS: L-05 B5 LUT_PAIR a=0 b=1 different_bytes=148
+OBS: L-05 B5 LUT_PAIR a=0 b=2 different_bytes=167
+OBS: L-05 B5 LUT_PAIR a=0 b=3 different_bytes=238
+OBS: L-05 B5 LUT_PAIR a=1 b=2 different_bytes=118
+OBS: L-05 B5 LUT_PAIR a=1 b=3 different_bytes=193
+OBS: L-05 B5 LUT_PAIR a=2 b=3 different_bytes=165
+OBS: L-05 B3 RESULT beats=3722 cycles=9772 ready_low=6050 done_pulses=1 done=1 err=0 cfg=1
+OBS: L-05 B4 READBACK conv_bytes=5328 param_fields=984 lut_bytes=1024 fcw_words=2432 mismatches=0/0/0/0 hierarchy_reads=0 clocks=2432
+PASS: L-05 B4 RAM_PORT_READBACK all_compared=1 mismatches=0
+PASS: L-05 REAL_BLOB B1-B6 ALL bytes=422992 beats=3722 skipped_FC1_bytes=393216 done=1 err=0 cfg=1 RAM_mismatches=0 cycles=9772 ready_low=6050
+$finish called at time : 122087 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_loader_real_blob.v" Line 266
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 16:22:14 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.679264

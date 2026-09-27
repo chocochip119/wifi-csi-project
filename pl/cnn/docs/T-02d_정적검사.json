@@ -1,0 +1,171 @@
+{
+  "protected_files": [
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_ctrl.v",
+      "sha256": "625b16aedfcf804cae50d071ff1e2b6b53df4396f0cbe5008c16fff0ee1ab64d",
+      "after_sha256": "625b16aedfcf804cae50d071ff1e2b6b53df4396f0cbe5008c16fff0ee1ab64d",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_M00_AXI.v",
+      "sha256": "9c5ee22c6d25602e97032c337ad437032f99e94ea883f55c231a2d4d71e998d0",
+      "after_sha256": "9c5ee22c6d25602e97032c337ad437032f99e94ea883f55c231a2d4d71e998d0",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_S00_AXI.v",
+      "sha256": "78adb298e83ae2c4ab023748aff78104a237648364579729d951a5b597e1a65e",
+      "after_sha256": "78adb298e83ae2c4ab023748aff78104a237648364579729d951a5b597e1a65e",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\axi4_slave_mem_model.v",
+      "sha256": "02813e9d5789189b27464dad307d39c0c2eaae56106d28d437afe731b9bea348",
+      "after_sha256": "02813e9d5789189b27464dad307d39c0c2eaae56106d28d437afe731b9bea348",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_axi4_slave_mem_model.v",
+      "sha256": "170ca4b8ab67996c6c4bb52d9112acbac4aec292311aa9893ee8d20c9d6e7944",
+      "after_sha256": "170ca4b8ab67996c6c4bb52d9112acbac4aec292311aa9893ee8d20c9d6e7944",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_csr_ctrl_link.v",
+      "sha256": "4d00d7bb088ecfffa58806dd817991f903a4abe2d356024111262868e09e57e1",
+      "after_sha256": "4d00d7bb088ecfffa58806dd817991f903a4abe2d356024111262868e09e57e1",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_ctrl_status.v",
+      "sha256": "cb75018472ba16b7bbdd20747230d1f157441b4bc737c22a302ae77b56f7abef",
+      "after_sha256": "cb75018472ba16b7bbdd20747230d1f157441b4bc737c22a302ae77b56f7abef",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_read.v",
+      "sha256": "99705f116077c108dc7d3799057b8d637395ba2783f84187d8a4b916b682e101",
+      "after_sha256": "99705f116077c108dc7d3799057b8d637395ba2783f84187d8a4b916b682e101",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_read_perf.v",
+      "sha256": "4e29a74bf287b001a73c91d5e49af606c32cb2db6c9f97c1b43a87ac1a309439",
+      "after_sha256": "4e29a74bf287b001a73c91d5e49af606c32cb2db6c9f97c1b43a87ac1a309439",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_write.v",
+      "sha256": "bda8ff6685076323e5d138061bfca6a6b3e58b345b4bbca527efbf43283e713c",
+      "after_sha256": "bda8ff6685076323e5d138061bfca6a6b3e58b345b4bbca527efbf43283e713c",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_ctrl.v",
+      "sha256": "72bcd126b4e6ca0e1a1b129973ff65c0c1f6f40c2b3d691c568da15041206d2f",
+      "after_sha256": "72bcd126b4e6ca0e1a1b129973ff65c0c1f6f40c2b3d691c568da15041206d2f",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_read.v",
+      "sha256": "1733a639ed4d2299dd8b1f72f4d282b5b3535b3f033f41c00f49707f2a42c0f5",
+      "after_sha256": "1733a639ed4d2299dd8b1f72f4d282b5b3535b3f033f41c00f49707f2a42c0f5",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_regs.v",
+      "sha256": "773760f459f582096d1644b06cd0a85cdd37db33bfa190bb3ff7fc46ef60cab2",
+      "after_sha256": "773760f459f582096d1644b06cd0a85cdd37db33bfa190bb3ff7fc46ef60cab2",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_write.v",
+      "sha256": "aff01c63ad24a35ca122c912b6a781e5e5a623b9341f26ed7c4fcbf16f1e7170",
+      "after_sha256": "aff01c63ad24a35ca122c912b6a781e5e5a623b9341f26ed7c4fcbf16f1e7170",
+      "unchanged": true
+    }
+  ],
+  "new_source_sha256": "02e1e0a88b16168ce0734b34faff7ac2344a86fbe330be227703177da4f90486",
+  "new_source_lines": 694,
+  "AXI_direct_ports_per_instance": 37,
+  "error_cases_including_recovery": 22,
+  "injections": 8,
+  "master_protocol_violations": 0,
+  "allowed_checker_violations": 0,
+  "compile_elaborate_warnings": 0,
+  "compile_elaborate_errors": 0,
+  "regression_read_same_semantic_lines": 53,
+  "regression_write_same_integrity_lines": 47,
+  "regression_model_same_pass_and_expected_violation_lines": 49,
+  "independent_trace_audit": [
+    {
+      "case": "E5_E9_early_RLAST",
+      "independently_checked_fault_cycles": 2000,
+      "read_words_frozen": 15,
+      "busy_START_ignored": 1
+    },
+    {
+      "case": "E5_E9_missing_RLAST",
+      "independently_checked_fault_cycles": 2000,
+      "read_words_frozen": 16,
+      "busy_START_ignored": 1
+    },
+    {
+      "case": "E6_zero_length",
+      "independent_no_AXI_offer_samples": 9
+    },
+    {
+      "case": "E6_unaligned_address",
+      "independent_no_AXI_offer_samples": 9
+    },
+    {
+      "case": "E6_unaligned_length",
+      "independent_no_AXI_offer_samples": 9
+    },
+    {
+      "case": "E6_address_overflow",
+      "independent_no_AXI_offer_samples": 9
+    },
+    {
+      "case": "E7_AR_stall",
+      "post_timeout_cycles_independently_checked": 10,
+      "preserved_signal": "arvalid"
+    },
+    {
+      "case": "E7_R_stall",
+      "post_timeout_cycles_independently_checked": 10,
+      "preserved_signal": "rready"
+    },
+    {
+      "case": "E7_AW_W_stall",
+      "post_timeout_cycles_independently_checked": 10,
+      "preserved_signal": "wvalid"
+    },
+    {
+      "case": "E7_B_stall",
+      "post_timeout_cycles_independently_checked": 10,
+      "preserved_signal": "bready"
+    },
+    {
+      "case": "E8_clean_W_finishes_first",
+      "simultaneous_busy_samples": 5,
+      "read_finish": 517,
+      "write_finish": 468,
+      "clean_side_error_samples": 54
+    },
+    {
+      "case": "E8_R_error_R_finishes_first",
+      "simultaneous_busy_samples": 54,
+      "read_finish": 584,
+      "write_finish": 615,
+      "clean_side_error_samples": 85
+    },
+    {
+      "case": "E8_W_error_W_finishes_first",
+      "simultaneous_busy_samples": 54,
+      "read_finish": 862,
+      "write_finish": 682,
+      "clean_side_error_samples": 234
+    }
+  ]
+}

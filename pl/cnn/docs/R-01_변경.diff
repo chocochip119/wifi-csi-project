@@ -1,0 +1,286 @@
+--- before/pose_cnn_v1_0_M00_AXI.v
++++ after/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v
+@@ -138,7 +138,8 @@
+     assign mem_rd_busy = (rd_state != RD_IDLE);
+     assign M_AXI_ARADDR = rd_addr_reg;
+     assign M_AXI_ARLEN = {3'b000, rd_burst_beats} - 8'd1;
+-    assign M_AXI_ARVALID = (rd_state == RD_ADDR);
++    // PROJECT_CONTEXT 5.2 AXI clause: keep ARVALID zero throughout reset.
++    assign M_AXI_ARVALID = M_AXI_ARESETN && (rd_state == RD_ADDR);
+     assign mem_rd_data = M_AXI_RDATA;
+     assign mem_rd_valid = (rd_state == RD_DATA) && M_AXI_RVALID;
+     assign M_AXI_RREADY = (rd_state == RD_DATA) && mem_rd_ready;
+@@ -149,9 +150,10 @@
+     assign M_AXI_AWADDR = wr_addr_reg;
+     assign M_AXI_AWLEN = {3'b000, wr_burst_beats} - 8'd1;
+     // AWVALID and WVALID are independent: do not wait for AWREADY to issue W.
+-    assign M_AXI_AWVALID = (wr_state == WR_SEND) && !wr_aw_sent;
+-    assign M_AXI_WVALID  = (wr_state == WR_SEND) &&
+-                           (wr_beat_count < wr_burst_beats);
++    // PROJECT_CONTEXT 5.2 AXI clause: keep AWVALID/WVALID zero throughout reset.
++    assign M_AXI_AWVALID = M_AXI_ARESETN && ((wr_state == WR_SEND) && !wr_aw_sent);
++    assign M_AXI_WVALID  = M_AXI_ARESETN && ((wr_state == WR_SEND) &&
++                           (wr_beat_count < wr_burst_beats));
+     assign M_AXI_WDATA = mem_wr_data;
+     assign M_AXI_WSTRB = 8'hff;
+     assign M_AXI_WLAST = (wr_beat_count == wr_burst_beats - 1'b1);
+@@ -194,7 +196,8 @@
+         endcase
+     end
+ 
+-    always @(posedge M_AXI_ACLK or negedge M_AXI_ARESETN) begin
++    // Synchronous active-low reset, sampled on the rising clock edge.
++    always @(posedge M_AXI_ACLK) begin
+         if (!M_AXI_ARESETN) begin
+             rd_state       <= RD_IDLE;
+             rd_addr_reg    <= 32'd0;
+@@ -265,7 +268,8 @@
+         endcase
+     end
+ 
+-    always @(posedge M_AXI_ACLK or negedge M_AXI_ARESETN) begin
++    // Synchronous active-low reset, sampled on the rising clock edge.
++    always @(posedge M_AXI_ACLK) begin
+         if (!M_AXI_ARESETN) begin
+             wr_state       <= WR_IDLE;
+             wr_addr_reg    <= 32'd0;
+--- before/cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v
++++ after/cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v
+@@ -99,7 +99,8 @@
+ 
+     // No replacement AR on the R handshake edge: current rvalid still occupies it.
+     assign S_AXI_ARREADY = S_AXI_ARESETN && channel_enable_reg && !rvalid_reg;
+-    assign S_AXI_RVALID  = rvalid_reg;
++    // PROJECT_CONTEXT 5.2 AXI clause: keep VALID zero throughout reset.
++    assign S_AXI_RVALID  = S_AXI_ARESETN && rvalid_reg;
+     assign S_AXI_RDATA   = rdata_reg;
+     assign S_AXI_RRESP   = rresp_reg;
+ 
+@@ -111,10 +112,10 @@
+     assign reg_weight_addr  = weight_addr_reg;
+     assign reg_output_addr  = output_addr_reg;
+ 
+-    // Reset assertion is asynchronous. Release must be synchronous upstream.
++    // Synchronous active-low reset; sample low on a rising clock edge.
+     // channel_enable is a one-clock startup guard, NOT a reset synchronizer:
+     // READY stays low after release until the first rising edge with reset=1.
+-    always @(posedge S_AXI_ACLK or negedge S_AXI_ARESETN) begin
++    always @(posedge S_AXI_ACLK) begin
+         if (!S_AXI_ARESETN) begin
+             wr_state_reg       <= WR_COLLECT;
+             channel_enable_reg <= 1'b0;
+@@ -313,7 +314,7 @@
+         endcase
+     end
+ 
+-    always @(posedge S_AXI_ACLK or negedge S_AXI_ARESETN) begin
++    always @(posedge S_AXI_ACLK) begin
+         if (!S_AXI_ARESETN) begin
+             rvalid_reg <= 1'b0;
+             rdata_reg  <= 32'b0;
+--- before/cnn_rtl/syn/README.md
++++ after/cnn_rtl/syn/README.md
+@@ -19,6 +19,8 @@
+ |---|---|---:|---:|---:|---:|---:|---:|
+ | 2026-09-25 | `pose_cnn_v1_0_S00_AXI` (X-01) | 182 | 208 | 0 | 0 | +3.895 ns | 0 |
+ | 2026-09-25 | `pose_cnn_ctrl` (T-01R, 부분 구현) | 19 | 40 | 0 | 0 | +4.885 ns | 0 |
++| 2026-09-25 | `pose_cnn_v1_0_S00_AXI` (R-01, 동기 reset) | 183 | 208 | 0 | 0 | +3.895 ns | 0 |
++| 2026-09-25 | `pose_cnn_v1_0_M00_AXI` (R-01, 첫 합성) | 364 | 132 | 0 | 0 | +2.779 ns | 0 |
+ 
+ X-01 임계 경로: `S_AXI_ARESETN`(입력 포트) → `S_AXI_ARREADY`.
+ reset이 READY로 가는 조합 경로이며 AXI 권고(리셋 중 READY=0)를 위해 의도한 것이다.
+@@ -35,3 +37,17 @@
+ 미사용 주소 snapshot과 미도달 상태는 최적화되고 FSM은 one-hot으로 재인코딩됐다.
+ RTL의 13상태 인코딩과 snapshot 동작은 RTL 시뮬레이션에서 별도로 확인한다.
+ [실행 명령·출력 전문](../docs/T-01R_syn_실행로그.txt)
++
++R-01은 두 모듈을 기존 Tcl/XDC로 각각 1회 합성했다. 양쪽 모두 조합 루프 0,
++Setup failing endpoint 0, `synth_design` 자체 오류·경고 0이다.
++S00는 X-01 대비 LUT +1, FF/BRAM/DSP 및 WNS 변화 0이다. 동기 reset 매핑과
++RVALID 게이트 추가 후의 합계이며, 임계 경로는 여전히 `S_AXI_ARESETN` → `S_AXI_ARREADY`다.
++같은 +3.895 ns의 AWREADY/BVALID 경로도 보고됐다. M00의 임계 경로는
++`M_AXI_ARESETN` → WVALID/전송 성립 논리 → `mem_wr_ready`이며,
++`mem_wr_ready`에 별도 reset 게이트를 추가한 것은 아니다.
++실행 전체에는 T-01R과 같은 `Common 17-741`, `Timing 38-242`, `Vivado 12-180`
++메시지가 있다. OOC 추정치이며 배치·배선/hold 검증은 하지 않았다.
++**R-01 회귀는 4/6 PASS다. 기존 TB 두 곳의 에지 전 reset 기대 때문에 단계 완료는 보류한다.**
++[R-01 보고서](../docs/R-01_구현_검증기록.md) ·
++[S00 합성 전문](../docs/R-01_syn_S00_AXI_실행로그.txt) ·
++[M00 합성 전문](../docs/R-01_syn_M00_AXI_실행로그.txt)
+--- before/PROJECT_CONTEXT.md
++++ after/PROJECT_CONTEXT.md
+@@ -1,6 +1,6 @@
+ # CNN RTL 공통 작업 기준
+ 
+-갱신: 2026-09-25. **Claude의 전체 설계·통합 관리 + Codex의 소단계 구현 + 사용자 이해·확인·Notion 기록 후 다음 단계 진행**을 사용자 확정 작업 방식으로 유지한다. **T-01R의 13상태 골격 및 IDLE/DECODE/FINISH 구현·검증 완료**를 8절에 기록했다. 동기식 active-low reset은 Top에 반영했고 S00/M00 반영은 남아 있다(5.2절).
++갱신: 2026-09-25. **Claude의 전체 설계·통합 관리 + Codex의 소단계 구현 + 사용자 이해·확인·Notion 기록 후 다음 단계 진행**을 사용자 확정 작업 방식으로 유지한다. **R-01에서 S00/M00의 동기 reset·VALID 게이트 반영 및 M00 이동을 마쳤다.** 합성 2회와 신규 reset 검사는 통과했으나 기존 회귀는 4/6 PASS이며, 에지 전 초기화를 기대하는 TB 두 곳은 명세대로 기대값을 보존해 단계 완료를 보류했다(8절).
+ 
+ ## 1. 문서의 우선순위와 현재 상태
+ 
+@@ -153,7 +153,7 @@
+ - **공급 조건:** 동기식 reset에는 동작 중인 클록이 필요하다. reset 입력은 해당 클록의 타이밍을 만족하도록 공급하고, 모든 대상 블록이 reset을 샘플링할 수 있도록 유지한다. 외부 비동기 reset 원천의 동기화, 연결 IP가 요구하는 유지 시간, 생성 위치는 D07의 남은 통합 항목이다.
+ - **AXI 호환:** AXI는 동기식 active-low 구현과 양립한다. reset 해제는 ACLK에 동기화하고, reset 중 master의 ARVALID/AWVALID/WVALID 및 slave의 RVALID/BVALID를 0으로 유지해야 한다. master VALID의 재상승은 ARESETn이 HIGH인 뒤의 상승 에지부터 가능하다. 근거: [Arm AXI 규격 A3.1.2](https://developer.arm.com/-/media/Arm%20Developer%20Community/PDF/IHI0022H_amba_axi_protocol_spec.pdf). 연결된 AXI 경계의 reset 범위·겹침은 [AMD AXI Interconnect reset 조건](https://docs.amd.com/r/en-US/pg059-axi-interconnect/Resets)을 함께 따른다. 진행 중 전송의 reset 복구는 D08에서 별도로 다룬다.
+ - **RAM:** 내용 전체를 reset하지 않는 기존 방침은 유지한다.
+-- **반영 상태:** Encoder는 이미 동기식이며, `cnn_rtl/rtl/pose_cnn_ctrl.v`도 T-01R에서 동기식으로 변경하고 reset 에지 동작을 검증했다. `cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v`와 루트 `pose_cnn_v1_0_M00_AXI.v`는 비동기 assert 구현을 유지하므로 후속 반영·reset 관련 검증이 필요하다. 기존 XLSX·CSR 상세 설계·인계 문서의 비동기 assert 설명보다 이번 사용자 결정이 우선하며, 해당 산출물의 갱신은 아직 남아 있다.
++- **반영 상태:** Encoder와 T-01R Top에 이어 R-01에서 S00/M00도 동기식 active-low로 변경했다. M00 단일 원본은 `cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v`이며 루트 사본은 없다. AXI VALID의 reset 중 0을 유지하도록 지정된 게이트 4개만 추가했다. 신규 reset 검사는 통과했으나 `tb_s00_axi_regs`와 `tb_s00_axi_ctrl`의 첫 상승 에지 전 초기화 기대가 실패하므로 기존 6TB 전부 통과 조건은 미충족이다. 두 TB의 기대값은 R-01 지시에 따라 변경하지 않았다. 기존 XLSX·CSR 상세 설계·인계 문서 갱신 및 D07 reset 공급 조건은 별도 범위다.
+ 
+ ## 6. PS 계약과 다음 작업
+ 
+@@ -231,7 +231,7 @@
+ | S00-02 | **구현·검수 완료**. 쓰기 채널 handshake 골격 (AW/W 독립 수락, commit, B 응답). BRESP 항상 OKAY, 레지스터 저장·읽기·펄스 없음 |
+ | 기술 결정 | D01–D10 모두 미합의 유지. S00-02는 어느 항목도 선점하지 않았다 |
+ | 문법 규칙 | 2026-09-24 확정: 템플릿 인프라는 템플릿 활용, 직접 설계 RTL은 명시적 나열(`for`/`task`/`function` 미사용), testbench는 제약 없음. 4절 참조 |
+-| reset 규칙 | **2026-09-25 사용자 확정: 동기식 active-low로 통일.** Encoder 및 T-01R Top에 반영. 기존 S00/M00 RTL과 관련 TB·구명세 반영은 남아 있으며, 공통 reset 공급 구현은 D07에서 결정. 5.2절 참조 |
++| reset 규칙 | **2026-09-25 사용자 확정: 동기식 active-low로 통일.** Encoder/Top/S00/M00 RTL에 반영. R-01 기존 TB 2곳의 검사 시점 보정과 구명세 갱신은 남음. 공통 reset 공급 구현은 D07에서 결정. 5.2절 참조 |
+ | S00-03 | **구현·검수 완료**. 주소 디코드(`awaddr_reg[4:2]`), RW 레지스터 4개, WSTRB byte 병합. `reg_cmd`/`reg_input_addr`/`reg_weight_addr`/`reg_output_addr` 출력 활성 |
+ | S00-03 임시 동작 | `awaddr_reg[1:0]` 무시(0x0C와 0x0E가 같은 레지스터), WSTRB=0은 병합의 자연스러운 결과로 무변화+OKAY. 둘 다 D04/D05 확정 구현이 아니며 S00-05에서 바뀔 수 있음 |
+ | S00-04 | **구현·검수 완료**. 읽기 채널(outstanding 1, AR 수락 cycle snapshot), 8 offset 읽기 mux, STATUS 조립, 0x18의 `cfg_ok` 조건부 SLVERR |
+@@ -253,7 +253,7 @@
+ | **D08-2 답** | 확인됨 — `mem_rd_err`는 `mem_rd_start`에서 0으로 지워진다(M00 209–211행). LOAD가 read를 2회 하므로 구간1 오류가 구간2 시작에 지워진다. **T-00 도면의 `LD_RD1` → `mem_rd_err?` 선판정이 이 경로를 이미 막는다** |
+ | **D08-3 답** | 확인됨 — RRESP/RID 오류는 남은 beat를 끝까지 받고 `mem_rd_busy`를 정상적으로 내린다. **예외**: `RLAST` 불일치 시 `RD_FAULT`(M00 234행)는 빠져나올 수 없는 상태라 busy가 영원히 1이다. D08 결정 시 `ERR_DRAIN`이 이 경우 갇힌다는 점을 반영해야 한다 |
+ | M00 관련 관찰 | ① 명세에 없던 `invalid_command` 방어 추가 — `mem_rd_err`가 "DDR 오류" 외에 "Top FSM의 잘못된 명령"도 뜻하게 됨(디버깅에는 유용) ② `WATCHDOG_CYCLES` 기본 0(비활성) ③ `C_M_TARGET_SLAVE_BASE_ADDR`를 더하지 않음(주석 명시, 계약과 일치) ④ `function` 2개 사용 — 민영 모듈이므로 우리 4절 규칙 적용 대상인지 팀 정리 필요 |
+-| M00 파일 위치 | 현재 프로젝트 루트. `cnn_rtl/rtl/`로 옮기는 것을 권장한다(민영 산출물이라 Claude가 옮기지 않음) |
++| M00 파일 위치 | R-01에서 프로젝트 루트 → `cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v`로 이동. 이동 직후 바이트·SHA-256 일치 확인, 루트 사본 없음. 이후 이 경로가 단일 작업 원본 |
+ | **T-02 계획 변경** | M00 실물이 있으므로 **M00 모형 대신 실물 M00 + 간단한 AXI4 슬레이브 메모리 모형**을 쓴다. `mem_*` 계약을 모형이 아니라 실제로 검증하게 되고, burst 분할·4 KiB 경계·연속 burst가 실제로 돈다 |
+ | **T-00** | **완료·Claude 검수 완료.** Top FSM 전체 상태 그래프를 `cnn_rtl/doc/pose_cnn_ctrl_fsm.drawio` 4페이지(FSM 상태도 + ASM 공통/LOAD/INFER)로 확정. 상태 13개, 전이 20개. D06·D08은 주황 점선으로 미결 표시. 압축하지 않은 평문 XML이라 diff 가능 |
+ | 도면 표기 규칙 | 상태 박스 = 그 상태 동안 유지되는 레벨·등식. 전이 조건 출력 박스 = 1-cycle 펄스·레지스터 적재. **`fc_sel`은 `fc_start`를 샘플링하는 시점에 올바른 값이어야 한다**(`08_FC` r12·r45: `fc_start`에서 latch). 이후 값을 유지해도 되며, 도면에는 시작 전이에 필요한 값으로 표기한다. 2026-09-24 Claude가 상태 박스의 `fc_sel` 표기를 제거하고 생성 스크립트를 함께 수정함 |
+@@ -261,9 +261,10 @@
+ | T-01R 검증 | 기존 CSR TB 4개 무수정 + Top 단독/CSR 통합 TB 모두 통과. 단독 START 14회, 미구현 10상태·불법 3상태 복구, cfg 전환 양방향, 미사용 출력 0 확인. 통합 START 7회/busy 14cycle, 실제 busy COMMAND SLVERR·값 보존 확인. 합성 LUT 19/FF 40/BRAM 0/DSP 0, 래치·조합 루프 0, WNS +4.885 ns(잠정 100 MHz OOC). 실행 환경·OOC 경고와 범위는 보고서에 구분 기록 |
+ | **T-01R 검수** | **Claude 독립 확인 통과.** 도면 XML의 `fsm_code_*` 13개와 RTL `localparam` **13/13 일치**(직접 파싱). 6개 TB 전부 재실행 PASS(경고 0). 별도 작성한 독립 cycle trace로 ① busy 정확히 2cycle ② `cfg_ok`를 DECODE에서 관찰(START 에지 아님) ③ FINISH 출구 CLEAR 경합에서 기록 우선(D02 R4) ④ busy 중 START·cmd 변경 무시 ⑤ 미사용 출력 19개가 23 cycle 내내 0 확인. 합성 재현: LUT 19 / FF 40 / BRAM 0 / DSP 0, **LATCH count = 0**, 조합 루프 0, WNS +4.885 ns |
+ | T-01R 검수 관찰 | ① Vivado가 FSM을 **one-hot으로 재인코딩**한다. 4-bit 이진 인코딩은 RTL·도면의 계약이고 실제 구현 인코딩은 아니다(정상) ② 미사용 주소 snapshot 3개(96 FF)는 최적화로 제거되어 FF 40이다. T-03 이후 사용 시 늘어난다 ③ `mem_rd_ready`가 상수 0이다. T-03/T-04에서 상태별 구동으로 바뀐다 |
+-| **reset 혼재 (해소 예정)** | 현재 동기식(`pose_cnn_ctrl`, Encoder)과 비동기 assert(`pose_cnn_v1_0_S00_AXI`, `pose_cnn_v1_0_M00_AXI`)가 같은 `rst_n` 네트에 공존한다. 해제는 두 방식 모두 같은 상승 에지라 안전하고 통합 TB에서 확인됐다. 성립 조건은 **reset을 최소 1 클록 주기 이상 유지**하는 것이며 Zynq `proc_sys_reset`(16클록 이상)에서는 자동으로 만족된다. **R-01에서 해소한다** |
++| **reset 혼재 (RTL 해소)** | R-01에서 S00/M00의 비동기 sensitivity 4곳 제거. 기존 Top/Encoder와 모두 동기식 active-low. reset 입력은 유효한 상승 에지에 샘플링되도록 공급해야 한다. 새 reset 공급 회로·BD 유지 시간은 이번 범위에서 구현·검증하지 않음 |
+ | **M00 수정 주체 (2026-09-25 사용자 결정)** | **민영에게 요청하지 않고 한림 쪽에서 직접 수정한다.** `pose_cnn_v1_0_M00_AXI.v`를 프로젝트 루트에서 `cnn_rtl/rtl/`로 **옮겨** 우리 쪽 단일 원본으로 삼는다. **통보 시점도 사용자 결정: 지금 따로 알리지 않고, 나중에 팀 git에 올릴 때 사용자가 직접 설명한다.** 그때까지 두 사본이 갈라져 있는 상태를 사용자가 인지하고 감수한다. 기능·포트는 바꾸지 않으므로 갈라지는 범위는 reset 방식 4+4줄로 한정된다 |
+-| **R-01 예정** | **S00_AXI / M00_AXI 동기식 active-low reset 전환.** 비동기 sensitivity list 4곳 제거 + 5.2절 AXI 호환 조항(reset 중 VALID=0)을 유지하기 위한 게이트 4개(`S_AXI_RVALID`, `M_AXI_AWVALID`, `M_AXI_WVALID`, `M_AXI_ARVALID`). **T-02보다 먼저 한다** — T-02가 전환 후의 M00을 검증하게 되어 재작업이 없다 |
++| **R-01** | **코드 반영·신규 검사·합성 완료 / 기존 회귀 2건 실패로 단계 완료 보류.** M00 이동, sensitivity 4곳 및 VALID 게이트 4곳만 기능 변경. 신규 reset b-1/b-2 PASS. 기존 TB 6개 중 write/read/Top 단독/CSR-Top 통합은 PASS, regs/ctrl은 3 ns의 첫 상승 에지 전 초기화 검사에서 실패. 기대값 수정 없이 보고. [R-01 검증 기록](cnn_rtl/docs/R-01_구현_검증기록.md) 참조 |
++| R-01 합성·정적 확인 | S00 LUT 183/FF 208/WNS +3.895 ns, M00 LUT 364/FF 132/WNS +2.779 ns. 모두 BRAM/DSP 0, 래치·조합 루프 0(잠정 100 MHz OOC). M00 xvlog 오류·경고 0, wrapper 54/54 이름·폭 일치. M00 기능 TB는 아직 없으며 T-02 범위. 두 기존 TB의 reset 검사 시점 보정 명세가 필요함 |
+ | **T-01 (이전 단계)** | 기존 1클록 BUSY 구현 및 검증 기록은 [이전 보고서](cnn_rtl/docs/T-01_구현_검증기록.md)에 보존. 당시 busy COMMAND commit 도달 불가 제약은 T-01R의 2cycle busy에서 해소됨 |
+ | 다음 소단계 후보 | **T-02: AXI4 슬레이브 메모리 모형과 실물 M00_AXI 단독 검증. 다음 단계 진행 요청 전에는 구현하지 않음.** |
+ | Top FSM 분할 예정 | T-01R 골격/상태 → T-02 실물 M00 단독 검증 → T-03 LOAD → T-04 IN_RD/ENC → T-05 FC1(**D06**) → T-06 FC2/FC3/WR → T-07 ERR_DRAIN(**D08**). 이번 승인·구현 범위는 T-01R뿐 |
+--- before/cnn_rtl/tb/tb_s00_axi_ctrl.v
++++ after/cnn_rtl/tb/tb_s00_axi_ctrl.v
+@@ -108,7 +108,7 @@
+     // TB-only core: sample registered START on the next rising edge, snapshot
+     // configuration, and stay busy for exactly BUSY_CYCLES complete periods.
+     // CLEAR affects display only; it never assigns busy or the countdown.
+-    always @(posedge clk or negedge rst_n) begin
++    always @(posedge clk) begin
+         if (!rst_n) begin
+             core_busy <= 1'b0;
+             remaining_cycles <= 0;
+--- before/cnn_rtl/tb/tb_s00_axi_write.v
++++ after/cnn_rtl/tb/tb_s00_axi_write.v
+@@ -26,6 +26,8 @@
+     reg [4:0] expected_addr [0:4];
+     reg [31:0] expected_data [0:4];
+     reg [3:0] expected_strb [0:4];
++    reg [212:0] reset_registers_before;
++    reg [4:0] reset_outputs_before;
+ 
+     pose_cnn_v1_0_S00_AXI #(
+         .C_S_AXI_DATA_WIDTH(32),
+@@ -126,6 +128,36 @@
+         end
+     endtask
+ 
++    // R-01 b-2: enter just after tick (#1 after posedge). The entire low pulse
++    // is between rising edges: outputs are gated, but no register is reset.
++    // This documents why the supplied reset must cover at least one clock
++    // period; a pulse that misses every rising edge is NOT a valid reset.
++    task check_short_reset_pulse;
++        begin
++            reset_registers_before = {dut.wr_state_reg, dut.channel_enable_reg,
++                dut.aw_hold_reg, dut.w_hold_reg, dut.awaddr_reg, dut.wdata_reg,
++                dut.wstrb_reg, dut.cmd_reg, dut.input_addr_reg, dut.weight_addr_reg,
++                dut.output_addr_reg, dut.bresp_reg, dut.start_reg, dut.clear_status_reg,
++                dut.rvalid_reg, dut.rdata_reg, dut.rresp_reg};
++            reset_outputs_before = {awready, wready, bvalid, arready, rvalid};
++            check_condition(reg_cmd !== 32'b0, "short-pulse test starts with nonzero stored CSR");
++            #1 rst_n = 1'b0;
++            #1;
++            check_condition({awready, wready, bvalid, arready, rvalid} === 5'b00000,
++                            "short pulse gates all five AXI READY/VALID outputs low");
++            check_condition({dut.wr_state_reg, dut.channel_enable_reg,
++                dut.aw_hold_reg, dut.w_hold_reg, dut.awaddr_reg, dut.wdata_reg,
++                dut.wstrb_reg, dut.cmd_reg, dut.input_addr_reg, dut.weight_addr_reg,
++                dut.output_addr_reg, dut.bresp_reg, dut.start_reg, dut.clear_status_reg,
++                dut.rvalid_reg, dut.rdata_reg, dut.rresp_reg} === reset_registers_before,
++                            "pulse without a rising edge preserves every sequential register");
++            #1 rst_n = 1'b1;
++            #1;
++            check_condition({awready, wready, bvalid, arready, rvalid} === reset_outputs_before,
++                            "short pulse removal restores outputs from retained state");
++        end
++    endtask
++
+     always @(posedge clk) begin
+         if (rst_n) begin
+             check_condition(!rvalid || (rdata === 32'h3f800000 && rresp === 2'b00),
+@@ -181,10 +213,10 @@
+         expected_addr[3] = 5'h14; expected_data[3] = 32'h11223340; expected_strb[3] = 4'h3;
+         expected_addr[4] = 5'h04; expected_data[4] = 32'haabbccdd; expected_strb[4] = 4'hc;
+ 
+-        // Asynchronous assertion between clock edges; synchronous release via NBA.
++        // Assert between edges to check combinational output gates; release via NBA.
+         #2 rst_n = 1'b0;
+         #1;
+-        check_condition({awready, wready, bvalid} === 3'b000, "asynchronous reset blocks channels");
++        check_condition({awready, wready, bvalid} === 3'b000, "reset combinational gates block channels immediately");
+         repeat (2) begin
+             tick;
+             check_condition({awready, wready, bvalid} === 3'b000, "reset holds channels inactive");
+@@ -278,6 +310,12 @@
+                             "stalled response neither repeats commit nor accepts next write");
+         end
+         $display("PASS: BREADY delayed 4 cycles -> stable BVALID/BRESP; AWREADY=WREADY=0");
++        // R-01 b-2, pending-response phase: both VALID outputs are nonzero
++        // before the pulse, so their zero checks cannot pass vacuously.
++        while (rvalid !== 1'b1) tick;
++        check_condition(bvalid && rvalid, "short-pulse response phase has both VALID outputs high");
++        check_short_reset_pulse;
++        $display("PASS: R-01 b-2 response phase: short reset masks BVALID/RVALID without clearing registers");
+         @(negedge clk);
+         bready = 1'b1;
+         tick;
+@@ -304,6 +342,41 @@
+         $display("PASS: 2 consecutive writes preserve distinct address/data/strobe with no replay");
+         $display("PASS: concurrent scale/OKAY reads do not disturb writes; control pulses stay zero");
+         $display("PASS: totals AW=%0d W=%0d commit=%0d B=%0d", aw_count, w_count, commit_count, b_count);
++
++        // R-01 b-2, idle phase: exercise all three READY gates from high.
++        while (arready !== 1'b1) tick;
++        check_condition({awready, wready, arready} === 3'b111,
++                        "short-pulse idle phase starts with all three READY outputs high");
++        check_short_reset_pulse;
++        $display("PASS: R-01 b-2 idle phase: short reset masks READY; registers retained as required by reset contract");
++
++        // R-01 b-1: unlike the short pulse, a reset spanning rising edges
++        // must clear the real stored values and pending read response.
++        @(negedge clk);
++        rst_n = 1'b0;
++        repeat (2) begin
++            tick;
++            check_condition({dut.wr_state_reg, dut.channel_enable_reg,
++                dut.aw_hold_reg, dut.w_hold_reg, dut.awaddr_reg, dut.wdata_reg,
++                dut.wstrb_reg, dut.cmd_reg, dut.input_addr_reg, dut.weight_addr_reg,
++                dut.output_addr_reg, dut.bresp_reg, dut.start_reg, dut.clear_status_reg,
++                dut.rvalid_reg, dut.rdata_reg, dut.rresp_reg} === 213'b0,
++                            "clock-spanning reset clears every sequential register");
++            check_condition({awready, wready, bvalid, arready, rvalid} === 5'b00000,
++                            "clock-spanning reset keeps AXI outputs inactive");
++        end
++        @(posedge clk);
++        rst_n <= 1'b1;
++        #1;
++        check_condition({awready, wready, bvalid, arready, rvalid} === 5'b00000,
++                        "startup guard remains inactive immediately after valid reset release");
++        tick;
++        check_condition({awready, wready, bvalid, arready, rvalid} === 5'b11010,
++                        "first active edge enables empty channels without a stale response");
++        check_condition({reg_start, reg_clear_status, reg_cmd, reg_input_addr,
++                         reg_weight_addr, reg_output_addr} === 130'b0,
++                        "valid reset leaves no stale CSR or control pulse");
++        $display("PASS: R-01 b-1: clock-spanning reset clears registers and restart guard preserves channel timing");
+         $display("PASS: S00-02 ALL CHECKS PASSED");
+         $finish;
+     end

@@ -1,0 +1,98 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t07_tb_top_full/xsim_script.tcl
+# xsim {t07_tb_top_full} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: L-07 S3 fixture public_LOAD_beats=3722 cfg=1 err=0 hierarchy_RAM_access=0
+PASS: T-06 LOAD case=0 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=0 leg=0 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=0 leg=0 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=0 leg=0 name=normal_repeat cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e000000 done=1 error=0 violations=0
+PASS: L-07 S3 case=0 leg=1 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=0 leg=1 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=0 leg=1 name=normal_repeat cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e000040 done=1 error=0 violations=0
+PASS: T-06 Q6 case=0 restart_without_reset=PASS input_words=1440 FC_words=49152 pose_bytes=24
+PASS: T-06 LOAD case=1 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=1 leg=0 ENC_reads=6 FC_reads=55302 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=1 leg=0 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56937 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=1 leg=0 name=minimum_FC_delay cycles=56937 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55298/2/2 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e002000 done=1 error=0 violations=0
+PASS: T-06 LOAD case=2 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=2 leg=0 ENC_reads=6 FC_reads=55475 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=2 leg=0 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=57110 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=2 leg=0 name=delayed_FC cycles=57110 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55323/51/101 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e004000 done=1 error=0 violations=0
+PASS: T-06 LOAD case=3 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=3 leg=0 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=3 leg=0 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=3 leg=0 name=level_done_repeat cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e006000 done=1 error=0 violations=0
+PASS: L-07 S3 case=3 leg=1 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=3 leg=1 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=3 leg=1 name=level_done_repeat cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e006040 done=1 error=0 violations=0
+PASS: T-06 Q6 case=3 restart_without_reset=PASS input_words=1440 FC_words=49152 pose_bytes=24
+PASS: T-06 LOAD case=4 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=4 leg=0 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=4 leg=0 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56977 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=4 leg=0 name=write_stall_page_end cycles=56977 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=1 B=1 B_after_last_W=21 pose_bytes=24 output=1e01ffe0 done=1 error=0 violations=0
+PASS: T-06 LOAD case=5 leg=0 cycles=4195 AR=47+187 words=3722
+OBS: R4 tb=full case=5 leg=0 raw=1440 words=21 discarded=1419 read_fall=1622 cycles=1623 done=0 error=4 origin=5 entries=1 residence=1595
+PASS: T-06 INFER case=5 leg=0 name=input_error_restart cycles=1623 enc_delay=5 input_words=21 FC_words=0 FC_starts=0 FC_cycles=0/0/0 input_AR=90 FC_AR=0 full=0 AW=0 W=0 ready_samples=0 ready_max_run=0 B=0 B_after_last_W=0 pose_bytes=0 output=1e00a000 done=0 error=4 violations=0
+PASS: T-06 LOAD case=5 leg=1 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=5 leg=1 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=5 leg=1 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=5 leg=1 name=input_error_restart cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e00a040 done=1 error=0 violations=0
+PASS: T-07 D08 recovery case=5 common_reset_then_LOAD_then_INFER=PASS input_words=1440 FC_words=49152 pose_bytes=24
+PASS: T-06 LOAD case=6 leg=0 cycles=4195 AR=47+187 words=3722
+OBS: R4 tb=full case=6 leg=0 raw=50592 words=2725 discarded=47867 read_fall=58571 cycles=58572 done=0 error=4 origin=7 entries=1 residence=53849
+PASS: T-06 INFER case=6 leg=0 name=FC1_error_reset_recovery cycles=58572 enc_delay=5 input_words=1440 FC_words=1285 FC_starts=1 FC_cycles=3094/0/0 input_AR=90 FC_AR=3072 full=1718 AW=0 W=0 ready_samples=0 ready_max_run=0 B=0 B_after_last_W=0 pose_bytes=0 output=1e00c000 done=0 error=4 violations=0
+PASS: T-06 LOAD case=6 leg=2 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=6 leg=2 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=6 leg=2 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=6 leg=2 name=FC1_error_reset_recovery cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e00c080 done=1 error=0 violations=0
+PASS: T-07 D08 recovery case=6 common_reset_then_LOAD_then_INFER=PASS input_words=1440 FC_words=49152 pose_bytes=24
+PASS: T-06 LOAD case=7 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=7 leg=0 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=7 leg=0 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56959 done=0 error=5 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=7 leg=0 name=write_error_restart cycles=56959 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=13 pose_bytes=24 output=1e00e000 done=0 error=5 violations=0
+PASS: T-06 LOAD case=7 leg=1 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=7 leg=1 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=7 leg=1 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56959 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=7 leg=1 name=write_error_restart cycles=56959 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=13 pose_bytes=24 output=1e00e040 done=1 error=0 violations=0
+PASS: T-07 D08 recovery case=7 common_reset_then_LOAD_then_INFER=PASS input_words=1440 FC_words=49152 pose_bytes=24
+PASS: T-06 LOAD case=8 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=8 leg=0 ENC_reads=1278891 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=8 leg=0 raw=50592 words=50592 discarded=0 read_fall=1335810 cycles=1335832 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=8 leg=0 name=measured_Encoder_delay cycles=1335832 enc_delay=1278890 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e010000 done=1 error=0 violations=0
+PASS: T-06 LOAD case=9 leg=0 cycles=9313 AR=47+187 words=3722
+PASS: L-07 S3 case=9 leg=0 ENC_reads=6 FC_reads=196623 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=9 leg=0 raw=50592 words=50592 discarded=0 read_fall=198169 cycles=200237 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=9 leg=0 name=FIFO_and_read_stall cycles=200237 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=196614/4/5 input_AR=90 FC_AR=3072 full=119484 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e012000 done=1 error=0 violations=0
+PASS: T-06 LOAD case=10 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-07 R5 case=10 mode=1 held_cycles=2000 state=11 M00_state=4 busy=1 STATUS_error=0 internal_error=4 raw=31 RAM_words=31 AXI_C12_violations=0
+PASS: T-06 LOAD case=10 leg=1 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=10 leg=1 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=10 leg=1 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=10 leg=1 name=early_RLAST_fault cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e014040 done=1 error=0 violations=0
+PASS: T-07 R5 case=10 TB_common_reset_then_LOAD_then_INFER=PASS board_reset_scope=X03
+PASS: T-06 LOAD case=11 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-07 R5 case=11 mode=2 held_cycles=2000 state=11 M00_state=4 busy=1 STATUS_error=0 internal_error=4 raw=32 RAM_words=32 AXI_C12_violations=0
+PASS: T-06 LOAD case=11 leg=1 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=11 leg=1 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=11 leg=1 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=11 leg=1 name=missing_RLAST_fault cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e016040 done=1 error=0 violations=0
+PASS: T-07 R5 case=11 TB_common_reset_then_LOAD_then_INFER=PASS board_reset_scope=X03
+PASS: T-06 LOAD case=12 leg=0 cycles=4195 AR=47+187 words=3722
+PASS: T-07 R3 case=12 both_busy_cycles=1594 read_idle_write_busy_cycles=4386 read_fall=1622 B_accept=6007 Top_finish=6009 discarded=1419 W=3 B=1 done=0 error=4 violations=0
+PASS: T-06 LOAD case=12 leg=1 cycles=4195 AR=47+187 words=3722
+PASS: L-07 S3 case=12 leg=1 ENC_reads=6 FC_reads=55312 stale_enc_param=17 stale_enc_lut=73 entry=1 FC_handoffs=2 exit=1 mismatches=0 read_latency=1
+OBS: R4 tb=full case=12 leg=1 raw=50592 words=50592 discarded=0 read_fall=56925 cycles=56947 done=1 error=0 origin=-1 entries=0 residence=0
+PASS: T-06 INFER case=12 leg=1 name=read_write_outstanding_drain cycles=56947 enc_delay=5 input_words=1440 FC_words=49152 FC_starts=3 FC_cycles=55303/4/5 input_AR=90 FC_AR=3072 full=0 AW=1 W=3 ready_samples=3 ready_max_run=3 B=1 B_after_last_W=1 pose_bytes=24 output=1e018040 done=1 error=0 violations=0
+PASS: T-06 Q1-Q6 ALL SELECTED cases=13 INFER_runs=18 selector=-1 AXI_C12_violations=0
+$finish called at time : 24986790 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_top_full.v" Line 816
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:00:47 . Memory (MB): peak = 917.277 ; gain = 0.047
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 19:09:39 2026...

@@ -1,0 +1,446 @@
+--- cnn_rtl/rtl/pose_cnn_ctrl.v (before)
++++ cnn_rtl/rtl/pose_cnn_ctrl.v
+@@ -39,6 +39,9 @@
+     output reg  [63:0]  ld_data,
+     output reg          ld_valid,
+     input  wire         ld_ready,
++    // D09 C: explicit read-address ownership for the Loader's shared RAM ports.
++    output wire         param_sel_fc,
++    output wire         lut_sel_fc,
+     // D08: no consumer abort port; recovery uses the verified common reset.
+ 
+     output reg          enc_start,
+@@ -100,6 +103,10 @@
+     assign status_busy  = (state_reg != IDLE);
+     assign status_done  = done_reg;
+     assign status_error = error_reg;
++    // Current-state decode, not fc_start: RAM samples the selected address on
++    // its next rising edge. No extra register or change to the FSM sequence.
++    assign param_sel_fc = (state_reg == FC1) || (state_reg == FC2) || (state_reg == FC3);
++    assign lut_sel_fc   = (state_reg == FC1) || (state_reg == FC2) || (state_reg == FC3);
+ 
+     // User decision (2026-09-25): synchronous active-low reset, as in Encoder.
+     always @(posedge clk) begin
+--- cnn_rtl/rtl/weight_param_loader.v (before)
++++ cnn_rtl/rtl/weight_param_loader.v
+@@ -15,6 +15,8 @@
+     output wire [31:0]  pool_mult,
+     output wire [31:0]  pool_shift,
+     output wire [31:0]  output_scale_bits,
++    input  wire         param_sel_fc,
++    input  wire         lut_sel_fc,
+     input  wire [8:0]   conv_raddr,
+     output wire [127:0] conv_rdata,
+     input  wire [8:0]   enc_param_raddr,
+@@ -43,14 +45,13 @@
+     wire [11:0]  fcw_waddr;
+     wire [63:0]  fcw_wdata;
+ 
+-    // D09 source is undecided. L-07: connect fc_active to the agreed signal.
+-    // Explicit selection is required: Encoder addresses can remain nonzero.
+-    wire fc_active;
++    // D09 C: Top selects FC during FC1/FC2/FC3; otherwise selects Encoder.
++    // Select addresses before the synchronous RAM, preserving one-cycle reads.
++    // Encoder addresses may remain nonzero after enc_done; never combine them.
+     wire [8:0] param_read_addr;
+     wire [9:0] lut_read_addr;
+-    assign fc_active = 1'b0;
+-    assign param_read_addr = fc_active ? fc_param_raddr : enc_param_raddr;
+-    assign lut_read_addr = fc_active ? fc_lut_raddr : enc_lut_raddr;
++    assign param_read_addr = param_sel_fc ? fc_param_raddr : enc_param_raddr;
++    assign lut_read_addr = lut_sel_fc ? fc_lut_raddr : enc_lut_raddr;
+ 
+     blob_decoder u_blob_decoder (
+         .clk(clk), .rst_n(rst_n), .loader_start(loader_start),
+--- cnn_rtl/tb/tb_csr_ctrl_link.v (before)
++++ cnn_rtl/tb/tb_csr_ctrl_link.v
+@@ -94,7 +94,9 @@
+         end
+     end
+ 
++    wire param_sel_fc, lut_sel_fc;
+     pose_cnn_ctrl u_ctrl (
++        .param_sel_fc(param_sel_fc), .lut_sel_fc(lut_sel_fc),
+         .clk(clk), .rst_n(rst_n),
+         .reg_start(reg_start), .reg_clear_status(reg_clear_status), .reg_cmd(reg_cmd),
+         .reg_input_addr(reg_input_addr), .reg_weight_addr(reg_weight_addr),
+--- cnn_rtl/tb/tb_ctrl_status.v (before)
++++ cnn_rtl/tb/tb_ctrl_status.v
+@@ -1,7 +1,7 @@
+ `timescale 1 ns / 1 ps
+ 
+ // T-06 status regression: LOAD/INFER use short read/Loader/Encoder/FC handshake models.
+-// Compile with xvlog -sv. Force/release is limited to state-recovery checks.
++// Compile with xvlog -sv. Force/release is limited to state recovery and exhaustive selector decoding.
+ module tb_ctrl_status;
+     reg clk = 1'b0;
+     reg rst_n = 1'b0;
+@@ -25,6 +25,7 @@
+     integer recovery_checks = 0;
+     integer state_index;
+     reg [3:0] recovery_state;
++    reg [15:0] selector_states_seen=16'b0;
+ 
+ 
+     // Small handshake-only environment for CSR/status regression. Full data
+@@ -74,7 +75,9 @@
+         end
+     end
+ 
++    wire param_sel_fc, lut_sel_fc;
+     pose_cnn_ctrl u_ctrl (
++        .param_sel_fc(param_sel_fc), .lut_sel_fc(lut_sel_fc),
+         .clk(clk), .rst_n(rst_n),
+         .reg_start(reg_start), .reg_clear_status(reg_clear_status), .reg_cmd(reg_cmd),
+         .reg_input_addr(reg_input_addr), .reg_weight_addr(reg_weight_addr),
+@@ -393,6 +396,26 @@
+         repeat (2) tick;
+         check_status(1'b0, 1'b0, 4'd0);
+         $display("PASS: synchronous reset in FINISH waits for the edge, clears all state, and produces no phantom completion");
++        // Exhaustive combinational decode, including the three illegal codes.
++        // Hold reset while injecting states so no artificial START is consumed.
++        @(negedge clk);rst_n=0;
++        for(state_index=0;state_index<16;state_index=state_index+1) begin
++            recovery_state=state_index[3:0];
++            force u_ctrl.state_reg=recovery_state;
++            #1;
++            check(u_ctrl.state_reg===recovery_state,"S2 forced state is the observed state");
++            check(param_sel_fc===((recovery_state==7)||(recovery_state==8)||(recovery_state==9)) &&
++                  lut_sel_fc===param_sel_fc,"S2 current-state selection, including illegal states");
++            selector_states_seen[recovery_state]=1'b1;
++            $display("PASS: L-07 S2 state=%0d param_sel_fc=%b lut_sel_fc=%b",u_ctrl.state_reg,param_sel_fc,lut_sel_fc);
++            release u_ctrl.state_reg;
++            tick;
++            @(negedge clk);
++        end
++        rst_n=1;tick;
++        check_status(1'b0,1'b0,4'd0);
++        check(selector_states_seen===16'hffff,"S2 all sixteen observed state encodings covered");
++        $display("PASS: L-07 S2 states=13 illegal_codes=3 FC_selected=7,8,9 all_others=0");
+         $display("PASS: unused outputs stayed zero for %0d sampled cycles while unused inputs toggled", zero_output_checks);
+         $display("PASS: T-06 ALL CTRL STATUS CHECKS PASSED (%0d START snapshots checked)", starts_checked);
+         $finish;
+--- cnn_rtl/tb/tb_loader_real_blob.v (before)
++++ cnn_rtl/tb/tb_loader_real_blob.v
+@@ -18,6 +18,7 @@
+     wire [7:0] enc_lut_rdata,fc_lut_rdata;
+     wire [63:0] fcw_rdata;
+     weight_param_loader dut (
++        .param_sel_fc(1'b0), .lut_sel_fc(1'b0),
+         .clk(clk),.rst_n(rst_n),.loader_start(loader_start),
+         .loader_done(loader_done),.loader_err(loader_err),
+         .ld_data(ld_data),.ld_valid(ld_valid),.ld_ready(ld_ready),.cfg_ok(cfg_ok),
+--- cnn_rtl/tb/tb_top_fc1.v (before)
++++ cnn_rtl/tb/tb_top_fc1.v
+@@ -167,7 +167,9 @@
+     wire  fifo_full;
+     wire [191:0] pose_data;
+ 
++    wire param_sel_fc, lut_sel_fc;
+     pose_cnn_ctrl ctrl (
++        .param_sel_fc(param_sel_fc), .lut_sel_fc(lut_sel_fc),
+         .clk(clk),
+         .rst_n(resetn),
+         .reg_start(reg_start),
+--- cnn_rtl/tb/tb_top_full.v (before)
++++ cnn_rtl/tb/tb_top_full.v
+@@ -175,7 +175,9 @@
+     wire  fifo_full;
+     wire [191:0] pose_data;
+ 
++    wire param_sel_fc, lut_sel_fc;
+     pose_cnn_ctrl ctrl (
++        .param_sel_fc(param_sel_fc), .lut_sel_fc(lut_sel_fc),
+         .clk(clk),
+         .rst_n(resetn),
+         .reg_start(reg_start),
+@@ -231,6 +233,160 @@
+     fc_stub fc(.clk(clk),.resetn(resetn),.fc_start(fc_start),.fc_sel(tested_sel),
+         .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done),.pose_data(pose_data));
+ 
++    // L-07 S3: real Loader read-port fixture, separate from the existing
++    // protocol-only loader_stub. Preload via public LOAD ports once; no RAM
++    // forces/backdoors. This is not the X-02 whole-core LOAD integration.
++    // Unmodified Encoder/FC stubs have no RAM address ports. These TB-local
++    // address producers model Encoder's nonzero residual addresses and FC's
++    // independent requests. The production Loader performs the actual mux.
++    reg probe_resetn=0,probe_start=0,probe_valid=0;
++    reg [63:0] probe_data=0;
++    wire probe_done,probe_err,probe_ready,probe_cfg;
++    wire [31:0] probe_mult,probe_shift,probe_scale;
++    wire [127:0] probe_conv;
++    wire [63:0] probe_fcw;
++    wire [95:0] probe_enc_param_data,probe_fc_param_data;
++    wire [7:0] probe_enc_lut_data,probe_fc_lut_data;
++    wire [8:0] probe_enc_param_addr=9'd17;
++    wire [9:0] probe_enc_lut_addr=10'd73;
++    reg [8:0] probe_fc_param_addr=9'd48;
++    reg [9:0] probe_fc_lut_addr=10'd612;
++    bit probe_loaded=0;
++    integer probe_pfirst[0:4],probe_pcount[0:4],probe_pbase[0:4];
++    integer probe_requests=0,probe_enc_reads=0,probe_fc_reads=0;
++    integer probe_enter=0,probe_exit=0,probe_handoffs=0;
++    weight_param_loader read_port_loader (
++        .clk(clk),.rst_n(probe_resetn),.loader_start(probe_start),
++        .loader_done(probe_done),.loader_err(probe_err),
++        .ld_data(probe_data),.ld_valid(probe_valid),.ld_ready(probe_ready),.cfg_ok(probe_cfg),
++        .pool_mult(probe_mult),.pool_shift(probe_shift),.output_scale_bits(probe_scale),
++        .param_sel_fc(param_sel_fc),.lut_sel_fc(lut_sel_fc),
++        .conv_raddr(9'd0),.conv_rdata(probe_conv),.fcw_raddr(12'd0),.fcw_rdata(probe_fcw),
++        .enc_param_raddr(probe_enc_param_addr),.enc_param_rdata(probe_enc_param_data),
++        .fc_param_raddr(probe_fc_param_addr),.fc_param_rdata(probe_fc_param_data),
++        .enc_lut_raddr(probe_enc_lut_addr),.enc_lut_rdata(probe_enc_lut_data),
++        .fc_lut_raddr(probe_fc_lut_addr),.fc_lut_rdata(probe_fc_lut_data)
++    );
++    function automatic [31:0] probe_field(input integer a,input integer f);
++        case(f)
++            0:probe_field=32'h76540000+32'(a);
++            1:probe_field=32'h12340000+32'(a*3);
++            default:probe_field=32'd31;
++        endcase
++    endfunction
++    function automatic [95:0] probe_param(input integer a);
++        probe_param={probe_field(a,2),probe_field(a,1),probe_field(a,0)};
++    endfunction
++    function automatic [7:0] probe_lut(input integer a);
++        probe_lut=8'(a);
++    endfunction
++    function automatic [63:0] probe_word(input integer b);
++        reg [63:0] v;
++        integer k,a;
++        begin
++            v=0;
++            for(integer l=0;l<5;l=l+1) for(integer f=0;f<3;f=f+1) begin
++                k=b-probe_pfirst[l]-f*(probe_pcount[l]/2);
++                if(k>=0 && k<probe_pcount[l]/2) begin
++                    a=probe_pbase[l]+2*k;v={probe_field(a+1,f),probe_field(a,f)};
++                end
++            end
++            if(b>=3594) for(k=0;k<8;k=k+1) v[k*8+:8]=probe_lut((b-3594)*8+k);
++            case(b)
++                0:v={32'd2,32'h36574c50};
++                1:v={32'h3cb76adb,32'd105748};
++                2:v={32'h783b66b4,32'h3bd997a8};
++                3:v={32'd0,32'd31};
++                default:begin end
++            endcase
++            probe_word=v;
++        end
++    endfunction
++    task preload_read_fixture;
++        integer elapsed;
++        begin
++            probe_pfirst[0]=94;probe_pcount[0]=16;probe_pbase[0]=0;
++            probe_pfirst[1]=694;probe_pcount[1]=32;probe_pbase[1]=16;
++            probe_pfirst[2]=742;probe_pcount[2]=128;probe_pbase[2]=48;
++            probe_pfirst[3]=2982;probe_pcount[3]=128;probe_pbase[3]=176;
++            probe_pfirst[4]=3558;probe_pcount[4]=24;probe_pbase[4]=304;
++            repeat(2) @(negedge clk);
++            probe_resetn=1;probe_start=1;
++            @(negedge clk);probe_start=0;elapsed=0;
++            for(integer b=0;b<3722;b=b+1) begin
++                probe_data=probe_word(b);probe_valid=1;
++                @(posedge clk);
++                while(!probe_ready) begin @(posedge clk);end
++                @(negedge clk);probe_valid=0;
++            end
++            while(!probe_done) begin
++                @(negedge clk);elapsed=elapsed+1;check(elapsed<20,"S3 fixture LOAD completion bound");
++            end
++            check(probe_cfg && !probe_err,"S3 real Loader accepts deterministic fixture");
++            probe_loaded=1;
++            $display("PASS: L-07 S3 fixture public_LOAD_beats=3722 cfg=1 err=0 hierarchy_RAM_access=0");
++        end
++    endtask
++    always @(negedge clk) begin : read_address_producers
++        reg [207:0] held;
++        if(probe_loaded && resetn) begin
++            held={probe_enc_param_data,probe_fc_param_data,probe_enc_lut_data,probe_fc_lut_data};
++            if(ctrl.state_reg>=7 && ctrl.state_reg<=9) begin
++                probe_fc_param_addr=9'(48+128*(int'(ctrl.state_reg)-7)+probe_requests%24);
++                probe_fc_lut_addr=10'((ctrl.state_reg==7?512:768)+100+probe_requests%24);
++            end
++            #2;
++            check({probe_enc_param_data,probe_fc_param_data,probe_enc_lut_data,probe_fc_lut_data}===held,
++                "S3 real Loader read data holds when FC address changes between edges");
++        end
++    end
++    always @(posedge clk) begin : shared_read_monitor
++        reg [3:0] sampled_state;
++        reg [95:0] want_param;
++        reg [7:0] want_lut;
++        bit sampled_enc_done,sampled_fc_done,sampled_fc_start,sampled_seen;
++        reg [1:0] sampled_fc_sel;
++        if(probe_loaded && resetn) begin
++            sampled_state=ctrl.state_reg;
++            sampled_enc_done=enc_done;sampled_fc_done=fc_done;sampled_seen=ctrl.fc_done_seen_reg;
++            sampled_fc_start=fc_start;sampled_fc_sel=fc_sel;
++            check(param_sel_fc===(sampled_state>=7 && sampled_state<=9) && lut_sel_fc===param_sel_fc,
++                "S3 current state drives both real Loader selectors");
++            want_param=probe_param(param_sel_fc?probe_fc_param_addr:probe_enc_param_addr);
++            want_lut=probe_lut(lut_sel_fc?probe_fc_lut_addr:probe_enc_lut_addr);
++            if(sampled_state==6) probe_enc_reads=probe_enc_reads+1;
++            if(param_sel_fc) begin
++                check(probe_enc_param_addr==17 && probe_enc_lut_addr==73 &&
++                    want_param!==probe_param(17) && want_lut!==probe_lut(73),
++                    "S3 nonzero stale Encoder addresses produce different data and remain driven");
++                probe_fc_reads=probe_fc_reads+1;
++            end
++            probe_requests=probe_requests+1;
++            #2;
++            check(probe_enc_param_data===want_param && probe_fc_param_data===want_param &&
++                probe_enc_lut_data===want_lut && probe_fc_lut_data===want_lut,
++                "S3 both outputs equal golden for pre-edge address/select, including transition edges");
++            check(param_sel_fc===(ctrl.state_reg>=7 && ctrl.state_reg<=9) && lut_sel_fc===param_sel_fc,
++                "S3 select follows state change without an extra register");
++            if(sampled_state==6 && ctrl.state_reg==7) begin
++                check(sampled_enc_done && sampled_fc_start && sampled_fc_sel==0 &&
++                    param_sel_fc && want_param===probe_param(17),
++                    "S3 ENC-to-FC1: start samples while ENC-selected, FC reads begin next edge");
++                probe_enter=probe_enter+1;
++            end
++            if((sampled_state==7 && ctrl.state_reg==8) || (sampled_state==8 && ctrl.state_reg==9)) begin
++                check((sampled_fc_done || sampled_seen) && sampled_fc_start && param_sel_fc,
++                    "S3 FC1/2 handoff requires done/seen, keeps FC read ownership");
++                probe_handoffs=probe_handoffs+1;
++            end
++            if(sampled_state==9 && ctrl.state_reg==10) begin
++                check((sampled_fc_done || sampled_seen) && !param_sel_fc && !lut_sel_fc,
++                    "S3 FC3-to-WR releases read ownership at completed transition");
++                probe_exit=probe_exit+1;
++            end
++        end
++    end
++
+     localparam integer LAST_CASE=12;
+     localparam [31:0] LOAD_BASE=32'h1c000050, INPUT_BASE=32'h1d000000;
+     localparam [31:0] S1=32'haaaa0001,S2=32'hcccc0003,SW=32'hfc1a0010,SI=32'h24681357;
+@@ -441,6 +597,7 @@
+     task clear_observation;
+         begin
+             reset_drain_observation;
++            probe_enc_reads=0;probe_fc_reads=0;probe_enter=0;probe_exit=0;probe_handoffs=0;
+             began=0;finished=0;commands=0;ar1=0;ar2=0;r1=0;r2=0;in_words=0;fc_words=0;enc_starts=0;fc_starts=0;
+             wr_starts=0;aw_count=0;w_count=0;b_count=0;ready_count=0;ready_run=0;max_ready_run=0;
+             write_edge=0;last_w=0;last_b=0;write_end=0;full_cycles=0;drain_cycles=0;error_pushes=-1;
+@@ -521,6 +678,13 @@
+                 end
+             end
+             check(memory.mem_word(output_base-8)===UNWRITTEN && memory.mem_word(output_base+24)===UNWRITTEN,"both unwritten pose guard words preserved");
++            if(fault==0 || fault==3) begin
++                check(probe_enc_reads>0 && probe_fc_reads>0 && probe_enter==1 && probe_exit==1 && probe_handoffs==2,
++                    "S3 normal INFER exercises all ownership transitions and stale-address exclusion");
++                $display("PASS: L-07 S3 case=%0d leg=%0d ENC_reads=%0d FC_reads=%0d stale_enc_param=17 stale_enc_lut=73 entry=%0d FC_handoffs=%0d exit=%0d mismatches=0 read_latency=1",
++                    case_id,leg,probe_enc_reads,probe_fc_reads,probe_enter,probe_handoffs,probe_exit);
++            end
++
+             if((fault==1 || fault==2) && !legacy_drain) check(drain_entries==1 && drain_residence>0,"read error traverses ERR_DRAIN exactly once");
+             $display("OBS: R4 tb=full case=%0d leg=%0d raw=%0d words=%0d discarded=%0d read_fall=%0d cycles=%0d done=%b error=%0d origin=%0d entries=%0d residence=%0d",
+                 case_id,leg,r1+r2,in_words+fc_words,drain_discarded,read_fall-began,finished-began,status_done,status_error,drain_from,drain_entries,drain_residence);
+@@ -642,6 +806,7 @@
+     initial begin
+         events=$fopen("top_full_events.csv","w");check(events!=0,"open trace");
+         $fdisplay(events,"case,leg,phase,cycle,state,read_busy,write_busy,fc_start,fc_done,fc_sel,wr_ready,beat,FC_words,W_words");
++        preload_read_fixture;
+         if($value$plusargs("CASE=%d",selected)) begin
+             check(selected>=0 && selected<=LAST_CASE,"valid CASE selector");run_case(selected);
+         end else for(integer j=0;j<=(legacy_drain?9:LAST_CASE);j=j+1) run_case(j);
+--- cnn_rtl/tb/tb_top_infer.v (before)
++++ cnn_rtl/tb/tb_top_infer.v
+@@ -167,7 +167,9 @@
+     wire [63:0] fifo_wdata;
+     wire  fifo_full;
+     wire [191:0] pose_data;
++    wire param_sel_fc, lut_sel_fc;
+     pose_cnn_ctrl ctrl (
++        .param_sel_fc(param_sel_fc), .lut_sel_fc(lut_sel_fc),
+         .clk(clk),
+         .rst_n(resetn),
+         .reg_start(reg_start),
+--- cnn_rtl/tb/tb_top_load.v (before)
++++ cnn_rtl/tb/tb_top_load.v
+@@ -170,7 +170,9 @@
+     assign fifo_full = '0;
+     wire [191:0] pose_data;
+     assign pose_data = '0;
++    wire param_sel_fc, lut_sel_fc;
+     pose_cnn_ctrl ctrl (
++        .param_sel_fc(param_sel_fc), .lut_sel_fc(lut_sel_fc),
+         .clk(clk),
+         .rst_n(resetn),
+         .reg_start(reg_start),
+--- cnn_rtl/tb/tb_weight_param_loader.v (before)
++++ cnn_rtl/tb/tb_weight_param_loader.v
+@@ -1,8 +1,7 @@
+ `timescale 1ns / 1ps
+ 
+-// L-04: test only the 24 public ports. No hierarchical reads, forces or RAM access.
+-// Param/LUT currently broadcast Encoder-selected data to both consumers.
+-// L-07 must update selection expectations when the D09 source is connected.
++// L-04/L-07: public-port tests only; no hierarchical reads, forces or RAM access.
++// D09: independent address selections; selected data broadcasts to both consumers.
+ module tb_weight_param_loader;
+     reg clk=0, rst_n=0, loader_start=0, ld_valid=0;
+     always #5 clk=~clk;
+@@ -16,7 +15,9 @@
+     wire [95:0] enc_param_rdata,fc_param_rdata;
+     wire [7:0] enc_lut_rdata,fc_lut_rdata;
+     wire [63:0] fcw_rdata;
++    reg param_sel_fc=0, lut_sel_fc=0;
+     weight_param_loader dut (
++        .param_sel_fc(param_sel_fc), .lut_sel_fc(lut_sel_fc),
+         .clk(clk),.rst_n(rst_n),.loader_start(loader_start),
+         .loader_done(loader_done),.loader_err(loader_err),
+         .ld_data(ld_data),.ld_valid(ld_valid),.ld_ready(ld_ready),.cfg_ok(cfg_ok),
+@@ -247,6 +248,43 @@
+         end
+     endtask
+ 
++    // Alternate both address sources and all four independent select pairs.
++    // Six outputs must hold before the edge and match the sampled addresses
++    // immediately after that edge: neither combinational nor two-cycle reads.
++    task check_selection;
++        integer ca,pa,la,fa,mask;
++        reg [399:0] held;
++        reg [95:0] expected_param;
++        begin
++            mask=0;
++            for(integer k=0;k<64;k=k+1) begin
++                @(negedge clk);
++                held={conv_rdata,enc_param_rdata,fc_param_rdata,enc_lut_rdata,fc_lut_rdata,fcw_rdata};
++                param_sel_fc=k[0];lut_sel_fc=k[1];mask=mask | (1<<(k%4));
++                ca=(k*7)%333;fa=(k*31)%2432;
++                conv_raddr=9'(ca);fcw_raddr=12'(fa);
++                enc_param_raddr=9'(k+1);fc_param_raddr=9'(k+138);
++                enc_lut_raddr=10'(k*3+1);fc_lut_raddr=10'(k*3+2);
++                pa=param_sel_fc?fc_param_raddr:enc_param_raddr;
++                la=lut_sel_fc?fc_lut_raddr:enc_lut_raddr;
++                #2;
++                check({conv_rdata,enc_param_rdata,fc_param_rdata,enc_lut_rdata,fc_lut_rdata,fcw_rdata}===held,
++                    "S1/S4 selector/address changes cannot change data before edge");
++                @(posedge clk);#2;
++                expected_param={param_field(pa,2,5),param_field(pa,1,5),param_field(pa,0,5)};
++                check(enc_param_rdata===expected_param && fc_param_rdata===expected_param,
++                    "S1 both Param outputs broadcast independently selected address");
++                check(enc_lut_rdata===lut_byte(la,5) && fc_lut_rdata===lut_byte(la,5),
++                    "S1 both LUT outputs broadcast independently selected address");
++                check(conv_rdata===conv_word(ca,5,0,0) && fcw_rdata===fcw_word(fa,5),
++                    "S4 Conv/FCW unchanged during selection switches");
++            end
++            check(mask==15,"S1 all four select combinations exercised");
++            @(negedge clk);param_sel_fc=0;lut_sel_fc=0;
++            $display("PASS: L-07 S1/S4 select_pairs=00,01,10,11 distinct_addresses=64 clocks=64 six_port_checks=384 preedge_hold_checks=384 mismatches=0 read_latency=1");
++        end
++    endtask
++
+     initial begin #3000000;$fatal(1,"FAIL: L-04 global deadline");end
+     initial begin
+         first[0]=0;length[0]=4;cost[0]=1;
+@@ -288,6 +326,7 @@
+         full_load(5,4,3); // Shift error drains remaining stream without a deadlock.
+         reset_control;
+         full_load(6,5,0);read_all(5,0,0);
++        check_selection;
+         $display("PASS: L-04 K2-K6 ALL completed_LOADs=%0d aborted_LOADs=1 full_port_sweeps=%0d default_runs_all=1 hierarchy_reads=0 nominal_cycles=9772 ready_low=6050",completed,read_passes);
+         $finish;
+     end

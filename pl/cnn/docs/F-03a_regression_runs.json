@@ -1,0 +1,52 @@
+[
+  {
+    "runner": "run_existing.py",
+    "exit": 0,
+    "seconds": 148.9
+  },
+  {
+    "runner": "regression.py",
+    "exit": 0,
+    "seconds": 93.517
+  },
+  {
+    "runner": "run_new.py",
+    "exit": 0,
+    "seconds": 38.364
+  },
+  {
+    "runner": "run_wrapper.py",
+    "exit": 0,
+    "seconds": 14.598
+  },
+  {
+    "runner": "run_real.py",
+    "exit": 0,
+    "seconds": 13.607
+  },
+  {
+    "runner": "run_equiv.py",
+    "exit": 0,
+    "seconds": 88.268
+  },
+  {
+    "runner": "run_core.py",
+    "exit": 0,
+    "seconds": 160.254
+  },
+  {
+    "runner": "run_g02.py",
+    "exit": 0,
+    "seconds": 66.795
+  },
+  {
+    "runner": "run_storage.py",
+    "exit": 0,
+    "seconds": 9.786
+  },
+  {
+    "runner": "run_mac.py",
+    "exit": 0,
+    "seconds": 13.46
+  }
+]

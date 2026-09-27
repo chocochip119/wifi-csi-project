@@ -1,0 +1,37 @@
+{
+  "label": "tb_s00_axi_ctrl_elab",
+  "argv": [
+    "C:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat",
+    "work.tb_s00_axi_ctrl",
+    "-s",
+    "handover_tb_s00_axi_ctrl"
+  ],
+  "exit_code": 0,
+  "wall_seconds": 5.154,
+  "passed": true,
+  "diagnostics": [],
+  "required_marker": null
+}
+
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_s00_axi_ctrl -s handover_tb_s00_axi_ctrl 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_S00_AXI
+Compiling module work.s00_ctrl_case
+Compiling module work.tb_s00_axi_ctrl
+Built simulation snapshot handover_tb_s00_axi_ctrl
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source D:/2609_final_project/CNN_RTL_�μ��ΰ�_2026-09-27/runs/20260927_105219_618939/xsim.dir/handover_tb_s00_axi_ctrl/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sun Sep 27 10:52:27 2026...

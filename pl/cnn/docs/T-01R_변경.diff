@@ -1,0 +1,629 @@
+--- before/cnn_rtl/rtl/pose_cnn_ctrl.v
++++ after/cnn_rtl/rtl/pose_cnn_ctrl.v
+@@ -1,8 +1,8 @@
+ `timescale 1 ns / 1 ps
+ 
+-// T-01 PARTIAL IMPLEMENTATION: START decoding, snapshots and sticky status.
+-// Valid LOAD/INFER commands complete after one BUSY cycle WITHOUT doing work.
+-// Contract: PROJECT_CONTEXT.md 5.1, D02 and D03 R1/R2.
++// T-01R PARTIAL IMPLEMENTATION: T-00 state skeleton, snapshots and sticky status.
++// Valid LOAD/INFER commands traverse DECODE/FINISH WITHOUT doing work yet.
++// Contract: pose_cnn_ctrl_fsm.drawio p1/p2; PROJECT_CONTEXT.md 5.1 D02/D03, 5.2 reset.
+ module pose_cnn_ctrl (
+     input  wire         clk,
+     input  wire         rst_n,
+@@ -39,7 +39,7 @@
+     output wire [63:0]  ld_data,
+     output wire         ld_valid,
+     input  wire         ld_ready,
+-    // D08-1 may add a Loader abort port; no interface is invented in T-01.
++    // D08-1 may add a Loader abort port; no interface is invented in T-01R.
+ 
+     output wire         enc_start,
+     input  wire         enc_done,
+@@ -54,15 +54,27 @@
+     input  wire         fifo_full,
+     input  wire [191:0] pose_data
+ );
+-    localparam [1:0] IDLE = 2'b00;
+-    localparam [1:0] BUSY = 2'b01;
++    // T-00 p1: all thirteen target states retain the diagram's 4-bit encoding.
++    localparam [3:0] IDLE      = 4'b0000;
++    localparam [3:0] DECODE    = 4'b0001;
++    localparam [3:0] LD_RD1    = 4'b0010;
++    localparam [3:0] LD_RD2    = 4'b0011;
++    localparam [3:0] LD_WAIT   = 4'b0100;
++    localparam [3:0] IN_RD     = 4'b0101;
++    localparam [3:0] ENC       = 4'b0110;
++    localparam [3:0] FC1       = 4'b0111;
++    localparam [3:0] FC2       = 4'b1000;
++    localparam [3:0] FC3       = 4'b1001;
++    localparam [3:0] WR        = 4'b1010;
++    localparam [3:0] ERR_DRAIN = 4'b1011;
++    localparam [3:0] FINISH    = 4'b1100;
+     localparam [31:0] CMD_INFER = 32'd0;
+     localparam [31:0] CMD_LOAD  = 32'd1;
+     localparam [3:0] ERR_NONE    = 4'd0;
+     localparam [3:0] ERR_BAD_CMD = 4'd1;
+     localparam [3:0] ERR_NO_CFG  = 4'd2;
+ 
+-    reg [1:0]  state_reg, state_next;
++    reg [3:0]  state_reg, state_next;
+     // Unsigned configuration snapshots; only reset/accepted START changes them.
+     reg [31:0] cmd_reg, cmd_next;
+     reg [31:0] input_addr_reg, input_addr_next;
+@@ -73,11 +85,11 @@
+     reg        done_reg, done_next;
+     reg [3:0]  error_reg, error_next;
+ 
+-    assign status_busy  = (state_reg == BUSY);
++    assign status_busy  = (state_reg != IDLE);
+     assign status_done  = done_reg;
+     assign status_error = error_reg;
+ 
+-    // T-02 이후: memory commands/data and compute controls are inactive.
++    // T-03 이후: memory commands/data and compute controls are inactive here.
+     assign mem_rd_start = 1'b0;
+     assign mem_rd_addr  = 32'b0;
+     assign mem_rd_bytes = 20'b0;
+@@ -98,8 +110,8 @@
+     assign fifo_we      = 1'b0;
+     assign fifo_wdata   = 64'b0;
+ 
+-    // Asynchronous assertion; synchronous reset release is guaranteed upstream.
+-    always @(posedge clk or negedge rst_n) begin
++    // User decision (2026-09-25): synchronous active-low reset, as in Encoder.
++    always @(posedge clk) begin
+         if (!rst_n) begin
+             state_reg       <= IDLE;
+             cmd_reg         <= 32'b0;
+@@ -140,29 +152,74 @@
+         case (state_reg)
+             IDLE: begin
+                 if (reg_start) begin
+-                    // D03 R1: snapshot and BUSY update on the START sampling edge.
++                    // D03 R1: snapshot and busy update on the START sampling edge.
+                     cmd_next         = reg_cmd;
+                     input_addr_next  = reg_input_addr;
+                     weight_addr_next = reg_weight_addr;
+                     output_addr_next = reg_output_addr;
+-                    state_next       = BUSY;
++                    run_error_next   = ERR_NONE;
++                    state_next       = DECODE;
++                    // D02 R1: an accepted START clears the previous display.
+                     done_next        = 1'b0;
+                     error_next       = ERR_NONE;
+-
+-                    // Use the same incoming command being snapshotted, not the
+-                    // previous cmd_reg. cfg_ok is evaluated on this edge only.
+-                    if ((reg_cmd != CMD_INFER) && (reg_cmd != CMD_LOAD))
+-                        run_error_next = ERR_BAD_CMD;
+-                    else if ((reg_cmd == CMD_INFER) && !cfg_ok)
+-                        run_error_next = ERR_NO_CFG;
+-                    else
+-                        run_error_next = ERR_NONE;
+                 end
+             end
+-            BUSY: begin
+-                // T-02 이후 실제 LOAD/INFER 순서가 들어갈 자리.
+-                // T-01 holds BUSY for exactly one full cycle, even on errors.
+-                // D02 R2: clear at START, publish at a different (exit) edge.
++            DECODE: begin
++                // cmd_reg now contains THIS request's START snapshot; changes
++                // to incoming reg_cmd cannot change the accepted command.
++                // cfg_ok is observed in DECODE, not on the START sampling edge.
++                // T-01R keeps DECODE for one cycle, then FINISH for one cycle.
++                if (cmd_reg == CMD_LOAD) begin
++                    // T-03: replace FINISH with LD_RD1 and add start pulses.
++                    run_error_next = ERR_NONE;
++                    state_next = FINISH;
++                end else if ((cmd_reg == CMD_INFER) && cfg_ok) begin
++                    // T-04: replace FINISH with IN_RD and add mem_rd_start.
++                    run_error_next = ERR_NONE;
++                    state_next = FINISH;
++                end else if ((cmd_reg == CMD_INFER) && !cfg_ok) begin
++                    run_error_next = ERR_NO_CFG;
++                    state_next = FINISH;
++                end else begin
++                    run_error_next = ERR_BAD_CMD;
++                    state_next = FINISH;
++                end
++            end
++            // T-02~T-07 에서 채움: placeholders recover like default, without
++            // changing the execution result or fabricating completion.
++            LD_RD1: begin
++                state_next = IDLE;
++            end
++            LD_RD2: begin
++                state_next = IDLE;
++            end
++            LD_WAIT: begin
++                state_next = IDLE;
++            end
++            IN_RD: begin
++                state_next = IDLE;
++            end
++            ENC: begin
++                state_next = IDLE;
++            end
++            FC1: begin
++                state_next = IDLE;
++            end
++            FC2: begin
++                state_next = IDLE;
++            end
++            FC3: begin
++                state_next = IDLE;
++            end
++            WR: begin
++                state_next = IDLE;
++            end
++            ERR_DRAIN: begin
++                state_next = IDLE;
++            end
++            FINISH: begin
++                // D02 R2: publish only on the FINISH exit edge. R1's START
++                // clear occurs on a different edge and cannot erase this result.
+                 // D02 R4: publish after CLEAR above, so the new result wins.
+                 // A START sampled here is ignored, including on this exit edge.
+                 state_next = IDLE;
+@@ -175,11 +232,9 @@
+                 end
+             end
+             default: begin
+-                // Illegal state recovery does not fabricate successful work.
+-                state_next     = IDLE;
+-                run_error_next = ERR_NONE;
+-                done_next      = 1'b0;
+-                error_next     = ERR_NONE;
++                // Illegal state recovery preserves results; independent CLEAR
++                // above still applies. No new success/error is manufactured.
++                state_next = IDLE;
+             end
+         endcase
+     end
+--- before/cnn_rtl/tb/tb_ctrl_status.v
++++ after/cnn_rtl/tb/tb_ctrl_status.v
+@@ -1,7 +1,7 @@
+ `timescale 1 ns / 1 ps
+ 
+-// T-01 PARTIAL IMPLEMENTATION test: no memory/compute operation is expected.
+-// Compile this TB with xvlog -sv. Internal reads check snapshots; no force/deposit.
++// T-01R PARTIAL IMPLEMENTATION: only IDLE / DECODE / FINISH perform work.
++// Compile with xvlog -sv. Force/release is limited to state-recovery checks.
+ module tb_ctrl_status;
+     reg clk = 1'b0;
+     reg rst_n = 1'b0;
+@@ -22,6 +22,9 @@
+     reg [127:0] expected_snapshot;
+     integer starts_checked = 0;
+     integer zero_output_checks = 0;
++    integer recovery_checks = 0;
++    integer state_index;
++    reg [3:0] recovery_state;
+ 
+     pose_cnn_ctrl u_ctrl (
+         .clk(clk), .rst_n(rst_n),
+@@ -45,7 +48,7 @@
+     );
+ 
+     always #5 clk = ~clk;
+-    // Unimplemented status/data inputs must not affect T-01 execution.
++    // Unimplemented status/data inputs must not affect T-01R execution.
+     always @(negedge clk) unused_inputs <= ~unused_inputs;
+ 
+     task check;
+@@ -54,7 +57,7 @@
+         begin
+             if (condition !== 1'b1) begin
+                 $display("FAIL: %s at %0t", message, $time);
+-                $fatal(1, "T-01 standalone mismatch");
++                $fatal(1, "T-01R standalone mismatch");
+             end
+         end
+     endtask
+@@ -82,7 +85,6 @@
+     task begin_run;
+         input [31:0] command_value;
+         input cfg_value, clear_value;
+-        input [3:0] pending_error;
+         begin
+             @(negedge clk);
+             check(!status_busy, "START scenario begins in IDLE");
+@@ -98,9 +100,35 @@
+             check(!status_busy, "START must not raise busy before the sampling edge");
+             tick;
+             check_status(1'b1, 1'b0, 4'd0);
+-            check_snapshot;
+-            check(u_ctrl.run_error_reg === pending_error, "pending result captured at START");
++            check(u_ctrl.state_reg === 4'd1, "START enters DECODE");
++            check_snapshot;
++            check(u_ctrl.run_error_reg === 4'd0, "START clears internal result before DECODE");
+             starts_checked = starts_checked + 1;
++        end
++    endtask
++
++    task decode_run;
++        input [3:0] result_error;
++        input decode_cfg, clear_value, busy_start;
++        begin
++            @(negedge clk);
++            reg_start = busy_start;
++            reg_clear_status = clear_value;
++            // DECODE uses the captured command but the current cfg_ok.
++            reg_cmd = 32'hdeadbeef;
++            reg_input_addr = 32'h10101010;
++            reg_weight_addr = 32'h20202020;
++            reg_output_addr = 32'h30303020;
++            cfg_ok = decode_cfg;
++            #1;
++            check_status(1'b1, 1'b0, 4'd0);
++            check_snapshot;
++            check(u_ctrl.run_error_reg === 4'd0, "DECODE does not record an error before its edge");
++            tick;
++            check(u_ctrl.state_reg === 4'd12, "DECODE enters FINISH");
++            check_status(1'b1, 1'b0, 4'd0);
++            check_snapshot;
++            check(u_ctrl.run_error_reg === result_error, "DECODE evaluates saved cmd and current cfg");
+         end
+     endtask
+ 
+@@ -111,7 +139,7 @@
+             @(negedge clk);
+             reg_start = busy_start;
+             reg_clear_status = clear_value;
+-            // A second request while BUSY must not latch this invalid payload.
++            // FINISH ignores START and subsequent command/cfg changes.
+             reg_cmd = 32'hdeadbeef;
+             reg_input_addr = 32'h10101010;
+             reg_weight_addr = 32'h20202020;
+@@ -122,6 +150,7 @@
+             check_snapshot;
+             check(u_ctrl.run_error_reg === result_error, "CLEAR/input changes preserve pending result");
+             tick;
++            check(u_ctrl.state_reg === 4'd0, "FINISH enters IDLE");
+             check_status(1'b0, result_error == 4'd0, result_error);
+             check_snapshot;
+             check(u_ctrl.run_error_reg === result_error, "completion preserves pending result");
+@@ -133,6 +162,33 @@
+                 check_status(1'b0, result_error == 4'd0, result_error);
+                 check_snapshot;
+             end
++        end
++    endtask
++
++    task check_recovery;
++        input [3:0] injected_state;
++        reg [3:0] saved_result;
++        reg [4:0] saved_display;
++        begin
++            saved_result = u_ctrl.run_error_reg;
++            saved_display = {status_done, status_error};
++            @(negedge clk);
++            // Use a module-level force source (avoids task-argument sensitivity
++            // warnings). Release before the edge so the DUT's NBA can recover.
++            recovery_state = injected_state;
++            force u_ctrl.state_reg = recovery_state;
++            #1;
++            check(u_ctrl.state_reg === injected_state, "requested recovery state is actually injected");
++            check(status_busy === 1'b1, "every non-IDLE encoding reports busy");
++            check(u_ctrl.state_next === 4'd0, "unimplemented/illegal state selects IDLE");
++            release u_ctrl.state_reg;
++            tick;
++            check(u_ctrl.state_reg === 4'd0, "unimplemented/illegal state recovers on next edge");
++            check(status_busy === 1'b0, "recovery lowers busy");
++            check({status_done, status_error} === saved_display, "recovery preserves displayed result");
++            check(u_ctrl.run_error_reg === saved_result, "recovery preserves internal result");
++            check_snapshot;
++            recovery_checks = recovery_checks + 1;
+         end
+     endtask
+ 
+@@ -165,78 +221,121 @@
+ 
+     initial begin
+         #10000;
+-        $fatal(1, "T-01 standalone watchdog timeout");
++        $fatal(1, "T-01R standalone watchdog timeout");
+     end
+ 
+     initial begin
++        check($bits(u_ctrl.state_reg) == 4 && $bits(u_ctrl.state_next) == 4,
++              "state registers must be four bits");
++        check({u_ctrl.IDLE, u_ctrl.DECODE, u_ctrl.LD_RD1, u_ctrl.LD_RD2,
++               u_ctrl.LD_WAIT, u_ctrl.IN_RD, u_ctrl.ENC, u_ctrl.FC1,
++               u_ctrl.FC2, u_ctrl.FC3, u_ctrl.WR, u_ctrl.ERR_DRAIN, u_ctrl.FINISH} ===
++              {4'd0, 4'd1, 4'd2, 4'd3, 4'd4, 4'd5, 4'd6, 4'd7,
++               4'd8, 4'd9, 4'd10, 4'd11, 4'd12}, "all thirteen state encodings match target FSM");
++        $display("PASS: thirteen named states and four-bit state registers match the target FSM");
+         repeat (2) tick;
+         expected_snapshot = 128'b0;
+         check_status(1'b0, 1'b0, 4'd0);
+         check_snapshot;
+         check(u_ctrl.run_error_reg === 4'd0, "reset clears pending result");
+-        // Model upstream synchronous release, just after a rising edge.
++        // Change reset away from sampling races; state updates only at posedge.
+         @(posedge clk); rst_n <= 1'b1;
+         tick;
+         $display("PASS: reset clears status, snapshots and pending result");
+ 
+-        begin_run(32'd1, 1'b0, 1'b0, 4'd0);
++        begin_run(32'd1, 1'b0, 1'b0);
++        decode_run(4'd0, 1'b0, 1'b0, 1'b0);
+         finish_run(4'd0, 1'b0, 1'b0);
+-        $display("PASS: LOAD succeeds with cfg=0; busy rises at START edge and lasts exactly one cycle");
+-
+-        begin_run(32'd0, 1'b1, 1'b0, 4'd0);
++        $display("PASS: LOAD succeeds with cfg=0; DECODE and FINISH hold busy for exactly two cycles");
++
++        begin_run(32'd0, 1'b1, 1'b0);
++        decode_run(4'd0, 1'b1, 1'b0, 1'b0);
+         finish_run(4'd0, 1'b0, 1'b0);
+-        $display("PASS: INFER cfg=1 succeeds; START clears previous done; later invalid cmd/cfg changes have no effect");
++        $display("PASS: INFER cfg=1 succeeds; START clears done; live cmd/address changes do not replace snapshots");
+         clear_idle;
+         $display("PASS: IDLE CLEAR removes sticky done without changing snapshots/internal result");
+ 
+-        begin_run(32'd0, 1'b0, 1'b0, 4'd2);
++        begin_run(32'd0, 1'b0, 1'b0);
++        decode_run(4'd2, 1'b0, 1'b0, 1'b0);
+         finish_run(4'd2, 1'b0, 1'b0);
+-        $display("PASS: INFER cfg=0 reports NO_CFG even if cfg becomes 1 after START");
+-
+-        begin_run(32'd2, 1'b0, 1'b0, 4'd1);
++        $display("PASS: INFER cfg=0 at DECODE reports NO_CFG; cfg changes in FINISH cannot change it");
++
++        begin_run(32'd0, 1'b0, 1'b0);
++        decode_run(4'd0, 1'b1, 1'b0, 1'b0);
++        finish_run(4'd0, 1'b0, 1'b0);
++        $display("PASS: INFER cfg 0 at START -> 1 at DECODE succeeds");
++        begin_run(32'd0, 1'b1, 1'b0);
++        decode_run(4'd2, 1'b0, 1'b0, 1'b0);
++        finish_run(4'd2, 1'b0, 1'b0);
++        $display("PASS: INFER cfg 1 at START -> 0 at DECODE reports NO_CFG");
++
++        begin_run(32'd2, 1'b0, 1'b0);
++        decode_run(4'd1, 1'b0, 1'b0, 1'b0);
+         finish_run(4'd1, 1'b0, 1'b0);
+         $display("PASS: cmd=2 reports BAD_CMD; new START clears previous NO_CFG");
+-        begin_run(32'hffffffff, 1'b1, 1'b0, 4'd1);
++        begin_run(32'hffffffff, 1'b1, 1'b0);
++        decode_run(4'd1, 1'b1, 1'b0, 1'b0);
+         finish_run(4'd1, 1'b0, 1'b0);
+         $display("PASS: cmd=FFFFFFFF reports BAD_CMD; consecutive errors are recorded anew");
+-        begin_run(32'h80000000, 1'b0, 1'b0, 4'd1);
++        begin_run(32'h80000000, 1'b0, 1'b0);
++        decode_run(4'd1, 1'b0, 1'b0, 1'b0);
+         finish_run(4'd1, 1'b0, 1'b0);
+         $display("PASS: cmd=80000000 reports BAD_CMD (full 32-bit decode, independent of cfg)");
+         clear_idle;
+         $display("PASS: IDLE CLEAR removes sticky error without erasing internal failure");
+ 
+-        begin_run(32'd1, 1'b0, 1'b0, 4'd0);
++        begin_run(32'd1, 1'b0, 1'b0);
++        decode_run(4'd0, 1'b0, 1'b1, 1'b0);
+         finish_run(4'd0, 1'b1, 1'b0);
+         $display("PASS: BUSY CLEAR cannot cancel success; completion wins over same-edge CLEAR");
+-        begin_run(32'd0, 1'b0, 1'b0, 4'd2);
++        begin_run(32'd0, 1'b0, 1'b0);
++        decode_run(4'd2, 1'b0, 1'b1, 1'b0);
+         finish_run(4'd2, 1'b1, 1'b0);
+         $display("PASS: BUSY CLEAR preserves NO_CFG; error wins over same-edge CLEAR");
+ 
+-        begin_run(32'd1, 1'b0, 1'b1, 4'd0);
++        begin_run(32'd1, 1'b0, 1'b1);
++        decode_run(4'd0, 1'b0, 1'b0, 1'b0);
+         finish_run(4'd0, 1'b0, 1'b0);
+         $display("PASS: IDLE START+CLEAR accepts START and clears old error before new completion");
+ 
+-        begin_run(32'd1, 1'b0, 1'b0, 4'd0);
++        begin_run(32'd1, 1'b0, 1'b0);
++        decode_run(4'd0, 1'b0, 1'b0, 1'b1);
+         finish_run(4'd0, 1'b0, 1'b1);
+-        $display("PASS: BUSY START is ignored; original success and all four snapshots survive");
+-        begin_run(32'd2, 1'b1, 1'b0, 4'd1);
++        $display("PASS: START is ignored in both DECODE and FINISH; success and all four snapshots survive");
++        begin_run(32'd2, 1'b1, 1'b0);
++        decode_run(4'd1, 1'b1, 1'b1, 1'b1);
+         finish_run(4'd1, 1'b1, 1'b1);
+         $display("PASS: BUSY START+CLEAR cannot overwrite original BAD_CMD at completion");
+ 
+-        begin_run(32'd2, 1'b0, 1'b0, 4'd1);
+-        // Assert between clock edges during BUSY and check before the next edge.
++        // Pending/displayed BAD_CMD is intentionally nonzero, so a recovery
++        // that silently clears results cannot pass these checks.
++        for (state_index = 2; state_index <= 11; state_index = state_index + 1)
++            check_recovery(state_index[3:0]);
++        for (state_index = 13; state_index <= 15; state_index = state_index + 1)
++            check_recovery(state_index[3:0]);
++        $display("PASS: ten unimplemented and three illegal states recover without changing results/snapshots (%0d checks)", recovery_checks);
++
++        begin_run(32'd2, 1'b0, 1'b0);
++        decode_run(4'd1, 1'b0, 1'b0, 1'b0);
++        // Assert between edges in FINISH. Synchronous reset must preserve all
++        // registers until the next rising edge, then abort without completion.
+         #1; rst_n = 1'b0; reg_start = 1'b0;
+         #1;
++        check_status(1'b1, 1'b0, 4'd0);
++        check(u_ctrl.state_reg === 4'd12, "synchronous reset cannot change FINISH between edges");
++        check_snapshot;
++        check(u_ctrl.run_error_reg === 4'd1, "synchronous reset preserves pending result before edge");
++        tick;
+         expected_snapshot = 128'b0;
+         check_status(1'b0, 1'b0, 4'd0);
+         check_snapshot;
+-        check(u_ctrl.run_error_reg === 4'd0, "asynchronous reset aborts pending result");
++        check(u_ctrl.run_error_reg === 4'd0, "synchronous reset aborts pending result at rising edge");
+         @(posedge clk); rst_n <= 1'b1;
+         repeat (2) tick;
+         check_status(1'b0, 1'b0, 4'd0);
+-        $display("PASS: asynchronous reset during BUSY clears immediately; release creates no phantom completion");
++        $display("PASS: synchronous reset in FINISH waits for the edge, clears all state, and produces no phantom completion");
+         $display("PASS: unused outputs stayed zero for %0d sampled cycles while unused inputs toggled", zero_output_checks);
+-        $display("PASS: T-01 ALL CTRL STATUS CHECKS PASSED (%0d START snapshots checked)", starts_checked);
++        $display("PASS: T-01R ALL CTRL STATUS CHECKS PASSED (%0d START snapshots checked)", starts_checked);
+         $finish;
+     end
+ endmodule
+--- before/cnn_rtl/tb/tb_csr_ctrl_link.v
++++ after/cnn_rtl/tb/tb_csr_ctrl_link.v
+@@ -1,8 +1,8 @@
+ `timescale 1 ns / 1 ps
+ 
+-// T-01 PARTIAL IMPLEMENTATION integration test. All commands use AXI4-Lite.
++// T-01R PARTIAL IMPLEMENTATION integration test. All commands use AXI4-Lite.
+ // cfg_ok/scale model Loader-owned levels. No hierarchical drive, force or delay
+-// extension of ctrl BUSY is used. See the documented one-cycle write boundary.
++// extension of ctrl busy is used. DECODE and FINISH each hold busy for one cycle.
+ module tb_csr_ctrl_link;
+     reg clk = 1'b0, rst_n = 1'b0;
+     reg [4:0] awaddr = 5'b0, araddr = 5'b0;
+@@ -72,7 +72,7 @@
+         begin
+             if (condition !== 1'b1) begin
+                 $display("FAIL: %s at %0t", message, $time);
+-                $fatal(1, "T-01 CSR/ctrl integration mismatch");
++                $fatal(1, "T-01R CSR/ctrl integration mismatch");
+             end
+         end
+     endtask
+@@ -150,7 +150,7 @@
+             end
+             check(completed, "bounded STATUS polling reaches !busy && (done || error)");
+             check(value === expected, "final STATUS including error code and cfg_ok");
+-            if (require_busy) check(saw_busy, "prompt AXI polling observes one-cycle busy");
++            if (require_busy) check(saw_busy, "prompt AXI polling observes DECODE/FINISH busy");
+         end
+     endtask
+ 
+@@ -174,12 +174,12 @@
+                mem_wr_start, mem_wr_addr, mem_wr_bytes, mem_wr_data,
+                loader_start, ld_data, ld_valid, enc_start, in_we, in_waddr,
+                in_wdata, fc_start, fc_sel, fifo_we, fifo_wdata} === '0,
+-              "integrated ctrl never issues memory/compute activity in T-01");
++               "integrated ctrl never issues memory/compute activity in T-01R");
+     end
+ 
+     initial begin
+         #20000;
+-        $fatal(1, "T-01 integration watchdog timeout");
++        $fatal(1, "T-01R integration watchdog timeout");
+     end
+ 
+     initial begin
+@@ -231,30 +231,32 @@
+         poll_result(32'h0000000a, 1'b1);
+         $display("PASS: AXI idle START+CLEAR works with the real ctrl");
+ 
+-        // At START commit E0, busy is 0. E1 consumes B and raises busy.
+-        // Earliest next AW/W is E2 (also ctrl completion); its commit is E3.
+-        // Therefore a COMMAND offered during this one-cycle busy is accepted
+-        // with OKAY at E3, where busy is already 0. SLVERR is unreachable here.
++        // At START commit E0, busy is 0. E1 consumes B and enters DECODE.
++        // Earliest next AW/W is E2, when ctrl enters FINISH and stays busy.
++        // At E3 the COMMAND commit samples FINISH's busy=1 and records SLVERR;
++        // ctrl returns to IDLE on that same edge, without changing the response.
+         write_word(5'h08, 32'd1, 2'b00);
+         write_word(5'h00, 32'd1, 2'b00);
+         check(status_busy, "real ctrl busy before issuing fastest next COMMAND");
+-        write_word(5'h08, 32'd2, 2'b00);
++        check(u_ctrl.state_reg === 4'b0001, "START B handshake coincides with DECODE entry");
++        write_word(5'h08, 32'd2, 2'b10);
+         check(command_commit_cycle - start_commit_cycle == 3,
+-              "earliest COMMAND commit is three edges after START commit");
+-        check(command_busy_commits == 0, "no COMMAND can commit during this one-cycle busy");
+-        read_expect(5'h08, 32'd2);
++               "earliest COMMAND commit is three edges after START commit");
++        check(command_busy_commits == 1, "fastest COMMAND commits while FINISH is still busy");
++        check(!status_busy && u_ctrl.state_reg === 4'b0000,
++              "busy rejection response survives ctrl returning to IDLE");
++        read_expect(5'h08, 32'd1);
+         read_expect(5'h04, 32'h0000000a);
+-        check(u_ctrl.cmd_reg === 32'd1, "later CSR write preserves completed command snapshot");
+-        $display("PASS: fastest COMMAND offered while busy commits at START+3 with busy=0, returns OKAY and updates CSR");
+-        $display("NOTE: busy COMMAND SLVERR is not reachable with T-01 real ctrl; existing CSR TB covers rejection");
++        check(u_ctrl.cmd_reg === 32'd1, "rejected CSR write preserves completed command snapshot");
++        $display("PASS: fastest COMMAND commits at START+3 with FINISH busy=1, returns SLVERR and preserves CSR/snapshot");
+ 
+         write_word(5'h00, 32'd2, 2'b00);
+         read_expect(5'h04, 32'h00000008);
+-        check(start_count == 7 && busy_cycles == 7 && busy_reads == 6,
+-              "seven STARTs, exactly seven busy cycles and six prompt AXI busy snapshots");
++        check(start_count == 7 && busy_cycles == 14 && busy_reads == 6,
++              "seven STARTs, exactly fourteen busy cycles and six prompt AXI busy snapshots");
+         $display("PASS: totals START=%0d busy_cycles=%0d AXI_busy_reads=%0d busy_COMMAND_commits=%0d",
+                  start_count, busy_cycles, busy_reads, command_busy_commits);
+-        $display("PASS: T-01 ALL REACHABLE CSR/CTRL LINK CHECKS PASSED");
++        $display("PASS: T-01R ALL REACHABLE CSR/CTRL LINK CHECKS PASSED");
+         $finish;
+     end
+ endmodule
+--- before/PROJECT_CONTEXT.md
++++ after/PROJECT_CONTEXT.md
+@@ -1,6 +1,6 @@
+ # CNN RTL 공통 작업 기준
+ 
+-갱신: 2026-09-25. **Claude의 전체 설계·통합 관리 + Codex의 소단계 구현 + 사용자 이해·확인·Notion 기록 후 다음 단계 진행**을 사용자 확정 작업 방식으로 유지한다. 최신 사용자 결정인 **동기식 active-low reset 통일**을 반영했다(5.2절). 이번 갱신은 정책 기록이며 기존 RTL/TB를 변경한 것은 아니다.
++갱신: 2026-09-25. **Claude의 전체 설계·통합 관리 + Codex의 소단계 구현 + 사용자 이해·확인·Notion 기록 후 다음 단계 진행**을 사용자 확정 작업 방식으로 유지한다. **T-01R의 13상태 골격 및 IDLE/DECODE/FINISH 구현·검증 완료**를 8절에 기록했다. 동기식 active-low reset은 Top에 반영했고 S00/M00 반영은 남아 있다(5.2절).
+ 
+ ## 1. 문서의 우선순위와 현재 상태
+ 
+@@ -153,7 +153,7 @@
+ - **공급 조건:** 동기식 reset에는 동작 중인 클록이 필요하다. reset 입력은 해당 클록의 타이밍을 만족하도록 공급하고, 모든 대상 블록이 reset을 샘플링할 수 있도록 유지한다. 외부 비동기 reset 원천의 동기화, 연결 IP가 요구하는 유지 시간, 생성 위치는 D07의 남은 통합 항목이다.
+ - **AXI 호환:** AXI는 동기식 active-low 구현과 양립한다. reset 해제는 ACLK에 동기화하고, reset 중 master의 ARVALID/AWVALID/WVALID 및 slave의 RVALID/BVALID를 0으로 유지해야 한다. master VALID의 재상승은 ARESETn이 HIGH인 뒤의 상승 에지부터 가능하다. 근거: [Arm AXI 규격 A3.1.2](https://developer.arm.com/-/media/Arm%20Developer%20Community/PDF/IHI0022H_amba_axi_protocol_spec.pdf). 연결된 AXI 경계의 reset 범위·겹침은 [AMD AXI Interconnect reset 조건](https://docs.amd.com/r/en-US/pg059-axi-interconnect/Resets)을 함께 따른다. 진행 중 전송의 reset 복구는 D08에서 별도로 다룬다.
+ - **RAM:** 내용 전체를 reset하지 않는 기존 방침은 유지한다.
+-- **반영 상태:** Encoder는 이미 동기식이다. 현재 `cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v`, `cnn_rtl/rtl/pose_cnn_ctrl.v`, 루트 `pose_cnn_v1_0_M00_AXI.v`는 비동기 assert 구현이므로 후속 반영·reset 관련 검증이 필요하다. 이번에는 RTL/TB를 일괄 수정하지 않았다. 기존 XLSX·CSR 상세 설계·인계 문서의 비동기 assert 설명보다 이번 사용자 결정이 우선하며, 해당 산출물의 갱신은 아직 남아 있다.
++- **반영 상태:** Encoder는 이미 동기식이며, `cnn_rtl/rtl/pose_cnn_ctrl.v`도 T-01R에서 동기식으로 변경하고 reset 에지 동작을 검증했다. `cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v`와 루트 `pose_cnn_v1_0_M00_AXI.v`는 비동기 assert 구현을 유지하므로 후속 반영·reset 관련 검증이 필요하다. 기존 XLSX·CSR 상세 설계·인계 문서의 비동기 assert 설명보다 이번 사용자 결정이 우선하며, 해당 산출물의 갱신은 아직 남아 있다.
+ 
+ ## 6. PS 계약과 다음 작업
+ 
+@@ -233,7 +233,7 @@
+ | S00-02 | **구현·검수 완료**. 쓰기 채널 handshake 골격 (AW/W 독립 수락, commit, B 응답). BRESP 항상 OKAY, 레지스터 저장·읽기·펄스 없음 |
+ | 기술 결정 | D01–D10 모두 미합의 유지. S00-02는 어느 항목도 선점하지 않았다 |
+ | 문법 규칙 | 2026-09-24 확정: 템플릿 인프라는 템플릿 활용, 직접 설계 RTL은 명시적 나열(`for`/`task`/`function` 미사용), testbench는 제약 없음. 4절 참조 |
+-| reset 규칙 | **2026-09-25 사용자 확정: 동기식 active-low로 통일.** Encoder 방식 채택. 기존 S00/M00/Top RTL과 관련 TB·구명세 반영은 남아 있으며, 공통 reset 공급 구현은 D07에서 결정. 5.2절 참조 |
++| reset 규칙 | **2026-09-25 사용자 확정: 동기식 active-low로 통일.** Encoder 및 T-01R Top에 반영. 기존 S00/M00 RTL과 관련 TB·구명세 반영은 남아 있으며, 공통 reset 공급 구현은 D07에서 결정. 5.2절 참조 |
+ | S00-03 | **구현·검수 완료**. 주소 디코드(`awaddr_reg[4:2]`), RW 레지스터 4개, WSTRB byte 병합. `reg_cmd`/`reg_input_addr`/`reg_weight_addr`/`reg_output_addr` 출력 활성 |
+ | S00-03 임시 동작 | `awaddr_reg[1:0]` 무시(0x0C와 0x0E가 같은 레지스터), WSTRB=0은 병합의 자연스러운 결과로 무변화+OKAY. 둘 다 D04/D05 확정 구현이 아니며 S00-05에서 바뀔 수 있음 |
+ | S00-04 | **구현·검수 완료**. 읽기 채널(outstanding 1, AR 수락 cycle snapshot), 8 offset 읽기 mux, STATUS 조립, 0x18의 `cfg_ok` 조건부 SLVERR |
+@@ -259,11 +259,11 @@
+ | **T-02 계획 변경** | M00 실물이 있으므로 **M00 모형 대신 실물 M00 + 간단한 AXI4 슬레이브 메모리 모형**을 쓴다. `mem_*` 계약을 모형이 아니라 실제로 검증하게 되고, burst 분할·4 KiB 경계·연속 burst가 실제로 돈다 |
+ | **T-00** | **완료·Claude 검수 완료.** Top FSM 전체 상태 그래프를 `cnn_rtl/doc/pose_cnn_ctrl_fsm.drawio` 4페이지(FSM 상태도 + ASM 공통/LOAD/INFER)로 확정. 상태 13개, 전이 20개. D06·D08은 주황 점선으로 미결 표시. 압축하지 않은 평문 XML이라 diff 가능 |
+ | 도면 표기 규칙 | 상태 박스 = 그 상태 동안 유지되는 레벨·등식. 전이 조건 출력 박스 = 1-cycle 펄스·레지스터 적재. **`fc_sel`은 `fc_start`를 샘플링하는 시점에 올바른 값이어야 한다**(`08_FC` r12·r45: `fc_start`에서 latch). 이후 값을 유지해도 되며, 도면에는 시작 전이에 필요한 값으로 표기한다. 2026-09-24 Claude가 상태 박스의 `fc_sel` 표기를 제거하고 생성 스크립트를 함께 수정함 |
+-| **T-01 재작업 필요** | 현재 코드는 `IDLE`/`BUSY` 2상태(`localparam [1:0]`)다. T-00 그래프의 13상태 4-bit 인코딩으로 골격을 다시 만든다. 채울 상태는 `IDLE`/`DECODE`/`FINISH`이고, 기존 D02·D03 로직은 그대로 옮긴다 |
+-| **T-01** | **구현·시뮬레이션 완료 / Claude 검수·사용자 확인 대기.** `pose_cnn_ctrl.v`의 START snapshot, 1클록 BUSY, done/error, CLEAR 경합. 신규 TB 2개 + 기존 CSR TB 4개 통과. 합성 미실행. [구현·검증 기록](cnn_rtl/docs/T-01_구현_검증기록.md)에 설명·실행 전문·Notion 복사 초안 수록. Notion 직접 기록은 하지 않음 |
+-| T-01 검사 제약 | 명세 조건 14의 busy COMMAND SLVERR는 실제 CSR+1클록 ctrl에서 도달 불가(가장 빠른 다음 commit은 이미 idle). 통합 TB는 이 경계의 OKAY를 확인했고 기존 CSR 모형 TB는 busy 거부·값 보존 통과. 실제 긴 실행 통합 검사는 T-02 이후 이월 제안, 아직 승인된 결정 아님 |
+-| 다음 소단계 후보 | T-01 재작성: 목표 도면의 13상태 4-bit 골격에 IDLE / DECODE / FINISH와 기존 D02·D03 로직 반영. 이후 T-02에서 mem read 발행과 LOAD 순서(M00·Loader 모형)를 다룬다. **다음 단계 진행 요청 전에는 구현하지 않음** |
+-| Top FSM 분할 예정 | T-01 START 해석·상태 → T-02 mem read 발행·LOAD 순서 → T-03 INFER 순서 → T-04 pose 출력 → T-05 오류 처리·drain(**D08 필요**) |
++| **T-01R** | **구현·시뮬레이션·단독 합성 완료 / Claude 검수·사용자 확인 대기.** 13상태 4-bit 골격, IDLE/DECODE/FINISH 구현. START snapshot 후 DECODE의 `cfg_ok`로 판정, busy 2cycle, FINISH 출구 결과 기록. 내부 결과/표시 분리 및 D02/D03 유지. Top reset은 동기식으로 반영. [구현·검증 기록](cnn_rtl/docs/T-01R_구현_검증기록.md) 참조. Notion 직접 기록은 하지 않음 |
++| T-01R 검증 | 기존 CSR TB 4개 무수정 + Top 단독/CSR 통합 TB 모두 통과. 단독 START 14회, 미구현 10상태·불법 3상태 복구, cfg 전환 양방향, 미사용 출력 0 확인. 통합 START 7회/busy 14cycle, 실제 busy COMMAND SLVERR·값 보존 확인. 합성 LUT 19/FF 40/BRAM 0/DSP 0, 래치·조합 루프 0, WNS +4.885 ns(잠정 100 MHz OOC). 실행 환경·OOC 경고와 범위는 보고서에 구분 기록 |
++| **T-01 (이전 단계)** | 기존 1클록 BUSY 구현 및 검증 기록은 [이전 보고서](cnn_rtl/docs/T-01_구현_검증기록.md)에 보존. 당시 busy COMMAND commit 도달 불가 제약은 T-01R의 2cycle busy에서 해소됨 |
++| 다음 소단계 후보 | **T-02: AXI4 슬레이브 메모리 모형과 실물 M00_AXI 단독 검증. 다음 단계 진행 요청 전에는 구현하지 않음.** |
++| Top FSM 분할 예정 | T-01R 골격/상태 → T-02 실물 M00 단독 검증 → T-03 LOAD → T-04 IN_RD/ENC → T-05 FC1(**D06**) → T-06 FC2/FC3/WR → T-07 ERR_DRAIN(**D08**). 이번 승인·구현 범위는 T-01R뿐 |
+ | Loader | 보류. 재개 시 L-01(beat 카운터·구간 판별·`ld_ready`) 명세가 준비되어 있다. 상주 RAM은 **D09** 필요 |
+ | 병렬 진행 | D09 질문 2건을 동우·지원에게 지금 전달해 두면 Loader 재개 시 막히지 않는다 |
+ | D01–D05 | **2026-09-24 확정 완료** (5.1절). S00-05는 5.1절의 판정표·규칙대로 구현한다. 정렬 검사도 S00-05에 포함한다 |
+--- before/cnn_rtl/syn/README.md
++++ after/cnn_rtl/syn/README.md
+@@ -18,9 +18,20 @@
+ | 날짜 | 대상 | LUT | FF | BRAM | DSP | Setup WNS | 래치 |
+ |---|---|---:|---:|---:|---:|---:|---:|
+ | 2026-09-25 | `pose_cnn_v1_0_S00_AXI` (X-01) | 182 | 208 | 0 | 0 | +3.895 ns | 0 |
++| 2026-09-25 | `pose_cnn_ctrl` (T-01R, 부분 구현) | 19 | 40 | 0 | 0 | +4.885 ns | 0 |
+ 
+-임계 경로: `S_AXI_ARESETN`(입력 포트) → `S_AXI_ARREADY`.
++X-01 임계 경로: `S_AXI_ARESETN`(입력 포트) → `S_AXI_ARREADY`.
+ reset이 READY로 가는 조합 경로이며 AXI 권고(리셋 중 READY=0)를 위해 의도한 것이다.
+ 100 MHz에서 여유 3.9 ns로 문제없다.
+ 
+ `timing_100mhz.xdc`의 100 MHz는 **잠정값**이다. 보드·클록은 D10 미결이다.
++
++T-01R은 `xc7z010clg400-1`, 기존 스크립트·잠정 100 MHz 제약으로 1회 합성했다.
++조합 루프 0, Setup failing endpoint 0이며 임계 경로는 상태 FF → `status_busy`이다.
++합성 단계 자체의 오류·경고는 0이다. 실행 전체에는 Tcl store 접근 권한 관련
++`Common 17-741` CRITICAL WARNING, OOC clock 위치 미지정 `Timing 38-242`,
++래치 검색 결과가 비어 발생한 `Vivado 12-180` 경고가 있다.
++배치·배선 및 hold 검증은 수행하지 않았으며 WNS는 OOC 합성 추정치다.
++미사용 주소 snapshot과 미도달 상태는 최적화되고 FSM은 one-hot으로 재인코딩됐다.
++RTL의 13상태 인코딩과 snapshot 동작은 RTL 시뮬레이션에서 별도로 확인한다.
++[실행 명령·출력 전문](../docs/T-01R_syn_실행로그.txt)

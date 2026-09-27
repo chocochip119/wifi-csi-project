@@ -1,0 +1,74 @@
+Working directory: C:\Users\kccistc\AppData\Local\Temp\codex-t02d-kpwruqcj\sim
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.751714
+
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\tb_m00_err.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_err.v" into library work
+INFO: [VRFC 10-311] analyzing module m00_err_fixture
+INFO: [VRFC 10-311] analyzing module tb_m00_err
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.741314
+
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_m00_err -s t02d_err
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_m00_err -s t02d_err 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.m00_err_fixture
+Compiling module work.pose_cnn_v1_0_M00_AXI(WATCHDOG_C...
+Compiling module work.m00_err_fixture(WD=8)
+Compiling module work.tb_m00_err
+Built simulation snapshot t02d_err
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t02d-kpwruqcj/sim/xsim.dir/t02d_err/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 21:50:57 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.103442
+
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t02d_err -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t02d_err/xsim_script.tcl
+# xsim {t02d_err} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+FATAL_ERROR: Vivado Simulator kernel has discovered an exceptional condition from which it cannot recover. Process will terminate. For technical support on this issue, please open a WebCase with this project attached at http://www.xilinx.com/support.
+Time: 0 ps  Iteration: 0  Process: /tb_m00_err/normal/begin_case
+  File: D:/2609_final_project/cnn_rtl/tb/tb_m00_err.v
+
+HDL Line: D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v:165
+exit 2
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 21:51:01 2026...
+
+EXIT_CODE: 2
+WALL_CLOCK_SECONDS: 3.955316

@@ -1,0 +1,10 @@
+{
+  "tag": "encoder_default_10.000",
+  "block": "encoder",
+  "top": "CNN_Encoder",
+  "mode": "default",
+  "period_ns": 10.0,
+  "exit": 1,
+  "seconds": 192.255294,
+  "complete": false
+}

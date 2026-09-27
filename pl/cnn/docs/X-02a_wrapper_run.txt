@@ -1,0 +1,125 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\wrapper_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\weight_param_loader.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v" into library work
+INFO: [VRFC 10-311] analyzing module blob_decoder
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/conv_weight_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module conv_weight_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/param_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module param_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/gelu_lut_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module gelu_lut_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module weight_param_loader
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.115575
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\wrapper_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\tb_weight_param_loader.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_weight_param_loader.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_weight_param_loader
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 1.041515
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\wrapper_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_weight_param_loader -s l04_loader
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_weight_param_loader -s l04_loader 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.blob_decoder
+Compiling module work.conv_weight_ram
+Compiling module work.param_ram
+Compiling module work.gelu_lut_ram
+Compiling module work.fcw_ram
+Compiling module work.weight_param_loader
+Compiling module work.tb_weight_param_loader
+Built simulation snapshot l04_loader
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-x02a/wrapper_sim/xsim.dir/l04_loader/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 15:29:32 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 4.115920
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-x02a\wrapper_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat l04_loader -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/l04_loader/xsim_script.tcl
+# xsim {l04_loader} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: L-04 K5 REGION case=0 region=0 beats=4 work_cycles=4 ready_low=0
+PASS: L-04 K5 REGION case=0 region=1 beats=90 work_cycles=720 ready_low=630
+PASS: L-04 K5 REGION case=0 region=2 beats=24 work_cycles=48 ready_low=24
+PASS: L-04 K5 REGION case=0 region=3 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-04 K5 REGION case=0 region=4 beats=48 work_cycles=96 ready_low=48
+PASS: L-04 K5 REGION case=0 region=5 beats=192 work_cycles=384 ready_low=192
+PASS: L-04 K5 REGION case=0 region=6 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-04 K5 REGION case=0 region=7 beats=192 work_cycles=384 ready_low=192
+PASS: L-04 K5 REGION case=0 region=8 beats=384 work_cycles=384 ready_low=0
+PASS: L-04 K5 REGION case=0 region=9 beats=36 work_cycles=72 ready_low=36
+PASS: L-04 K5 REGION case=0 region=10 beats=128 work_cycles=1024 ready_low=896
+PASS: L-04 K2/K5/K6 LOAD case=0 seed=1 fault=0 accepted=3722 cycles=9772 ready_low=6050 done_pulses=1 err=0 cfg=1
+PASS: L-04 K2/K3/K4 READ case=0 seed=1 partial_new_bytes=0 conv_bytes=5328 param_fields=984 lut_bytes=1024 fcw_words=2432 mismatches=0 clocks=2432 six_port_checks=14592 preedge_hold_checks=14592 selected=ENC
+PASS: L-04 K2/K3/K4 READ case=1 seed=1 partial_new_bytes=3 conv_bytes=5328 param_fields=984 lut_bytes=1024 fcw_words=2432 mismatches=0 clocks=2432 six_port_checks=14592 preedge_hold_checks=14592 selected=ENC
+PASS: L-04 K6 RESET accepted=5 conv_new_bytes=3 remaining_RAM_preserved=1 reset_edges=2 cfg=0 no_spurious_done=1
+PASS: L-04 K5 REGION case=2 region=0 beats=4 work_cycles=4 ready_low=0
+PASS: L-04 K5 REGION case=2 region=1 beats=90 work_cycles=720 ready_low=630
+PASS: L-04 K5 REGION case=2 region=2 beats=24 work_cycles=48 ready_low=24
+PASS: L-04 K5 REGION case=2 region=3 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-04 K5 REGION case=2 region=4 beats=48 work_cycles=96 ready_low=48
+PASS: L-04 K5 REGION case=2 region=5 beats=192 work_cycles=384 ready_low=192
+PASS: L-04 K5 REGION case=2 region=6 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-04 K5 REGION case=2 region=7 beats=192 work_cycles=384 ready_low=192
+PASS: L-04 K5 REGION case=2 region=8 beats=384 work_cycles=384 ready_low=0
+PASS: L-04 K5 REGION case=2 region=9 beats=36 work_cycles=72 ready_low=36
+PASS: L-04 K5 REGION case=2 region=10 beats=128 work_cycles=1024 ready_low=896
+PASS: L-04 K2/K5/K6 LOAD case=2 seed=3 fault=0 accepted=3722 cycles=9772 ready_low=6050 done_pulses=1 err=0 cfg=1
+PASS: L-04 K2/K3/K4 READ case=2 seed=3 partial_new_bytes=0 conv_bytes=5328 param_fields=984 lut_bytes=1024 fcw_words=2432 mismatches=0 clocks=2432 six_port_checks=14592 preedge_hold_checks=14592 selected=ENC
+PASS: L-04 K2/K5/K6 LOAD case=3 seed=4 fault=1 accepted=3722 cycles=3722 ready_low=0 done_pulses=1 err=1 cfg=0
+PASS: L-04 K2/K3/K4 READ case=3 seed=3 partial_new_bytes=0 conv_bytes=5328 param_fields=984 lut_bytes=1024 fcw_words=2432 mismatches=0 clocks=2432 six_port_checks=14592 preedge_hold_checks=14592 selected=ENC
+PASS: L-04 K2/K5/K6 LOAD case=4 seed=4 fault=2 accepted=3722 cycles=3722 ready_low=0 done_pulses=1 err=1 cfg=0
+PASS: L-04 K2/K3/K4 READ case=4 seed=3 partial_new_bytes=0 conv_bytes=5328 param_fields=984 lut_bytes=1024 fcw_words=2432 mismatches=0 clocks=2432 six_port_checks=14592 preedge_hold_checks=14592 selected=ENC
+PASS: L-04 K2/K5/K6 LOAD case=5 seed=4 fault=3 accepted=3722 cycles=8440 ready_low=4718 done_pulses=1 err=1 cfg=0
+PASS: L-04 K5 REGION case=6 region=0 beats=4 work_cycles=4 ready_low=0
+PASS: L-04 K5 REGION case=6 region=1 beats=90 work_cycles=720 ready_low=630
+PASS: L-04 K5 REGION case=6 region=2 beats=24 work_cycles=48 ready_low=24
+PASS: L-04 K5 REGION case=6 region=3 beats=576 work_cycles=4608 ready_low=4032
+PASS: L-04 K5 REGION case=6 region=4 beats=48 work_cycles=96 ready_low=48
+PASS: L-04 K5 REGION case=6 region=5 beats=192 work_cycles=384 ready_low=192
+PASS: L-04 K5 REGION case=6 region=6 beats=2048 work_cycles=2048 ready_low=0
+PASS: L-04 K5 REGION case=6 region=7 beats=192 work_cycles=384 ready_low=192
+PASS: L-04 K5 REGION case=6 region=8 beats=384 work_cycles=384 ready_low=0
+PASS: L-04 K5 REGION case=6 region=9 beats=36 work_cycles=72 ready_low=36
+PASS: L-04 K5 REGION case=6 region=10 beats=128 work_cycles=1024 ready_low=896
+PASS: L-04 K2/K5/K6 LOAD case=6 seed=5 fault=0 accepted=3722 cycles=9772 ready_low=6050 done_pulses=1 err=0 cfg=1
+PASS: L-04 K2/K3/K4 READ case=6 seed=5 partial_new_bytes=0 conv_bytes=5328 param_fields=984 lut_bytes=1024 fcw_words=2432 mismatches=0 clocks=2432 six_port_checks=14592 preedge_hold_checks=14592 selected=ENC
+PASS: L-07 S1/S4 select_pairs=00,01,10,11 distinct_addresses=64 clocks=64 six_port_checks=384 preedge_hold_checks=384 mismatches=0 read_latency=1
+PASS: L-04 K2-K6 ALL completed_LOADs=6 aborted_LOADs=1 full_port_sweeps=6 default_runs_all=1 hierarchy_reads=0 nominal_cycles=9772 ready_low=6050
+$finish called at time : 599010 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_weight_param_loader.v" Line 331
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 15:29:37 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 5.602459

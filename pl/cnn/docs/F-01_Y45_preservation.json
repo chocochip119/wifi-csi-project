@@ -1,0 +1,22 @@
+{
+  "source_blocks_sha256": {
+    "check": "3b6cdba3e7556677d74acbacfe01791cd74eff23e6c157286edc0b5d5c200534",
+    "hidden_word": "8d99672efecf04e8a18f2e0d382cb0c15754374aecff53c55c839334d3a8ac4b",
+    "hidden_write": "87dbb6f12f9efa08659416d52002ce33a663e729d67685cea7f86f85973befed",
+    "hidden_read": "22eef27fae35f4f58a1687806f5d5389e760108798a70e54fd995e84aaf76ede",
+    "pose_write": "b35ccfa98e5f18db3f4233d87724a15782fda2d24a36a254005b49e72fe8e249",
+    "test_hidden_pose": "ff6481a913dd16cdfc489299b4add37dff5acc048fd201fe95e14e2a06e0544f"
+  },
+  "observation_lines": [
+    "PASS: Y4 two banks bytes=256 words=32 lane_order=low_address_low_byte read_latency=1 cycle",
+    "PASS: Y4 same-word read/write collisions=8 read-first=8 next_read_new_data=8",
+    "PASS: Y4 unused address bits invalid_write_ignored=1 invalid_read_zero=1 valid_bytes_unchanged=8",
+    "PASS: Y5 pose bytes=24 parallel_bits=192 byte_k_at_8k=24",
+    "PASS: Y5 partial_writes=3 other_bytes_held=21 idle_hold_cycles=7 invalid_write_ignored=1",
+    "PASS: Y4/Y5 reset hidden_retained_bytes=256 pose_retained_bytes=24 writes_during_reset_ignored=1",
+    "OBS: Y5 parallel pose output shows OLD value before write edge and NEW value after edge; no clocked read port"
+  ],
+  "checks": 215,
+  "cycles": 663,
+  "unchanged": true
+}

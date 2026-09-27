@@ -1,0 +1,817 @@
+--- before/cnn_rtl/rtl/pose_cnn_ctrl.v
++++ after/cnn_rtl/rtl/pose_cnn_ctrl.v
+@@ -1,7 +1,7 @@
+ `timescale 1 ns / 1 ps
+ 
+-// T-06: complete normal LOAD/INFER path through FC1/FC2/FC3 and pose write.
+-// Read-error drain is still temporary; ERR_DRAIN is reserved for T-07/D08.
++// T-07: all thirteen states implemented, including shared read-error drain.
++// D08: no local timeout/abort; PS recovery policy is PROJECT_CONTEXT.md 5.4.
+ // Contract: pose_cnn_ctrl_fsm.drawio p1/p2; PROJECT_CONTEXT.md 5.1 D02/D03, 5.2 reset.
+ module pose_cnn_ctrl (
+     input  wire         clk,
+@@ -39,7 +39,7 @@
+     output reg  [63:0]  ld_data,
+     output reg          ld_valid,
+     input  wire         ld_ready,
+-    // D08-1 may add a Loader abort port; no interface is invented in T-01R.
++    // D08: no consumer abort port; recovery uses the verified common reset.
+ 
+     output reg          enc_start,
+     input  wire         enc_done,
+@@ -253,14 +253,13 @@
+                 ld_data = mem_rd_data;
+                 mem_rd_ready = ld_ready;
+                 // Error has priority over the falling busy edge (ASM-LOAD).
+-                if (mem_rd_err || (run_error_reg == ERR_MEM_RD)) begin
++                if (mem_rd_err) begin
+                     run_error_next = ERR_MEM_RD;
+-                    // T-03 user-approved temporary drain: remain here, stop
+-                    // Loader delivery and accept/discard outstanding R data.
+-                    // T-07: replace with ERR_DRAIN after D08 is decided.
++                    // D08: gate the consumer in THIS error-detection cycle,
++                    // before entering the shared drain on the next edge.
+                     ld_valid = 1'b0;
+                     mem_rd_ready = 1'b1;
+-                    if (!mem_rd_busy) state_next = FINISH;
++                    state_next = ERR_DRAIN;
+                 end else if (mem_rd_busy_prev_reg && !mem_rd_busy) begin
+                     mem_rd_start = 1'b1;
+                     mem_rd_addr = ld2_addr_reg;
+@@ -272,12 +271,11 @@
+                 ld_valid = mem_rd_valid;
+                 ld_data = mem_rd_data;
+                 mem_rd_ready = ld_ready;
+-                if (mem_rd_err || (run_error_reg == ERR_MEM_RD)) begin
++                if (mem_rd_err) begin
+                     run_error_next = ERR_MEM_RD;
+                     ld_valid = 1'b0;
+                     mem_rd_ready = 1'b1;
+-                    // T-07: replace with ERR_DRAIN after D08 is decided.
+-                    if (!mem_rd_busy) state_next = FINISH;
++                    state_next = ERR_DRAIN;
+                 end else if (mem_rd_busy_prev_reg && !mem_rd_busy) begin
+                     state_next = LD_WAIT;
+                 end
+@@ -295,14 +293,13 @@
+                 in_waddr = beat_reg;
+                 in_wdata = mem_rd_data;
+                 // ASM-INFER priority: error, valid beat, then falling busy.
+-                if (mem_rd_err || (run_error_reg == ERR_MEM_RD)) begin
++                if (mem_rd_err) begin
+                     run_error_next = ERR_MEM_RD;
+-                    // T-03 approved policy: stop the consumer, drain with READY=1.
++                    // D08: immediately stop the consumer, drain with READY=1.
+                     // M00 registers an RRESP error after accepting that beat;
+                     // this suppresses subsequent writes, not the accepted beat.
+-                    // T-07: replace with ERR_DRAIN after D08 is decided.
+                     in_we = 1'b0;
+-                    if (!mem_rd_busy) state_next = FINISH;
++                    state_next = ERR_DRAIN;
+                 end else if (mem_rd_valid) begin
+                     beat_next = beat_reg + 11'd1;
+                 end else if (mem_rd_busy_prev_reg && !mem_rd_busy) begin
+@@ -329,13 +326,12 @@
+                 mem_rd_ready = !fifo_full;
+                 fifo_wdata = mem_rd_data;
+                 // Error takes priority over both live and remembered completion.
+-                if (mem_rd_err || (run_error_reg == ERR_MEM_RD)) begin
++                if (mem_rd_err) begin
+                     run_error_next = ERR_MEM_RD;
+                     fifo_we = 1'b0;
+                     mem_rd_ready = 1'b1;
+-                    // T-07: replace with ERR_DRAIN after D08 is decided.
+                     // Do not restart/abort active FC without a defined contract.
+-                    if (!mem_rd_busy) state_next = FINISH;
++                    state_next = ERR_DRAIN;
+                 end else if ((fc_done || fc_done_seen_reg) && !mem_rd_busy) begin
+                     fc_start = 1'b1;
+                     fc_sel = 2'd1;
+@@ -379,9 +375,13 @@
+                     state_next = FINISH;
+                 end
+             end
+-            // T-07: the only remaining unimplemented state.
+             ERR_DRAIN: begin
+-                state_next = IDLE;
++                // Defaults suppress every consumer write/start and set data=0.
++                // Keep accepting R beats, including while a write is outstanding.
++                // Preserve run_error_reg; FINISH alone publishes STATUS.error.
++                // RD_FAULT never clears busy: PS timeout/reset is the D08 policy.
++                mem_rd_ready = 1'b1;
++                if (!mem_rd_busy && !mem_wr_busy) state_next = FINISH;
+             end
+             FINISH: begin
+                 // D02 R2: publish only on the FINISH exit edge. R1's START
+--- before/cnn_rtl/tb/tb_ctrl_status.v
++++ after/cnn_rtl/tb/tb_ctrl_status.v
+@@ -243,10 +243,10 @@
+             #1;
+             check(u_ctrl.state_reg === injected_state, "requested recovery state is actually injected");
+             check(status_busy === 1'b1, "every non-IDLE encoding reports busy");
+-            check(u_ctrl.state_next === 4'd0, "unimplemented/illegal state selects IDLE");
++            check(u_ctrl.state_next === 4'd0, "illegal state selects IDLE");
+             release u_ctrl.state_reg;
+             tick;
+-            check(u_ctrl.state_reg === 4'd0, "unimplemented/illegal state recovers on next edge");
++            check(u_ctrl.state_reg === 4'd0, "illegal state recovers on next edge");
+             check(status_busy === 1'b0, "recovery lowers busy");
+             check({status_done, status_error} === saved_display, "recovery preserves displayed result");
+             check(u_ctrl.run_error_reg === saved_result, "recovery preserves internal result");
+@@ -370,11 +370,9 @@
+ 
+         // Pending/displayed BAD_CMD is intentionally nonzero, so a recovery
+         // that silently clears results cannot pass these checks.
+-        for (state_index = 11; state_index <= 11; state_index = state_index + 1)
+-            check_recovery(state_index[3:0]);
+         for (state_index = 13; state_index <= 15; state_index = state_index + 1)
+             check_recovery(state_index[3:0]);
+-        $display("PASS: one unimplemented and three illegal states recover without changing results/snapshots (%0d checks)", recovery_checks);
++        $display("PASS: all thirteen states implemented; three illegal states recover without changing results/snapshots (%0d checks)", recovery_checks);
+ 
+         begin_run(32'd2, 1'b0, 1'b0);
+         decode_run(4'd1, 1'b0, 1'b0, 1'b0);
+--- before/cnn_rtl/tb/tb_top_fc1.v
++++ after/cnn_rtl/tb/tb_top_fc1.v
+@@ -166,7 +166,7 @@
+     wire [63:0] fifo_wdata;
+     wire  fifo_full;
+     wire [191:0] pose_data;
+-    assign pose_data = '0;
++
+     pose_cnn_ctrl ctrl (
+         .clk(clk),
+         .rst_n(resetn),
+@@ -221,8 +221,12 @@
+     enc_stub encoder(.clk(clk),.resetn(resetn),.enc_start(enc_start),.enc_done(enc_done));
+     // Change only the stub's live selector after sampling. No force on the DUT.
+     wire [1:0] tested_fc_sel=fc_start ? fc_sel : (fc_sel ^ 2'b11);
+-    fc_stub fc(.clk(clk),.resetn(resetn),.fc_start(fc_start),.fc_sel(tested_fc_sel),
+-        .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done));
++    // Forced early/same done violates the real completion contract. Isolate
++    // those two probes at the FC1 boundary; never force the DUT or abort FC.
++    bit boundary_probe=0;
++    wire model_fc_start=fc_start && (!boundary_probe || fc_sel==0);
++    fc_stub fc(.clk(clk),.resetn(resetn),.fc_start(model_fc_start),.fc_sel(tested_fc_sel),
++        .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done),.pose_data(pose_data));
+     localparam integer LAST_CASE=10;
+     localparam [31:0] INPUT_BASE=32'h1d000000, INPUT_SEED=32'h24681357;
+     localparam [31:0] LOAD1_SEED=32'haaaa0001, LOAD2_SEED=32'hcccc0003;
+@@ -237,6 +241,48 @@
+     reg [3:0] prior_state;
+     string case_name, done_relation;
+ 
++
++    // BASELINE_T06 is only for replay against the saved pre-T07 controller.
++    // Default execution always requires the real ERR_DRAIN state.
++    bit legacy_drain=0;
++    integer drain_entries=0, drain_residence=0, drain_discarded=0, read_fall=0;
++    integer drain_from=-1, both_busy_cycles=0, write_only_cycles=0;
++    reg [3:0] drain_prior_state=0;
++    initial legacy_drain=$test$plusargs("BASELINE_T06");
++    task reset_drain_observation;
++        begin
++            drain_entries=0;drain_residence=0;drain_discarded=0;read_fall=0;
++            drain_from=-1;both_busy_cycles=0;write_only_cycles=0;drain_prior_state=0;
++        end
++    endtask
++    task observe_drain;
++        begin
++            if(ctrl.mem_rd_busy_prev_reg && !mem_rd_busy) read_fall=cycle;
++            if(mem_rd_err && (ctrl.state_reg==2 || ctrl.state_reg==3 || ctrl.state_reg==5 || ctrl.state_reg==7)) begin
++                check(!ld_valid && !in_we && !fifo_we && mem_rd_ready,
++                    "R1 immediate error-cycle consumer gating and RREADY=1");
++                check(ctrl.run_error_next==4,"R1 latch MEM_RD_ERR before drain entry");
++                if(!legacy_drain) check(ctrl.state_next==11,"R1 each read origin selects ERR_DRAIN=1011");
++                drain_from=ctrl.state_reg;
++            end
++            if(mem_rd_err && mem_rd_valid && mem_rd_ready) drain_discarded=drain_discarded+1;
++            if(ctrl.state_reg==11) begin
++                if(drain_prior_state!=11) drain_entries=drain_entries+1;
++                drain_residence=drain_residence+1;
++                check(status_busy && !status_done && status_error==0 && ctrl.run_error_reg==4 &&
++                    ctrl.run_error_next==4,"R2 internal error retained; STATUS waits for FINISH");
++                check(mem_rd_ready && {ld_valid,in_we,fifo_we,ld_data,in_wdata,fifo_wdata,
++                    mem_rd_start,mem_wr_start,loader_start,enc_start,fc_start}==='0,
++                    "R2 drain accepts/discards; every consumer and START/data output is zero");
++                check(ctrl.state_next==((!mem_rd_busy&&!mem_wr_busy)?12:11),
++                    "R3 FINISH requires BOTH engines idle");
++                if(mem_rd_busy && mem_wr_busy) both_busy_cycles=both_busy_cycles+1;
++                if(!mem_rd_busy && mem_wr_busy) write_only_cycles=write_only_cycles+1;
++            end
++            drain_prior_state=ctrl.state_reg;
++        end
++    endtask
++
+     function automatic [63:0] pattern(input reg [31:0] addr,seed);
+         pattern={seed^32'hA5C39E71,addr^seed};
+     endfunction
+@@ -275,11 +321,13 @@
+     always @(posedge clk) begin
+         cycle=cycle+1;
+         if(resetn && active) begin
++            observe_drain;
+             if(reg_start && ctrl.state_reg==0) start_edge=cycle;
+             check(!(prior_mem_start && mem_rd_start),"read START one-cycle");
+             check(!(prior_fc_start && fc_start),"FC START one-cycle");
+             prior_mem_start=mem_rd_start;prior_fc_start=fc_start;
+-            check({mem_wr_start,mem_wr_addr,mem_wr_bytes,mem_wr_data}==='0,"write outputs remain zero");
++            if(ctrl.state_reg!=9 && ctrl.state_reg!=10)
++                check({mem_wr_start,mem_wr_addr,mem_wr_bytes,mem_wr_data}==='0,"write outputs zero through FC1 boundary");
+             if(loader_start) load_starts=load_starts+1;
+             if(enc_start) enc_starts=enc_starts+1;
+             if(mem_rd_start) begin
+@@ -318,10 +366,12 @@
+                     in_wdata===pattern(INPUT_BASE+8*input_writes,INPUT_SEED),"full input word/address sequence");
+                 input_writes=input_writes+1;
+             end
+-            if(fc_start) begin
++            if(fc_start && fc_sel==0) begin
+                 fc_starts=fc_starts+1;
+                 check(mem_rd_start && phase==2 && input_writes==1440,"FC1 starts after complete input/Encoder");
+             end
++            if(commands==2 && prior_busy && !mem_rd_busy) fc_read_end=cycle;
++            if(ctrl.state_reg==11) drain_cycles=drain_cycles+1;
+             if(ctrl.state_reg==7) begin
+                 fc_cycles=fc_cycles+1;
+                 if(mem_rd_busy) fc_busy_cycles=fc_busy_cycles+1;
+@@ -329,7 +379,7 @@
+                 if(mem_rd_err || ctrl.run_error_reg==4) begin
+                     if(error_at_push<0) error_at_push=pushes;
+                     check(!fifo_we && mem_rd_ready && status_busy && !fc_start,"error stops FIFO writes and drains");
+-                    if(mem_rd_busy) check(ctrl.state_next==7,"error cannot finish before M00 idle");
++                    if(legacy_drain && mem_rd_busy) check(ctrl.state_next==7,"error cannot finish before M00 idle");
+                     drain_cycles=drain_cycles+1;
+                 end else begin
+                     check(fifo_we===(mem_rd_valid && !fifo_full) && mem_rd_ready===!fifo_full &&
+@@ -346,8 +396,10 @@
+                         if(done_edge!=0 && done_edge<cycle)
+                             check(ctrl.fc_done_seen_reg,"earlier completion retained until busy falls");
+                     end
+-                    check(ctrl.state_next==(((fc_done||ctrl.fc_done_seen_reg)&&!mem_rd_busy)?12:7),
++                    check(ctrl.state_next==(((fc_done||ctrl.fc_done_seen_reg)&&!mem_rd_busy)?8:7),
+                         "FC1 waits for both remembered/live done and read idle");
++                    if(ctrl.state_next==8) check(fc_start && fc_sel==1 && !mem_rd_start,
++                        "FC1 boundary emits exactly the FC2 START/select, even in isolated completion probes");
+                 end
+             end
+             if(fifo_we) begin
+@@ -371,18 +423,26 @@
+     end
+     task initialize_observation;
+         begin
++            reset_drain_observation;
+             start_edge=0;finish_edge=0;commands=0;ar1=0;ar2=0;raw1=0;raw2=0;pushes=0;input_writes=0;
+             load_starts=0;enc_starts=0;fc_starts=0;fc_cycles=0;fc_busy_cycles=0;full_samples=0;full_stalls=0;
+             fc_begin=0;fc_read_end=0;done_edge=0;error_at_push=-1;drain_cycles=0;full_run=0;max_full_run=0;
+             prior_mem_start=0;prior_fc_start=0;prior_busy=0;prior_state=0;injected=0;
+-            inject_before=memory.injection_count;done_before=fc.done_count;
++            inject_before=memory.injection_count;done_before=fc.phase_dones[0];
+         end
+     endtask
+     task wait_command;
+         begin
+             @(posedge clk);#2;check(status_busy && !status_done && status_error==0,"START clears display");
+             @(negedge clk);reg_start=0;reg_cmd=32'hdeadbeef;reg_weight_addr=32'h2f000000;reg_input_addr=32'h2e000000;
+-            while(status_busy) begin @(posedge clk);#2;check(cycle-start_edge<500000,"bounded command completion");end
++            if(boundary_probe && phase==2) begin
++                while(ctrl.state_reg!=8 || fc.active) begin
++                    @(posedge clk);#2;check(cycle-start_edge<500000,"bounded FC1 boundary probe");
++                end
++                finish_edge=cycle;
++                check(status_busy && !status_done && !mem_rd_busy && fc.pop_count==49152,
++                    "isolated probe reaches FC2 boundary with all FIFO words consumed, no full-INFER claim");
++            end else while(status_busy) begin @(posedge clk);#2;check(cycle-start_edge<500000,"bounded command completion");end
+             check(!mem_rd_busy,"Top only finishes after M00 read completes");
+             repeat(4) begin @(posedge clk);#2;end
+             @(negedge clk);active=0;
+@@ -425,9 +485,9 @@
+             for(integer j=0;j<fc.pop_count;j=j+1)
+                 check(fc.consumed[j]===pattern(loaded_base+5936+8*j,weight_seed),"entire popped sequence in FIFO order");
+             if(!fault) begin
+-                check(status_done && status_error==0 && pushes==49152 && fc.pop_count==49152 && fc.count==0 && !fc.active,
++                check((boundary_probe?status_busy:status_done) && status_error==0 && pushes==49152 && fc.pop_count==49152 && fc.count==0 && !fc.active,
+                     "successful FC1 consumes all 49152 words and empties FIFO");
+-                check(fc.done_count==done_before+1 && fc.sel_changed_cycles>0 && fc.selected_reg==0,
++                check(fc.phase_dones[0]==done_before+1 && fc.sel_changed_cycles>0 && fc.selected_reg==(boundary_probe?0:2),
+                     "one completion; START-latched selection ignores changing live selector");
+                 check(full_samples==fc.full_cycles && max_full_run==fc.max_full_run,"independent full statistics agree");
+                 if(fc.consume_mode==0) check(full_samples==0,"fast consumer never fills FIFO");
+@@ -438,7 +498,7 @@
+                     check(done_edge==fc_read_end,"forced completion coincides with busy falling");done_relation="same";
+                 end else begin check(done_edge>fc_read_end,"normal completion after busy falls");done_relation="after";end
+                 if(fc.done_width_cycles==1) check(!fc_done,"done is one-cycle pulse");
+-                else check(fc_done,"done held as level");
++                else check(done_edge>0,"FC1 level done was observed exactly once before FC2 START cleared it");
+             end else begin
+                 check(!status_done && status_error==4 && fc_starts==1 && memory.injection_count==inject_before+1,
+                     "memory error recorded, no FC2/restart START");
+@@ -446,6 +506,9 @@
+                     "no writes after error; FC remains incomplete without an abort contract");
+                 done_relation="error_no_done";
+             end
++            if(fault && !legacy_drain) check(drain_entries==1 && drain_residence>0,"FC1 error passes shared drain");
++            $display("OBS: R4 tb=fc1 case=%0d leg=%0d raw=%0d words=%0d discarded=%0d read_fall=%0d cycles=%0d done=%b error=%0d origin=%0d entries=%0d residence=%0d scope=%s",
++                case_id,leg,raw2,pushes,drain_discarded,read_fall-start_edge,finish_edge-start_edge,status_done,status_error,drain_from,drain_entries,drain_residence,boundary_probe?"FC1_boundary":"full_INFER");
+             infer_runs=infer_runs+1;
+             $display("PASS: T-05 INFER case=%0d leg=%0d name=%s loaded=%08h current=%08h issued=%08h total_cycles=%0d FC1_cycles=%0d read_busy_cycles=%0d AR=%0d expected_AR=%0d pushes=%0d pops=%0d full_cycles=%0d max_full_run=%0d full_R_stalls=%0d done_relation=%s done_edge=%0d read_end=%0d done=%b error=%0d overflow=0 violations=0",
+                 case_id,leg,case_name,loaded_base,other_base,loaded_base+5936,finish_edge-start_edge,fc_cycles,
+@@ -456,7 +519,7 @@
+     task automatic run_case(input integer id);
+         begin
+             @(negedge clk);active=0;resetn=0;reg_start=0;phase=0;repeat(3) @(negedge clk);
+-            case_id=id;leg=0;fault=0;base_a=32'h1c000050;base_b=32'h1c100050;weight_seed=32'hfc1a0010;
++            case_id=id;boundary_probe=(id==5 || id==6);leg=0;fault=0;base_a=32'h1c000050;base_b=32'h1c100050;weight_seed=32'hfc1a0010;
+             encoder.delay_cycles=5;fc.consume_mode=0;fc.consume_period=4;fc.done_mode=0;
+             fc.done_delay_cycles=5;fc.done_width_cycles=1;fc.pause_after=1024;fc.pause_cycles=2000;fc.seed=32'h1234abcd;
+             memory.ar_ready_mode=0;memory.r_gap_cycles=0;memory.ar_gap_cycles=0;
+--- before/cnn_rtl/tb/tb_top_full.v
++++ after/cnn_rtl/tb/tb_top_full.v
+@@ -1,6 +1,6 @@
+ `timescale 1ns / 1ps
+ 
+-// T-06 full Top/real-M00 integration fixture. Existing memory RTL/model unchanged.
++// T-07 full Top/real-M00 integration and D08 drain/reset fixture. Existing memory RTL/model unchanged.
+ module tb_top_full;
+     reg clk = 0, resetn = 0;
+     always #5 clk = ~clk;
+@@ -51,12 +51,20 @@
+     wire M_AXI_RLAST;
+     wire M_AXI_RVALID;
+     wire M_AXI_RREADY;
++    // R3-only test producer: normal Top never overlaps a read and pose write.
++    // Exercise a REAL independent M00 write without forcing any RTL state.
++    bit diagnostic_write=0, diagnostic_start=0;
++    reg [31:0] diagnostic_addr=0;
++    localparam [63:0] DIAGNOSTIC_WORD=64'h718293a4b5c6d7e8;
+     pose_cnn_v1_0_M00_AXI dut (
+         .M_AXI_ACLK(clk), .M_AXI_ARESETN(resetn),
+         .mem_rd_start(mem_rd_start), .mem_rd_addr(mem_rd_addr), .mem_rd_bytes(mem_rd_bytes),
+         .mem_rd_busy(mem_rd_busy), .mem_rd_data(mem_rd_data), .mem_rd_valid(mem_rd_valid),
+         .mem_rd_ready(mem_rd_ready), .mem_rd_err(mem_rd_err),
+-        .mem_wr_start(mem_wr_start), .mem_wr_addr(mem_wr_addr), .mem_wr_bytes(mem_wr_bytes), .mem_wr_data(mem_wr_data),
++        .mem_wr_start(diagnostic_write?diagnostic_start:mem_wr_start),
++        .mem_wr_addr(diagnostic_write?diagnostic_addr:mem_wr_addr),
++        .mem_wr_bytes(diagnostic_write?20'd24:mem_wr_bytes),
++        .mem_wr_data(diagnostic_write?DIAGNOSTIC_WORD:mem_wr_data),
+         .mem_wr_busy(mem_wr_busy), .mem_wr_ready(mem_wr_ready), .mem_wr_err(mem_wr_err),
+         .M_AXI_AWID(M_AXI_AWID),
+         .M_AXI_AWADDR(M_AXI_AWADDR),
+@@ -223,7 +231,7 @@
+     fc_stub fc(.clk(clk),.resetn(resetn),.fc_start(fc_start),.fc_sel(tested_sel),
+         .fifo_we(fifo_we),.fifo_wdata(fifo_wdata),.fifo_full(fifo_full),.fc_done(fc_done),.pose_data(pose_data));
+ 
+-    localparam integer LAST_CASE=9;
++    localparam integer LAST_CASE=12;
+     localparam [31:0] LOAD_BASE=32'h1c000050, INPUT_BASE=32'h1d000000;
+     localparam [31:0] S1=32'haaaa0001,S2=32'hcccc0003,SW=32'hfc1a0010,SI=32'h24681357;
+     localparam [63:0] UNWRITTEN=64'hdeadbeefbad00001;
+@@ -241,6 +249,48 @@
+     bit injected=0,restart_probe=0;
+     string case_name;
+ 
++
++    // BASELINE_T06 is only for replay against the saved pre-T07 controller.
++    // Default execution always requires the real ERR_DRAIN state.
++    bit legacy_drain=0;
++    integer drain_entries=0, drain_residence=0, drain_discarded=0, read_fall=0;
++    integer drain_from=-1, both_busy_cycles=0, write_only_cycles=0;
++    reg [3:0] drain_prior_state=0;
++    initial legacy_drain=$test$plusargs("BASELINE_T06");
++    task reset_drain_observation;
++        begin
++            drain_entries=0;drain_residence=0;drain_discarded=0;read_fall=0;
++            drain_from=-1;both_busy_cycles=0;write_only_cycles=0;drain_prior_state=0;
++        end
++    endtask
++    task observe_drain;
++        begin
++            if(ctrl.mem_rd_busy_prev_reg && !mem_rd_busy) read_fall=cycle;
++            if(mem_rd_err && (ctrl.state_reg==2 || ctrl.state_reg==3 || ctrl.state_reg==5 || ctrl.state_reg==7)) begin
++                check(!ld_valid && !in_we && !fifo_we && mem_rd_ready,
++                    "R1 immediate error-cycle consumer gating and RREADY=1");
++                check(ctrl.run_error_next==4,"R1 latch MEM_RD_ERR before drain entry");
++                if(!legacy_drain) check(ctrl.state_next==11,"R1 each read origin selects ERR_DRAIN=1011");
++                drain_from=ctrl.state_reg;
++            end
++            if(mem_rd_err && mem_rd_valid && mem_rd_ready) drain_discarded=drain_discarded+1;
++            if(ctrl.state_reg==11) begin
++                if(drain_prior_state!=11) drain_entries=drain_entries+1;
++                drain_residence=drain_residence+1;
++                check(status_busy && !status_done && status_error==0 && ctrl.run_error_reg==4 &&
++                    ctrl.run_error_next==4,"R2 internal error retained; STATUS waits for FINISH");
++                check(mem_rd_ready && {ld_valid,in_we,fifo_we,ld_data,in_wdata,fifo_wdata,
++                    mem_rd_start,mem_wr_start,loader_start,enc_start,fc_start}==='0,
++                    "R2 drain accepts/discards; every consumer and START/data output is zero");
++                check(ctrl.state_next==((!mem_rd_busy&&!mem_wr_busy)?12:11),
++                    "R3 FINISH requires BOTH engines idle");
++                if(mem_rd_busy && mem_wr_busy) both_busy_cycles=both_busy_cycles+1;
++                if(!mem_rd_busy && mem_wr_busy) write_only_cycles=write_only_cycles+1;
++            end
++            drain_prior_state=ctrl.state_reg;
++        end
++    endtask
++
+     function automatic [63:0] pattern(input reg [31:0] addr,seed);
+         pattern={seed^32'ha5c39e71,addr^seed};
+     endfunction
+@@ -260,6 +310,9 @@
+     endtask
+     always @(negedge clk) begin
+         if(active && phase==2 && !injected) begin
++            if((fault==4 || fault==5) && commands==1 && ar1==1) begin
++                memory.inject_rlast_mode=fault-3;injected=1;
++            end
+             if((fault==1 && commands==1 && ar1==1) || (fault==2 && commands==2 && ar2==80)) begin
+                 memory.inject_rresp=2'b10;memory.inject_rresp_beat=4;injected=1;
+             end
+@@ -268,7 +321,9 @@
+     always @(posedge clk) begin
+         cycle=cycle+1;pose_before_edge=pose_data;
+         if(resetn && active) begin
+-            check(ctrl.state_reg!=11,"normal/write-error paths never enter ERR_DRAIN");
++            observe_drain;
++            if(fault==0 || fault==3) check(ctrl.state_reg!=11,"normal/write-error paths never enter ERR_DRAIN");
++            if(ctrl.state_reg==11) drain_cycles=drain_cycles+1;
+             if(reg_start && ctrl.state_reg==0) began=cycle;
+             check(!(previous_start && mem_rd_start) && !(previous_fc && fc_start) &&
+                   !(previous_write && mem_wr_start),"read/FC/write STARTs are one-cycle pulses");
+@@ -385,6 +440,7 @@
+     end
+     task clear_observation;
+         begin
++            reset_drain_observation;
+             began=0;finished=0;commands=0;ar1=0;ar2=0;r1=0;r2=0;in_words=0;fc_words=0;enc_starts=0;fc_starts=0;
+             wr_starts=0;aw_count=0;w_count=0;b_count=0;ready_count=0;ready_run=0;max_ready_run=0;
+             write_edge=0;last_w=0;last_b=0;write_end=0;full_cycles=0;drain_cycles=0;error_pushes=-1;
+@@ -465,6 +521,9 @@
+                 end
+             end
+             check(memory.mem_word(output_base-8)===UNWRITTEN && memory.mem_word(output_base+24)===UNWRITTEN,"both unwritten pose guard words preserved");
++            if((fault==1 || fault==2) && !legacy_drain) check(drain_entries==1 && drain_residence>0,"read error traverses ERR_DRAIN exactly once");
++            $display("OBS: R4 tb=full case=%0d leg=%0d raw=%0d words=%0d discarded=%0d read_fall=%0d cycles=%0d done=%b error=%0d origin=%0d entries=%0d residence=%0d",
++                case_id,leg,r1+r2,in_words+fc_words,drain_discarded,read_fall-began,finished-began,status_done,status_error,drain_from,drain_entries,drain_residence);
+             $display("PASS: T-06 INFER case=%0d leg=%0d name=%s cycles=%0d enc_delay=%0d input_words=%0d FC_words=%0d FC_starts=%0d FC_cycles=%0d/%0d/%0d input_AR=%0d FC_AR=%0d full=%0d AW=%0d W=%0d ready_samples=%0d ready_max_run=%0d B=%0d B_after_last_W=%0d pose_bytes=%0d output=%08h done=%b error=%0d violations=0",
+                 case_id,leg,case_name,finished-began,encoder.delay_cycles,in_words,fc_words,fc_starts,fc_cycles[0],fc_cycles[1],fc_cycles[2],
+                 ar1,ar2,full_cycles,aw_count,w_count,ready_count,max_ready_run,b_count,last_b-last_w,w_count*8,output_base,status_done,status_error);
+@@ -472,23 +531,69 @@
+     endtask
+     task common_reset;
+         begin
+-            @(negedge clk);active=0;reg_start=0;resetn=0;cfg_ok=0;
++            @(negedge clk);active=0;reg_start=0;resetn=0;cfg_ok=0;diagnostic_write=0;diagnostic_start=0;
+             repeat(3) @(negedge clk);
+             check(!status_busy && !mem_rd_busy && !mem_wr_busy && status_error==0 && !fc.active && fc.count==0 &&
+                   ctrl.load_base_reg==0 && ctrl.ld2_addr_reg==0 && ctrl.fc1_addr_reg==0,"common synchronous reset clears engines and address cache");
+             resetn=1;
+         end
+     endtask
+-    task probe_failed_restart;
+-        begin
+-            leg=1;fault=0;restart_probe=1;fc.expected_busy_starts=1;
++    task probe_rd_fault;
++        integer held_words,held_raw,held_ar;
++        begin
+             start_infer;
+             @(posedge clk);#2;@(negedge clk);reg_start=0;
+-            while(fc.rejected_starts==0) begin @(posedge clk);#2;check(cycle-began<10000,"bounded non-idle restart probe");end
+-            check(fc.active && fc.expected_busy_starts==0 && fc_starts==1 && fc.selected_reg==0,"restart attempted while old FC1 still active, no hidden abort");
+-            $display("PASS: T-06 Q6 FC1_error restart_contract=REJECTED active=%b consumed=%0d expected=49152 rejected_starts=%0d reset_required=1",fc.active,fc.pop_count,fc.rejected_starts);
+-            common_reset;restart_probe=0;leg=2;fc.consume_mode=0;do_load;do_infer;
+-            $display("PASS: T-06 Q6 FC1_error recovery=common_reset_then_LOAD_then_INFER words=49152 pose_bytes=24");
++            while(ctrl.state_reg!=11 || dut.rd_state!=3'd4) begin
++                @(posedge clk);#2;check(cycle-began<200,"RD_FAULT and ERR_DRAIN entry deadline");
++            end
++            held_words=input_ram.write_count;held_raw=r1;held_ar=ar1;
++            // This is a deliberately unfinished AXI request. No check_quiescent
++            // until AFTER the coordinated testbench reset; no expected violation.
++            repeat(2000) begin
++                @(posedge clk);#2;
++                check(ctrl.state_reg==11 && dut.rd_state==4 && status_busy && mem_rd_busy &&
++                    mem_rd_err && !status_done && status_error==0 && ctrl.run_error_reg==4,
++                    "R5 RD_FAULT holds busy while STATUS.error remains ZERO");
++                check(input_ram.write_count==held_words && r1==held_raw && ar1==held_ar &&
++                    enc_starts==0 && fc_starts==0 && mem_rd_ready,"R5 consumers quiet and no false completion/timeout");
++            end
++            check(memory.injection_count-inject_before==1 && memory.rlast_injected>0 &&
++                drain_entries==1 && memory.violation_count==0,"R5 one malformed RLAST, no master violation");
++            $display("PASS: T-07 R5 case=%0d mode=%0d held_cycles=2000 state=%0d M00_state=%0d busy=%b STATUS_error=%0d internal_error=%0d raw=%0d RAM_words=%0d AXI_C12_violations=0",
++                case_id,fault-3,ctrl.state_reg,dut.rd_state,status_busy,status_error,ctrl.run_error_reg,held_raw,held_words);
++            common_reset;memory.check_quiescent;
++            leg=1;fault=0;do_load;do_infer;
++            $display("PASS: T-07 R5 case=%0d TB_common_reset_then_LOAD_then_INFER=PASS board_reset_scope=X03",case_id);
++        end
++    endtask
++    task probe_two_engines;
++        integer saved_fall;
++        begin
++            // B arrives well AFTER input read drain. If ERR_DRAIN checks only
++            // read busy, its FINISH transition fails the per-cycle R3 assertion.
++            memory.b_delay_cycles=6000;
++            start_infer;diagnostic_write=1;diagnostic_addr=32'h1f000000;
++            output_base=diagnostic_addr;expected_pose={3{DIAGNOSTIC_WORD}};
++            fork
++                wait_finish;
++                begin
++                    wait(mem_rd_busy);@(negedge clk);diagnostic_start=1;
++                    @(negedge clk);diagnostic_start=0;
++                end
++            join
++            check(drain_entries==1 && both_busy_cycles>0 && write_only_cycles>0 &&
++                !status_done && status_error==4 && !mem_rd_busy && !mem_wr_busy,
++                "R3 two real M00 engines: wait for read AND delayed B, then error4");
++            check(ar1==90 && r1==1440 && in_words==21 && enc_starts==0 && fc_starts==0 &&
++                wr_starts==0 && aw_count==1 && w_count==3 && b_count==1 && ready_count==3,
++                "R3 diagnostic write is external TB producer; Top starts no compute/write");
++            for(integer k=0;k<3;k=k+1) check(memory.mem_word(diagnostic_addr+8*k)===DIAGNOSTIC_WORD,
++                "R3 diagnostic write data intact during read drain");
++            check(memory.mem_word(diagnostic_addr-8)===UNWRITTEN && memory.mem_word(diagnostic_addr+24)===UNWRITTEN,
++                "R3 diagnostic write guards intact");
++            $display("PASS: T-07 R3 case=12 both_busy_cycles=%0d read_idle_write_busy_cycles=%0d read_fall=%0d B_accept=%0d Top_finish=%0d discarded=%0d W=3 B=1 done=%b error=%0d violations=0",
++                both_busy_cycles,write_only_cycles,read_fall-began,last_b-began,finished-began,drain_discarded,status_done,status_error);
++            common_reset;fault=0;leg=1;memory.b_delay_cycles=0;do_load;do_infer;
+         end
+     endtask
+     task automatic run_case(input integer id);
+@@ -511,16 +616,25 @@
+                 7:begin case_name="write_error_restart";fault=3;memory.b_delay_cycles=12;end
+                 8:begin case_name="measured_Encoder_delay";encoder.delay_cycles=1278890;end
+                 9:begin case_name="FIFO_and_read_stall";fc.consume_mode=1;memory.ar_ready_mode=1;memory.ar_gap_cycles=7;memory.r_gap_cycles=1;end
++                10:begin case_name="early_RLAST_fault";fault=4;end
++                11:begin case_name="missing_RLAST_fault";fault=5;end
++                12:begin case_name="read_write_outstanding_drain";fault=1;end
+                 default:$fatal(1,"invalid CASE");
+             endcase
+             memory.mem_fill(LOAD_BASE,5936,S1);memory.mem_fill(LOAD_BASE+5936,393216,SW);
+             memory.mem_fill(LOAD_BASE+399152,23840,S2);memory.mem_fill(INPUT_BASE,11520,SI);
+-            do_load;do_infer;
+-            if(id==0 || id==3 || id==5 || id==7) begin
++            do_load;
++            if(id==10 || id==11) probe_rd_fault;
++            else if(id==12) probe_two_engines;
++            else do_infer;
++            if(id==0 || id==3) begin
+                 leg=1;fault=0;do_infer;
+                 $display("PASS: T-06 Q6 case=%0d restart_without_reset=PASS input_words=1440 FC_words=49152 pose_bytes=24",id);
+             end
+-            if(id==6) probe_failed_restart;
++            if(id==5 || id==6 || id==7) begin
++                common_reset;leg=(id==6?2:1);fault=0;fc.consume_mode=0;do_load;do_infer;
++                $display("PASS: T-07 D08 recovery case=%0d common_reset_then_LOAD_then_INFER=PASS input_words=1440 FC_words=49152 pose_bytes=24",id);
++            end
+             cases_done=cases_done+1;
+         end
+     endtask
+@@ -530,7 +644,7 @@
+         $fdisplay(events,"case,leg,phase,cycle,state,read_busy,write_busy,fc_start,fc_done,fc_sel,wr_ready,beat,FC_words,W_words");
+         if($value$plusargs("CASE=%d",selected)) begin
+             check(selected>=0 && selected<=LAST_CASE,"valid CASE selector");run_case(selected);
+-        end else for(integer j=0;j<=LAST_CASE;j=j+1) run_case(j);
++        end else for(integer j=0;j<=(legacy_drain?9:LAST_CASE);j=j+1) run_case(j);
+         $display("PASS: T-06 Q1-Q6 ALL SELECTED cases=%0d INFER_runs=%0d selector=%0d AXI_C12_violations=%0d",cases_done,tests,selected,memory.violation_count);
+         $fclose(events);$finish;
+     end
+--- before/cnn_rtl/tb/tb_top_infer.v
++++ after/cnn_rtl/tb/tb_top_infer.v
+@@ -243,6 +243,48 @@
+     reg [3:0] prior_state;
+     string case_name;
+ 
++
++    // BASELINE_T06 is only for replay against the saved pre-T07 controller.
++    // Default execution always requires the real ERR_DRAIN state.
++    bit legacy_drain=0;
++    integer drain_entries=0, drain_residence=0, drain_discarded=0, read_fall=0;
++    integer drain_from=-1, both_busy_cycles=0, write_only_cycles=0;
++    reg [3:0] drain_prior_state=0;
++    initial legacy_drain=$test$plusargs("BASELINE_T06");
++    task reset_drain_observation;
++        begin
++            drain_entries=0;drain_residence=0;drain_discarded=0;read_fall=0;
++            drain_from=-1;both_busy_cycles=0;write_only_cycles=0;drain_prior_state=0;
++        end
++    endtask
++    task observe_drain;
++        begin
++            if(ctrl.mem_rd_busy_prev_reg && !mem_rd_busy) read_fall=cycle;
++            if(mem_rd_err && (ctrl.state_reg==2 || ctrl.state_reg==3 || ctrl.state_reg==5 || ctrl.state_reg==7)) begin
++                check(!ld_valid && !in_we && !fifo_we && mem_rd_ready,
++                    "R1 immediate error-cycle consumer gating and RREADY=1");
++                check(ctrl.run_error_next==4,"R1 latch MEM_RD_ERR before drain entry");
++                if(!legacy_drain) check(ctrl.state_next==11,"R1 each read origin selects ERR_DRAIN=1011");
++                drain_from=ctrl.state_reg;
++            end
++            if(mem_rd_err && mem_rd_valid && mem_rd_ready) drain_discarded=drain_discarded+1;
++            if(ctrl.state_reg==11) begin
++                if(drain_prior_state!=11) drain_entries=drain_entries+1;
++                drain_residence=drain_residence+1;
++                check(status_busy && !status_done && status_error==0 && ctrl.run_error_reg==4 &&
++                    ctrl.run_error_next==4,"R2 internal error retained; STATUS waits for FINISH");
++                check(mem_rd_ready && {ld_valid,in_we,fifo_we,ld_data,in_wdata,fifo_wdata,
++                    mem_rd_start,mem_wr_start,loader_start,enc_start,fc_start}==='0,
++                    "R2 drain accepts/discards; every consumer and START/data output is zero");
++                check(ctrl.state_next==((!mem_rd_busy&&!mem_wr_busy)?12:11),
++                    "R3 FINISH requires BOTH engines idle");
++                if(mem_rd_busy && mem_wr_busy) both_busy_cycles=both_busy_cycles+1;
++                if(!mem_rd_busy && mem_wr_busy) write_only_cycles=write_only_cycles+1;
++            end
++            drain_prior_state=ctrl.state_reg;
++        end
++    endtask
++
+     function automatic [63:0] pattern(input reg [31:0] addr, seed);
+         pattern={seed^32'hA5C39E71,addr^seed};
+     endfunction
+@@ -279,6 +321,7 @@
+     always @(posedge clk) begin
+         cycle=cycle+1;
+         if (resetn && active) begin
++            observe_drain;
+             expected_counter=int'(ctrl.beat_reg);
+             if (reg_start && ctrl.state_reg==0) start_edge=cycle;
+             check(!(prior_start && mem_rd_start),"read START one-cycle pulse");
+@@ -306,6 +349,7 @@
+                     fc_commands=fc_commands+1;
+                 end
+             end
++            if(ctrl.state_reg==11) drain_cycles=drain_cycles+1;
+             if (ctrl.state_reg==5) begin
+                 check(status_busy && mem_rd_ready===1'b1,"IN_RD always READY=1 even with Loader READY=0");
+                 check(in_waddr===ctrl.beat_reg && in_wdata===mem_rd_data,"IN_RD address/data equations");
+@@ -313,7 +357,7 @@
+                     check(!in_we && !enc_start,"error suppresses RAM writes and Encoder start");
+                     if (error_at_word<0) error_at_word=writes;
+                     drain_cycles=drain_cycles+1;
+-                    if (mem_rd_busy) check(ctrl.state_next==5,"wait for M00 drain before FINISH");
++                    if (legacy_drain && mem_rd_busy) check(ctrl.state_next==5,"wait for M00 drain before FINISH");
+                 end else begin
+                     check(in_we===mem_rd_valid,"IN_RD write enable equals valid");
+                     equations=equations+1;
+@@ -355,7 +399,7 @@
+                       in_wdata[63:32]!=(AFTER_SEED^32'hA5C39E71),"neither guard pattern enters RAM");
+                 writes=writes+1;
+             end
+-            if (ctrl.state_reg==5 && prior_busy && !mem_rd_busy) read_end=cycle;
++            if (fc_commands==0 && prior_busy && !mem_rd_busy) read_end=cycle;
+             if (enc_start) begin
+                 enc_pulses=enc_pulses+1; enc_edge=cycle;
+                 check(ctrl.state_reg==5 && !mem_rd_err && prior_busy && !mem_rd_busy,
+@@ -379,6 +423,7 @@
+     task execute_transfer;
+         integer last_write_cycle, expected_error;
+         begin
++            reset_drain_observation;
+             // Falling-edge setup avoids any sampling race with RAM/model monitors.
+             input_ram.begin_transfer;
+             commands=0; enc_pulses=0; ar_count=0; raw_beats=0; writes=0; enc_cycles=0;
+@@ -448,6 +493,9 @@
+             check(encoder.ignored_starts==0 && input_ram.violations==0 && memory.violation_count==0 && fc.violations==0,
+                 "no repeated Encoder starts or RAM/AXI/C12 violations");
+             memory.check_quiescent;
++            if(fault_mode!=0 && !legacy_drain) check(drain_entries==1 && drain_residence>0,"input error passes ERR_DRAIN");
++            $display("OBS: R4 tb=infer case=%0d leg=%0d raw=%0d words=%0d discarded=%0d read_fall=%0d cycles=%0d done=%b error=%0d origin=%0d entries=%0d residence=%0d",
++                case_id,leg,raw_beats,writes,drain_discarded,(read_fall==0?0:read_fall-start_edge),finish_edge-start_edge,status_done,status_error,drain_from,drain_entries,drain_residence);
+             tests=tests+1;
+             $display("PASS: T-04 case=%0d leg=%0d name=%s base=%08h total_cycles=%0d input_cycles=%0d enc_delay=%0d enc_cycles=%0d commands=%0d AR=%0d expected_AR=%0d boundary_shorts=%0d R=%0d RAM_words=%0d enc_start=%0d equations=%0d no_valid=%0d drain_cycles=%0d discarded=%0d done=%b error=%0d violations=0",
+                 case_id,leg,case_name,base,finish_edge-start_edge,read_end-read_edge,
+@@ -504,7 +552,12 @@
+             if(id==6) memory.ar_seed=32'h23456789;
+             @(negedge clk); execute_transfer;
+             if (id==11 || id==12) begin
+-                // No hardware reset: prove beat clear, stale level done and read-error clear.
++                // Normal level-done repetition stays reset-free. D08 memory-error
++                // recovery now explicitly resets all TB endpoints and reloads.
++                if(id==12) begin
++                    @(negedge clk);resetn=0;cfg_ok=0;repeat(3) @(negedge clk);
++                    resetn=1;prepare_addresses;cfg_ok=1;
++                end
+                 leg=1; fault_mode=0;
+                 @(negedge clk); execute_transfer;
+             end
+--- before/cnn_rtl/tb/tb_top_load.v
++++ after/cnn_rtl/tb/tb_top_load.v
+@@ -227,13 +227,55 @@
+     integer commands=0, loader_pulses=0, ar1=0, ar2=0, raw_beats=0, delivered=0;
+     integer waiting=0, last_first_beat=0, raw_last=0, done_edge=0;
+     integer equation_checks=0, held_cycles=0, error_part=0, ar_left=0, ar_expected;
+-    integer ar_injected=0, events;
++    integer ar_injected=0, events, injection_before;
+     reg [31:0] next_ar_addr;
+     bit active=0, done_seen=0, prior_start=0, prior_loader_start=0, prior_busy=0;
+     bit prior_loader_done=0, injected=0, early_error=0;
+     reg [3:0] prior_state=0;
+     reg [63:0] expected_data;
+     string case_name;
++
++
++    // BASELINE_T06 is only for replay against the saved pre-T07 controller.
++    // Default execution always requires the real ERR_DRAIN state.
++    bit legacy_drain=0;
++    integer drain_entries=0, drain_residence=0, drain_discarded=0, read_fall=0;
++    integer drain_from=-1, both_busy_cycles=0, write_only_cycles=0;
++    reg [3:0] drain_prior_state=0;
++    initial legacy_drain=$test$plusargs("BASELINE_T06");
++    task reset_drain_observation;
++        begin
++            drain_entries=0;drain_residence=0;drain_discarded=0;read_fall=0;
++            drain_from=-1;both_busy_cycles=0;write_only_cycles=0;drain_prior_state=0;
++        end
++    endtask
++    task observe_drain;
++        begin
++            if(ctrl.mem_rd_busy_prev_reg && !mem_rd_busy) read_fall=cycle;
++            if(mem_rd_err && (ctrl.state_reg==2 || ctrl.state_reg==3 || ctrl.state_reg==5 || ctrl.state_reg==7)) begin
++                check(!ld_valid && !in_we && !fifo_we && mem_rd_ready,
++                    "R1 immediate error-cycle consumer gating and RREADY=1");
++                check(ctrl.run_error_next==4,"R1 latch MEM_RD_ERR before drain entry");
++                if(!legacy_drain) check(ctrl.state_next==11,"R1 each read origin selects ERR_DRAIN=1011");
++                drain_from=ctrl.state_reg;
++            end
++            if(mem_rd_err && mem_rd_valid && mem_rd_ready) drain_discarded=drain_discarded+1;
++            if(ctrl.state_reg==11) begin
++                if(drain_prior_state!=11) drain_entries=drain_entries+1;
++                drain_residence=drain_residence+1;
++                check(status_busy && !status_done && status_error==0 && ctrl.run_error_reg==4 &&
++                    ctrl.run_error_next==4,"R2 internal error retained; STATUS waits for FINISH");
++                check(mem_rd_ready && {ld_valid,in_we,fifo_we,ld_data,in_wdata,fifo_wdata,
++                    mem_rd_start,mem_wr_start,loader_start,enc_start,fc_start}==='0,
++                    "R2 drain accepts/discards; every consumer and START/data output is zero");
++                check(ctrl.state_next==((!mem_rd_busy&&!mem_wr_busy)?12:11),
++                    "R3 FINISH requires BOTH engines idle");
++                if(mem_rd_busy && mem_wr_busy) both_busy_cycles=both_busy_cycles+1;
++                if(!mem_rd_busy && mem_wr_busy) write_only_cycles=write_only_cycles+1;
++            end
++            drain_prior_state=ctrl.state_reg;
++        end
++    endtask
+ 
+     function automatic [63:0] pattern(input reg [31:0] addr,seed);
+         pattern={seed^32'hA5C39E71,addr^seed};
+@@ -260,6 +302,7 @@
+     always @(posedge clk) begin
+         cycle=cycle+1;
+         if (resetn && active) begin
++            observe_drain;
+             check(!(prior_start && mem_rd_start),"mem_rd_start is one cycle");
+             check(!(prior_loader_start && loader_start),"loader_start is one cycle");
+             check(!(prior_loader_done && loader_done),"loader_done is one cycle");
+@@ -291,8 +334,8 @@
+                 end
+                 if (mem_rd_err || ctrl.run_error_reg==4) begin
+                     check(!mem_rd_start && !ld_valid && mem_rd_ready && status_busy,
+-                        "approved temporary drain discards data and keeps Top busy");
+-                    if (mem_rd_busy) check(ctrl.state_next==ctrl.state_reg,
++                        "error detection gates Loader and keeps Top busy");
++                    if (legacy_drain && mem_rd_busy) check(ctrl.state_next==ctrl.state_reg,
+                         "drain cannot leave LD_RD before M00 completion");
+                 end
+             end
+@@ -339,9 +382,17 @@
+         end
+     end
+ 
+-    initial begin #2000000; $fatal(1,"FAIL: T-03 global deadline"); end
+-    initial begin
+-        if (!$value$plusargs("CASE=%d",selected)) selected=0;
++    initial begin #20000000; $fatal(1,"FAIL: T-03 global deadline"); end
++    task automatic run_case(input integer id);
++        begin
++        @(negedge clk);active=0;resetn=0;reg_start=0;
++        selected=id;commands=0;loader_pulses=0;ar1=0;ar2=0;raw_beats=0;delivered=0;
++        start_edge=0;finish_edge=0;waiting=0;last_first_beat=0;raw_last=0;done_edge=0;
++        equation_checks=0;held_cycles=0;error_part=0;ar_left=0;done_seen=0;
++        prior_start=0;prior_loader_start=0;prior_busy=0;prior_loader_done=0;injected=0;prior_state=0;
++        reset_drain_observation;injection_before=memory.injection_count;
++        loader.ready_mode=0;loader.done_delay_cycles=10;loader.inject_error=0;
++        memory.ar_ready_mode=0;memory.ar_gap_cycles=0;memory.r_gap_cycles=0;
+         events=$fopen($sformatf("top_load_case%0d.csv",selected),"w");
+         check(events!=0,"open transition trace");
+         $fdisplay(events,"case,cycle,state,top_busy,mem_busy,mem_err,mem_start,loader_done,raw_R,loader_words,AR1,AR2");
+@@ -399,13 +450,25 @@
+             check(delivered<3722 && loader.done_count==0,"error leaves incomplete Loader payload");
+             check(raw_beats==(error_part==2?3722:742),"M00 drains complete command after response error");
+             check(commands==(error_part==2?2:1),"no next read after earlier region failure");
+-            check(memory.injection_count==1,"one RRESP fault actually injected");
++            check(memory.injection_count-injection_before==1,"one RRESP fault actually injected");
+         end
+         memory.check_quiescent;
+         check(memory.violation_count==0 && loader.violations==0,"zero AXI/C12/Loader protocol violations");
+         $display("PASS: T-03 %s L1-L8 cycles=%0d commands=%0d Loader_start=%0d AR1=%0d AR2=%0d R_beats=%0d compared_words=%0d LD_WAIT_cycles=%0d max_ready_low=%0d held_valid=%0d equations=%0d done=%b error=%0d violations=0",
+             case_name,finish_edge-start_edge,commands,loader_pulses,ar1,ar2,raw_beats,delivered,
+             waiting,loader.max_low_run,held_cycles,equation_checks,status_done,status_error);
+-        $fclose(events); $finish;
++        $display("OBS: R4 tb=load case=%0d leg=0 raw=%0d words=%0d discarded=%0d read_fall=%0d cycles=%0d done=%b error=%0d origin=%0d entries=%0d residence=%0d",
++            selected,raw_beats,delivered,drain_discarded,read_fall-start_edge,finish_edge-start_edge,status_done,status_error,drain_from,drain_entries,drain_residence);
++        if(error_part!=0 && !legacy_drain) check(drain_entries==1 && drain_residence>0,"R1 read error traversed shared drain exactly once");
++        $fclose(events);
++        end
++    endtask
++    integer selection=-1;
++    initial begin
++        if($value$plusargs("CASE=%d",selection)) begin
++            check(selection>=0 && selection<=9,"valid CASE");run_case(selection);
++        end else for(integer c=0;c<10;c=c+1) run_case(c);
++        $display("PASS: T-07 LOAD ALL SELECTED cases=%0d selector=%0d",selection<0?10:1,selection);
++        $finish;
+     end
+ endmodule

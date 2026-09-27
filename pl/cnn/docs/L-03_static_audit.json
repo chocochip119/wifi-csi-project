@@ -1,0 +1,322 @@
+{
+  "protected_unchanged": {
+    "cnn_rtl/rtl/conv_weight_ram.v": {
+      "before": "cbde3bd3afcc8daab93708997d660a3d897426cc08a39a12ac740fc2c2bb2b77",
+      "after": "cbde3bd3afcc8daab93708997d660a3d897426cc08a39a12ac740fc2c2bb2b77"
+    },
+    "cnn_rtl/rtl/fcw_ram.v": {
+      "before": "8a5392d9baadaff863e75474a9a2c3ab3cba955484c7ac945add246b34859e03",
+      "after": "8a5392d9baadaff863e75474a9a2c3ab3cba955484c7ac945add246b34859e03"
+    },
+    "cnn_rtl/rtl/gelu_lut_ram.v": {
+      "before": "e7596407fc8a4742ed3c09b5a0df76fa133fca037effd6a32357fd155eec2727",
+      "after": "e7596407fc8a4742ed3c09b5a0df76fa133fca037effd6a32357fd155eec2727"
+    },
+    "cnn_rtl/rtl/param_ram.v": {
+      "before": "2c30577caffde1b9078b0fd68f72fb1e036310e1bd4a8792ee0f0b803268a56e",
+      "after": "2c30577caffde1b9078b0fd68f72fb1e036310e1bd4a8792ee0f0b803268a56e"
+    },
+    "cnn_rtl/rtl/pose_cnn_ctrl.v": {
+      "before": "de0326cb2f07eb3e9ac251594886c5727dc8b781db91c2b0770245b6ef62723d",
+      "after": "de0326cb2f07eb3e9ac251594886c5727dc8b781db91c2b0770245b6ef62723d"
+    },
+    "cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v": {
+      "before": "9c5ee22c6d25602e97032c337ad437032f99e94ea883f55c231a2d4d71e998d0",
+      "after": "9c5ee22c6d25602e97032c337ad437032f99e94ea883f55c231a2d4d71e998d0"
+    },
+    "cnn_rtl/rtl/pose_cnn_v1_0_S00_AXI.v": {
+      "before": "78adb298e83ae2c4ab023748aff78104a237648364579729d951a5b597e1a65e",
+      "after": "78adb298e83ae2c4ab023748aff78104a237648364579729d951a5b597e1a65e"
+    },
+    "cnn_rtl/tb/axi4_slave_mem_model.v": {
+      "before": "02813e9d5789189b27464dad307d39c0c2eaae56106d28d437afe731b9bea348",
+      "after": "02813e9d5789189b27464dad307d39c0c2eaae56106d28d437afe731b9bea348"
+    },
+    "cnn_rtl/tb/enc_stub.v": {
+      "before": "34794641743be6d2de3138cc90eec4dd6fe370199d2dbb5384fdb4f4c48ba333",
+      "after": "34794641743be6d2de3138cc90eec4dd6fe370199d2dbb5384fdb4f4c48ba333"
+    },
+    "cnn_rtl/tb/fc_stub.v": {
+      "before": "48b4bd7c02d8c0ecb29527107615ea54160384d19273c6c46c8aab851abca26a",
+      "after": "48b4bd7c02d8c0ecb29527107615ea54160384d19273c6c46c8aab851abca26a"
+    },
+    "cnn_rtl/tb/in_ram_stub.v": {
+      "before": "5e0cd6bab4a93cf602d86720d2698d5e30b9a9398370f0db259b351849a2c45d",
+      "after": "5e0cd6bab4a93cf602d86720d2698d5e30b9a9398370f0db259b351849a2c45d"
+    },
+    "cnn_rtl/tb/loader_stub.v": {
+      "before": "5bc7d249ed1cd89adbc041b4c8e950575259bd10f670ccff93338d3e00285e9b",
+      "after": "5bc7d249ed1cd89adbc041b4c8e950575259bd10f670ccff93338d3e00285e9b"
+    },
+    "cnn_rtl/tb/tb_axi4_slave_mem_model.v": {
+      "before": "170ca4b8ab67996c6c4bb52d9112acbac4aec292311aa9893ee8d20c9d6e7944",
+      "after": "170ca4b8ab67996c6c4bb52d9112acbac4aec292311aa9893ee8d20c9d6e7944"
+    },
+    "cnn_rtl/tb/tb_csr_ctrl_link.v": {
+      "before": "bddec9002951ff2636e107ba38973afce666c3ca671c1584f0c52b1119ccbf00",
+      "after": "bddec9002951ff2636e107ba38973afce666c3ca671c1584f0c52b1119ccbf00"
+    },
+    "cnn_rtl/tb/tb_ctrl_status.v": {
+      "before": "5f02331834abb6e2deefc2ad51945ec1c2dc0c60e1f96abc174b1e2644c8c217",
+      "after": "5f02331834abb6e2deefc2ad51945ec1c2dc0c60e1f96abc174b1e2644c8c217"
+    },
+    "cnn_rtl/tb/tb_loader_rams.v": {
+      "before": "f72a8a85fd826f56b7bd354634409c55e7f9475d20773a33e175c3e922f8a76e",
+      "after": "f72a8a85fd826f56b7bd354634409c55e7f9475d20773a33e175c3e922f8a76e"
+    },
+    "cnn_rtl/tb/tb_m00_err.v": {
+      "before": "02e1e0a88b16168ce0734b34faff7ac2344a86fbe330be227703177da4f90486",
+      "after": "02e1e0a88b16168ce0734b34faff7ac2344a86fbe330be227703177da4f90486"
+    },
+    "cnn_rtl/tb/tb_m00_read.v": {
+      "before": "99705f116077c108dc7d3799057b8d637395ba2783f84187d8a4b916b682e101",
+      "after": "99705f116077c108dc7d3799057b8d637395ba2783f84187d8a4b916b682e101"
+    },
+    "cnn_rtl/tb/tb_m00_read_perf.v": {
+      "before": "4e29a74bf287b001a73c91d5e49af606c32cb2db6c9f97c1b43a87ac1a309439",
+      "after": "4e29a74bf287b001a73c91d5e49af606c32cb2db6c9f97c1b43a87ac1a309439"
+    },
+    "cnn_rtl/tb/tb_m00_write.v": {
+      "before": "bda8ff6685076323e5d138061bfca6a6b3e58b345b4bbca527efbf43283e713c",
+      "after": "bda8ff6685076323e5d138061bfca6a6b3e58b345b4bbca527efbf43283e713c"
+    },
+    "cnn_rtl/tb/tb_s00_axi_ctrl.v": {
+      "before": "72bcd126b4e6ca0e1a1b129973ff65c0c1f6f40c2b3d691c568da15041206d2f",
+      "after": "72bcd126b4e6ca0e1a1b129973ff65c0c1f6f40c2b3d691c568da15041206d2f"
+    },
+    "cnn_rtl/tb/tb_s00_axi_read.v": {
+      "before": "1733a639ed4d2299dd8b1f72f4d282b5b3535b3f033f41c00f49707f2a42c0f5",
+      "after": "1733a639ed4d2299dd8b1f72f4d282b5b3535b3f033f41c00f49707f2a42c0f5"
+    },
+    "cnn_rtl/tb/tb_s00_axi_regs.v": {
+      "before": "773760f459f582096d1644b06cd0a85cdd37db33bfa190bb3ff7fc46ef60cab2",
+      "after": "773760f459f582096d1644b06cd0a85cdd37db33bfa190bb3ff7fc46ef60cab2"
+    },
+    "cnn_rtl/tb/tb_s00_axi_write.v": {
+      "before": "aff01c63ad24a35ca122c912b6a781e5e5a623b9341f26ed7c4fcbf16f1e7170",
+      "after": "aff01c63ad24a35ca122c912b6a781e5e5a623b9341f26ed7c4fcbf16f1e7170"
+    },
+    "cnn_rtl/tb/tb_top_fc1.v": {
+      "before": "eb1eb95ce807c53c2d49de875bc642f3da0bc1856cb5c9c578a2dfd07d91a196",
+      "after": "eb1eb95ce807c53c2d49de875bc642f3da0bc1856cb5c9c578a2dfd07d91a196"
+    },
+    "cnn_rtl/tb/tb_top_full.v": {
+      "before": "3ca96be988f4665207665b1e9d16ce2a709c5f5f871b16437a2812635ea0a6e4",
+      "after": "3ca96be988f4665207665b1e9d16ce2a709c5f5f871b16437a2812635ea0a6e4"
+    },
+    "cnn_rtl/tb/tb_top_infer.v": {
+      "before": "1943b354af97fd74bb3a5eac102a7a09b6cf0f19038e5937ab5b02ac46334387",
+      "after": "1943b354af97fd74bb3a5eac102a7a09b6cf0f19038e5937ab5b02ac46334387"
+    },
+    "cnn_rtl/tb/tb_top_load.v": {
+      "before": "7b8ab4ff457254c5a6e52b9b65a4644a676e07ffe19bce9620e9be3ae6df8746",
+      "after": "7b8ab4ff457254c5a6e52b9b65a4644a676e07ffe19bce9620e9be3ae6df8746"
+    }
+  },
+  "RTL_ports": {
+    "clk": [
+      "IN",
+      1
+    ],
+    "rst_n": [
+      "IN",
+      1
+    ],
+    "loader_start": [
+      "IN",
+      1
+    ],
+    "loader_done": [
+      "OUT",
+      1
+    ],
+    "loader_err": [
+      "OUT",
+      1
+    ],
+    "ld_data": [
+      "IN",
+      64
+    ],
+    "ld_valid": [
+      "IN",
+      1
+    ],
+    "ld_ready": [
+      "OUT",
+      1
+    ],
+    "cfg_ok": [
+      "OUT",
+      1
+    ],
+    "output_scale_bits": [
+      "OUT",
+      32
+    ],
+    "pool_mult": [
+      "OUT",
+      32
+    ],
+    "pool_shift": [
+      "OUT",
+      32
+    ],
+    "conv_we": [
+      "OUT",
+      1
+    ],
+    "conv_waddr": [
+      "OUT",
+      9
+    ],
+    "conv_wdata": [
+      "OUT",
+      128
+    ],
+    "conv_wstrb": [
+      "OUT",
+      16
+    ],
+    "param_we": [
+      "OUT",
+      1
+    ],
+    "param_waddr": [
+      "OUT",
+      9
+    ],
+    "param_wdata": [
+      "OUT",
+      96
+    ],
+    "param_wstrb": [
+      "OUT",
+      3
+    ],
+    "lut_we": [
+      "OUT",
+      1
+    ],
+    "lut_waddr": [
+      "OUT",
+      10
+    ],
+    "lut_wdata": [
+      "OUT",
+      8
+    ],
+    "fcw_we": [
+      "OUT",
+      1
+    ],
+    "fcw_waddr": [
+      "OUT",
+      12
+    ],
+    "fcw_wdata": [
+      "OUT",
+      64
+    ]
+  },
+  "forbidden_RTL_constructs": [],
+  "RTL_division_modulo_operators": 0,
+  "map_pairs": 5328,
+  "map_missing": 0,
+  "hashes_final": {
+    "cnn_rtl/rtl/blob_decoder.v": "0571338a096fdd8c7c63e977a6539b2a43cfa7f27997265c9c6f177674f71b8e",
+    "cnn_rtl/tb/tb_blob_decoder.v": "dc45296d7c0e896dc6054fae9c179a0c93ed0884be2a2c252574af8d1a9bc002"
+  },
+  "L02_same_case_results": 37,
+  "L02_same_region_observations": 407,
+  "L02_same_nonconv_write_counts": 37,
+  "completed_streams": 38,
+  "conv_observations": 26,
+  "lane_boundary_bytes": 24,
+  "transition_points": [
+    {
+      "layer": "1",
+      "n": "719",
+      "word": "44",
+      "lane": "15"
+    },
+    {
+      "layer": "2",
+      "n": "0",
+      "word": "45",
+      "lane": "0"
+    },
+    {
+      "layer": "2",
+      "n": "2303",
+      "word": "188",
+      "lane": "15"
+    },
+    {
+      "layer": "2",
+      "n": "2304",
+      "word": "189",
+      "lane": "0"
+    },
+    {
+      "layer": "2",
+      "n": "4607",
+      "word": "332",
+      "lane": "15"
+    }
+  ],
+  "simulation_logs": {
+    "L-03_new_run.txt": {
+      "commands": 6,
+      "finish_markers": 2,
+      "wall_seconds_sum": 23.590511
+    },
+    "L-03_existing_top_run.txt": {
+      "commands": 14,
+      "finish_markers": 6,
+      "wall_seconds_sum": 100.211581
+    },
+    "L-03_regression_run.txt": {
+      "commands": 20,
+      "finish_markers": 9,
+      "wall_seconds_sum": 80.783335
+    }
+  },
+  "success_markers": {
+    "tb_axi4_slave_mem_model_output": "PASS: T-02a ALL A/B/C/D CHECKS PASSED; mandatory negatives=6/6 total negatives=13 injections=6",
+    "tb_blob_decoder_output": "PASS: L-03 ALL C1-C7 D1-D7 N1-N7 checked_runs=32 default_runs=1 alternate_runs=3 optout_runs=1 selector=-1 ideal_cycles=9772 RAM_writes=5328/984/2432/1024",
+    "tb_csr_ctrl_link_output": "PASS: T-06 ALL REACHABLE CSR/CTRL LINK CHECKS PASSED",
+    "tb_ctrl_status_output": "PASS: T-06 ALL CTRL STATUS CHECKS PASSED (14 START snapshots checked)",
+    "tb_loader_rams_output": "PASS: L-02 RAM M1-M6 ALL checks_read_cycles=4884 shared_outputs_equal=1",
+    "tb_m00_err_output": "PASS: T-02d E1-E9 ALL CHECKS cases=22 normal_injections=8 watchdog_injections=0 master_violations=0 expected_checker_violations=0 C12=0 RD_FAULT_hold=2000_each reset_recovery=PASS",
+    "tb_m00_read_output": "PASS: T-02b FUNCTIONAL 12/12 CASES, ALL COLLECTED WORDS AND AR RANGES CHECKED; protocol violations=0",
+    "tb_m00_read_perf_output": "PASS: T-02b PERFORMANCE MEASUREMENT COMPLETE; all words checked, C11 enabled, violations=0",
+    "tb_m00_write_output": "PASS: T-02c ALL W1-W8 CHECKS",
+    "tb_s00_axi_ctrl_output": "PASS: S00-05 ALL CONTROL CHECKS PASSED (15a/15b/15c included)",
+    "tb_s00_axi_read_output": "PASS: S00-04 ALL READ CHECKS PASSED",
+    "tb_s00_axi_regs_output": "PASS: S00-03 ALL REGISTER CHECKS PASSED",
+    "tb_s00_axi_write_output": "PASS: S00-02 ALL CHECKS PASSED",
+    "tb_top_fc1_output": "PASS: T-05 ALL SELECTED cases=11 INFER_runs=14 selector=-1 violations=0",
+    "tb_top_full_output": "PASS: T-06 Q1-Q6 ALL SELECTED cases=13 INFER_runs=18 selector=-1 AXI_C12_violations=0",
+    "tb_top_infer_output": "PASS: T-04 N1-N8 ALL SELECTED CHECKS cases=13 runs=15 selector=-1 AXI_C12_violations=0 RAM_violations=0",
+    "tb_top_load_output": "PASS: T-07 LOAD ALL SELECTED cases=10 selector=-1"
+  },
+  "synthesis": {
+    "LUT": 631,
+    "FF": 212,
+    "RAMB36": 10,
+    "RAMB18": 3,
+    "DSP": 0,
+    "WNS_ns": 1.365,
+    "latch": 0,
+    "loops": 0,
+    "source": "u_blob_decoder/beat_count_reg_reg[1]/C",
+    "destination": "u_conv_weight_ram/mem_reg_0/ADDRBWRADDR[13]",
+    "warnings": [
+      "CRITICAL WARNING: [Common 17-741] No write access right to the local Tcl store at 'C'. XilinxTclStore is reverted to the installation area. If you want to use local Tcl Store, please change the access right and relaunch Vivado.",
+      "WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port \"clk\" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew",
+      "WARNING: [Vivado 12-180] No cells matched 'get_cells -hierarchical -filter {PRIMITIVE_TYPE =~ REGISTER.latch.*}'."
+    ],
+    "wall_seconds": 35.306179
+  }
+}

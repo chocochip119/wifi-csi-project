@@ -1,0 +1,822 @@
+CWD: D:\2609_final_project\cnn_rtl\syn
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\vivado.bat -mode batch -source syn_check.tcl -nojournal -nolog -tclargs weight_param_loader xc7z020clg400-1 D:\2609_final_project\cnn_rtl\rtl\blob_decoder.v D:\2609_final_project\cnn_rtl\rtl\conv_weight_ram.v D:\2609_final_project\cnn_rtl\rtl\param_ram.v D:\2609_final_project\cnn_rtl\rtl\gelu_lut_ram.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v D:\2609_final_project\cnn_rtl\rtl\weight_param_loader.v
+
+****** Vivado v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+CRITICAL WARNING: [Common 17-741] No write access right to the local Tcl store at 'C'. XilinxTclStore is reverted to the installation area. If you want to use local Tcl Store, please change the access right and relaunch Vivado.
+source syn_check.tcl
+# set top   [lindex $argv 0]
+# set part  [lindex $argv 1]
+# set srcs  [lrange $argv 2 end]
+# foreach f $srcs { read_verilog $f }
+# read_xdc [file join [file dirname [info script]] timing_100mhz.xdc]
+# synth_design -top $top -part $part -mode out_of_context
+Command: synth_design -top weight_param_loader -part xc7z020clg400-1 -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 45624
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 1106.594 ; gain = 0.000
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'weight_param_loader' [D:/2609_final_project/cnn_rtl/rtl/weight_param_loader.v:5]
+INFO: [Synth 8-6157] synthesizing module 'blob_decoder' [D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v:6]
+	Parameter EXPECTED_MAGIC bound to: 911690832 - type: integer 
+	Parameter EXPECTED_VERSION bound to: 2 - type: integer 
+	Parameter EXPECTED_TOTAL_WORDS bound to: 105748 - type: integer 
+	Parameter CHECK_VERSION bound to: 1'b1 
+	Parameter IDLE bound to: 2'b00 
+	Parameter RECEIVE bound to: 2'b01 
+	Parameter WORK bound to: 2'b10 
+	Parameter DRAIN bound to: 2'b11 
+	Parameter HEADER bound to: 4'b0000 
+	Parameter CONV1_W bound to: 4'b0001 
+	Parameter CONV1_P bound to: 4'b0010 
+	Parameter CONV2_W bound to: 4'b0011 
+	Parameter CONV2_P bound to: 4'b0100 
+	Parameter FC1_P bound to: 4'b0101 
+	Parameter FC2_W bound to: 4'b0110 
+	Parameter FC2_P bound to: 4'b0111 
+	Parameter FC3_W bound to: 4'b1000 
+	Parameter FC3_P bound to: 4'b1001 
+	Parameter GELU bound to: 4'b1010 
+	Parameter NO_REGION bound to: 4'b1111 
+	Parameter STREAM_BEATS bound to: 12'b111010001010 
+INFO: [Synth 8-226] default block is never used [D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v:235]
+INFO: [Synth 8-6155] done synthesizing module 'blob_decoder' (1#1) [D:/2609_final_project/cnn_rtl/rtl/blob_decoder.v:6]
+INFO: [Synth 8-6157] synthesizing module 'conv_weight_ram' [D:/2609_final_project/cnn_rtl/rtl/conv_weight_ram.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'conv_weight_ram' (2#1) [D:/2609_final_project/cnn_rtl/rtl/conv_weight_ram.v:6]
+INFO: [Synth 8-6157] synthesizing module 'param_ram' [D:/2609_final_project/cnn_rtl/rtl/param_ram.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'param_ram' (3#1) [D:/2609_final_project/cnn_rtl/rtl/param_ram.v:6]
+INFO: [Synth 8-6157] synthesizing module 'gelu_lut_ram' [D:/2609_final_project/cnn_rtl/rtl/gelu_lut_ram.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'gelu_lut_ram' (4#1) [D:/2609_final_project/cnn_rtl/rtl/gelu_lut_ram.v:6]
+INFO: [Synth 8-6157] synthesizing module 'fcw_ram' [D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'fcw_ram' (5#1) [D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'weight_param_loader' (6#1) [D:/2609_final_project/cnn_rtl/rtl/weight_param_loader.v:5]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1106.594 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1106.594 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1106.594 ; gain = 0.000
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.031 . Memory (MB): peak = 1106.594 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [D:/2609_final_project/cnn_rtl/syn/timing_100mhz.xdc]
+Finished Parsing XDC File [D:/2609_final_project/cnn_rtl/syn/timing_100mhz.xdc]
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1237.793 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.017 . Memory (MB): peak = 1237.793 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1237.793 ; gain = 131.199
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z020clg400-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1237.793 ; gain = 131.199
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1237.793 ; gain = 131.199
+---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg_reg' in module 'blob_decoder'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                    IDLE |                               00 |                               00
+                 RECEIVE |                               01 |                               01
+                   DRAIN |                               10 |                               11
+                    WORK |                               11 |                               10
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg_reg' using encoding 'sequential' in module 'blob_decoder'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 1237.793 ; gain = 131.199
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   12 Bit       Adders := 2     
+	   2 Input   10 Bit       Adders := 2     
+	   2 Input    9 Bit       Adders := 27    
+	   2 Input    8 Bit       Adders := 1     
+	   2 Input    5 Bit       Adders := 1     
+	   2 Input    3 Bit       Adders := 1     
++---Registers : 
+	              128 Bit    Registers := 1     
+	               96 Bit    Registers := 1     
+	               64 Bit    Registers := 2     
+	               32 Bit    Registers := 3     
+	               12 Bit    Registers := 1     
+	               10 Bit    Registers := 1     
+	                9 Bit    Registers := 1     
+	                8 Bit    Registers := 2     
+	                5 Bit    Registers := 1     
+	                4 Bit    Registers := 1     
+	                3 Bit    Registers := 2     
+	                1 Bit    Registers := 4     
++---RAMs : 
+	             152K Bit	(2432 X 64 bit)          RAMs := 1     
+	              41K Bit	(333 X 128 bit)          RAMs := 1     
+	              30K Bit	(328 X 96 bit)          RAMs := 1     
+	               8K Bit	(1024 X 8 bit)          RAMs := 1     
++---Muxes : 
+	   2 Input  128 Bit        Muxes := 31    
+	   2 Input   96 Bit        Muxes := 9     
+	   4 Input   96 Bit        Muxes := 1     
+	   2 Input   64 Bit        Muxes := 4     
+	   4 Input   64 Bit        Muxes := 2     
+	   4 Input   32 Bit        Muxes := 2     
+	   2 Input   32 Bit        Muxes := 1     
+	   2 Input   16 Bit        Muxes := 1     
+	   2 Input   12 Bit        Muxes := 5     
+	   4 Input   12 Bit        Muxes := 2     
+	   2 Input   10 Bit        Muxes := 9     
+	   4 Input   10 Bit        Muxes := 3     
+	   2 Input    9 Bit        Muxes := 7     
+	   4 Input    9 Bit        Muxes := 2     
+	   2 Input    8 Bit        Muxes := 16    
+	   4 Input    8 Bit        Muxes := 3     
+	   3 Input    8 Bit        Muxes := 1     
+	   2 Input    5 Bit        Muxes := 5     
+	   4 Input    5 Bit        Muxes := 1     
+	  11 Input    4 Bit        Muxes := 1     
+	  12 Input    4 Bit        Muxes := 1     
+	   4 Input    4 Bit        Muxes := 1     
+	  16 Input    3 Bit        Muxes := 1     
+	   2 Input    3 Bit        Muxes := 6     
+	   4 Input    3 Bit        Muxes := 3     
+	   4 Input    2 Bit        Muxes := 1     
+	   2 Input    2 Bit        Muxes := 2     
+	   2 Input    1 Bit        Muxes := 16    
+	   4 Input    1 Bit        Muxes := 24    
+	   3 Input    1 Bit        Muxes := 2     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 220 (col length:60)
+BRAMs: 280 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 1237.793 ; gain = 131.199
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Preliminary Mapping	Report (see note below)
++--------------------+---------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name         | RTL Object                | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++--------------------+---------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|weight_param_loader | u_conv_weight_ram/mem_reg | 333 x 128(READ_FIRST)  | W |   | 333 x 128(WRITE_FIRST) |   | R | Port A and B     | 0      | 2      | 
+|weight_param_loader | u_param_ram/mem_reg       | 328 x 96(READ_FIRST)   | W |   | 328 x 96(WRITE_FIRST)  |   | R | Port A and B     | 1      | 1      | 
+|weight_param_loader | u_gelu_lut_ram/mem_reg    | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|weight_param_loader | u_fcw_ram/mem_reg         | 2 K x 64(READ_FIRST)   | W |   | 2 K x 64(WRITE_FIRST)  |   | R | Port A and B     | 1      | 7      | 
++--------------------+---------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+Note: The table above is a preliminary report that shows the Block RAMs at the current stage of the synthesis flow. Some Block RAMs may be reimplemented as non Block RAM primitives later in the synthesis flow. Multiple instantiated Block RAMs are reported only once. 
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 1237.793 ; gain = 131.199
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:26 ; elapsed = 00:00:28 . Memory (MB): peak = 1282.633 ; gain = 176.039
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Final Mapping	Report
++--------------------+---------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name         | RTL Object                | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++--------------------+---------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|weight_param_loader | u_conv_weight_ram/mem_reg | 333 x 128(READ_FIRST)  | W |   | 333 x 128(WRITE_FIRST) |   | R | Port A and B     | 0      | 2      | 
+|weight_param_loader | u_param_ram/mem_reg       | 328 x 96(READ_FIRST)   | W |   | 328 x 96(WRITE_FIRST)  |   | R | Port A and B     | 1      | 1      | 
+|weight_param_loader | u_gelu_lut_ram/mem_reg    | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|weight_param_loader | u_fcw_ram/mem_reg         | 2 K x 64(READ_FIRST)   | W |   | 2 K x 64(WRITE_FIRST)  |   | R | Port A and B     | 1      | 7      | 
++--------------------+---------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+INFO: [Synth 8-7052] The timing for the instance u_conv_weight_ram/mem_reg_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_conv_weight_ram/mem_reg_1 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_param_ram/mem_reg_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_param_ram/mem_reg_1 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_gelu_lut_ram/mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_fcw_ram/mem_reg_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_fcw_ram/mem_reg_1 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_fcw_ram/mem_reg_2 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_fcw_ram/mem_reg_3 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_fcw_ram/mem_reg_4 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_fcw_ram/mem_reg_5 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_fcw_ram/mem_reg_6 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_fcw_ram/mem_reg_7 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:27 ; elapsed = 00:00:28 . Memory (MB): peak = 1290.039 ; gain = 183.445
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 1295.488 ; gain = 188.895
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 1295.488 ; gain = 188.895
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 1295.488 ; gain = 188.895
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 1295.488 ; gain = 188.895
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 1295.488 ; gain = 188.895
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 1295.488 ; gain = 188.895
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+---------+------+
+|      |Cell     |Count |
++------+---------+------+
+|1     |CARRY4   |    25|
+|2     |LUT1     |     8|
+|3     |LUT2     |   255|
+|4     |LUT3     |   140|
+|5     |LUT4     |    47|
+|6     |LUT5     |   117|
+|7     |LUT6     |   236|
+|8     |MUXF7    |     8|
+|9     |RAMB18E1 |     3|
+|12    |RAMB36E1 |    10|
+|14    |FDRE     |   208|
+|15    |FDSE     |     4|
++------+---------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 1295.488 ; gain = 188.895
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:23 ; elapsed = 00:00:30 . Memory (MB): peak = 1295.488 ; gain = 57.695
+Synthesis Optimization Complete : Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 1295.488 ; gain = 188.895
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.017 . Memory (MB): peak = 1307.504 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 46 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [D:/2609_final_project/cnn_rtl/syn/timing_100mhz.xdc]
+Finished Parsing XDC File [D:/2609_final_project/cnn_rtl/syn/timing_100mhz.xdc]
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1312.477 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+42 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:35 ; elapsed = 00:00:40 . Memory (MB): peak = 1312.477 ; gain = 205.883
+# puts "===== UTILIZATION ====="
+===== UTILIZATION =====
+# report_utilization -hierarchical
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Sat Sep 26 15:31:31 2026
+| Host         : DESKTOP-7CFQ9ND running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical
+| Design       : weight_param_loader
+| Device       : 7z020clg400-1
+| Design State : Synthesized
+------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++-------------------------+-----------------+------------+------------+---------+------+-----+--------+--------+------------+
+|         Instance        |      Module     | Total LUTs | Logic LUTs | LUTRAMs | SRLs | FFs | RAMB36 | RAMB18 | DSP Blocks |
++-------------------------+-----------------+------------+------------+---------+------+-----+--------+--------+------------+
+| weight_param_loader     |           (top) |        650 |        650 |       0 |    0 | 212 |     10 |      3 |          0 |
+|   (weight_param_loader) |           (top) |         13 |         13 |       0 |    0 |   0 |      0 |      0 |          0 |
+|   u_blob_decoder        |    blob_decoder |        551 |        551 |       0 |    0 | 212 |      0 |      0 |          0 |
+|   u_conv_weight_ram     | conv_weight_ram |          0 |          0 |       0 |    0 |   0 |      2 |      0 |          0 |
+|   u_fcw_ram             |         fcw_ram |          0 |          0 |       0 |    0 |   0 |      7 |      1 |          0 |
+|   u_gelu_lut_ram        |    gelu_lut_ram |         10 |         10 |       0 |    0 |   0 |      0 |      1 |          0 |
+|   u_param_ram           |       param_ram |         76 |         76 |       0 |    0 |   0 |      1 |      1 |          0 |
++-------------------------+-----------------+------------+------------+---------+------+-----+--------+--------+------------+
+
+
+# puts "===== TIMING ====="
+===== TIMING =====
+# report_timing_summary -delay_type max -max_paths 3
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "clk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Sat Sep 26 15:31:34 2026
+| Host         : DESKTOP-7CFQ9ND running 64-bit major release  (build 9200)
+| Command      : report_timing_summary -delay_type max -max_paths 3
+| Design       : weight_param_loader
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+------------------------------------------------------------------------------------
+
+Timing Summary Report
+
+------------------------------------------------------------------------------------------------
+| Timer Settings
+| --------------
+------------------------------------------------------------------------------------------------
+
+  Enable Multi Corner Analysis               :  Yes
+  Enable Pessimism Removal                   :  Yes
+  Pessimism Removal Resolution               :  Nearest Common Node
+  Enable Input Delay Default Clock           :  No
+  Enable Preset / Clear Arcs                 :  No
+  Disable Flight Delays                      :  No
+  Ignore I/O Paths                           :  No
+  Timing Early Launch at Borrowing Latches   :  No
+  Borrow Time for Max Delay Exceptions       :  Yes
+  Merge Timing Exceptions                    :  Yes
+
+  Corner  Analyze    Analyze    
+  Name    Max Paths  Min Paths  
+  ------  ---------  ---------  
+  Slow    Yes        Yes        
+  Fast    Yes        Yes        
+
+
+
+check_timing report
+
+Table of Contents
+-----------------
+1. checking no_clock (0)
+2. checking constant_clock (0)
+3. checking pulse_width_clock (0)
+4. checking unconstrained_internal_endpoints (0)
+5. checking no_input_delay (0)
+6. checking no_output_delay (0)
+7. checking multiple_clock (0)
+8. checking generated_clocks (0)
+9. checking loops (0)
+10. checking partial_input_delay (0)
+11. checking partial_output_delay (0)
+12. checking latch_loops (0)
+
+1. checking no_clock (0)
+------------------------
+ There are 0 register/latch pins with no clock.
+
+
+2. checking constant_clock (0)
+------------------------------
+ There are 0 register/latch pins with constant_clock.
+
+
+3. checking pulse_width_clock (0)
+---------------------------------
+ There are 0 register/latch pins which need pulse_width check
+
+
+4. checking unconstrained_internal_endpoints (0)
+------------------------------------------------
+ There are 0 pins that are not constrained for maximum delay.
+
+ There are 0 pins that are not constrained for maximum delay due to constant clock.
+
+
+5. checking no_input_delay (0)
+------------------------------
+ There are 0 input ports with no input delay specified.
+
+ There are 0 input ports with no input delay but user has a false path constraint.
+
+
+6. checking no_output_delay (0)
+-------------------------------
+ There are 0 ports with no output delay specified.
+
+ There are 0 ports with no output delay but user has a false path constraint
+
+ There are 0 ports with no output delay but with a timing clock defined on it or propagating through it
+
+
+7. checking multiple_clock (0)
+------------------------------
+ There are 0 register/latch pins with multiple clocks.
+
+
+8. checking generated_clocks (0)
+--------------------------------
+ There are 0 generated clocks that are not connected to a clock source.
+
+
+9. checking loops (0)
+---------------------
+ There are 0 combinational loops in the design.
+
+
+10. checking partial_input_delay (0)
+------------------------------------
+ There are 0 input ports with partial input delay specified.
+
+
+11. checking partial_output_delay (0)
+-------------------------------------
+ There are 0 ports with partial output delay specified.
+
+
+12. checking latch_loops (0)
+----------------------------
+ There are 0 combinational latch loops in the design through latch input
+
+
+
+------------------------------------------------------------------------------------------------
+| Design Timing Summary
+| ---------------------
+------------------------------------------------------------------------------------------------
+
+    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+      1.365        0.000                      0                 1748        4.500        0.000                       0                   238  
+
+
+All user specified timing constraints are met.
+
+
+------------------------------------------------------------------------------------------------
+| Clock Summary
+| -------------
+------------------------------------------------------------------------------------------------
+
+Clock  Waveform(ns)       Period(ns)      Frequency(MHz)
+-----  ------------       ----------      --------------
+ACLK   {0.000 5.000}      10.000          100.000         
+
+
+------------------------------------------------------------------------------------------------
+| Intra Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+ACLK                1.365        0.000                      0                 1748        4.500        0.000                       0                   238  
+
+
+------------------------------------------------------------------------------------------------
+| Inter Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+----------    --------          -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Other Path Groups Table
+| -----------------------
+------------------------------------------------------------------------------------------------
+
+Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+----------    ----------    --------          -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Timing Details
+| --------------
+------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  ACLK
+  To Clock:  ACLK
+
+Setup :            0  Failing Endpoints,  Worst Slack        1.365ns,  Total Violation        0.000ns
+Hold  :           NA  Failing Endpoints,  Worst Slack           NA  ,  Total Violation           NA
+PW    :            0  Failing Endpoints,  Worst Slack        4.500ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             1.365ns  (required time - arrival time)
+  Source:                 u_blob_decoder/beat_count_reg_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_conv_weight_ram/mem_reg_0/ADDRBWRADDR[13]
+                            (rising edge-triggered cell RAMB36E1 clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (ACLK rise@10.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        7.985ns  (logic 2.460ns (30.809%)  route 5.525ns (69.191%))
+  Logic Levels:           8  (CARRY4=2 LUT2=2 LUT3=1 LUT4=1 LUT6=2)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=237, unset)          0.973     0.973    u_blob_decoder/clk
+                         FDRE                                         r  u_blob_decoder/beat_count_reg_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_fdre_C_Q)         0.518     1.491 f  u_blob_decoder/beat_count_reg_reg[1]/Q
+                         net (fo=44, unplaced)        0.820     2.311    u_blob_decoder/beat_count_reg[1]
+                         LUT4 (Prop_lut4_I1_O)        0.295     2.606 r  u_blob_decoder/mem_reg_1_i_80__0/O
+                         net (fo=8, unplaced)         0.940     3.546    u_blob_decoder/mem_reg_1_i_80__0_n_0
+                         LUT6 (Prop_lut6_I3_O)        0.124     3.670 r  u_blob_decoder/mem_reg_7_i_19/O
+                         net (fo=3, unplaced)         0.920     4.590    u_blob_decoder/mem_reg_7_i_19_n_0
+                         LUT3 (Prop_lut3_I0_O)        0.124     4.714 f  u_blob_decoder/conv_oc_reg[4]_i_10/O
+                         net (fo=4, unplaced)         0.926     5.640    u_blob_decoder/conv_oc_reg[4]_i_10_n_0
+                         LUT6 (Prop_lut6_I2_O)        0.124     5.764 r  u_blob_decoder/conv_oc_reg[4]_i_7/O
+                         net (fo=10, unplaced)        0.492     6.256    u_blob_decoder/conv_second
+                         LUT2 (Prop_lut2_I0_O)        0.124     6.380 r  u_blob_decoder/mem_reg_1_i_118__0/O
+                         net (fo=1, unplaced)         0.000     6.380    u_blob_decoder/mem_reg_1_i_118__0_n_0
+                         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.513     6.893 r  u_blob_decoder/mem_reg_1_i_86__0/CO[3]
+                         net (fo=1, unplaced)         0.009     6.902    u_blob_decoder/mem_reg_1_i_86__0_n_0
+                         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.331     7.233 r  u_blob_decoder/mem_reg_1_i_85__0/O[3]
+                         net (fo=1, unplaced)         0.618     7.851    u_blob_decoder/mem_reg_1_i_85__0_n_4
+                         LUT2 (Prop_lut2_I0_O)        0.307     8.158 r  u_blob_decoder/mem_reg_1_i_3/O
+                         net (fo=2, unplaced)         0.800     8.958    u_conv_weight_ram/conv_waddr[7]
+                         RAMB36E1                                     r  u_conv_weight_ram/mem_reg_0/ADDRBWRADDR[13]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)      10.000    10.000 r  
+                                                      0.000    10.000 r  clk (IN)
+                         net (fo=237, unset)          0.924    10.924    u_conv_weight_ram/clk
+                         RAMB36E1                                     r  u_conv_weight_ram/mem_reg_0/CLKBWRCLK
+                         clock pessimism              0.000    10.924    
+                         clock uncertainty           -0.035    10.889    
+                         RAMB36E1 (Setup_ramb36e1_CLKBWRCLK_ADDRBWRADDR[13])
+                                                     -0.566    10.323    u_conv_weight_ram/mem_reg_0
+  -------------------------------------------------------------------
+                         required time                         10.323    
+                         arrival time                          -8.958    
+  -------------------------------------------------------------------
+                         slack                                  1.365    
+
+Slack (MET) :             1.365ns  (required time - arrival time)
+  Source:                 u_blob_decoder/beat_count_reg_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_conv_weight_ram/mem_reg_1/ADDRBWRADDR[13]
+                            (rising edge-triggered cell RAMB36E1 clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (ACLK rise@10.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        7.985ns  (logic 2.460ns (30.809%)  route 5.525ns (69.191%))
+  Logic Levels:           8  (CARRY4=2 LUT2=2 LUT3=1 LUT4=1 LUT6=2)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=237, unset)          0.973     0.973    u_blob_decoder/clk
+                         FDRE                                         r  u_blob_decoder/beat_count_reg_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_fdre_C_Q)         0.518     1.491 f  u_blob_decoder/beat_count_reg_reg[1]/Q
+                         net (fo=44, unplaced)        0.820     2.311    u_blob_decoder/beat_count_reg[1]
+                         LUT4 (Prop_lut4_I1_O)        0.295     2.606 r  u_blob_decoder/mem_reg_1_i_80__0/O
+                         net (fo=8, unplaced)         0.940     3.546    u_blob_decoder/mem_reg_1_i_80__0_n_0
+                         LUT6 (Prop_lut6_I3_O)        0.124     3.670 r  u_blob_decoder/mem_reg_7_i_19/O
+                         net (fo=3, unplaced)         0.920     4.590    u_blob_decoder/mem_reg_7_i_19_n_0
+                         LUT3 (Prop_lut3_I0_O)        0.124     4.714 f  u_blob_decoder/conv_oc_reg[4]_i_10/O
+                         net (fo=4, unplaced)         0.926     5.640    u_blob_decoder/conv_oc_reg[4]_i_10_n_0
+                         LUT6 (Prop_lut6_I2_O)        0.124     5.764 r  u_blob_decoder/conv_oc_reg[4]_i_7/O
+                         net (fo=10, unplaced)        0.492     6.256    u_blob_decoder/conv_second
+                         LUT2 (Prop_lut2_I0_O)        0.124     6.380 r  u_blob_decoder/mem_reg_1_i_118__0/O
+                         net (fo=1, unplaced)         0.000     6.380    u_blob_decoder/mem_reg_1_i_118__0_n_0
+                         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.513     6.893 r  u_blob_decoder/mem_reg_1_i_86__0/CO[3]
+                         net (fo=1, unplaced)         0.009     6.902    u_blob_decoder/mem_reg_1_i_86__0_n_0
+                         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.331     7.233 r  u_blob_decoder/mem_reg_1_i_85__0/O[3]
+                         net (fo=1, unplaced)         0.618     7.851    u_blob_decoder/mem_reg_1_i_85__0_n_4
+                         LUT2 (Prop_lut2_I0_O)        0.307     8.158 r  u_blob_decoder/mem_reg_1_i_3/O
+                         net (fo=2, unplaced)         0.800     8.958    u_conv_weight_ram/conv_waddr[7]
+                         RAMB36E1                                     r  u_conv_weight_ram/mem_reg_1/ADDRBWRADDR[13]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)      10.000    10.000 r  
+                                                      0.000    10.000 r  clk (IN)
+                         net (fo=237, unset)          0.924    10.924    u_conv_weight_ram/clk
+                         RAMB36E1                                     r  u_conv_weight_ram/mem_reg_1/CLKBWRCLK
+                         clock pessimism              0.000    10.924    
+                         clock uncertainty           -0.035    10.889    
+                         RAMB36E1 (Setup_ramb36e1_CLKBWRCLK_ADDRBWRADDR[13])
+                                                     -0.566    10.323    u_conv_weight_ram/mem_reg_1
+  -------------------------------------------------------------------
+                         required time                         10.323    
+                         arrival time                          -8.958    
+  -------------------------------------------------------------------
+                         slack                                  1.365    
+
+Slack (MET) :             1.466ns  (required time - arrival time)
+  Source:                 u_blob_decoder/beat_count_reg_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            u_conv_weight_ram/mem_reg_0/ADDRBWRADDR[14]
+                            (rising edge-triggered cell RAMB36E1 clocked by ACLK  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             ACLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (ACLK rise@10.000ns - ACLK rise@0.000ns)
+  Data Path Delay:        7.884ns  (logic 2.232ns (28.312%)  route 5.652ns (71.688%))
+  Logic Levels:           8  (CARRY4=2 LUT2=1 LUT3=2 LUT4=1 LUT6=2)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock ACLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  clk (IN)
+                         net (fo=237, unset)          0.973     0.973    u_blob_decoder/clk
+                         FDRE                                         r  u_blob_decoder/beat_count_reg_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+                         FDRE (Prop_fdre_C_Q)         0.518     1.491 f  u_blob_decoder/beat_count_reg_reg[1]/Q
+                         net (fo=44, unplaced)        0.820     2.311    u_blob_decoder/beat_count_reg[1]
+                         LUT4 (Prop_lut4_I1_O)        0.295     2.606 r  u_blob_decoder/mem_reg_1_i_80__0/O
+                         net (fo=8, unplaced)         0.940     3.546    u_blob_decoder/mem_reg_1_i_80__0_n_0
+                         LUT6 (Prop_lut6_I3_O)        0.124     3.670 r  u_blob_decoder/mem_reg_7_i_19/O
+                         net (fo=3, unplaced)         0.920     4.590    u_blob_decoder/mem_reg_7_i_19_n_0
+                         LUT3 (Prop_lut3_I0_O)        0.124     4.714 f  u_blob_decoder/conv_oc_reg[4]_i_10/O
+                         net (fo=4, unplaced)         0.926     5.640    u_blob_decoder/conv_oc_reg[4]_i_10_n_0
+                         LUT6 (Prop_lut6_I2_O)        0.124     5.764 r  u_blob_decoder/conv_oc_reg[4]_i_7/O
+                         net (fo=10, unplaced)        0.462     6.226    u_blob_decoder/conv_second
+                         LUT3 (Prop_lut3_I0_O)        0.124     6.350 r  u_blob_decoder/mem_reg_1_i_105/O
+                         net (fo=1, unplaced)         0.473     6.823    u_blob_decoder/mem_reg_1_i_105_n_0
+                         CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.396     7.219 r  u_blob_decoder/mem_reg_1_i_85__0/CO[3]
+                         net (fo=1, unplaced)         0.000     7.219    u_blob_decoder/mem_reg_1_i_85__0_n_0
+                         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.232     7.451 r  u_blob_decoder/mem_reg_1_i_84__0/O[0]
+                         net (fo=1, unplaced)         0.311     7.762    u_blob_decoder/mem_reg_1_i_84__0_n_7
+                         LUT2 (Prop_lut2_I0_O)        0.295     8.057 r  u_blob_decoder/mem_reg_1_i_2/O
+                         net (fo=2, unplaced)         0.800     8.857    u_conv_weight_ram/conv_waddr[8]
+                         RAMB36E1                                     r  u_conv_weight_ram/mem_reg_0/ADDRBWRADDR[14]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock ACLK rise edge)      10.000    10.000 r  
+                                                      0.000    10.000 r  clk (IN)
+                         net (fo=237, unset)          0.924    10.924    u_conv_weight_ram/clk
+                         RAMB36E1                                     r  u_conv_weight_ram/mem_reg_0/CLKBWRCLK
+                         clock pessimism              0.000    10.924    
+                         clock uncertainty           -0.035    10.889    
+                         RAMB36E1 (Setup_ramb36e1_CLKBWRCLK_ADDRBWRADDR[14])
+                                                     -0.566    10.323    u_conv_weight_ram/mem_reg_0
+  -------------------------------------------------------------------
+                         required time                         10.323    
+                         arrival time                          -8.857    
+  -------------------------------------------------------------------
+                         slack                                  1.466    
+
+
+
+
+
+Pulse Width Checks
+--------------------------------------------------------------------------------------
+Clock Name:         ACLK
+Waveform(ns):       { 0.000 5.000 }
+Period(ns):         10.000
+Sources:            { clk }
+
+Check Type        Corner  Lib Pin             Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location  Pin
+Min Period        n/a     RAMB18E1/CLKARDCLK  n/a            2.944         10.000      7.056                u_fcw_ram/mem_reg_7/CLKARDCLK
+Min Period        n/a     RAMB18E1/CLKARDCLK  n/a            2.944         10.000      7.056                u_param_ram/mem_reg_1/CLKARDCLK
+Min Period        n/a     RAMB18E1/CLKBWRCLK  n/a            2.944         10.000      7.056                u_param_ram/mem_reg_1/CLKBWRCLK
+Low Pulse Width   Fast    FDRE/C              n/a            0.500         5.000       4.500                u_blob_decoder/pool_mult_reg_reg[31]/C
+Low Pulse Width   Fast    FDRE/C              n/a            0.500         5.000       4.500                u_blob_decoder/pool_mult_reg_reg[3]/C
+Low Pulse Width   Fast    FDRE/C              n/a            0.500         5.000       4.500                u_blob_decoder/pool_mult_reg_reg[4]/C
+High Pulse Width  Slow    FDRE/C              n/a            0.500         5.000       4.500                u_blob_decoder/pool_mult_reg_reg[31]/C
+High Pulse Width  Fast    FDRE/C              n/a            0.500         5.000       4.500                u_blob_decoder/pool_mult_reg_reg[31]/C
+High Pulse Width  Slow    FDRE/C              n/a            0.500         5.000       4.500                u_blob_decoder/pool_mult_reg_reg[3]/C
+
+
+
+# puts "===== LATCH CHECK ====="
+===== LATCH CHECK =====
+WARNING: [Vivado 12-180] No cells matched 'get_cells -hierarchical -filter {PRIMITIVE_TYPE =~ REGISTER.latch.*}'.
+# set latches [get_cells -hierarchical -filter {PRIMITIVE_TYPE =~ REGISTER.latch.*}]
+# puts "LATCH count = [llength $latches]"
+LATCH count = 0
+# if {[llength $latches] > 0} { puts "LATCHES: $latches" }
+# puts "SYN_CHECK_DONE"
+SYN_CHECK_DONE
+INFO: [Common 17-206] Exiting Vivado at Sat Sep 26 15:31:34 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 48.476691

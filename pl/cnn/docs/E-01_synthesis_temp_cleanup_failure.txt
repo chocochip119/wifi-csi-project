@@ -1,0 +1,107 @@
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-e01
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\vivado.bat -mode batch -source C:\Users\kccistc\AppData\Local\Temp\codex-e01\encoder_syn.tcl -nojournal -nolog -tclargs CNN_Encoder xc7z020clg400-1 C:\Users\kccistc\AppData\Local\Temp\codex-e01\work_encoder\Buffer.v C:\Users\kccistc\AppData\Local\Temp\codex-e01\work_encoder\Conv_MAC.v C:\Users\kccistc\AppData\Local\Temp\codex-e01\work_encoder\requant_stage.v C:\Users\kccistc\AppData\Local\Temp\codex-e01\work_encoder\gelu_stage.v C:\Users\kccistc\AppData\Local\Temp\codex-e01\work_encoder\Pool.v C:\Users\kccistc\AppData\Local\Temp\codex-e01\work_encoder\CNN_Encoder.v
+
+****** Vivado v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+CRITICAL WARNING: [Common 17-741] No write access right to the local Tcl store at 'C'. XilinxTclStore is reverted to the installation area. If you want to use local Tcl Store, please change the access right and relaunch Vivado.
+source {C:\Users\kccistc\AppData\Local\Temp\codex-e01\encoder_syn.tcl}
+# source D:/2609_final_project/cnn_rtl/syn/syn_check.tcl
+## set top   [lindex $argv 0]
+## set part  [lindex $argv 1]
+## set srcs  [lrange $argv 2 end]
+## foreach f $srcs { read_verilog $f }
+## read_xdc [file join [file dirname [info script]] timing_100mhz.xdc]
+## synth_design -top $top -part $part -mode out_of_context
+Command: synth_design -top CNN_Encoder -part xc7z020clg400-1 -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 34416
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1103.676 ; gain = 0.000
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'CNN_Encoder' [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/CNN_Encoder.v:3]
+INFO: [Synth 8-6157] synthesizing module 'Buffer' [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/Buffer.v:3]
+	Parameter W_DATA_WIDTH bound to: 64 - type: integer 
+	Parameter R_DATA_WIDTH bound to: 8 - type: integer 
+	Parameter DEPTH_BYTE bound to: 11520 - type: integer 
+	Parameter W_ADDR_WIDTH bound to: 11 - type: integer 
+	Parameter R_ADDR_WIDTH bound to: 14 - type: integer 
+	Parameter MIN_DATA_W bound to: 8 - type: integer 
+	Parameter MAX_DATA_W bound to: 64 - type: integer 
+	Parameter DEPTH bound to: 11520 - type: integer 
+	Parameter RATIO bound to: 8 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'Buffer' (1#1) [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/Buffer.v:3]
+INFO: [Synth 8-6157] synthesizing module 'Conv_MAC' [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/Conv_MAC.v:3]
+	Parameter IDLE bound to: 0 - type: integer 
+	Parameter CONV1 bound to: 1 - type: integer 
+	Parameter WAIT_FMAP1 bound to: 2 - type: integer 
+	Parameter CONV2_0 bound to: 3 - type: integer 
+	Parameter CONV2_1 bound to: 4 - type: integer 
+	Parameter LANES bound to: 16 - type: integer 
+	Parameter WIDTH bound to: 10 - type: integer 
+	Parameter HEIGHT bound to: 128 - type: integer 
+	Parameter C1_IC bound to: 3 - type: integer 
+	Parameter C1_KH bound to: 5 - type: integer 
+	Parameter C1_KW bound to: 3 - type: integer 
+	Parameter C1_TAPS bound to: 45 - type: integer 
+	Parameter C1_PAD_H bound to: 2 - type: integer 
+	Parameter C1_PAD_W bound to: 1 - type: integer 
+	Parameter C1_WBASE bound to: 0 - type: integer 
+	Parameter C2_IC bound to: 16 - type: integer 
+	Parameter C2_KH bound to: 3 - type: integer 
+	Parameter C2_KW bound to: 3 - type: integer 
+	Parameter C2_TAPS bound to: 144 - type: integer 
+	Parameter C2_PAD_H bound to: 1 - type: integer 
+	Parameter C2_PAD_W bound to: 1 - type: integer 
+	Parameter C2_WBASE bound to: 45 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'Conv_MAC' (2#1) [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/Conv_MAC.v:3]
+INFO: [Synth 8-6157] synthesizing module 'requant_stage' [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/requant_stage.v:3]
+INFO: [Synth 8-6155] done synthesizing module 'requant_stage' (3#1) [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/requant_stage.v:3]
+INFO: [Synth 8-6157] synthesizing module 'gelu_stage' [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/gelu_stage.v:3]
+INFO: [Synth 8-6155] done synthesizing module 'gelu_stage' (4#1) [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/gelu_stage.v:3]
+INFO: [Synth 8-6157] synthesizing module 'Buffer__parameterized0' [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/Buffer.v:3]
+	Parameter W_DATA_WIDTH bound to: 8 - type: integer 
+	Parameter R_DATA_WIDTH bound to: 8 - type: integer 
+	Parameter DEPTH_BYTE bound to: 20480 - type: integer 
+	Parameter W_ADDR_WIDTH bound to: 15 - type: integer 
+	Parameter R_ADDR_WIDTH bound to: 15 - type: integer 
+	Parameter MIN_DATA_W bound to: 8 - type: integer 
+	Parameter MAX_DATA_W bound to: 8 - type: integer 
+	Parameter DEPTH bound to: 20480 - type: integer 
+	Parameter RATIO bound to: 1 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'Buffer__parameterized0' (4#1) [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/Buffer.v:3]
+INFO: [Synth 8-6157] synthesizing module 'Pool' [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/Pool.v:2]
+INFO: [Synth 8-6155] done synthesizing module 'Pool' (5#1) [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/Pool.v:2]
+INFO: [Synth 8-6155] done synthesizing module 'CNN_Encoder' (6#1) [C:/Users/kccistc/AppData/Local/Temp/codex-e01/work_encoder/CNN_Encoder.v:3]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 1106.297 ; gain = 2.621
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 1106.297 ; gain = 2.621
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 1106.297 ; gain = 2.621
+---------------------------------------------------------------------------------
+error deleting "C:/Users/kccistc/AppData/Local/Temp/codex-e01/.Xil/Vivado-44876-DESKTOP-7CFQ9ND/realtime/tmp": no such file or directory
+INFO: [Common 17-83] Releasing license: Synthesis
+20 Infos, 0 Warnings, 0 Critical Warnings and 1 Errors encountered.
+synth_design failed
+ERROR: [Common 17-69] Command failed: Synthesis failed - please see the console or run log file for details
+
+    while executing
+"source D:/2609_final_project/cnn_rtl/syn/syn_check.tcl"
+    (file "C:\Users\kccistc\AppData\Local\Temp\codex-e01\encoder_syn.tcl" line 1)
+INFO: [Common 17-206] Exiting Vivado at Sat Sep 26 03:39:09 2026...
+
+EXIT_CODE: 1
+WALL_CLOCK_SECONDS: 23.278197

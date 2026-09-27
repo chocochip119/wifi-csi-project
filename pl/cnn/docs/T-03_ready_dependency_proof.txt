@@ -1,0 +1,60 @@
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\pose_cnn_v1_0_M00_AXI.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/pose_cnn_v1_0_M00_AXI.v" into library work
+INFO: [VRFC 10-311] analyzing module pose_cnn_v1_0_M00_AXI
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\axi4_slave_mem_model.v D:\2609_final_project\cnn_rtl\tb\tb_m00_err.v C:\Users\kccistc\AppData\Local\Temp\codex-t03-twpm5b4y\tb_t03_ready_proof.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/axi4_slave_mem_model.v" into library work
+INFO: [VRFC 10-311] analyzing module axi4_slave_mem_model
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_m00_err.v" into library work
+INFO: [VRFC 10-311] analyzing module m00_err_fixture
+INFO: [VRFC 10-311] analyzing module tb_m00_err
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/kccistc/AppData/Local/Temp/codex-t03-twpm5b4y/tb_t03_ready_proof.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_t03_ready_proof
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_t03_ready_proof -s t03_ready_proof
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_t03_ready_proof -s t03_ready_proof 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pose_cnn_v1_0_M00_AXI
+Compiling module work.axi4_slave_mem_model
+Compiling module work.m00_err_fixture
+Compiling module work.tb_t03_ready_proof
+Built simulation snapshot t03_ready_proof
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-t03-twpm5b4y/sim/xsim.dir/t03_ready_proof/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Fri Sep 25 22:05:27 2026...
+
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat t03_ready_proof -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/t03_ready_proof/xsim_script.tcl
+# xsim {t03_ready_proof} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: T03_error_needs_READY reset_pair sampled_edges=2 busy_before=00 err_before=00 busy_after=00 err_after=00 C12_violations=0
+CASE: WD=0 T03_error_needs_READY expected_checker_codes=NONE; slave injections counted separately
+PASS: T03_error_needs_READY START rd=1 wr=0 old_err=00 clear_edge=6 err_after=00 busy_after=10
+PROOF: error with ready=0 stays busy for 16 cycles; accepted=5 of 16
+PASS: T03_error_needs_READY READ beats=16 AR=1 busy_cycles=34 err_high_sample_cycles=27 first_err_edge=13 bad_beats=1 bad_burst=1 first_bad_word_1based=5 remaining_after_first_bad=11 finish_edge=40
+PASS: T03_error_needs_READY END injections=1 expected_checker_codes=NONE master_violations=0 quiescent=1
+PROOF: restoring ready=1 drains all 16 beats and busy falls
+$finish called at time : 400 ns : File "C:/Users/kccistc/AppData/Local/Temp/codex-t03-twpm5b4y/tb_t03_ready_proof.v" Line 18
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 25 22:05:30 2026...

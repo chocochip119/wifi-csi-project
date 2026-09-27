@@ -1,0 +1,360 @@
+--- before/pose_cnn_ctrl.v
++++ after/pose_cnn_ctrl.v
+@@ -1,7 +1,7 @@
+ `timescale 1 ns / 1 ps
+ 
+-// T-03 PARTIAL IMPLEMENTATION: LOAD issues two resident-blob reads.
+-// INFER remains the T-01R DECODE/FINISH placeholder until T-04.
++// T-04 PARTIAL IMPLEMENTATION: LOAD reads resident data; INFER fills input RAM
++// and runs Encoder. ENC -> FINISH is temporary until T-05 (D06 required).
+ // Contract: pose_cnn_ctrl_fsm.drawio p1/p2; PROJECT_CONTEXT.md 5.1 D02/D03, 5.2 reset.
+ module pose_cnn_ctrl (
+     input  wire         clk,
+@@ -41,11 +41,11 @@
+     input  wire         ld_ready,
+     // D08-1 may add a Loader abort port; no interface is invented in T-01R.
+ 
+-    output wire         enc_start,
++    output reg          enc_start,
+     input  wire         enc_done,
+-    output wire         in_we,
+-    output wire [10:0]  in_waddr,
+-    output wire [63:0]  in_wdata,
++    output reg          in_we,
++    output reg  [10:0]  in_waddr,
++    output reg  [63:0]  in_wdata,
+     output wire         fc_start,
+     input  wire         fc_done,
+     output wire [1:0]   fc_sel,
+@@ -89,20 +89,17 @@
+     reg        mem_rd_busy_prev_reg;
+     reg        loader_done_seen_reg, loader_done_seen_next;
+     reg        loader_error_seen_reg, loader_error_seen_next;
++    reg [10:0] beat_reg, beat_next;
+ 
+     assign status_busy  = (state_reg != IDLE);
+     assign status_done  = done_reg;
+     assign status_error = error_reg;
+ 
+-    // T-04 이후: input/compute/write paths remain inactive.
++    // T-05 이후: FC/FIFO/write paths remain inactive.
+     assign mem_wr_start = 1'b0;
+     assign mem_wr_addr  = 32'b0;
+     assign mem_wr_bytes = 20'b0;
+     assign mem_wr_data  = 64'b0;
+-    assign enc_start    = 1'b0;
+-    assign in_we        = 1'b0;
+-    assign in_waddr     = 11'b0;
+-    assign in_wdata     = 64'b0;
+     assign fc_start     = 1'b0;
+     assign fc_sel       = 2'b0;
+     assign fifo_we      = 1'b0;
+@@ -122,6 +119,7 @@
+             mem_rd_busy_prev_reg <= 1'b0;
+             loader_done_seen_reg <= 1'b0;
+             loader_error_seen_reg <= 1'b0;
++            beat_reg        <= 11'd0;
+         end else begin
+             state_reg       <= state_next;
+             cmd_reg         <= cmd_next;
+@@ -134,6 +132,7 @@
+             mem_rd_busy_prev_reg <= mem_rd_busy;
+             loader_done_seen_reg <= loader_done_seen_next;
+             loader_error_seen_reg <= loader_error_seen_next;
++            beat_reg        <= beat_next;
+         end
+     end
+ 
+@@ -148,6 +147,7 @@
+         error_next       = error_reg;
+         loader_done_seen_next = loader_done_seen_reg;
+         loader_error_seen_next = loader_error_seen_reg;
++        beat_next        = beat_reg;
+         mem_rd_start     = 1'b0;
+         mem_rd_addr      = 32'b0;
+         mem_rd_bytes     = 20'b0;
+@@ -155,6 +155,10 @@
+         loader_start     = 1'b0;
+         ld_data          = 64'b0;
+         ld_valid         = 1'b0;
++        enc_start        = 1'b0;
++        in_we            = 1'b0;
++        in_waddr         = 11'd0;
++        in_wdata         = 64'd0;
+ 
+         // T-03 user-approved correction: a one-cycle Loader completion may
+         // precede LD_WAIT. Capture its error on the SAME edge as its pulse.
+@@ -200,9 +204,12 @@
+                     mem_rd_bytes = 20'd5936;
+                     state_next = LD_RD1;
+                 end else if ((cmd_reg == CMD_INFER) && cfg_ok) begin
+-                    // T-04: replace FINISH with IN_RD and add mem_rd_start.
+                     run_error_next = ERR_NONE;
+-                    state_next = FINISH;
++                    mem_rd_start = 1'b1;
++                    mem_rd_addr = input_addr_reg;
++                    mem_rd_bytes = 20'd11520;
++                    beat_next = 11'd0;
++                    state_next = IN_RD;
+                 end else if ((cmd_reg == CMD_INFER) && !cfg_ok) begin
+                     run_error_next = ERR_NO_CFG;
+                     state_next = FINISH;
+@@ -252,13 +259,36 @@
+                     state_next = FINISH;
+                 end
+             end
+-            // T-04~T-07: unimplemented states recover without new results.
+             IN_RD: begin
+-                state_next = IDLE;
++                mem_rd_ready = 1'b1;
++                in_we = mem_rd_valid;
++                in_waddr = beat_reg;
++                in_wdata = mem_rd_data;
++                // ASM-INFER priority: error, valid beat, then falling busy.
++                if (mem_rd_err || (run_error_reg == ERR_MEM_RD)) begin
++                    run_error_next = ERR_MEM_RD;
++                    // T-03 approved policy: stop the consumer, drain with READY=1.
++                    // M00 registers an RRESP error after accepting that beat;
++                    // this suppresses subsequent writes, not the accepted beat.
++                    // T-07: replace with ERR_DRAIN after D08 is decided.
++                    in_we = 1'b0;
++                    if (!mem_rd_busy) state_next = FINISH;
++                end else if (mem_rd_valid) begin
++                    beat_next = beat_reg + 11'd1;
++                end else if (mem_rd_busy_prev_reg && !mem_rd_busy) begin
++                    enc_start = 1'b1;
++                    state_next = ENC;
++                end
+             end
+             ENC: begin
+-                state_next = IDLE;
+-            end
++                // A synchronous zero-delay done starts just after the edge
++                // accepting enc_start; that edge also enters ENC, so it is seen.
++                if (enc_done) begin
++                    // T-05: replace FINISH with FC1 and its outputs; D06 required.
++                    state_next = FINISH;
++                end
++            end
++            // T-05~T-07: unimplemented states recover without new results.
+             FC1: begin
+                 state_next = IDLE;
+             end
+--- before/tb_ctrl_status.v
++++ after/tb_ctrl_status.v
+@@ -1,6 +1,6 @@
+ `timescale 1 ns / 1 ps
+ 
+-// T-03 status regression: LOAD uses a short read/Loader handshake model.
++// T-04 status regression: LOAD/INFER use short read/Loader/Encoder handshake models.
+ // Compile with xvlog -sv. Force/release is limited to state-recovery checks.
+ module tb_ctrl_status;
+     reg clk = 1'b0;
+@@ -28,18 +28,24 @@
+ 
+ 
+     // Small handshake-only environment for CSR/status regression. Full data
+-    // and real-M00 LOAD verification belongs to tb_top_load.
+-    reg mock_rd_busy = 0, mock_loader_done = 0;
+-    integer mock_left = 0, mock_commands = 0, mock_done_left = 0;
++    // and real-M00 data verification belongs to tb_top_load/tb_top_infer.
++    reg mock_rd_busy = 0, mock_loader_done = 0, mock_enc_done = 0;
++    integer mock_left = 0, mock_commands = 0, mock_done_left = 0, mock_enc_left = 0;
+     always @(posedge clk) begin
+         if (!rst_n) begin
+-            mock_rd_busy <= 0; mock_loader_done <= 0;
++            mock_rd_busy <= 0; mock_loader_done <= 0; mock_enc_done <= 0; mock_enc_left <= 0;
+             mock_left <= 0; mock_commands <= 0; mock_done_left <= 0;
+         end else begin
+-            mock_loader_done <= 0;
++            mock_loader_done <= 0; mock_enc_done <= 0;
++            if (enc_start) mock_enc_left <= 3;
++            else if (mock_enc_left != 0) begin
++                mock_enc_left <= mock_enc_left-1;
++                if (mock_enc_left == 1) mock_enc_done <= 1;
++            end
+             if (mem_rd_start) begin
+                 mock_rd_busy <= 1; mock_left <= 2;
+-                if (loader_start) mock_commands <= 1;
++                if (mem_rd_bytes == 11520) mock_commands <= 0;
++                else if (loader_start) mock_commands <= 1;
+                 else mock_commands <= mock_commands+1;
+             end else if (mock_rd_busy) begin
+                 if (mock_left == 0) begin
+@@ -68,7 +74,7 @@
+         .mem_wr_ready(unused_inputs[4]), .mem_wr_err(unused_inputs[5]),
+         .loader_start(loader_start), .loader_done(mock_loader_done), .loader_err(1'b0),
+         .ld_data(ld_data), .ld_valid(ld_valid), .ld_ready(1'b1),
+-        .enc_start(enc_start), .enc_done(unused_inputs[9]),
++        .enc_start(enc_start), .enc_done(mock_enc_done),
+         .in_we(in_we), .in_waddr(in_waddr), .in_wdata(in_wdata),
+         .fc_start(fc_start), .fc_done(unused_inputs[10]), .fc_sel(fc_sel),
+         .fifo_we(fifo_we), .fifo_wdata(fifo_wdata), .fifo_full(unused_inputs[11]),
+@@ -76,7 +82,7 @@
+     );
+ 
+     always #5 clk = ~clk;
+-    // Unimplemented status/data inputs must not affect T-01R execution.
++    // Unused compute/write inputs must not affect T-04 execution.
+     always @(negedge clk) unused_inputs <= ~unused_inputs;
+ 
+     task check;
+@@ -85,7 +91,7 @@
+         begin
+             if (condition !== 1'b1) begin
+                 $display("FAIL: %s at %0t", message, $time);
+-                $fatal(1, "T-03 standalone mismatch");
++                $fatal(1, "T-04 standalone mismatch");
+             end
+         end
+     endtask
+@@ -161,6 +167,13 @@
+                 end
+                 check(mock_commands == 2, "LOAD uses exactly two memory commands");
+             end
++            if (expected_snapshot[127:96] == 32'd0 && result_error == 0) begin
++                check(u_ctrl.state_reg === 4'd5, "INFER DECODE enters IN_RD");
++                while (u_ctrl.state_reg != 4'd12) begin
++                    check_status(1'b1,1'b0,4'd0); check_snapshot;
++                    tick;
++                end
++            end
+             check(u_ctrl.state_reg === 4'd12, "decoded command eventually reaches FINISH");
+             check_status(1'b1, 1'b0, 4'd0);
+             check_snapshot;
+@@ -248,15 +261,14 @@
+     always @(posedge clk) begin
+         #2;
+         check({mem_wr_start, mem_wr_addr, mem_wr_bytes, mem_wr_data,
+-               enc_start, in_we, in_waddr,
+-               in_wdata, fc_start, fc_sel, fifo_we, fifo_wdata} === '0,
++               fc_start, fc_sel, fifo_we, fifo_wdata} === '0,
+               "all unused outputs must remain zero, including during reset");
+         zero_output_checks = zero_output_checks + 1;
+     end
+ 
+     initial begin
+         #10000;
+-        $fatal(1, "T-03 standalone watchdog timeout");
++        $fatal(1, "T-04 standalone watchdog timeout");
+     end
+ 
+     initial begin
+@@ -344,11 +356,11 @@
+ 
+         // Pending/displayed BAD_CMD is intentionally nonzero, so a recovery
+         // that silently clears results cannot pass these checks.
+-        for (state_index = 5; state_index <= 11; state_index = state_index + 1)
++        for (state_index = 7; state_index <= 11; state_index = state_index + 1)
+             check_recovery(state_index[3:0]);
+         for (state_index = 13; state_index <= 15; state_index = state_index + 1)
+             check_recovery(state_index[3:0]);
+-        $display("PASS: seven unimplemented and three illegal states recover without changing results/snapshots (%0d checks)", recovery_checks);
++        $display("PASS: five unimplemented and three illegal states recover without changing results/snapshots (%0d checks)", recovery_checks);
+ 
+         begin_run(32'd2, 1'b0, 1'b0);
+         decode_run(4'd1, 1'b0, 1'b0, 1'b0);
+@@ -370,7 +382,7 @@
+         check_status(1'b0, 1'b0, 4'd0);
+         $display("PASS: synchronous reset in FINISH waits for the edge, clears all state, and produces no phantom completion");
+         $display("PASS: unused outputs stayed zero for %0d sampled cycles while unused inputs toggled", zero_output_checks);
+-        $display("PASS: T-03 ALL CTRL STATUS CHECKS PASSED (%0d START snapshots checked)", starts_checked);
++        $display("PASS: T-04 ALL CTRL STATUS CHECKS PASSED (%0d START snapshots checked)", starts_checked);
+         $finish;
+     end
+ endmodule
+--- before/tb_csr_ctrl_link.v
++++ after/tb_csr_ctrl_link.v
+@@ -1,8 +1,8 @@
+ `timescale 1 ns / 1 ps
+ 
+-// T-03 CSR/ctrl integration regression. All commands use AXI4-Lite.
++// T-04 CSR/ctrl integration regression. All commands use AXI4-Lite.
+ // cfg_ok/scale model Loader-owned levels. No hierarchical drive, force or delay
+-// extension of ctrl busy is used. LOAD uses a short read/Loader handshake model.
++// extension of ctrl busy is used. LOAD/INFER use short read/Loader/Encoder handshake models.
+ module tb_csr_ctrl_link;
+     reg clk = 1'b0, rst_n = 1'b0;
+     reg [4:0] awaddr = 5'b0, araddr = 5'b0;
+@@ -48,18 +48,24 @@
+ 
+ 
+     // Small handshake-only environment for CSR/status regression. Full data
+-    // and real-M00 LOAD verification belongs to tb_top_load.
+-    reg mock_rd_busy = 0, mock_loader_done = 0;
+-    integer mock_left = 0, mock_commands = 0, mock_done_left = 0;
++    // and real-M00 data verification belongs to tb_top_load/tb_top_infer.
++    reg mock_rd_busy = 0, mock_loader_done = 0, mock_enc_done = 0;
++    integer mock_left = 0, mock_commands = 0, mock_done_left = 0, mock_enc_left = 0;
+     always @(posedge clk) begin
+         if (!rst_n) begin
+-            mock_rd_busy <= 0; mock_loader_done <= 0;
++            mock_rd_busy <= 0; mock_loader_done <= 0; mock_enc_done <= 0; mock_enc_left <= 0;
+             mock_left <= 0; mock_commands <= 0; mock_done_left <= 0;
+         end else begin
+-            mock_loader_done <= 0;
++            mock_loader_done <= 0; mock_enc_done <= 0;
++            if (enc_start) mock_enc_left <= 3;
++            else if (mock_enc_left != 0) begin
++                mock_enc_left <= mock_enc_left-1;
++                if (mock_enc_left == 1) mock_enc_done <= 1;
++            end
+             if (mem_rd_start) begin
+                 mock_rd_busy <= 1; mock_left <= 2;
+-                if (loader_start) mock_commands <= 1;
++                if (mem_rd_bytes == 11520) mock_commands <= 0;
++                else if (loader_start) mock_commands <= 1;
+                 else mock_commands <= mock_commands+1;
+             end else if (mock_rd_busy) begin
+                 if (mock_left == 0) begin
+@@ -87,7 +93,7 @@
+         .mem_wr_busy(1'b0), .mem_wr_data(mem_wr_data), .mem_wr_ready(1'b0), .mem_wr_err(1'b0),
+         .loader_start(loader_start), .loader_done(mock_loader_done), .loader_err(1'b0),
+         .ld_data(ld_data), .ld_valid(ld_valid), .ld_ready(1'b1),
+-        .enc_start(enc_start), .enc_done(1'b0), .in_we(in_we), .in_waddr(in_waddr), .in_wdata(in_wdata),
++        .enc_start(enc_start), .enc_done(mock_enc_done), .in_we(in_we), .in_waddr(in_waddr), .in_wdata(in_wdata),
+         .fc_start(fc_start), .fc_done(1'b0), .fc_sel(fc_sel),
+         .fifo_we(fifo_we), .fifo_wdata(fifo_wdata), .fifo_full(1'b0), .pose_data(192'b0)
+     );
+@@ -100,7 +106,7 @@
+         begin
+             if (condition !== 1'b1) begin
+                 $display("FAIL: %s at %0t", message, $time);
+-                $fatal(1, "T-03 CSR/ctrl integration mismatch");
++                $fatal(1, "T-04 CSR/ctrl integration mismatch");
+             end
+         end
+     endtask
+@@ -199,14 +205,13 @@
+         end
+         #2;
+         check({mem_wr_start, mem_wr_addr, mem_wr_bytes, mem_wr_data,
+-               enc_start, in_we, in_waddr,
+-               in_wdata, fc_start, fc_sel, fifo_we, fifo_wdata} === '0,
+-               "unimplemented write/compute outputs remain zero in T-03");
++               fc_start, fc_sel, fifo_we, fifo_wdata} === '0,
++               "unimplemented write/compute outputs remain zero in T-04");
+     end
+ 
+     initial begin
+         #20000;
+-        $fatal(1, "T-03 integration watchdog timeout");
++        $fatal(1, "T-04 integration watchdog timeout");
+     end
+ 
+     initial begin
+@@ -279,10 +284,10 @@
+         read_expect(5'h04, 32'h00000008);
+         $display("PASS: totals START=%0d busy_cycles=%0d AXI_busy_reads=%0d busy_COMMAND_commits=%0d",
+                  start_count, busy_cycles, busy_reads, command_busy_commits);
+-        // Modeled LOAD: DECODE(1)+LD_RD1(4)+LD_RD2(4)+LD_WAIT(2)+FINISH(1)=12.
+-        check(start_count == 7 && busy_cycles == 34 && busy_reads >= 6,
+-              "seven STARTs: two 12-cycle LOADs + five 2-cycle other commands; busy snapshots observed");
+-        $display("PASS: T-03 ALL REACHABLE CSR/CTRL LINK CHECKS PASSED");
++        // Modeled LOAD=12; INFER=DECODE(1)+IN_RD(4)+ENC(4)+FINISH(1)=10.
++        check(start_count == 7 && busy_cycles == 50 && busy_reads >= 6,
++              "seven STARTs: two 12-cycle LOADs + two 10-cycle INFERs + three 2-cycle errors; busy snapshots observed");
++        $display("PASS: T-04 ALL REACHABLE CSR/CTRL LINK CHECKS PASSED");
+         $finish;
+     end
+ endmodule

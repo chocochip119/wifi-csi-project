@@ -1,0 +1,120 @@
+SHA PREFLIGHT PASS
+{
+  "blob.bin": "063d01b880c4d96f1fe61450a72a9911b222ebf67bbbbf560da700a7350b94bb",
+  "fc1_acc_i32.hex": "22b6aca7a6875ef604e8bfbfc5238de14cb78602256cd8d4aaac9f3821fc306d",
+  "fc2_acc_i32.hex": "081119f47e2668b983023ef428ca871900338a4563551ed355e906c0aa2df1f8",
+  "fc3_acc_i32.hex": "31021ea552cac2163495cb6b37789f977a8ccf9f9ec470a1e7e0621f3e0b0ec9",
+  "encoder_flat_u64.hex": "50922ed6746c48c4dda4be98e161152af47d5068c76392300fe5cea8846f0120",
+  "fc1_gelu_i8.hex": "3ed38e4567bac7f9ca5bf9cefecc11471e5cebae3a4ae8bffff66ef04ef6170b",
+  "fc2_gelu_i8.hex": "f741ba38d3adc58a77a93137ee08860b1314fecb5e320f72a47f8d9f633c4ffe"
+}
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f02\mac_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat D:\2609_final_project\cnn_rtl\rtl\fc\fc_mac.v D:\2609_final_project\cnn_rtl\rtl\fc\fc1_weight_fifo.v D:\2609_final_project\cnn_rtl\rtl\fc\hidden_buffer.v D:\2609_final_project\cnn_rtl\rtl\fcw_ram.v
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fc/fc_mac.v" into library work
+INFO: [VRFC 10-311] analyzing module fc_mac
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fc/fc1_weight_fifo.v" into library work
+INFO: [VRFC 10-311] analyzing module fc1_weight_fifo
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fc/hidden_buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module hidden_buffer
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/2609_final_project/cnn_rtl/rtl/fcw_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module fcw_ram
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.845339
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f02\mac_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xvlog.bat -sv D:\2609_final_project\cnn_rtl\tb\tb_fc_mac.v
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/2609_final_project/cnn_rtl/tb/tb_fc_mac.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_fc_mac
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 0.903056
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f02\mac_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xelab.bat work.tb_fc_mac -s f02_mac
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe work.tb_fc_mac -s f02_mac 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.fc_mac
+Compiling module work.fc1_weight_fifo
+Compiling module work.hidden_buffer
+Compiling module work.fcw_ram
+Compiling module work.tb_fc_mac
+Built simulation snapshot f02_mac
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/kccistc/AppData/Local/Temp/codex-f02/mac_sim/xsim.dir/f02_mac/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sat Sep 26 18:28:07 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 2.943361
+
+CWD: C:\Users\kccistc\AppData\Local\Temp\codex-f02\mac_sim
+COMMAND: C:\Xilinx\Vivado\2020.2\bin\xsim.bat f02_mac -runall -onerror quit
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/f02_mac/xsim_script.tcl
+# xsim {f02_mac} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: preflight blob_bytes=422992 golden_outputs=280 activation_words=384+16+16 hash_guard=F02ACC01
+PASS: Z1_FC1_golden layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=0 groups=49152 first_acc_after_start=390 last_acc_after_start=49158 done_after_start=49159 done_gap=1 busy_start_ignored=1
+OBS: Z1_FC1_golden min_pure_sum=-280055 max_pure_sum=54582 negative_outputs=95 positive_i32_margin=2147429065 negative_i32_margin=2147203593
+PASS: Z1_FC1_golden FIFO words=49152 full_cycles=5 empty_stall_cycles=0 empty_read_probes=0 stretched_intervals=0 overflow=0
+PASS: Z2_FC2_golden layer=1 outputs=128 mismatch=0 tag_base=128 interval=16 stalled=0 groups=2048 first_acc_after_start=22 last_acc_after_start=2054 done_after_start=2055 done_gap=1 busy_start_ignored=1
+OBS: Z2_FC2_golden min_pure_sum=-58962 max_pure_sum=33324 negative_outputs=81 positive_i32_margin=2147450323 negative_i32_margin=2147424686
+PASS: Z3_FC3_golden layer=2 outputs=24 mismatch=0 tag_base=256 interval=16 stalled=0 groups=384 first_acc_after_start=22 last_acc_after_start=390 done_after_start=391 done_gap=1 busy_start_ignored=1
+OBS: Z3_FC3_golden min_pure_sum=97493 max_pure_sum=224858 negative_outputs=0 positive_i32_margin=2147258789 negative_i32_margin=2147581141
+PASS: Z1-Z3 golden accumulator comparison outputs=280 mismatch=0 bias_added_only_in_TB=1
+PASS: Z5_FC1_empty_stalls layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=1 groups=49152 first_acc_after_start=390 last_acc_after_start=56509 done_after_start=56510 done_gap=1 busy_start_ignored=1
+OBS: Z5_FC1_empty_stalls min_pure_sum=-280055 max_pure_sum=54582 negative_outputs=95 positive_i32_margin=2147429065 negative_i32_margin=2147203593
+PASS: Z5_FC1_empty_stalls FIFO words=49152 full_cycles=5 empty_stall_cycles=7351 empty_read_probes=7358 stretched_intervals=126 overflow=0
+PASS: Z6_FC1_activation layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=0 groups=49152 first_acc_after_start=390 last_acc_after_start=49158 done_after_start=49159 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC1_activation min_pure_sum=-280117 max_pure_sum=54555 negative_outputs=95 positive_i32_margin=2147429092 negative_i32_margin=2147203531
+PASS: Z6_FC1_activation FIFO words=49152 full_cycles=5 empty_stall_cycles=0 empty_read_probes=0 stretched_intervals=0 overflow=0
+PASS: Z6 Z6_FC1_activation activation_byte=0 weight_byte=-1 delta=1 changed_outputs=126 exact_delta_compare=1
+PASS: Z6_FC1_weight layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=0 groups=49152 first_acc_after_start=390 last_acc_after_start=49158 done_after_start=49159 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC1_weight min_pure_sum=-280055 max_pure_sum=54582 negative_outputs=95 positive_i32_margin=2147429065 negative_i32_margin=2147203593
+PASS: Z6_FC1_weight FIFO words=49152 full_cycles=5 empty_stall_cycles=0 empty_read_probes=0 stretched_intervals=0 overflow=0
+PASS: Z6 Z6_FC1_weight activation_byte=-1 weight_byte=15360 delta=1 changed_outputs=1 exact_delta_compare=1
+PASS: Z6_FC2_activation layer=1 outputs=128 mismatch=0 tag_base=128 interval=16 stalled=0 groups=2048 first_acc_after_start=22 last_acc_after_start=2054 done_after_start=2055 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC2_activation min_pure_sum=-59034 max_pure_sum=33298 negative_outputs=81 positive_i32_margin=2147450349 negative_i32_margin=2147424614
+PASS: Z6 Z6_FC2_activation activation_byte=0 weight_byte=-1 delta=1 changed_outputs=127 exact_delta_compare=1
+PASS: Z6_FC2_weight layer=1 outputs=128 mismatch=0 tag_base=128 interval=16 stalled=0 groups=2048 first_acc_after_start=22 last_acc_after_start=2054 done_after_start=2055 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC2_weight min_pure_sum=-58962 max_pure_sum=33324 negative_outputs=81 positive_i32_margin=2147450323 negative_i32_margin=2147424686
+PASS: Z6 Z6_FC2_weight activation_byte=-1 weight_byte=640 delta=1 changed_outputs=1 exact_delta_compare=1
+PASS: Z6_FC3_activation layer=2 outputs=24 mismatch=0 tag_base=256 interval=16 stalled=0 groups=384 first_acc_after_start=22 last_acc_after_start=390 done_after_start=391 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC3_activation min_pure_sum=97450 max_pure_sum=224793 negative_outputs=0 positive_i32_margin=2147258854 negative_i32_margin=2147581098
+PASS: Z6 Z6_FC3_activation activation_byte=0 weight_byte=-1 delta=1 changed_outputs=24 exact_delta_compare=1
+PASS: Z6_FC3_weight layer=2 outputs=24 mismatch=0 tag_base=256 interval=16 stalled=0 groups=384 first_acc_after_start=22 last_acc_after_start=390 done_after_start=391 done_gap=1 busy_start_ignored=1
+OBS: Z6_FC3_weight min_pure_sum=97493 max_pure_sum=224858 negative_outputs=0 positive_i32_margin=2147258789 negative_i32_margin=2147581141
+PASS: Z6 Z6_FC3_weight activation_byte=-1 weight_byte=640 delta=1 changed_outputs=1 exact_delta_compare=1
+PASS: Z4_FC1_minus128_squared layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=0 groups=49152 first_acc_after_start=390 last_acc_after_start=49158 done_after_start=49159 done_gap=1 busy_start_ignored=1
+OBS: Z4_FC1_minus128_squared min_pure_sum=50331648 max_pure_sum=50331648 negative_outputs=0 positive_i32_margin=2097151999 negative_i32_margin=2197815296
+PASS: Z4_FC1_minus128_squared FIFO words=49152 full_cycles=5 empty_stall_cycles=0 empty_read_probes=0 stretched_intervals=0 overflow=0
+PASS: Z4_FC1_signed_minimum layer=0 outputs=128 mismatch=0 tag_base=0 interval=384 stalled=0 groups=49152 first_acc_after_start=390 last_acc_after_start=49158 done_after_start=49159 done_gap=1 busy_start_ignored=1
+OBS: Z4_FC1_signed_minimum min_pure_sum=-49938432 max_pure_sum=-49938432 negative_outputs=128 positive_i32_margin=2197422079 negative_i32_margin=2097545216
+PASS: Z4_FC1_signed_minimum FIFO words=49152 full_cycles=5 empty_stall_cycles=0 empty_read_probes=0 stretched_intervals=0 overflow=0
+PASS: F-02 ALL cases=12 outputs_compared=1224 checks=2128172 cycles=320872
+$finish called at time : 3208717 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_fc_mac.v" Line 356
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 18:28:14 2026...
+
+EXIT_CODE: 0
+WALL_CLOCK_SECONDS: 7.572207

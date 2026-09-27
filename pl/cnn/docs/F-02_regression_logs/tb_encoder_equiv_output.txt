@@ -1,0 +1,28 @@
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/e01_equiv/xsim_script.tcl
+# xsim {e01_equiv} -autoloadwcfg -runall -onerror quit
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+PASS: E-01 BUFFER id=2 W=8 R=64 bytes=64 checks=288 read_first_collisions=29 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BUFFER id=4 W=64 R=16 bytes=64 checks=304 read_first_collisions=52 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BUFFER id=3 W=24 R=8 bytes=60 checks=400 read_first_collisions=68 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BLOB path=D:/2609_final_project/wifi-csi-pose-main/HLS/pl_accel_v6/pl_accel_v6_weights.bin bytes=422992 LOAD_beats=3722 LOAD_cycles=9772 pool_mult=783b66b4 pool_shift=31
+PASS: E-01 BUFFER id=0 W=64 R=8 bytes=11520 checks=36200 read_first_collisions=11521 latency=1 lane_order=LSB_at_low_address mismatches=0
+PASS: E-01 BUFFER id=1 W=8 R=8 bytes=20480 checks=82120 read_first_collisions=20481 latency=1 lane_order=LSB_at_low_address mismatches=0
+OBS: E-01 ENCODER case=0 pattern=deterministic seed=00000000 sampled_done_cycles=1278889 first_assert_cycles=1278888 compared_cycles=1278890 output_signals=5 output_bits=93 extra_buffer_signals=2 known_feat_samples=440704 unknown_feat_samples=838186 done_pulses=1 mismatches=0
+OBS: E-01 CYCLE_DEFINITION case=0 spec=1278890 elapsed_edges=1278889 inclusive_edges=1278890 original_and_new_finish_together=1
+PASS: E-01 FEATURES case=0 swept_addresses=512 valid_words=384 known_bytes=3072 out_of_range_X=128 nonzero_words=384 changed_from_pattern0=0 mismatches=0 latency=1
+OBS: E-01 ENCODER case=1 pattern=   xorshift32 seed=6e01cafe sampled_done_cycles=1278889 first_assert_cycles=1278888 compared_cycles=1278890 output_signals=5 output_bits=93 extra_buffer_signals=2 known_feat_samples=959231 unknown_feat_samples=319659 done_pulses=1 mismatches=0
+OBS: E-01 CYCLE_DEFINITION case=1 spec=1278890 elapsed_edges=1278889 inclusive_edges=1278890 original_and_new_finish_together=1
+PASS: E-01 FEATURES case=1 swept_addresses=512 valid_words=384 known_bytes=3072 out_of_range_X=128 nonzero_words=384 changed_from_pattern0=384 mismatches=0 latency=1
+PASS: E-01 ALL cases=2 full_run_compared_cycles=2557780 output_signals_per_cycle=5 extra_buffer_signals_per_cycle=2 final_valid_feature_words=768 buffer_variants=5 mismatches=0
+$finish called at time : 26438156 ns : File "D:/2609_final_project/cnn_rtl/tb/tb_encoder_equiv.v" Line 270
+run: Time (s): cpu = 00:00:01 ; elapsed = 00:01:22 . Memory (MB): peak = 918.047 ; gain = 0.043
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Sep 26 18:26:20 2026...

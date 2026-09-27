@@ -1,0 +1,190 @@
+{
+  "protected_existing_files": [
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_ctrl.v",
+      "before": "625B16AEDFCF804CAE50D071FF1E2B6B53DF4396F0CBE5008C16FFF0EE1AB64D",
+      "after": "625B16AEDFCF804CAE50D071FF1E2B6B53DF4396F0CBE5008C16FFF0EE1AB64D",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_M00_AXI.v",
+      "before": "9C5EE22C6D25602E97032C337AD437032F99E94EA883F55C231A2D4D71E998D0",
+      "after": "9C5EE22C6D25602E97032C337AD437032F99E94EA883F55C231A2D4D71E998D0",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\rtl\\pose_cnn_v1_0_S00_AXI.v",
+      "before": "78ADB298E83AE2C4AB023748AFF78104A237648364579729D951A5B597E1A65E",
+      "after": "78ADB298E83AE2C4AB023748AFF78104A237648364579729D951A5B597E1A65E",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\axi4_slave_mem_model.v",
+      "before": "02813E9D5789189B27464DAD307D39C0C2EAAE56106D28D437AFE731B9BEA348",
+      "after": "02813E9D5789189B27464DAD307D39C0C2EAAE56106D28D437AFE731B9BEA348",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_axi4_slave_mem_model.v",
+      "before": "170CA4B8AB67996C6C4BB52D9112ACBAC4AEC292311AA9893EE8D20C9D6E7944",
+      "after": "170CA4B8AB67996C6C4BB52D9112ACBAC4AEC292311AA9893EE8D20C9D6E7944",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_csr_ctrl_link.v",
+      "before": "4D00D7BB088ECFFFA58806DD817991F903A4ABE2D356024111262868E09E57E1",
+      "after": "4D00D7BB088ECFFFA58806DD817991F903A4ABE2D356024111262868E09E57E1",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_ctrl_status.v",
+      "before": "CB75018472BA16B7BBDD20747230D1F157441B4BC737C22A302AE77B56F7ABEF",
+      "after": "CB75018472BA16B7BBDD20747230D1F157441B4BC737C22A302AE77B56F7ABEF",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_read_perf.v",
+      "before": "4E29A74BF287B001A73C91D5E49AF606C32CB2DB6C9F97C1B43A87AC1A309439",
+      "after": "4E29A74BF287B001A73C91D5E49AF606C32CB2DB6C9F97C1B43A87AC1A309439",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_m00_read.v",
+      "before": "99705F116077C108DC7D3799057B8D637395BA2783F84187D8A4B916B682E101",
+      "after": "99705F116077C108DC7D3799057B8D637395BA2783F84187D8A4B916B682E101",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_ctrl.v",
+      "before": "72BCD126B4E6CA0E1A1B129973FF65C0C1F6F40C2B3D691C568DA15041206D2F",
+      "after": "72BCD126B4E6CA0E1A1B129973FF65C0C1F6F40C2B3D691C568DA15041206D2F",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_read.v",
+      "before": "1733A639ED4D2299DD8B1F72F4D282B5B3535B3F033F41C00F49707F2A42C0F5",
+      "after": "1733A639ED4D2299DD8B1F72F4D282B5B3535B3F033F41C00F49707F2A42C0F5",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_regs.v",
+      "before": "773760F459F582096D1644B06CD0A85CDD37DB33BFA190BB3FF7FC46EF60CAB2",
+      "after": "773760F459F582096D1644B06CD0A85CDD37DB33BFA190BB3FF7FC46EF60CAB2",
+      "unchanged": true
+    },
+    {
+      "path": "D:\\2609_final_project\\cnn_rtl\\tb\\tb_s00_axi_write.v",
+      "before": "AFF01C63AD24A35CA122C912B6A781E5E5A623B9341F26ED7C4FCBF16F1E7170",
+      "after": "AFF01C63AD24A35CA122C912B6A781E5E5A623B9341F26ED7C4FCBF16F1E7170",
+      "unchanged": true
+    }
+  ],
+  "write_source_sha256": "f10cbe60eb025a395f5572aff5e972972b72223c90e35cdc1989cd21ec2c6556",
+  "AXI_direct_port_count_per_instance": 37,
+  "C11_enabled": true,
+  "read_regression_semantic_lines_unchanged": 53,
+  "compile_elaborate_errors": 0,
+  "compile_elaborate_warnings": 0,
+  "runtime_contract_fail": "W5 no-consecutive-HIGH only; deferred fatal after all integrity checks",
+  "cycle_and_AW_csv_independent_audit": [
+    {
+      "case": "pose_24",
+      "ready_cycles": 3,
+      "high_runs": 1,
+      "max_high_run": 3,
+      "adjacent_pairs": 2,
+      "bursts": 1,
+      "coverage_bytes": 24
+    },
+    {
+      "case": "size_8",
+      "ready_cycles": 1,
+      "high_runs": 1,
+      "max_high_run": 1,
+      "adjacent_pairs": 0,
+      "bursts": 1,
+      "coverage_bytes": 8
+    },
+    {
+      "case": "size_128",
+      "ready_cycles": 16,
+      "high_runs": 1,
+      "max_high_run": 16,
+      "adjacent_pairs": 15,
+      "bursts": 1,
+      "coverage_bytes": 128
+    },
+    {
+      "case": "size_136_busy",
+      "ready_cycles": 17,
+      "high_runs": 2,
+      "max_high_run": 16,
+      "adjacent_pairs": 15,
+      "bursts": 2,
+      "coverage_bytes": 136
+    },
+    {
+      "case": "boundary_ff8",
+      "ready_cycles": 17,
+      "high_runs": 2,
+      "max_high_run": 16,
+      "adjacent_pairs": 15,
+      "bursts": 2,
+      "coverage_bytes": 136
+    },
+    {
+      "case": "size_4096",
+      "ready_cycles": 512,
+      "high_runs": 33,
+      "max_high_run": 16,
+      "adjacent_pairs": 479,
+      "bursts": 33,
+      "coverage_bytes": 4096
+    },
+    {
+      "case": "pose_Bdelay12",
+      "ready_cycles": 3,
+      "high_runs": 1,
+      "max_high_run": 3,
+      "adjacent_pairs": 2,
+      "bursts": 1,
+      "coverage_bytes": 24
+    },
+    {
+      "case": "W_before_AW",
+      "ready_cycles": 16,
+      "high_runs": 1,
+      "max_high_run": 16,
+      "adjacent_pairs": 15,
+      "bursts": 1,
+      "coverage_bytes": 128
+    },
+    {
+      "case": "AW_before_W",
+      "ready_cycles": 3,
+      "high_runs": 3,
+      "max_high_run": 1,
+      "adjacent_pairs": 0,
+      "bursts": 1,
+      "coverage_bytes": 24
+    },
+    {
+      "case": "W_periodic",
+      "ready_cycles": 17,
+      "high_runs": 17,
+      "max_high_run": 1,
+      "adjacent_pairs": 0,
+      "bursts": 2,
+      "coverage_bytes": 136
+    },
+    {
+      "case": "W_random",
+      "ready_cycles": 64,
+      "high_runs": 29,
+      "max_high_run": 7,
+      "adjacent_pairs": 35,
+      "bursts": 4,
+      "coverage_bytes": 512
+    }
+  ]
+}
