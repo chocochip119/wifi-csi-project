@@ -1,20 +1,26 @@
 `timescale 1ns / 1ps
 
-module Pool (
+module Pool #(
+    parameter RX = 3,  // number of receivers
+    // derived from RX, do not override
+    parameter RX_W        = (RX > 1) ? $clog2(RX) : 1,
+    parameter TAG_W       = RX_W + 17,
+    parameter FEAT_ADDR_W = $clog2(RX * 128)  // result RX x 1024 B = RX*128 64-bit words
+) (
     input wire clk,
     input wire rst_n,
     input wire [7:0] pool_q,
     input wire pool_valid,
-    input wire [18:0] pool_tag,  // {rx[1:0], layer, oc[4:0], h[6:0], w[3:0]}
-    input wire [31:0] pool_mult,  // signed, LOAD 후 고정
-    input wire [31:0] pool_shift,  // signed, LOAD 후 고정 (현재 blob: 31)
-    input wire [8:0] feat_raddr,
+    input wire [TAG_W - 1:0] pool_tag,  // {rx[RX_W-1:0], layer, oc[4:0], h[6:0], w[3:0]}
+    input wire [31:0] pool_mult,  // signed, fixed after LOAD
+    input wire [31:0] pool_shift,  // signed, fixed after LOAD (blob: 31)
+    input wire [FEAT_ADDR_W - 1:0] feat_raddr,
     output reg [63:0] feat_rdata,
     output wire enc_done
 );
 
     // tag
-    wire [1:0] tag_rx = pool_tag[18:17];
+    wire [RX_W - 1:0] tag_rx = pool_tag[TAG_W - 1:17];
     wire [4:0] tag_oc = pool_tag[15:11];
     wire [6:0] tag_h = pool_tag[10:4];
     wire [3:0] tag_w = pool_tag[3:0];
@@ -48,7 +54,7 @@ module Pool (
     // end stripe 
     reg signed [15:0] hold [0:63];
     reg         done_r0;
-    reg [1:0] st_rx;
+    reg [RX_W - 1:0] st_rx;
     reg st_pass;
     reg [2:0] st_oh;
     reg busy;
@@ -151,19 +157,19 @@ module Pool (
         end
     end
 
-    // result memory
-    wire [11:0] wr_addr = {st_rx, st_pass, idx_r6[5:2], st_oh, idx_r6[1:0]};
+    // result memory : byte addr = rx*1024 + oc*32 + oh*4 + ow
+    wire [RX_W + 9:0] wr_addr = {st_rx, st_pass, idx_r6[5:2], st_oh, idx_r6[1:0]};
     wire [63:0] wr_data64 = {8{q_r6}};
     wire [7:0] wr_be = 8'b1 << wr_addr[2:0];
 
-    assign enc_done = v_r6 && (idx_r6 == 63) && (st_rx == 2) && st_pass && (st_oh == 7);
+    assign enc_done = v_r6 && (idx_r6 == 63) && (st_rx == RX - 1) && st_pass && (st_oh == 7);
 
-    reg [63:0] res_mem [0:383];
+    reg [63:0] res_mem [0:RX * 128 - 1];
     integer k;
 
     always @(posedge clk) begin
-        for (k = 0; k < 8; k = k + 1) 
-            if (v_r6 && wr_be[k]) res_mem[wr_addr[11:3]][8*k +: 8] <= wr_data64[8*k +: 8];
+        for (k = 0; k < 8; k = k + 1)
+            if (v_r6 && wr_be[k]) res_mem[wr_addr[RX_W + 9:3]][8*k +: 8] <= wr_data64[8*k +: 8];
         feat_rdata <= res_mem[feat_raddr];
     end
 

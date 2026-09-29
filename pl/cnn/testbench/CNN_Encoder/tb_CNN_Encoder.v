@@ -1,16 +1,18 @@
 `timescale 1ns / 1ps
 
 // CNN_Encoder 통합 테스트 : Conv1 → requant → GELU → Conv2 → requant → GELU → Pool
-// 3 RX Pool 결과 3,072 B 를 int8 reference 와 비교, enc_done 1회 확인
-// 벡터: python gen_CNN_Encoder.py  (enc_*.hex, numpy 필요)
+// RX 개 Pool 결과 RX*1024 B 를 int8 reference 와 비교, enc_done 1회 확인
+// 벡터: python gen_CNN_Encoder.py <RX>  (enc_*.hex, numpy 필요), RX 는 아래 parameter 와 같게
 module tb_CNN_Encoder;
+    parameter RX = 3;
+    localparam IN_WORDS = RX * 480, FEAT_WORDS = RX * 128;
     reg clk = 0, rst_n = 0;
     always #5 clk = ~clk;
 
     reg          enc_start = 0;
     wire         enc_done;
     reg          in_we = 0;
-    reg  [ 10:0] in_waddr = 0;
+    reg  [$clog2(IN_WORDS) - 1:0] in_waddr = 0;
     reg  [ 63:0] in_wdata = 0;
     wire [  8:0] conv_raddr;
     reg  [127:0] conv_rdata;
@@ -20,10 +22,10 @@ module tb_CNN_Encoder;
     reg  [  7:0] enc_lut_rdata;
     reg  [ 31:0] pool_mult, pool_shift;
     reg  [ 31:0] pool_mem [0:1];
-    reg  [  8:0] feat_raddr = 0;
+    reg  [$clog2(FEAT_WORDS) - 1:0] feat_raddr = 0;
     wire [ 63:0] feat_rdata;
 
-    CNN_Encoder dut (
+    CNN_Encoder #(.RX(RX)) dut (
         .clk(clk), .rst_n(rst_n),
         .enc_start(enc_start), .enc_done(enc_done),
         .in_we(in_we), .in_waddr(in_waddr), .in_wdata(in_wdata),
@@ -38,8 +40,8 @@ module tb_CNN_Encoder;
     reg [127:0] w_mem   [0:332];
     reg [ 95:0] p_mem   [0:327];
     reg [  7:0] lut_mem [0:1023];
-    reg [ 63:0] in_mem  [0:1439];
-    reg [ 63:0] exp_mem [0:383];
+    reg [ 63:0] in_mem  [0:IN_WORDS - 1];
+    reg [ 63:0] exp_mem [0:FEAT_WORDS - 1];
 
     always @(posedge clk) begin
         conv_rdata      <= w_mem[conv_raddr];
@@ -63,8 +65,8 @@ module tb_CNN_Encoder;
         repeat (5) @(posedge clk);
         rst_n <= 1;
 
-        // 입력 버퍼 채우기 (1440 beat)
-        for (k = 0; k < 1440; k = k + 1) begin
+        // 입력 버퍼 채우기 (RX*480 beat)
+        for (k = 0; k < IN_WORDS; k = k + 1) begin
             @(posedge clk);
             in_we    <= 1;
             in_waddr <= k;
@@ -81,7 +83,7 @@ module tb_CNN_Encoder;
         repeat (20) @(posedge clk);
 
         // Pool 결과 읽기 (raddr 다음 cycle rdata)
-        for (k = 0; k < 384; k = k + 1) begin
+        for (k = 0; k < FEAT_WORDS; k = k + 1) begin
             feat_raddr <= k;
             @(posedge clk);
             @(negedge clk);
@@ -91,7 +93,7 @@ module tb_CNN_Encoder;
             end
             @(posedge clk);
         end
-        $display("feat words checked=384 errors=%0d enc_done pulses=%0d", err, done_cnt);
+        $display("RX=%0d feat words checked=%0d errors=%0d enc_done pulses=%0d", RX, FEAT_WORDS, err, done_cnt);
         $finish;
     end
 

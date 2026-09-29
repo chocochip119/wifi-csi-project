@@ -1,15 +1,24 @@
 `timescale 1ns / 1ps
 
-module CNN_Encoder (
+module CNN_Encoder #(
+    parameter RX = 5,  // number of receivers
+    // derived from RX
+    parameter RX_W        = (RX > 1) ? $clog2(RX) : 1,  // rx field width in tag
+    parameter TAG_W       = RX_W + 17,                  // {rx, layer, oc[4:0], h[6:0], w[3:0]}
+    parameter IN_BYTES    = RX * 3 * 128 * 10,          // input RX*3 ch x 128 x 10
+    parameter IN_WADDR_W  = $clog2(IN_BYTES / 8),       // 64-bit word address
+    parameter IN_RADDR_W  = $clog2(IN_BYTES),           // byte address
+    parameter FEAT_ADDR_W = $clog2(RX * 128)            // Pool result RX x 1024 B, 64-bit word address
+) (
     input  wire         clk,
     input  wire         rst_n,
     // TOP FSM
     input  wire         enc_start,
     output wire         enc_done,
-    // from loader 
-    input  wire         in_we,
-    input  wire [ 10:0] in_waddr,   // 64-bit word 0 ~ 1439
-    input  wire [ 63:0] in_wdata,
+    // from loader
+    input  wire                    in_we,
+    input  wire [IN_WADDR_W - 1:0] in_waddr,  // 64-bit word 0 ~ RX*480-1
+    input  wire [            63:0] in_wdata,
     // Loader RAM
     output wire [  8:0] conv_raddr,
     input  wire [127:0] conv_rdata,
@@ -20,13 +29,13 @@ module CNN_Encoder (
     input  wire [ 31:0] pool_mult,
     input  wire [ 31:0] pool_shift,
     // Flatten
-    input  wire [  8:0] feat_raddr,
-    output wire [ 63:0] feat_rdata
+    input  wire [FEAT_ADDR_W - 1:0] feat_raddr,
+    output wire [             63:0] feat_rdata
 );
 
     // input buffer <-> Conv MAC
-    wire [13:0] in_raddr;
-    wire [ 7:0] in_rdata;
+    wire [IN_RADDR_W - 1:0] in_raddr;
+    wire [           7:0] in_rdata;
 
     // fmap1 buffer <-> Conv MAC / gelu_stage
     wire [14:0] fmap1_raddr;
@@ -37,25 +46,25 @@ module CNN_Encoder (
     wire        fmap1_last;
 
     // Conv MAC <-> requant_stage
-    wire [31:0] acc;
-    wire        acc_valid;
-    wire [18:0] acc_tag;
+    wire [       31:0] acc;
+    wire               acc_valid;
+    wire [TAG_W - 1:0] acc_tag;
 
     // requant_stage -> gelu_stage
-    wire [ 7:0] rq;
-    wire        rq_valid;
-    wire [18:0] rq_tag;
+    wire [        7:0] rq;
+    wire               rq_valid;
+    wire [TAG_W - 1:0] rq_tag;
 
     // gelu_stage -> Pool
-    wire [ 7:0] pool_q;
-    wire        pool_valid;
-    wire [18:0] pool_tag;
+    wire [        7:0] pool_q;
+    wire               pool_valid;
+    wire [TAG_W - 1:0] pool_tag;
 
     // input buffer
     Buffer #(
         .W_DATA_WIDTH(64),
         .R_DATA_WIDTH(8),
-        .DEPTH_BYTE  (11520)
+        .DEPTH_BYTE  (IN_BYTES)
     ) u_input_buf (
         .clk  (clk),
         .we   (in_we),
@@ -65,7 +74,9 @@ module CNN_Encoder (
         .rdata(in_rdata)
     );
 
-    Conv_MAC u_conv_mac (
+    Conv_MAC #(
+        .RX(RX)
+    ) u_conv_mac (
         .clk        (clk),
         .rst_n      (rst_n),
         .enc_start  (enc_start),
@@ -81,8 +92,10 @@ module CNN_Encoder (
         .acc_tag    (acc_tag)
     );
 
-    // Requant : acc + bias → × mult → round shift → [-127, 127]
-    requant_stage u_enc_rq (
+    // Requant : (acc + bias) * mult -> round shift -> [-127, 127]
+    requant_stage #(
+        .TAG_W(TAG_W)
+    ) u_enc_rq (
         .clk            (clk),
         .rst_n          (rst_n),
         .acc            (acc),
@@ -95,8 +108,10 @@ module CNN_Encoder (
         .rq_tag         (rq_tag)
     );
 
-    // GELU LUT : layer 0 → fmap1 buffer, layer 1 → Pool
-    gelu_stage u_enc_gelu (
+    // GELU LUT : layer 0 -> fmap1 buffer, layer 1 -> Pool
+    gelu_stage #(
+        .TAG_W(TAG_W)
+    ) u_enc_gelu (
         .clk          (clk),
         .rst_n        (rst_n),
         .rq           (rq),
@@ -127,8 +142,10 @@ module CNN_Encoder (
         .rdata(fmap1_rdata)
     );
 
-    // Pool : AdaptiveAvgPool(8,4) + requant, 결과 3 RX × 1024 B
-    Pool u_pool (
+    // Pool : AdaptiveAvgPool(8,4) + requant, result RX x 1024 B
+    Pool #(
+        .RX(RX)
+    ) u_pool (
         .clk       (clk),
         .rst_n     (rst_n),
         .pool_q    (pool_q),
