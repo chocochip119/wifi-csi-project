@@ -228,7 +228,7 @@ module pose_cnn #(
     assign pose_raddr = pose_raddr_reg;
     assign fc_done_ctrl = ((fc_layer_reg != 2'd2) && fc_done_raw) || fc3_done_reg;
 
-    always @(posedge clk or negedge rst_n) begin
+    always @(posedge clk) begin
         if (!rst_n) begin
             fc_layer_reg <= 2'd0;
             pose_collect_active <= 1'b0;

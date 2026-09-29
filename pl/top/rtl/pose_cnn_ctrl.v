@@ -86,6 +86,13 @@ module pose_cnn_ctrl #(
     localparam [19:0] FC1_WEIGHT_BYTES = RX * 20'd131072;
     localparam [31:0] LOAD2_OFFSET = 32'd5936 + (RX * 32'd131072);
 
+    // RX values outside the supported range must fail RTL elaboration.
+    generate
+        if ((RX < 1) || (RX > 7)) begin : GEN_INVALID_RX
+            INVALID_RX_PARAMETER invalid_rx_parameter();
+        end
+    endgenerate
+
     reg [3:0]  state_reg, state_next;
     // Unsigned configuration snapshots; only reset/accepted START changes them.
     reg [31:0] cmd_reg, cmd_next;
