@@ -83,6 +83,7 @@ module Conv_MAC (
     // tap 정보 파이프라인
     // s1 : 주소 레지스터와 같은 cycle
     // s2 : rdata / fmap1_rdata / conv_rdata 도착 cycle (동기 RAM 1 cycle)
+    // s3 : 곱셈 결과(prod_r) 레지스터 cycle
     // ------------------------------------------------------------
     reg       s1_valid, s1_pad, s1_first, s1_last, s1_layer, s1_pass;
     reg [1:0] s1_rx;
@@ -92,11 +93,16 @@ module Conv_MAC (
     reg [1:0] s2_rx;
     reg [6:0] s2_h;
     reg [3:0] s2_w;
+    reg       s3_valid, s3_first, s3_last, s3_layer, s3_pass;
+    reg [1:0] s3_rx;
+    reg [6:0] s3_h;
+    reg [3:0] s3_w;
 
     always @(posedge clk) begin
         if (!rst_n) begin
             s1_valid <= 0;
             s2_valid <= 0;
+            s3_valid <= 0;
         end else begin
             s1_valid <= conv_run;
             s1_pad   <= pad;
@@ -117,6 +123,15 @@ module Conv_MAC (
             s2_rx    <= s1_rx;
             s2_h     <= s1_h;
             s2_w     <= s1_w;
+
+            s3_valid <= s2_valid;
+            s3_first <= s2_first;
+            s3_last  <= s2_last;
+            s3_layer <= s2_layer;
+            s3_pass  <= s2_pass;
+            s3_rx    <= s2_rx;
+            s3_h     <= s2_h;
+            s3_w     <= s2_w;
         end
     end
 
@@ -131,12 +146,14 @@ module Conv_MAC (
         for (l = 0; l < LANES; l = l + 1) begin : g_lane
             reg signed [31:0] lane_acc;
             reg signed [31:0] lane_out;
+            reg signed [15:0] prod_r;
             wire signed [15:0] prod = $signed(act) * $signed(conv_rdata[8*l +: 8]);
-            wire signed [31:0] sum  = (s2_first ? 32'sd0 : lane_acc) + prod;
+            wire signed [31:0] sum  = (s3_first ? 32'sd0 : lane_acc) + prod_r;
 
             always @(posedge clk) begin
-                if (s2_valid) lane_acc <= sum;
-                if (s2_valid && s2_last) lane_out <= sum;  // 위치 하나 완료 → 출력 버퍼
+                if (s2_valid) prod_r <= prod;              // s2 : 곱셈
+                if (s3_valid) lane_acc <= sum;             // s3 : 누산
+                if (s3_valid && s3_last) lane_out <= sum;  // 위치 하나 완료 → 출력 버퍼
             end
 
             assign out_flat[32*l +: 32] = lane_out;
@@ -159,14 +176,14 @@ module Conv_MAC (
             drain_busy <= 0;
             drain_cnt  <= 0;
         end else begin
-            if (s2_valid && s2_last) begin
+            if (s3_valid && s3_last) begin
                 drain_busy <= 1;
                 drain_cnt  <= 0;
-                d_layer    <= s2_layer;
-                d_pass     <= s2_pass;
-                d_rx       <= s2_rx;
-                d_h        <= s2_h;
-                d_w        <= s2_w;
+                d_layer    <= s3_layer;
+                d_pass     <= s3_pass;
+                d_rx       <= s3_rx;
+                d_h        <= s3_h;
+                d_w        <= s3_w;
             end else if (drain_busy) begin
                 drain_cnt <= drain_cnt + 1;
                 if (drain_cnt == LANES - 1) drain_busy <= 0;

@@ -13,9 +13,9 @@ module requant_stage (
     output reg [18:0] rq_tag
 );
 
-    reg signed [63:0] acc_r1, acc_r2, acc_r3;
-    reg valid_r1, valid_r2, valid_r3;
-    reg [18:0] tag_r1, tag_r2, tag_r3;
+    reg signed [63:0] acc_r1, acc_r2, acc_r3, acc_r4;
+    reg valid_r1, valid_r2, valid_r3, valid_r4;
+    reg [18:0] tag_r1, tag_r2, tag_r3, tag_r4;
 
     // stage 0 
     wire tag0_layer = acc_tag[16];
@@ -37,7 +37,7 @@ module requant_stage (
 
     wire signed [63:0] acc_mult = acc_r2 * mult2;
 
-    // stage 3, >> shift and saturate
+    // stage 3, round shift
     wire signed [31:0] sh3 = param3[95:64];
 
     wire signed [63:0] half = 64'sd1 <<< (sh3[5:0] - 6'd1);
@@ -45,13 +45,15 @@ module requant_stage (
                                 (acc_r3 >= 0) ? ((acc_r3 + half) >>> sh3[5:0]) :
                                                 ((acc_r3 - half) >>> sh3[5:0]);
 
-    wire signed [7:0] acc_sat = (acc_sh < -127) ? -8'sd127 : (acc_sh > 127) ? 8'sd127 : acc_sh[7:0]; 
+    // stage 4, saturate
+    wire signed [7:0] acc_sat = (acc_r4 < -127) ? -8'sd127 : (acc_r4 > 127) ? 8'sd127 : acc_r4[7:0]; 
 
     always @(posedge clk) begin
         if (!rst_n) begin
             valid_r1 <= 0;
             valid_r2 <= 0;
             valid_r3 <= 0;
+            valid_r4 <= 0;
             rq_valid <= 0;
         end else begin
             // stage 0
@@ -68,10 +70,14 @@ module requant_stage (
             valid_r3 <= valid_r2;
             tag_r3 <= tag_r2;
             param3 <= param2;
-            // stage 3 
+            // stage 3
+            acc_r4 <= acc_sh;
+            valid_r4 <= valid_r3;
+            tag_r4 <= tag_r3;
+            // stage 4
             rq <= acc_sat;
-            rq_valid <= valid_r3;
-            rq_tag <= tag_r3;
+            rq_valid <= valid_r4;
+            rq_tag <= tag_r4;
         end
     end
 
