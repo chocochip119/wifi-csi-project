@@ -12,10 +12,12 @@ module pose_cnn_ctrl (
     input  wire [31:0]  reg_input_addr,
     input  wire [31:0]  reg_weight_addr,
     input  wire [31:0]  reg_output_addr,
+    input  wire [2:0]   reg_rx_count,
     output wire         status_busy,
     output wire         status_done,
     output wire [3:0]   status_error,
     input  wire         cfg_ok,
+    output wire [2:0]   active_rx_count,
 
     output reg          mem_rd_start,
     output reg  [31:0]  mem_rd_addr,
@@ -47,7 +49,7 @@ module pose_cnn_ctrl (
     output reg          enc_start,
     input  wire         enc_done,
     output reg          in_we,
-    output reg  [10:0]  in_waddr,
+    output reg  [11:0]  in_waddr,
     output reg  [63:0]  in_wdata,
     output reg          fc_start,
     input  wire         fc_done,
@@ -79,6 +81,8 @@ module pose_cnn_ctrl (
     localparam [3:0] ERR_BLOB    = 4'd3;
     localparam [3:0] ERR_MEM_RD  = 4'd4;
     localparam [3:0] ERR_MEM_WR  = 4'd5;
+    localparam [19:0] INPUT_BYTES_PER_RX = 20'd3840;
+    localparam [19:0] FC1_BYTES_PER_RX   = 20'd131072;
 
     reg [3:0]  state_reg, state_next;
     // Unsigned configuration snapshots; only reset/accepted START changes them.
@@ -86,6 +90,8 @@ module pose_cnn_ctrl (
     reg [31:0] input_addr_reg, input_addr_next;
     reg [31:0] weight_addr_reg, weight_addr_next;
     reg [31:0] output_addr_reg, output_addr_next;
+    reg [2:0]  rx_count_reg, rx_count_next;
+    reg [2:0]  loaded_rx_count_reg, loaded_rx_count_next;
     // Internal execution result is separate from the software-visible display.
     reg [3:0]  run_error_reg, run_error_next;
     reg        done_reg, done_next;
@@ -94,7 +100,7 @@ module pose_cnn_ctrl (
     reg        mem_wr_busy_prev_reg;
     reg        loader_done_seen_reg, loader_done_seen_next;
     reg        loader_error_seen_reg, loader_error_seen_next;
-    reg [10:0] beat_reg, beat_next;
+    reg [11:0] beat_reg, beat_next;
     reg [31:0] load_base_reg, load_base_next;
     reg [31:0] ld2_addr_reg, ld2_addr_next;
     reg [31:0] fc1_addr_reg, fc1_addr_next;
@@ -103,6 +109,10 @@ module pose_cnn_ctrl (
     assign status_busy  = (state_reg != IDLE);
     assign status_done  = done_reg;
     assign status_error = error_reg;
+    assign active_rx_count = rx_count_reg;
+    wire [19:0] input_bytes = rx_count_reg * INPUT_BYTES_PER_RX;
+    wire [19:0] fc1_weight_bytes = rx_count_reg * FC1_BYTES_PER_RX;
+    wire [31:0] load2_offset = 32'd5936 + {12'd0, fc1_weight_bytes};
     // Current-state decode, not fc_start: RAM samples the selected address on
     // its next rising edge. No extra register or change to the FSM sequence.
     assign param_sel_fc = (state_reg == FC1) || (state_reg == FC2) || (state_reg == FC3);
@@ -116,6 +126,8 @@ module pose_cnn_ctrl (
             input_addr_reg  <= 32'b0;
             weight_addr_reg <= 32'b0;
             output_addr_reg <= 32'b0;
+            rx_count_reg    <= 3'd3;
+            loaded_rx_count_reg <= 3'd0;
             run_error_reg   <= ERR_NONE;
             done_reg        <= 1'b0;
             error_reg       <= ERR_NONE;
@@ -123,7 +135,7 @@ module pose_cnn_ctrl (
             mem_wr_busy_prev_reg <= 1'b0;
             loader_done_seen_reg <= 1'b0;
             loader_error_seen_reg <= 1'b0;
-            beat_reg        <= 11'd0;
+            beat_reg        <= 12'd0;
             load_base_reg   <= 32'd0;
             ld2_addr_reg    <= 32'd0;
             fc1_addr_reg    <= 32'd0;
@@ -134,6 +146,8 @@ module pose_cnn_ctrl (
             input_addr_reg  <= input_addr_next;
             weight_addr_reg <= weight_addr_next;
             output_addr_reg <= output_addr_next;
+            rx_count_reg    <= rx_count_next;
+            loaded_rx_count_reg <= loaded_rx_count_next;
             run_error_reg   <= run_error_next;
             done_reg        <= done_next;
             error_reg       <= error_next;
@@ -155,6 +169,8 @@ module pose_cnn_ctrl (
         input_addr_next  = input_addr_reg;
         weight_addr_next = weight_addr_reg;
         output_addr_next = output_addr_reg;
+        rx_count_next     = rx_count_reg;
+        loaded_rx_count_next = loaded_rx_count_reg;
         run_error_next   = run_error_reg;
         done_next        = done_reg;
         error_next       = error_reg;
@@ -178,7 +194,7 @@ module pose_cnn_ctrl (
         ld_valid         = 1'b0;
         enc_start        = 1'b0;
         in_we            = 1'b0;
-        in_waddr         = 11'd0;
+        in_waddr         = 12'd0;
         in_wdata         = 64'd0;
         fc_start         = 1'b0;
         fc_sel           = 2'd0;
@@ -213,6 +229,13 @@ module pose_cnn_ctrl (
                     input_addr_next  = reg_input_addr;
                     weight_addr_next = reg_weight_addr;
                     output_addr_next = reg_output_addr;
+                    // The CSR enforces 1..7. Defaulting invalid direct-core
+                    // drives to 3 preserves legacy standalone test harnesses.
+                    case (reg_rx_count)
+                        3'd1, 3'd2, 3'd3, 3'd4, 3'd5, 3'd6, 3'd7:
+                            rx_count_next = reg_rx_count;
+                        default: rx_count_next = 3'd3;
+                    endcase
                     run_error_next   = ERR_NONE;
                     loader_done_seen_next = 1'b0;
                     loader_error_seen_next = 1'b0;
@@ -237,17 +260,18 @@ module pose_cnn_ctrl (
                     load_base_next = weight_addr_reg;
                     // Both addresses belong to this NEW LOAD snapshot. Using
                     // the old load_base_reg here would lag one LOAD behind.
-                    ld2_addr_next = weight_addr_reg + 32'd399152;
+                    ld2_addr_next = weight_addr_reg + load2_offset;
                     fc1_addr_next = load_base_next + 32'd5936;
                     state_next = LD_RD1;
-                end else if ((cmd_reg == CMD_INFER) && cfg_ok) begin
+                end else if ((cmd_reg == CMD_INFER) && cfg_ok &&
+                             (rx_count_reg == loaded_rx_count_reg)) begin
                     run_error_next = ERR_NONE;
                     mem_rd_start = 1'b1;
                     mem_rd_addr = input_addr_reg;
-                    mem_rd_bytes = 20'd11520;
-                    beat_next = 11'd0;
+                    mem_rd_bytes = input_bytes;
+                    beat_next = 12'd0;
                     state_next = IN_RD;
-                end else if ((cmd_reg == CMD_INFER) && !cfg_ok) begin
+                end else if (cmd_reg == CMD_INFER) begin
                     run_error_next = ERR_NO_CFG;
                     state_next = FINISH;
                 end else begin
@@ -291,6 +315,8 @@ module pose_cnn_ctrl (
                 if (loader_done || loader_done_seen_reg) begin
                     if (loader_done ? loader_err : loader_error_seen_reg)
                         run_error_next = ERR_BLOB;
+                    else
+                        loaded_rx_count_next = rx_count_reg;
                     state_next = FINISH;
                 end
             end
@@ -308,7 +334,7 @@ module pose_cnn_ctrl (
                     in_we = 1'b0;
                     state_next = ERR_DRAIN;
                 end else if (mem_rd_valid) begin
-                    beat_next = beat_reg + 11'd1;
+                    beat_next = beat_reg + 12'd1;
                 end else if (mem_rd_busy_prev_reg && !mem_rd_busy) begin
                     enc_start = 1'b1;
                     state_next = ENC;
@@ -324,7 +350,7 @@ module pose_cnn_ctrl (
                     mem_rd_start = 1'b1;
                     // D06 confirmed: use the LOAD base, not this INFER snapshot.
                     mem_rd_addr = fc1_addr_reg;
-                    mem_rd_bytes = 20'd393216;
+                    mem_rd_bytes = fc1_weight_bytes;
                     state_next = FC1;
                 end
             end
@@ -359,7 +385,7 @@ module pose_cnn_ctrl (
                     mem_wr_start = 1'b1;
                     mem_wr_addr = output_addr_reg;
                     mem_wr_bytes = 20'd24;
-                    beat_next = 11'd0;
+                    beat_next = 12'd0;
                     state_next = WR;
                 end
             end
@@ -368,13 +394,13 @@ module pose_cnn_ctrl (
                 // After the third transfer, keep the final word valid while
                 // M00 waits for B. There is no fourth producer transfer.
                 case (beat_reg)
-                    11'd0: mem_wr_data = pose_data[63:0];
-                    11'd1: mem_wr_data = pose_data[127:64];
+                    12'd0: mem_wr_data = pose_data[63:0];
+                    12'd1: mem_wr_data = pose_data[127:64];
                     default: mem_wr_data = pose_data[191:128];
                 endcase
                 if (mem_wr_ready) begin
                     // Consecutive HIGH cycles are distinct accepted beats.
-                    if (beat_reg < 11'd3) beat_next = beat_reg + 11'd1;
+                    if (beat_reg < 12'd3) beat_next = beat_reg + 12'd1;
                 end else if (mem_wr_busy_prev_reg && !mem_wr_busy) begin
                     // Write errors are checked only after the final B response;
                     // M00 has already finished, so WR does not enter ERR_DRAIN.

@@ -12,6 +12,7 @@ module pose_cnn (
     input  wire [31:0]  reg_input_addr,
     input  wire [31:0]  reg_weight_addr,
     input  wire [31:0]  reg_output_addr,
+    input  wire [2:0]   reg_rx_count,
     output wire         status_busy,
     output wire         status_done,
     output wire [3:0]   status_error,
@@ -44,7 +45,7 @@ module pose_cnn (
     wire enc_start;
     wire enc_done;
     wire in_we;
-    wire [10:0] in_waddr;
+    wire [11:0] in_waddr;
     wire [63:0] in_wdata;
     wire fc_start;
     wire fc_done;
@@ -69,6 +70,7 @@ module pose_cnn (
     wire [63:0] fcw_rdata;
     wire [8:0] flat_raddr;
     wire [63:0] flat_rdata;
+    wire [2:0] active_rx_count;
 
     pose_cnn_ctrl u_ctrl (
         .clk(clk),
@@ -79,10 +81,12 @@ module pose_cnn (
         .reg_input_addr(reg_input_addr),
         .reg_weight_addr(reg_weight_addr),
         .reg_output_addr(reg_output_addr),
+        .reg_rx_count(reg_rx_count),
         .status_busy(status_busy),
         .status_done(status_done),
         .status_error(status_error),
         .cfg_ok(cfg_ok),
+        .active_rx_count(active_rx_count),
         .mem_rd_start(mem_rd_start),
         .mem_rd_addr(mem_rd_addr),
         .mem_rd_bytes(mem_rd_bytes),
@@ -124,6 +128,7 @@ module pose_cnn (
         .clk(clk),
         .rst_n(rst_n),
         .loader_start(loader_start),
+        .active_rx_count(active_rx_count),
         .loader_done(loader_done),
         .loader_err(loader_err),
         .ld_data(ld_data),
@@ -155,7 +160,9 @@ module pose_cnn (
         .enc_start(enc_start),
         .enc_done(enc_done),
         .in_we(in_we),
-        .in_waddr(in_waddr),
+        // Encoder handoff: its current port is still 11-bit/3-RX. The low
+        // slice preserves existing operation until that team widens the port.
+        .in_waddr(in_waddr[10:0]),
         .in_wdata(in_wdata),
         .conv_raddr(conv_raddr),
         .conv_rdata(conv_rdata),

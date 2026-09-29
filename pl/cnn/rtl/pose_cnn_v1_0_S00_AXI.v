@@ -16,6 +16,7 @@ module pose_cnn_v1_0_S00_AXI #(
     output wire [31:0] reg_input_addr,
     output wire [31:0] reg_weight_addr,
     output wire [31:0] reg_output_addr,
+    output wire [2:0]  reg_rx_count,
     input  wire        status_busy,
     input  wire        status_done,
     input  wire [3:0]  status_error,
@@ -53,7 +54,7 @@ module pose_cnn_v1_0_S00_AXI #(
     localparam [2:0] SEL_WEIGHT_ADDR = 3'd4; // 0x10
     localparam [2:0] SEL_OUTPUT_ADDR = 3'd5; // 0x14
     localparam [2:0] SEL_SCALE       = 3'd6; // 0x18
-    localparam [2:0] SEL_RESERVED    = 3'd7; // 0x1C
+    localparam [2:0] SEL_RX_COUNT    = 3'd7; // 0x1C
 
     reg [1:0] wr_state_reg, wr_state_next;
     reg       channel_enable_reg, channel_enable_next;
@@ -67,6 +68,7 @@ module pose_cnn_v1_0_S00_AXI #(
     reg [31:0] input_addr_reg, input_addr_next;
     reg [31:0] weight_addr_reg, weight_addr_next;
     reg [31:0] output_addr_reg, output_addr_next;
+    reg [2:0]  rx_count_reg, rx_count_next;
     // Combinational selection/merge values; these are not storage registers.
     reg [31:0] csr_cur, csr_merged;
     wire [2:0] wr_sel;
@@ -111,6 +113,7 @@ module pose_cnn_v1_0_S00_AXI #(
     assign reg_input_addr   = input_addr_reg;
     assign reg_weight_addr  = weight_addr_reg;
     assign reg_output_addr  = output_addr_reg;
+    assign reg_rx_count     = rx_count_reg;
 
     // Synchronous active-low reset; sample low on a rising clock edge.
     // channel_enable is a one-clock startup guard, NOT a reset synchronizer:
@@ -128,6 +131,7 @@ module pose_cnn_v1_0_S00_AXI #(
             input_addr_reg     <= 32'b0;
             weight_addr_reg    <= 32'b0;
             output_addr_reg    <= 32'b0;
+            rx_count_reg       <= 3'd3;
             bresp_reg          <= 2'b00;
             start_reg          <= 1'b0;
             clear_status_reg   <= 1'b0;
@@ -143,6 +147,7 @@ module pose_cnn_v1_0_S00_AXI #(
             input_addr_reg     <= input_addr_next;
             weight_addr_reg    <= weight_addr_next;
             output_addr_reg    <= output_addr_next;
+            rx_count_reg       <= rx_count_next;
             bresp_reg          <= bresp_next;
             start_reg          <= start_next;
             clear_status_reg   <= clear_status_next;
@@ -217,6 +222,7 @@ module pose_cnn_v1_0_S00_AXI #(
             SEL_INPUT_ADDR:  csr_cur = input_addr_reg;
             SEL_WEIGHT_ADDR: csr_cur = weight_addr_reg;
             SEL_OUTPUT_ADDR: csr_cur = output_addr_reg;
+            SEL_RX_COUNT:    csr_cur = {29'b0, rx_count_reg};
             default:         csr_cur = 32'b0;
         endcase
 
@@ -233,7 +239,7 @@ module pose_cnn_v1_0_S00_AXI #(
     always @(*) begin
         wr_reject = 1'b0;
         case (wr_sel)
-            SEL_STATUS, SEL_SCALE, SEL_RESERVED: begin
+            SEL_STATUS, SEL_SCALE: begin
                 // 1) RO/reserved writes: OKAY regardless of busy or WSTRB.
                 wr_reject = 1'b0;
             end
@@ -252,6 +258,13 @@ module pose_cnn_v1_0_S00_AXI #(
                     wr_reject = wr_align_bad;
                 end
             end
+            SEL_RX_COUNT: begin
+                // RX_COUNT is an RW CSR. Only the supported 1..7 range commits.
+                if (status_busy)
+                    wr_reject = 1'b1;
+                else
+                    wr_reject = (csr_merged < 32'd1) || (csr_merged > 32'd7);
+            end
             default: wr_reject = 1'b0;
         endcase
     end
@@ -261,6 +274,7 @@ module pose_cnn_v1_0_S00_AXI #(
         input_addr_next   = input_addr_reg;
         weight_addr_next  = weight_addr_reg;
         output_addr_next  = output_addr_reg;
+        rx_count_next     = rx_count_reg;
         bresp_next        = bresp_reg;
         start_next        = 1'b0;
         clear_status_next = 1'b0;
@@ -280,6 +294,7 @@ module pose_cnn_v1_0_S00_AXI #(
                     SEL_INPUT_ADDR:  input_addr_next  = csr_merged;
                     SEL_WEIGHT_ADDR: weight_addr_next = csr_merged;
                     SEL_OUTPUT_ADDR: output_addr_next = csr_merged;
+                    SEL_RX_COUNT:    rx_count_next     = csr_merged[2:0];
                     default: begin
                         // RO/reserved writes keep all stored values and pulses.
                     end
@@ -302,11 +317,11 @@ module pose_cnn_v1_0_S00_AXI #(
             SEL_INPUT_ADDR:  read_data_mux = input_addr_reg;
             SEL_WEIGHT_ADDR: read_data_mux = weight_addr_reg;
             SEL_OUTPUT_ADDR: read_data_mux = output_addr_reg;
+            SEL_RX_COUNT:    read_data_mux = {29'b0, rx_count_reg};
             SEL_SCALE: begin
                 read_data_mux = cfg_ok ? output_scale_bits : 32'b0;
                 read_resp_mux = cfg_ok ? 2'b00 : 2'b10;
             end
-            SEL_RESERVED:    read_data_mux = 32'b0;
             default: begin
                 read_data_mux = 32'b0;
                 read_resp_mux = 2'b00;

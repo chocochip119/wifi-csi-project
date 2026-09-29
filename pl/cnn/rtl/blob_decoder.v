@@ -6,6 +6,8 @@
 module blob_decoder #(
     parameter [31:0] EXPECTED_MAGIC = 32'h36574c50,
     parameter [31:0] EXPECTED_VERSION = 32'd2,
+    // Kept as the 3-RX reference value for legacy parameterized testbenches.
+    // The runtime check below derives the resident base, then adds RX words.
     parameter [31:0] EXPECTED_TOTAL_WORDS = 32'd105748,
     // Version 2 confirmed against full_pose.h and the reference blob (L-02).
     parameter CHECK_VERSION = 1'b1
@@ -13,6 +15,7 @@ module blob_decoder #(
     input  wire         clk,
     input  wire         rst_n,
     input  wire         loader_start,
+    input  wire [2:0]   active_rx_count,
     output wire         loader_done,
     output wire         loader_err,
     input  wire [63:0]  ld_data,
@@ -43,6 +46,20 @@ module blob_decoder #(
     localparam [3:0] FC2_W = 4'd6, FC2_P = 4'd7, FC3_W = 4'd8;
     localparam [3:0] FC3_P = 4'd9, GELU = 4'd10, NO_REGION = 4'd15;
     localparam [11:0] STREAM_BEATS = 12'd3722;
+    localparam [31:0] FC1_WORDS_PER_RX = 32'd32768;
+    localparam [31:0] RESIDENT_TOTAL_WORDS =
+        EXPECTED_TOTAL_WORDS - (32'd3 * FC1_WORDS_PER_RX);
+
+    reg [2:0] rx_count_value;
+    always @(*) begin
+        case (active_rx_count)
+            3'd1, 3'd2, 3'd3, 3'd4, 3'd5, 3'd6, 3'd7:
+                rx_count_value = active_rx_count;
+            default: rx_count_value = 3'd3;
+        endcase
+    end
+    wire [31:0] expected_total_words = RESIDENT_TOTAL_WORDS +
+        (rx_count_value * FC1_WORDS_PER_RX);
 
     reg [1:0] state_reg, state_next;
     // Number already accepted; before a handshake it is that beat's index.
@@ -264,7 +281,7 @@ module blob_decoder #(
                             (CHECK_VERSION && (ld_data[63:32] != EXPECTED_VERSION)))
                             error_next = 1'b1;
                     end else if (beat_count_reg == 12'd1) begin
-                        if (ld_data[31:0] != EXPECTED_TOTAL_WORDS) error_next = 1'b1;
+                        if (ld_data[31:0] != expected_total_words) error_next = 1'b1;
                     end else if (beat_count_reg == 12'd2) begin
                         output_scale_next = ld_data[31:0];
                         pool_mult_next = ld_data[63:32];

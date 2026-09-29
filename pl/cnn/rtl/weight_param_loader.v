@@ -6,6 +6,7 @@ module weight_param_loader (
     input  wire         clk,
     input  wire         rst_n,
     input  wire         loader_start,
+    input  wire [2:0]   active_rx_count,
     output wire         loader_done,
     output wire         loader_err,
     input  wire [63:0]  ld_data,
@@ -55,6 +56,7 @@ module weight_param_loader (
 
     blob_decoder u_blob_decoder (
         .clk(clk), .rst_n(rst_n), .loader_start(loader_start),
+        .active_rx_count(active_rx_count),
         .loader_done(loader_done), .loader_err(loader_err),
         .ld_data(ld_data), .ld_valid(ld_valid), .ld_ready(ld_ready),
         .cfg_ok(cfg_ok), .pool_mult(pool_mult), .pool_shift(pool_shift),
