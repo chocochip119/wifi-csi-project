@@ -328,6 +328,14 @@ module pose_cnn_v1_0_M00_AXI #(
                         ((rd_state == RD_DATA) && mem_rd_ready && !M_AXI_RVALID);
     assign wr_waiting = ((wr_state == WR_SEND) && !aw_fire && !wr_fire) ||
                         ((wr_state == WR_RESP) && !M_AXI_BVALID);
+    
+    // Synthesis-visible guard for the supported burst length.
+    generate
+        if ((C_M_AXI_BURST_LEN < 1) ||
+            (C_M_AXI_BURST_LEN > 16)) begin : GEN_INVALID_BURST_LEN
+            INVALID_C_M_AXI_BURST_LEN invalid_burst_len();
+        end
+    endgenerate
 
     // synthesis translate_off
     initial begin
