@@ -1,12 +1,17 @@
 """tb_CNN_Encoder 용 벡터 생성 (numpy 필요).
 
+사용: python gen_CNN_Encoder.py [RX]   (기본 3, tb_CNN_Encoder 의 RX 와 같게)
+
 RX마다 Conv1 → requant → GELU1 → Conv2 → requant → GELU2 → AdaptiveAvgPool(8,4)
 수치 규칙은 ML/src/int8_reference.py 와 같다.
-출력: enc_in64.hex (입력 1440 x 64-bit), enc_wram.hex (333 x 128-bit),
+출력: enc_in64.hex (입력 RX*480 x 64-bit), enc_wram.hex (333 x 128-bit),
       enc_param.hex (48 x {shift, mult, bias}), enc_lut.hex (GELU LUT 1024 B),
-      enc_pool.hex (pool_mult, pool_shift), enc_feat.hex (기대 Pool 결과 384 x 64-bit)
+      enc_pool.hex (pool_mult, pool_shift), enc_feat.hex (기대 Pool 결과 RX*128 x 64-bit)
 """
+import sys
 import numpy as np
+
+RX = int(sys.argv[1]) if len(sys.argv) > 1 else 3
 
 rng = np.random.default_rng(11)
 H, W = 128, 10
@@ -20,7 +25,7 @@ def u8(v):
     return int(v) & 0xff
 
 
-inp = i8(9, H, W)
+inp = i8(3 * RX, H, W)
 w1, w2 = i8(16, 3, 5, 3), i8(32, 16, 3, 3)
 b1, b2 = rng.integers(-2**14, 2**14, 16), rng.integers(-2**14, 2**14, 32)
 m1, m2 = rng.integers(2**30, 2**31, 16), rng.integers(2**30, 2**31, 32)
@@ -56,9 +61,9 @@ def gelu(q, bank):
     return lut[bank][q + 128]
 
 
-feat = np.zeros(3072, np.int64)
-for rx in range(3):
-    x = inp[[rx + 3 * c for c in range(3)]]
+feat = np.zeros(RX * 1024, np.int64)
+for rx in range(RX):
+    x = inp[[rx + RX * c for c in range(3)]]
     f1 = gelu(requant(conv(x, w1, 2, 1), b1, m1, s1), 0)
     f2 = gelu(requant(conv(f1, w2, 1, 1), b2, m2, s2), 1)
     for oh in range(8):
@@ -71,7 +76,7 @@ for rx in range(3):
 
 fb = inp.reshape(-1)
 with open("enc_in64.hex", "w") as f:
-    f.write("".join("".join("%02x" % u8(fb[8 * k + i]) for i in reversed(range(8))) + "\n" for k in range(1440)))
+    f.write("".join("".join("%02x" % u8(fb[8 * k + i]) for i in reversed(range(8))) + "\n" for k in range(RX * 480)))
 
 words = []
 for c in range(3):
@@ -99,6 +104,6 @@ with open("enc_pool.hex", "w") as f:
     f.write("%08x\n%08x\n" % (pmult, pshift))
 
 with open("enc_feat.hex", "w") as f:
-    f.write("".join("".join("%02x" % u8(feat[8 * k + i]) for i in reversed(range(8))) + "\n" for k in range(384)))
+    f.write("".join("".join("%02x" % u8(feat[8 * k + i]) for i in reversed(range(8))) + "\n" for k in range(RX * 128)))
 
 print("feat bytes:", feat.size, " non-saturated:", float(np.mean(np.abs(feat) < 127)))

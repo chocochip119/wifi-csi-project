@@ -1,21 +1,23 @@
 `timescale 1ns / 1ps
 
-module requant_stage (
+module requant_stage #(
+    parameter TAG_W = 19  // {rx, layer, oc[4:0], h[6:0], w[3:0]}, rx width = TAG_W - 17
+) (
     input wire clk,
     input wire rst_n,
     input wire [31:0] acc,
     input wire acc_valid,
-    input wire [18:0] acc_tag,  // {rx[1:0], layer, oc[4:0], h[6:0], w[3:0]}
+    input wire [TAG_W - 1:0] acc_tag,  // {rx, layer, oc[4:0], h[6:0], w[3:0]}
     output wire [8:0] enc_param_raddr,
     input wire [95:0] enc_param_rdata,  // {shift[31:0], mult[31:0],bias[31:0]}
     output reg [7:0] rq,
     output reg rq_valid,
-    output reg [18:0] rq_tag
+    output reg [TAG_W - 1:0] rq_tag
 );
 
     reg signed [63:0] acc_r1, acc_r2, acc_r3, acc_r4;
     reg valid_r1, valid_r2, valid_r3, valid_r4;
-    reg [18:0] tag_r1, tag_r2, tag_r3, tag_r4;
+    reg [TAG_W - 1:0] tag_r1, tag_r2, tag_r3, tag_r4;
 
     // stage 0 
     wire tag0_layer = acc_tag[16];

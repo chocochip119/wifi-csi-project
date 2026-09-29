@@ -1,11 +1,13 @@
 `timescale 1ns / 1ps
 
-module gelu_stage (
+module gelu_stage #(
+    parameter TAG_W = 19  // {rx, layer, oc[4:0], h[6:0], w[3:0]}, rx width = TAG_W - 17
+) (
     input wire clk,
     input wire rst_n,
     input wire [7:0] rq,
     input wire rq_valid,
-    input wire [18:0] rq_tag,  // {rx[1:0], layer, oc[4:0], h[6:0], w[3:0]}
+    input wire [TAG_W - 1:0] rq_tag,  // {rx, layer, oc[4:0], h[6:0], w[3:0]}
     output wire [9:0] enc_lut_raddr,
     input wire [7:0] enc_lut_rdata,
     output wire fmap1_we,
@@ -14,7 +16,7 @@ module gelu_stage (
     output wire fmap1_last,
     output wire [7:0] pool_q,
     output wire pool_valid,
-    output wire [18:0] pool_tag
+    output wire [TAG_W - 1:0] pool_tag
 );
 
     // stage 0 : get rq, rq_valid
@@ -22,7 +24,7 @@ module gelu_stage (
 
     reg [7:0] rq_r0;
     reg rq_valid_r0, rq_valid_r1;
-    reg [18:0] rq_tag_r0, rq_tag_r1;
+    reg [TAG_W - 1:0] rq_tag_r0, rq_tag_r1;
 
     always @(posedge clk) begin
         if (!rst_n) begin
