@@ -80,29 +80,37 @@ module Pool (
 
     // stage 1 : read hold
     // stage 2 : sum * pool_mult
-    // stage 3 : round shift + saturation
-    // stage 4 : /48 + clamp -> write result
+    // stage 3 : round shift
+    // stage 4 : saturation
+    // stage 5 : /48 (dq)
+    // stage 6 : sign + clamp -> write result
 
-    reg v_r1, v_r2, v_r3, v_r4;
-    reg [5:0] idx_r1, idx_r2, idx_r3, idx_r4;
+    reg v_r1, v_r2, v_r3, v_r4, v_r5, v_r6;
+    reg [5:0] idx_r1, idx_r2, idx_r3, idx_r4, idx_r5, idx_r6;
     reg signed [15:0] sum_r1;
     reg signed [47:0] prod_r2;
-    reg signed [14:0] p_r3;
-    reg [7:0] q_r4;
+    reg signed [63:0] rs_r3;
+    reg signed [14:0] p_r4;
+    reg [8:0] dq_r5;
+    reg neg_r5;
+    reg [7:0] q_r6;
 
-    // stage 3 
+    // stage 3 : round shift
     wire signed [31:0] sh = pool_shift;
     wire signed [63:0] p64 = prod_r2;
     wire signed [63:0] half = 64'sd1 <<< (sh[5:0] - 6'd1);
     wire signed [63:0] rs = (sh <= 0) ? (p64 <<< (-sh)) : (p64 >= 0) ? ((p64 + half) >>> sh[5:0]) : ((p64 - half) >>> sh[5:0]);
 
-    wire signed [14:0] p_sat = (rs > 8191) ? 15'sd8191 : (rs < - 8191) ? -15'sd8191 : rs[14:0];
+    // stage 4 : saturation
+    wire signed [14:0] p_sat = (rs_r3 > 8191) ? 15'sd8191 : (rs_r3 < - 8191) ? -15'sd8191 : rs_r3[14:0];
 
-    // stage 4
-    wire signed [16:0] pp = p_r3;
+    // stage 5 : /48
+    wire signed [16:0] pp = p_r4;
     wire        [16:0] num = pp[16] ? (17'sd71 - pp) : (pp + 17'sd24);
     wire        [8:0] dq = (num * 5462) >> 18;
-    wire signed [9:0] qs = pp[16] ? -$signed({1'b0, dq}) : $signed({1'b0, dq});
+
+    // stage 6 : sign + clamp
+    wire signed [9:0] qs = neg_r5 ? -$signed({1'b0, dq_r5}) : $signed({1'b0, dq_r5});
     wire        [7:0] q_clamp = (qs > 127) ? 8'd127 : (qs < -127) ? 8'h81 : qs[7:0];
 
     always @(posedge clk) begin
@@ -111,6 +119,8 @@ module Pool (
             v_r2 <= 0;
             v_r3 <= 0;
             v_r4 <= 0;
+            v_r5 <= 0;
+            v_r6 <= 0;
         end
         else begin
             // stage 1
@@ -124,27 +134,36 @@ module Pool (
             // stage 3
             v_r3 <= v_r2;
             idx_r3 <= idx_r2;
-            p_r3 <= p_sat;
+            rs_r3 <= rs;
             // stage 4
             v_r4 <= v_r3;
             idx_r4 <= idx_r3;
-            q_r4 <= q_clamp;
+            p_r4 <= p_sat;
+            // stage 5
+            v_r5 <= v_r4;
+            idx_r5 <= idx_r4;
+            dq_r5 <= dq;
+            neg_r5 <= pp[16];
+            // stage 6
+            v_r6 <= v_r5;
+            idx_r6 <= idx_r5;
+            q_r6 <= q_clamp;
         end
     end
 
     // result memory
-    wire [11:0] wr_addr = {st_rx, st_pass, idx_r4[5:2], st_oh, idx_r4[1:0]};
-    wire [63:0] wr_data64 = {8{q_r4}};
+    wire [11:0] wr_addr = {st_rx, st_pass, idx_r6[5:2], st_oh, idx_r6[1:0]};
+    wire [63:0] wr_data64 = {8{q_r6}};
     wire [7:0] wr_be = 8'b1 << wr_addr[2:0];
 
-    assign enc_done = v_r4 && (idx_r4 == 63) && (st_rx == 2) && st_pass && (st_oh == 7);
+    assign enc_done = v_r6 && (idx_r6 == 63) && (st_rx == 2) && st_pass && (st_oh == 7);
 
     reg [63:0] res_mem [0:383];
     integer k;
 
     always @(posedge clk) begin
         for (k = 0; k < 8; k = k + 1) 
-            if (v_r4 && wr_be[k]) res_mem[wr_addr[11:3]][8*k +: 8] <= wr_data64[8*k +: 8];
+            if (v_r6 && wr_be[k]) res_mem[wr_addr[11:3]][8*k +: 8] <= wr_data64[8*k +: 8];
         feat_rdata <= res_mem[feat_raddr];
     end
 
