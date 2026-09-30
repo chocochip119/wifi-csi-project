@@ -15,20 +15,21 @@ module pose_buffer #(
     input  wire [ADDR_WIDTH-1:0]     pose_raddr,
     output reg  [DATA_WIDTH-1:0]     pose_rdata
 );
-
+    // Pose Memory
     reg [DATA_WIDTH-1:0] pose_mem [0:DEPTH-1];
 
+    // Write
     always @(posedge clk) begin
-        if (rst_n && pose_we) begin
+        if (rst_n && pose_we)
             pose_mem[pose_waddr] <= pose_wdata;
-        end
     end
 
+    // Synchronous Read
     always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
+        if (!rst_n)
             pose_rdata <= 0;
-        end else begin
+        else
             pose_rdata <= pose_mem[pose_raddr];
-        end
     end
+
 endmodule
