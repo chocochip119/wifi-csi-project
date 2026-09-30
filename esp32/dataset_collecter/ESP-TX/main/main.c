@@ -41,7 +41,7 @@
 #define APP_UART_CMD_PREFIX                  "CMD "
 #define APP_USB_CDC_PORT                     TINYUSB_CDC_ACM_0
 #define APP_USB_CHUNK_BYTES                  512u
-#define APP_USB_FLUSH_TIMEOUT_MS             1u
+#define APP_USB_FLUSH_TIMEOUT_MS             3u
 #define APP_USB_FLUSH_LOG_INTERVAL           100u
 
 #define APP_MAX_RX_NODES                     8
@@ -70,8 +70,8 @@
 #define APP_STATUS_FLAG_SAVED                BIT1
 #define APP_STATUS_FLAG_LIVE                 BIT2
 
-#define APP_DEFAULT_SLOT_TIMEOUT_US          2000u
-#define APP_DEFAULT_UDP_SLOT_GAP_US          2000u
+#define APP_DEFAULT_SLOT_TIMEOUT_US          4000u
+#define APP_DEFAULT_UDP_SLOT_GAP_US          500u
 #define APP_STATUS_INTERVAL_MS               1000u
 #define APP_HEARTBEAT_STALE_MS               3000u
 #define APP_UDP_PORT                         3333
