@@ -140,7 +140,7 @@ module fc_controller #(
 
             case (state)
                 S_IDLE: begin
-                    if (fc_start) begin
+                    if (fc_start && (fc_sel != 2'd3)) begin
                         fc_sel_reg <= fc_sel;
                         out_idx    <= 0;
                         group_idx  <= 0;

@@ -123,7 +123,7 @@ module requant_core #(
             else if (acc_r4 >= 0)
                 rounded_r5 <= acc_r4 + offset_r4;
             else
-                rounded_r5 <= acc_r4 - offset_r4;
+                rounded_r5 <= acc_r4 + offset_r4 - 65'sd1;
 
             shift_r5 <= shift_r4;
             valid_r5 <= valid_r4;

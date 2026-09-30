@@ -170,10 +170,10 @@ module fc_top #(
 
     // Requant Parameter Address
     always @(*) begin
-        case (mac_tag[8:7])
-            FC1: fc_param_raddr = FC1_PARAM_BASE + mac_tag[6:0];
-            FC2: fc_param_raddr = FC2_PARAM_BASE + mac_tag[6:0];
-            FC3: fc_param_raddr = FC3_PARAM_BASE + mac_tag[6:0];
+        case (acc_tag[8:7])
+            FC1: fc_param_raddr = FC1_PARAM_BASE + acc_tag[6:0];
+            FC2: fc_param_raddr = FC2_PARAM_BASE + acc_tag[6:0];
+            FC3: fc_param_raddr = FC3_PARAM_BASE + acc_tag[6:0];
             default: fc_param_raddr = 9'd0;
         endcase
     end
