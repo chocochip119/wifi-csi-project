@@ -124,7 +124,6 @@ Release/
 *.obj
 *.a
 *.map
-*.xsa
 
 # ==================================================
 # Misc generated archives
