@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include "pose_cnn_regs.h"
+#include "pose_cnn_lock.h"
 
 #define CSR_MAP_BYTES       0x00010000u
 #define DDR_RESERVED_BASE   0x3F000000u
@@ -249,6 +250,7 @@ int main(int argc, char **argv)
     uint8_t *input_file = NULL;
     uint8_t expected[POSE_CNN_OUTPUT_BYTES];
     int fd = -1;
+    int lock_fd = -1;
     phys_mapping_t csr_map = {0};
     phys_mapping_t weight_map = {0};
     phys_mapping_t input_map = {0};
@@ -286,6 +288,8 @@ int main(int argc, char **argv)
         goto cleanup;
     }
 
+    lock_fd = pose_cnn_lock_acquire();
+    if (lock_fd < 0) goto cleanup;
     fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (fd < 0) {
         fprintf(stderr, "open /dev/mem: %s\n", strerror(errno));
@@ -368,5 +372,6 @@ cleanup:
     }
     free(input_file);
     free(blob_file);
+    if (lock_fd >= 0) close(lock_fd);
     return result;
 }

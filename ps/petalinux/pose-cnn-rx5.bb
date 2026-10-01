@@ -4,6 +4,7 @@ LICENSE = "CLOSED"
 SRC_URI = "file://pose_cnn_rx5_board_test.c \
            file://pose_cnn_rx5_live.c \
            file://pose_cnn_regs.h \
+           file://pose_cnn_lock.h \
            file://csi_pipeline.c \
            file://csi_pipeline.h \
            file://blob_rx5_test.bin \

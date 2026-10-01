@@ -3,6 +3,7 @@
 
 #include "csi_pipeline.h"
 #include "pose_cnn_regs.h"
+#include "pose_cnn_lock.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -628,6 +629,33 @@ static int on_window(
     return 0;
 }
 
+/** Parse a finite positive scale, rejecting trailing text and range errors. */
+static int parse_input_scale(const char *text, float *value)
+{
+    char *end;
+    errno = 0;
+    *value = strtof(text, &end);
+    return text != end && *end == '\0' && errno == 0 &&
+           isfinite(*value) && *value > 0.0f ? 0 : -1;
+}
+
+/** Parse an unsigned decimal count; only explicit zero selects continuous mode. */
+static int parse_window_count(const char *text, uint64_t *value)
+{
+    const char *p = text;
+    char *end;
+    unsigned long long parsed;
+    if (*p == '\0') return -1;
+    for (; *p != '\0'; ++p) {
+        if (*p < '0' || *p > '9') return -1;
+    }
+    errno = 0;
+    parsed = strtoull(text, &end, 10);
+    if (errno != 0 || *end != '\0' || parsed > UINT64_MAX) return -1;
+    *value = (uint64_t)parsed;
+    return 0;
+}
+
 static void usage(const char *program)
 {
     fprintf(stderr,
@@ -644,6 +672,7 @@ int main(int argc, char **argv)
     const char *dump_path = NULL;
     float input_scale;
     int descriptor = -1;
+    int lock_fd = -1;
     uint8_t buffer[READ_CHUNK];
     live_context_t context = {0};
     csi_pipeline_t *pipeline = NULL;
@@ -663,13 +692,17 @@ int main(int argc, char **argv)
         return 2;
     }
     tty_path = argv[1];
-    input_scale = strtof(argv[2], NULL);
-    if (!isfinite(input_scale) || input_scale <= 0.0f) {
+    if (parse_input_scale(argv[2], &input_scale) != 0) {
+        fprintf(stderr, "invalid INPUT_SCALE: %s\n", argv[2]);
         usage(argv[0]);
         return 2;
     }
     if (argc >= 4) {
-        context.max_windows = strtoull(argv[3], NULL, 10);
+        if (parse_window_count(argv[3], &context.max_windows) != 0) {
+            fprintf(stderr, "invalid MAX_WINDOWS: %s (use 0 for continuous mode)\n", argv[3]);
+            usage(argv[0]);
+            return 2;
+        }
     }
     if (argc >= 5) {
         blob_path = argv[4];
@@ -689,6 +722,8 @@ int main(int argc, char **argv)
     if (strcmp(blob_path, DEFAULT_BLOB_PATH) == 0) {
         printf("NOTE: bundled blob is for integration testing, not the final trained model.\n");
     }
+    lock_fd = pose_cnn_lock_acquire();
+    if (lock_fd < 0) goto cleanup;
     if (cnn_engine_open(&engine, blob_path) != 0) {
         goto cleanup;
     }
@@ -882,5 +917,6 @@ cleanup:
         close(descriptor);
     }
     cnn_engine_close(&engine);
+    if (lock_fd >= 0) close(lock_fd);
     return exit_code;
 }
