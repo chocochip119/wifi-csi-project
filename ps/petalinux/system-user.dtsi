@@ -1,0 +1,34 @@
+/include/ "system-conf.dtsi"
+
+/*
+ * RX5 pose CNN DMA buffers.
+ *
+ * pose_cnn_0 reaches this physical DDR range through PS S_AXI_HP0. Linux
+ * must not allocate or map it as normal cached RAM. The board-test utility
+ * maps the no-map area through /dev/mem opened with O_SYNC.
+ */
+/ {
+    reserved-memory {
+        #address-cells = <1>;
+        #size-cells = <1>;
+        ranges;
+
+        pose_cnn_buffers: pose-cnn-buffers@3f000000 {
+            reg = <0x3f000000 0x01000000>;
+            no-map;
+        };
+    };
+
+    usb_phy0: phy0 {
+        compatible = "usb-nop-xceiv";
+        #phy-cells = <0>;
+        reset-gpios = <&gpio0 46 1>;
+    };
+};
+
+/* Coordinator ESP32-S3 is connected to the Zybo Z7-20 J11 USB host port. */
+&usb0 {
+    status = "okay";
+    dr_mode = "host";
+    usb-phy = <&usb_phy0>;
+};
