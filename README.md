@@ -105,6 +105,3 @@ wifi-csi-project/
 - [System Architecture](docs/architecture.md)
 - [Interface Specification](docs/interface.md)
 
-## Reference
-
-- [Wi-Fi CSI Pose Estimation](https://github.com/ziziccc/wifi-csi-pose)
