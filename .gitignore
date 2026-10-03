@@ -69,6 +69,18 @@ wandb/
 *.npz
 
 # ==================================================
+# Local Wi-Fi CSI datasets / extracted training data
+# Keep raw captures and Colab preprocessing caches out of Git.
+# ==================================================
+dataset/
+datasets/
+captures/
+raw_data/
+extracted_dataset/
+ml/pose/cache/
+*.csv
+
+# ==================================================
 # ESP-IDF / CMake generated files
 # ==================================================
 build/
