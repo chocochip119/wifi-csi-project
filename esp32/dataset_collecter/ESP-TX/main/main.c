@@ -769,12 +769,17 @@ static uint32_t drain_usb_tx_queue(uint32_t max_chunks)
                     (unsigned)s_usb_tx_current.len,
                     (unsigned long)(now_ms() - s_usb_tx_start_ms)
                 );
+                bool dropped_cycle =
+                    (s_usb_tx_current.frame_type == APP_SERIAL_FRAME_CYCLE);
+                            
                 free(s_usb_tx_current.data);
                 memset(&s_usb_tx_current, 0, sizeof(s_usb_tx_current));
                 s_usb_tx_offset = 0u;
                 s_usb_tx_busy = false;
-                s_usb_cycle_drop_count++;
-                continue;
+                            
+                if (dropped_cycle) {
+                    s_usb_cycle_drop_count++;
+                }
             }
         }
 
