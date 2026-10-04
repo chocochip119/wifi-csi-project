@@ -32,7 +32,7 @@
 #define APP_WIFI_SSID                        "CSI_TX"
 #define APP_WIFI_MAX_CONN                    8
 #define APP_WIFI_PROTOCOL_BITMAP             (WIFI_PROTOCOL_11B | WIFI_PROTOCOL_11G | WIFI_PROTOCOL_11N)
-#define APP_DEFAULT_WIFI_CHANNEL             6
+#define APP_DEFAULT_WIFI_CHANNEL             9
 #define APP_DEFAULT_SECOND_CHANNEL           WIFI_SECOND_CHAN_ABOVE
 #define APP_WIFI_BANDWIDTH                   WIFI_BW40
 #define APP_TRIGGER_TX_RATE                  WIFI_PHY_RATE_MCS3_LGI
@@ -83,6 +83,8 @@
 #define APP_UART_BACKPRESSURE_HIGH_WATER     (APP_UART_QUEUE_LEN - 4u)
 #define APP_UART_BACKPRESSURE_LOW_WATER      (APP_UART_QUEUE_LEN / 2u)
 #define APP_USB_CYCLE_MAX_AGE_MS             200u
+#define APP_USB_CONTROL_MAX_AGE_MS           1000u
+#define APP_CYCLE_PACING_MS                  5u
 
 static const uint8_t s_broadcast_mac[ESP_NOW_ETH_ALEN] = {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -304,6 +306,10 @@ typedef struct {
     tx_event_type_t type;
     union {
         struct {
+            uint64_t deadline_us;
+            uint64_t fired_count_us;
+        } timeout;
+        struct {
             udp_csi_packet_header_t header;
             uint16_t csi_len;
             uint8_t csi[APP_MAX_CSI_LEN];
@@ -323,9 +329,12 @@ static gptimer_handle_t s_timeout_timer;
 static app_state_t s_state;
 static cycle_state_t s_cycle;
 static portMUX_TYPE s_state_lock = portMUX_INITIALIZER_UNLOCKED;
-static volatile uint32_t s_timeout_generation;
-static volatile uint32_t s_timeout_trigger_seq;
 static volatile uint32_t s_evt_queue_isr_drop_count;
+static uint64_t s_timeout_deadline_us;
+static portMUX_TYPE s_timeout_recovery_lock = portMUX_INITIALIZER_UNLOCKED;
+static volatile uint32_t s_timeout_recovery_pending;
+static uint64_t s_timeout_recovery_deadline_us;
+static uint64_t s_timeout_recovery_fired_count_us;
 static const char *TAG = "CSI_TX";
 
 /* 바이너리 프레임과 제어 패킷에서 공통으로 쓰는 간단한 체크섬이다. */
@@ -746,21 +755,27 @@ static uint32_t drain_usb_tx_queue(uint32_t max_chunks)
             s_usb_tx_last_progress_ms = s_usb_tx_start_ms;
         }
 
-        if (s_usb_tx_current.frame_type == APP_SERIAL_FRAME_CYCLE &&
-            (now_ms() - s_usb_tx_start_ms) > APP_USB_CYCLE_MAX_AGE_MS) {
-            ESP_LOGW(
-                TAG,
-                "drop stale in-flight cycle offset=%u/%u age_ms=%lu",
-                (unsigned)s_usb_tx_offset,
-                (unsigned)s_usb_tx_current.len,
-                (unsigned long)(now_ms() - s_usb_tx_start_ms)
-            );
-            free(s_usb_tx_current.data);
-            memset(&s_usb_tx_current, 0, sizeof(s_usb_tx_current));
-            s_usb_tx_offset = 0u;
-            s_usb_tx_busy = false;
-            s_usb_cycle_drop_count++;
-            continue;
+        {
+            uint32_t max_age_ms =
+                s_usb_tx_current.frame_type == APP_SERIAL_FRAME_CYCLE
+                    ? APP_USB_CYCLE_MAX_AGE_MS
+                    : APP_USB_CONTROL_MAX_AGE_MS;
+            if ((now_ms() - s_usb_tx_start_ms) > max_age_ms) {
+                ESP_LOGW(
+                    TAG,
+                    "drop stale in-flight frame type=%u offset=%u/%u age_ms=%lu",
+                    (unsigned)s_usb_tx_current.frame_type,
+                    (unsigned)s_usb_tx_offset,
+                    (unsigned)s_usb_tx_current.len,
+                    (unsigned long)(now_ms() - s_usb_tx_start_ms)
+                );
+                free(s_usb_tx_current.data);
+                memset(&s_usb_tx_current, 0, sizeof(s_usb_tx_current));
+                s_usb_tx_offset = 0u;
+                s_usb_tx_busy = false;
+                s_usb_cycle_drop_count++;
+                continue;
+            }
         }
 
         err = tinyusb_write_chunk(
@@ -1039,11 +1054,17 @@ static bool IRAM_ATTR timeout_alarm_cb(
     };
 
     (void)timer;
-    (void)edata;
+    evt.data.timeout.deadline_us = edata->alarm_value;
+    evt.data.timeout.fired_count_us = edata->count_value;
 
     if (queue != NULL) {
         if (xQueueSendFromISR(queue, &evt, &high_woken) != pdTRUE) {
             s_evt_queue_isr_drop_count++;
+            portENTER_CRITICAL_ISR(&s_timeout_recovery_lock);
+            s_timeout_recovery_deadline_us = edata->alarm_value;
+            s_timeout_recovery_fired_count_us = edata->count_value;
+            s_timeout_recovery_pending = 1u;
+            portEXIT_CRITICAL_ISR(&s_timeout_recovery_lock);
         }
     }
     return high_woken == pdTRUE;
@@ -1064,23 +1085,25 @@ static void init_timeout_timer(void)
     ESP_ERROR_CHECK(gptimer_new_timer(&timer_cfg, &s_timeout_timer));
     ESP_ERROR_CHECK(gptimer_register_event_callbacks(s_timeout_timer, &callbacks, s_evt_queue));
     ESP_ERROR_CHECK(gptimer_enable(s_timeout_timer));
+    ESP_ERROR_CHECK(gptimer_start(s_timeout_timer));
 }
 
-/* 매 cycle마다 deadline을 다시 설정한다. */
+/* Timer count는 계속 증가시키고, 매 cycle은 절대 deadline만 새로 건다. */
 static void arm_cycle_timeout(uint32_t generation, uint32_t trigger_seq, uint32_t timeout_us)
 {
+    uint64_t now_count = 0u;
     gptimer_alarm_config_t alarm_cfg = {
         .reload_count = 0,
-        .alarm_count = timeout_us,
         .flags.auto_reload_on_alarm = false,
     };
 
-    s_timeout_generation = generation;
-    s_timeout_trigger_seq = trigger_seq;
-    gptimer_stop(s_timeout_timer);
-    gptimer_set_raw_count(s_timeout_timer, 0);
-    gptimer_set_alarm_action(s_timeout_timer, &alarm_cfg);
-    gptimer_start(s_timeout_timer);
+    (void)generation;
+    (void)trigger_seq;
+
+    ESP_ERROR_CHECK(gptimer_get_raw_count(s_timeout_timer, &now_count));
+    s_timeout_deadline_us = now_count + (uint64_t)timeout_us;
+    alarm_cfg.alarm_count = s_timeout_deadline_us;
+    ESP_ERROR_CHECK(gptimer_set_alarm_action(s_timeout_timer, &alarm_cfg));
 }
 
 /* raw trigger frame 템플릿을 매번 갱신해서 보낸다. */
@@ -1375,10 +1398,9 @@ static void start_next_cycle(void)
     uint32_t timeout_us = s_state.slot_timeout_us * ((active_count > 0u) ? active_count : 1u);
     int attempt;
 
-    while (s_state.mode == APP_MODE_RUNNING &&
-           uxQueueMessagesWaiting(s_uart_tx_queue) >= APP_UART_BACKPRESSURE_HIGH_WATER) {
-        vTaskDelay(pdMS_TO_TICKS(1));
-    }
+    /* Give the lower-priority USB control task deterministic CPU time and
+     * keep the sustained producer rate below the CDC drain rate. */
+    vTaskDelay(pdMS_TO_TICKS(APP_CYCLE_PACING_MS));
 
     for (attempt = 0; attempt < 3; ++attempt) {
         if (send_trigger_frame(generation, trigger_seq, active_count, &tx_us) == ESP_OK) {
@@ -1435,8 +1457,24 @@ static void coordinator_task(void *arg)
     (void)arg;
 
     while (true) {
-        if (xQueueReceive(s_evt_queue, &evt, portMAX_DELAY) != pdTRUE) {
-            continue;
+        if (xQueueReceive(s_evt_queue, &evt, 0) != pdTRUE) {
+            bool recovered_timeout = false;
+
+            portENTER_CRITICAL(&s_timeout_recovery_lock);
+            if (s_timeout_recovery_pending != 0u) {
+                memset(&evt, 0, sizeof(evt));
+                evt.type = TX_EVT_TIMEOUT;
+                evt.data.timeout.deadline_us = s_timeout_recovery_deadline_us;
+                evt.data.timeout.fired_count_us = s_timeout_recovery_fired_count_us;
+                s_timeout_recovery_pending = 0u;
+                recovered_timeout = true;
+            }
+            portEXIT_CRITICAL(&s_timeout_recovery_lock);
+
+            if (!recovered_timeout &&
+                xQueueReceive(s_evt_queue, &evt, portMAX_DELAY) != pdTRUE) {
+                continue;
+            }
         }
 
         if (s_evt_queue_isr_drop_count > 0u) {
@@ -1489,23 +1527,35 @@ static void coordinator_task(void *arg)
             s_state.running_node_count = 0u;
             memset(&s_cycle, 0, sizeof(s_cycle));
             portEXIT_CRITICAL(&s_state_lock);
-            gptimer_stop(s_timeout_timer);
+            s_timeout_deadline_us = 0u;
+            ESP_ERROR_CHECK(gptimer_set_alarm_action(s_timeout_timer, NULL));
+            portENTER_CRITICAL(&s_timeout_recovery_lock);
+            s_timeout_recovery_pending = 0u;
+            portEXIT_CRITICAL(&s_timeout_recovery_lock);
             send_ctrl_packet(APP_CTRL_MSG_MODE, NULL, 0xffu, 0u);
             ESP_LOGI(TAG, "run stop -> wait");
             continue;
         }
 
         if (evt.type == TX_EVT_TIMEOUT) {
-            if (s_state.mode == APP_MODE_RUNNING && s_cycle.active &&
-                s_cycle.generation == s_timeout_generation &&
-                s_cycle.trigger_seq == s_timeout_trigger_seq) {
+            uint64_t deadline_us = evt.data.timeout.deadline_us;
+            uint64_t fired_count_us = evt.data.timeout.fired_count_us;
+
+            if (s_state.mode == APP_MODE_RUNNING &&
+                s_cycle.active &&
+                deadline_us != 0u &&
+                deadline_us == s_timeout_deadline_us &&
+                fired_count_us >= deadline_us) {
+                s_timeout_deadline_us = 0u;
                 s_cycle.timeout_fired = true;
                 ESP_LOGW(
                     TAG,
-                    "cycle timeout gen=%lu trig=%lu active=%u",
+                    "cycle timeout gen=%lu trig=%lu active=%u deadline=%llu fired=%llu",
                     (unsigned long)s_cycle.generation,
                     (unsigned long)s_cycle.trigger_seq,
-                    (unsigned)s_cycle.active_node_count
+                    (unsigned)s_cycle.active_node_count,
+                    (unsigned long long)deadline_us,
+                    (unsigned long long)fired_count_us
                 );
                 finalize_cycle_and_queue_uart();
                 start_next_cycle();
@@ -1544,7 +1594,8 @@ static void coordinator_task(void *arg)
             );
 
             if (cycle_all_slots_complete()) {
-                gptimer_stop(s_timeout_timer);
+                s_timeout_deadline_us = 0u;
+                ESP_ERROR_CHECK(gptimer_set_alarm_action(s_timeout_timer, NULL));
                 finalize_cycle_and_queue_uart();
                 start_next_cycle();
             }
@@ -2104,7 +2155,9 @@ static void control_task(void *arg)
             app_mode_t mode_snapshot = s_state.mode;
             portEXIT_CRITICAL(&s_state_lock);
 
-            if (mode_snapshot == APP_MODE_WAIT && (now_ms() - last_status_ms) >= APP_STATUS_INTERVAL_MS) {
+            if (mode_snapshot == APP_MODE_WAIT &&
+                !usb_tx_pending() &&
+                (now_ms() - last_status_ms) >= APP_STATUS_INTERVAL_MS) {
                 enqueue_status_frame();
                 last_status_ms = now_ms();
             }
