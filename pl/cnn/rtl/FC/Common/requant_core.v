@@ -17,7 +17,6 @@ module requant_core #(
 );
 
     reg signed [31:0] acc_r1;
-    reg [95:0]        param_r1;
     reg               valid_r1;
     reg [TAG_WIDTH-1:0] tag_r1;
 
@@ -56,7 +55,7 @@ module requant_core #(
 
     wire signed [7:0] saturated;
 
-    assign bias_r1  = $signed(param_r1[31:0]);
+    assign bias_r1  = $signed(param_rdata[31:0]);
 
     assign acc_ext  = {acc_r1[31], acc_r1};
     assign bias_ext = {bias_r1[31], bias_r1};
@@ -73,7 +72,6 @@ module requant_core #(
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             acc_r1     <= 32'sd0;
-            param_r1   <= 96'd0;
             valid_r1   <= 1'b0;
             tag_r1     <= {TAG_WIDTH{1'b0}};
 
@@ -109,13 +107,12 @@ module requant_core #(
         end else begin
 
             acc_r1   <= $signed(acc);
-            param_r1 <= param_rdata;
             valid_r1 <= acc_valid;
             tag_r1   <= acc_tag;
 
             acc_r2   <= acc_bias;
-            mult_r2  <= $signed(param_r1[63:32]);
-            shift_r2 <= $signed(param_r1[95:64]);
+            mult_r2  <= $signed(param_rdata[63:32]);
+            shift_r2 <= $signed(param_rdata[95:64]);
             valid_r2 <= valid_r1;
             tag_r2   <= tag_r1;
 
@@ -135,19 +132,19 @@ module requant_core #(
                 offset_r4 <= 66'sd0;
 
             if (shift_r4 <= 0) begin
-                rounded_r5 <= {{1{acc_r4[64]}}, acc_r4};
+                rounded_r5 <= {acc_r4[64], acc_r4};
             end else if (shift_r4 <= 65) begin
                 if (acc_r4 >= 0)
                     rounded_r5 <=
-                        {{1{acc_r4[64]}}, acc_r4}
+                        {acc_r4[64], acc_r4}
                         + offset_r4;
                 else
                     rounded_r5 <=
-                        {{1{acc_r4[64]}}, acc_r4}
+                        {acc_r4[64], acc_r4}
                         + offset_r4
                         - 66'sd1;
             end else begin
-                rounded_r5 <= {{1{acc_r4[64]}}, acc_r4};
+                rounded_r5 <= {acc_r4[64], acc_r4};
             end
 
             shift_r5 <= shift_r4;
