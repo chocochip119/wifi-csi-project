@@ -86,6 +86,13 @@ void csi_pipeline_destroy(csi_pipeline_t *pipeline);
  */
 void csi_pipeline_resync(csi_pipeline_t *pipeline);
 
+/* Called for checksum-valid serial frames, before the receive buffer is reused.
+ * Consumers must validate the payload and copy it during the call. */
+typedef void (*csi_frame_callback_t)(uint8_t type, uint32_t uart_seq,
+    const uint8_t *payload, size_t length, void *user);
+void csi_pipeline_set_frame_callback(csi_pipeline_t *pipeline,
+    csi_frame_callback_t callback, void *user);
+
 /* Feed any fragment size. Multiple serial frames in one call are supported. */
 int csi_pipeline_feed(
     csi_pipeline_t *pipeline,

@@ -1,20 +1,14 @@
 # Interface
 
-모듈 간 연결이 확정될 때마다 이 문서에 입력/출력과 데이터 형식을 정리합니다.
-
-| From | To | Data | Interface | Format / Width | Status |
+| From | To | Data | Interface | Format / Width | 현재 구현 |
 |---|---|---|---|---|---|
-| ESP32 RX | PS | CSI packet | TBD | TBD | TBD |
-| PS | PL AXI | CSI / control | AXI | TBD | TBD |
-| AXI | CNN | CSI window | TBD | TBD | TBD |
-| AXI | FFT | CSI time-series | TBD | TBD | TBD |
-| AXI | Localization | CSI feature | TBD | TBD | TBD |
-| CNN | PS/TOP | Pose result | TBD | 12 keypoints / 24 values 예정 | TBD |
-| FFT | PS/TOP | Respiration result | TBD | TBD | TBD |
-| Localization | PS/TOP | Position result | TBD | Zone 또는 coordinate 예정 | TBD |
+| ESP32 RX | TX Coordinator | raw CSI | ESP32 Wi-Fi 경로 | ESP32 수집 펌웨어 규격 | esp32/ |
+| TX Coordinator | PS | CSI cycle / STATUS / ACK | USB CDC (`/dev/ttyACM0`) | 16-byte header, checksum32, cycle header 32, RX header 6 | ps/src/csi_pipeline.c |
+| PS | PL | CSI tensor / control | DDR + AXI4-Lite, PL AXI master | INT8 `[15,128,10]`, 19,200 bytes | ps/src/pose_cnn_rx5_live.c |
+| PL CNN | PS | Pose | DDR output | signed INT8 24 coords + CSR output_scale | 12관절 x/y |
+| PS | PC Backend | raw CSI / STATUS / ACK | **TCP 5000** | WISE v2, 24-byte header | ps/src/wise_server.c |
+| PS | PC Backend | Pose | **TCP 5001** | payload 40 bytes, 24 int8 + float32 scale | ps/src/wise_server.c |
+| PC Backend | Frontend | Snapshot | **HTTP / WebSocket** (기본 8000) | JSON `/api/snapshot`, `/ws` | pc/backend/app/web.py |
+| FFT | PS/TOP | Respiration | TBD | TBD | 현재 PC 통합 구현 없음 |
 
-## 작성 규칙
-
-- 인터페이스가 바뀌면 코드보다 먼저 또는 코드와 함께 이 문서를 갱신한다.
-- bit width, signed/unsigned, valid/ready, packet/frame 기준을 가능한 한 명확히 기록한다.
-- 확정되지 않은 항목은 억지로 정하지 않고 `TBD`로 둔다.
+PS↔PC 바이트 상세는 [ps_pc_protocol.md](ps_pc_protocol.md), CSR/DDR 주소는 [PS README](../ps/README.md)를 참조합니다. 프런트엔드는 아직 구현되지 않았습니다. TCP 경로는 호스트 C↔Python 테스트를 완료하며 실제 Zybo/ARM 실행은 별도 확인 대상입니다.

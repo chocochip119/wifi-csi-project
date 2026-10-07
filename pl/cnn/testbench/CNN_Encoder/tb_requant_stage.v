@@ -24,7 +24,9 @@ module tb_requant_stage;
         end
         @(posedge clk) acc_valid <= 0;
         repeat(10) @(posedge clk);
-        $display("checked=%0d errors=%0d", e, err); $finish;
+        $display("checked=%0d errors=%0d", e, err);
+        if (e != 5000 || err != 0) $fatal(1, "requant regression failed");
+        $finish;
     end
     always @(posedge clk) if (rst_n && rq_valid) begin
         if ({rq_tag, rq} !== exp_[e][26:0]) begin

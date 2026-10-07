@@ -1,7 +1,8 @@
 #define _DEFAULT_SOURCE
 #define _POSIX_C_SOURCE 200809L
 
-#include "csi_pipeline_bypass.h"
+#include "csi_pipeline.h"
+#include "wise_server.h"
 #include "pose_cnn_regs.h"
 #include "pose_cnn_lock.h"
 
@@ -122,7 +123,16 @@ typedef struct {
     csi_pipeline_t *pipeline;
     cnn_engine_t *engine;
     udp_sender_t udp;
+    wise_server_t *tcp;
 } live_context_t;
+
+static void on_usb_frame(uint8_t type, uint32_t seq,
+    const uint8_t *payload, size_t length, void *user)
+{
+    live_context_t *context = user;
+    if (wise_server_usb(context->tcp, type, seq, payload, length) < 0)
+        fprintf(stderr, "TCP rejected malformed USB payload type=%u length=%zu\n", type, length);
+}
 
 static volatile sig_atomic_t stop_requested = 0;
 
@@ -1003,6 +1013,8 @@ static int on_window(
         stats.last_received_nodes,
         pose);
 
+    (void)wise_server_pose(context->tcp, (uint32_t)window_seq, trigger_seq,
+        (uint32_t)(infer_ms * 1000L), context->engine->output_scale, pose);
     context->windows = window;
     printf(
         "LIVE window=%llu trigger=%u shape=[%u,%u,%u] bytes=%zu "
@@ -1120,7 +1132,7 @@ int main(int argc, char **argv)
         OUTPUT_PHYS);
     printf("blob=%s input_scale=%.9g\n", blob_path, (double)input_scale);
     if (strcmp(blob_path, DEFAULT_BLOB_PATH) == 0) {
-        printf("NOTE: bundled blob is for integration testing, not the final trained model.\n");
+        printf("NOTE: default blob is for integration testing; binary assets are supplied separately.\n");
     }
     lock_fd = pose_cnn_lock_acquire();
     if (lock_fd < 0) goto cleanup;
@@ -1158,6 +1170,11 @@ int main(int argc, char **argv)
     }
     context.pipeline = pipeline;
     context.engine = &engine;
+    const char *bind_ip = getenv("WISE_TCP_BIND");
+    context.tcp = wise_server_start(bind_ip ? bind_ip : "0.0.0.0", 5000, 5001);
+    if (!context.tcp) { fprintf(stderr, "Cannot start TCP ports 5000/5001\n"); goto cleanup; }
+    csi_pipeline_set_frame_callback(pipeline, on_usb_frame, &context);
+    printf("WISE TCP listening CSI/STATUS :5000 and Pose :5001\n");
     signal(SIGINT, on_signal);
     signal(SIGTERM, on_signal);
     printf(
@@ -1173,6 +1190,7 @@ int main(int argc, char **argv)
         goto cleanup;
     }
     last_progress_ms = monotonic_ms();
+    uint64_t last_status_request_ms = last_progress_ms;
 
     while (!stop_requested) {
         struct pollfd serial_poll = {descriptor, POLLIN, 0};
@@ -1190,6 +1208,10 @@ int main(int argc, char **argv)
         }
         if (stop_requested) {
             break;
+        }
+        if (monotonic_ms() - last_status_request_ms >= 3000u) {
+            if (send_command(descriptor, "status") != 0) goto cleanup;
+            last_status_request_ms = monotonic_ms();
         }
         if (poll_result == 0) {
             csi_pipeline_get_stats(pipeline, &stats);
@@ -1319,6 +1341,7 @@ cleanup:
         }
     }
 
+    wise_server_stop(context.tcp);
     udp_sender_stop(&context.udp);
     fprintf(stderr,
         "UDP STATS enqueued=%llu queue_dropped=%llu sent=%llu "

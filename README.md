@@ -2,7 +2,7 @@
 
 ESP32로 수집한 **Wi-Fi CSI(Channel State Information)** 를 이용해 사람의 동작/자세를 추정하고, CNN 추론을 Zynq FPGA에서 가속하는 프로젝트입니다.
 
-현재 프로젝트는 **CSI 기반 동작·자세 추정(CNN)** 에 집중하고 있습니다.
+현재 프로젝트는 **FPGA 자세 추정(CNN)** 과 **PC 위치 추론**을 통합합니다. PS→PC는 TCP 5000(CSI/STATUS/ACK), 5001(Pose)을 사용합니다. 실행은 [PC Backend](pc/backend/README.md), 바이트 규격은 [PS↔PC 규격](docs/ps_pc_protocol.md)을 참고하세요.
 
 ## Project Scope
 
@@ -83,6 +83,9 @@ wifi-csi-project/
 │  ├─ fft/                     # 이전 실험 코드
 │  └─ localization/            # 이전 실험 코드
 │
+├─ pc/                         # PC Backend / Frontend
+│  ├─ backend/                  # TCP 입력·위치 추론·HTTP/WebSocket
+│  └─ frontend/                 # 프런트엔드 추가 위치(현재 미구현)
 ├─ ps/                         # Zynq PS 프로그램
 ├─ ml/                         # 모델 학습 / Python 실험
 ├─ integration/                # Vivado Block Design / 전체 통합

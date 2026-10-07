@@ -7,18 +7,20 @@ SRC_URI = "file://pose_cnn_rx5_board_test.c \
            file://pose_cnn_lock.h \
            file://csi_pipeline.c \
            file://csi_pipeline.h \
-           file://blob_rx5_test.bin \
-           file://input_rx5_test.bin \
-           file://pose_expected.bin \
+           file://wise_server.c \
+           file://wise_server.h \
            file://pose_expected.txt"
 
+# The repository does not bundle trained weights or board test inputs.
+# install_app.sh optionally supplies this include with a complete asset directory.
+include pose-cnn-rx5-vectors.inc
 S = "${WORKDIR}"
 
 do_compile() {
     ${CC} ${CFLAGS} ${LDFLAGS} \
         -o pose_cnn_rx5_board_test pose_cnn_rx5_board_test.c
     ${CC} ${CFLAGS} ${LDFLAGS} -I${S} \
-        -o pose_cnn_rx5_live csi_pipeline.c pose_cnn_rx5_live.c -lm
+        -o pose_cnn_rx5_live csi_pipeline.c wise_server.c pose_cnn_rx5_live.c -lm -pthread
 }
 
 do_install() {
@@ -27,9 +29,11 @@ do_install() {
     install -m 0755 pose_cnn_rx5_live ${D}${bindir}/pose_cnn_rx5_live
 
     install -d ${D}${datadir}/pose-cnn-rx5
-    install -m 0644 blob_rx5_test.bin ${D}${datadir}/pose-cnn-rx5/blob_rx5_test.bin
-    install -m 0644 input_rx5_test.bin ${D}${datadir}/pose-cnn-rx5/input_rx5_test.bin
-    install -m 0644 pose_expected.bin ${D}${datadir}/pose-cnn-rx5/pose_expected.bin
+    for asset in blob_rx5_test.bin input_rx5_test.bin pose_expected.bin; do
+        if [ -f "$asset" ]; then
+            install -m 0644 "$asset" ${D}${datadir}/pose-cnn-rx5/"$asset"
+        fi
+    done
     install -m 0644 pose_expected.txt ${D}${datadir}/pose-cnn-rx5/pose_expected.txt
 }
 

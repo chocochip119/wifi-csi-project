@@ -143,3 +143,7 @@ Release/
 *.zip
 *.tar
 *.tar.gz
+
+# Reviewed PC runtime model and numerical regression fixture
+!pc/backend/localization/models/ridge_portable.npz
+!pc/backend/tests/fixtures/selfcheck_fixture.npz

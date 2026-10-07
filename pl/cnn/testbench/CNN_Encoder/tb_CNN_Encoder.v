@@ -54,7 +54,7 @@ module tb_CNN_Encoder;
 
     initial begin
         $readmemh("enc_wram.hex", w_mem);
-        $readmemh("enc_param.hex", p_mem);
+        $readmemh("enc_param.hex", p_mem, 0, 47);
         $readmemh("enc_lut.hex", lut_mem);
         $readmemh("enc_in64.hex", in_mem);
         $readmemh("enc_feat.hex", exp_mem);
@@ -94,12 +94,12 @@ module tb_CNN_Encoder;
             @(posedge clk);
         end
         $display("RX=%0d feat words checked=%0d errors=%0d enc_done pulses=%0d", RX, FEAT_WORDS, err, done_cnt);
+        if (err != 0 || done_cnt != 1) $fatal(1, "Encoder regression failed");
         $finish;
     end
 
     initial begin
         #100_000_000;
-        $display("TIMEOUT");
-        $finish;
+        $fatal(1, "TIMEOUT");
     end
 endmodule

@@ -5,19 +5,17 @@ Zybo Z7-20 / PetaLinux 2020.2에서 실행하는 C 소스입니다. PS가 5RX CS
 ## 폴더 구조
 
 ```text
-PS/
+ps/
 ├── README.md
 ├── src/
 │   ├── csi_pipeline.c                # CSI 파싱·INT8 전처리
 │   ├── pose_cnn_rx5_live.c           # 실시간 수신·FPGA 제어·좌표 출력
+│   ├── wise_server.c               # 비동기 TCP 5000/5001 서버
 │   └── pose_cnn_rx5_board_test.c     # 고정 입력 bit-exact 검증
 ├── include/
 │   ├── csi_pipeline.h               # 전처리 API
 │   └── pose_cnn_regs.h              # 레지스터·DDR 주소
 ├── test_vectors/
-│   ├── blob_rx5_test.bin            # 통합 시험용 모델 데이터
-│   ├── input_rx5_test.bin           # 고정 입력
-│   ├── pose_expected.bin            # 예상 출력
 │   └── pose_expected.txt            # 예상 출력 설명
 └── petalinux/
     ├── install_app.sh               # PetaLinux 앱 배치 스크립트
@@ -64,7 +62,7 @@ RX 5대 → TX Coordinator → Zybo USB /dev/ttyACM0
 
 이 저장소는 코드 탐색을 위해 폴더를 간단히 구성했습니다. [install_app.sh](petalinux/install_app.sh)가 앱 파일을 PetaLinux의 `project-spec/meta-user/recipes-apps/pose-cnn-rx5` 경로에 배치합니다. 기존 레시피가 있으면 먼저 백업합니다.
 
-압축 해제한 `PS` 폴더에서 실행합니다.
+저장소의 `ps` 폴더에서 실행합니다. GitHub checkout에는 가중치/고정 입력/예상 출력 `.bin`이 포함되지 않습니다. 아래 명령은 소스만 설치합니다. 검증된 시험 바이너리가 있다면 `install_app.sh PROJECT VERIFIED_VECTOR_DIR`로 세 파일을 명시적으로 함께 배치하세요. 최종 학습 blob은 실행 시 경로와 input_scale을 별도로 지정해야 합니다.
 
 ```bash
 source /home/petalinux/petalinux/2020.2/settings.sh
@@ -123,7 +121,7 @@ tail -n 8 /tmp/rx5_live_100.log
 
 `MAX_WINDOWS=0`이면 연속 실행합니다. `DUMP_BIN`에는 입력 윈도우가 저장되고, 자세 좌표는 로그의 `POSE_INT8`, `POSE_FLOAT`에 출력됩니다. 입력 파일 크기는 10윈도우 192,000 bytes, 100윈도우 1,920,000 bytes입니다.
 
-**blob_rx5_test.bin과 입력 스케일 `0.02`는 통합 시험용입니다.** 최종 자세 정확도는 최종 RX5 학습 모델의 blob과 입력 스케일을 적용한 뒤 평가해야 합니다.
+**위 예시의 blob_rx5_test.bin과 입력 스케일 `0.02`는 통합 시험용입니다.** 최종 자세 정확도는 최종 RX5 학습 모델의 blob과 입력 스케일을 적용한 뒤 평가해야 합니다.
 
 ## 보드 검증 기록 — 2026-09-30
 
@@ -149,3 +147,13 @@ tail -n 8 /tmp/rx5_live_100.log
 - 이 수정본은 숫자 인자 검사를 호스트에서 검증했으며 ARM 빌드·보드 회귀 시험은 별도로 필요합니다. 함수 주석 coverage 경고 전체를 해결한 버전은 아닙니다.
 
 `PS` 폴더를 팀 저장소에 복사합니다. C 소스·헤더·레시피·시험 벡터를 함께 올리고, `build/`, `image.ub`, `BOOT.BIN`, SD 백업은 포함하지 않습니다.
+
+## PC 연결 — TCP 기본 경로
+
+현재 live 앱은 TCP 5000(CSI/STATUS/ACK), 5001(Pose)의 서버를 엽니다. `WISE_TCP_BIND`로 PS IPv4 주소를 제한할 수 있습니다. 상태를 유지하기 위해 PS가 3초마다 TX에 `status`를 요청합니다. 네트워크 송신은 별도 스레드와 유한 큐를 사용합니다.
+
+PC에서 `python pc/backend/run_backend.py --ps-host <PS_IP>`를 실행하고 실제 RX 배치 확인 후 API로 위치 추론을 시작합니다. 자세한 [실행 방법](../pc/backend/README.md)과 [바이트 규격](../docs/ps_pc_protocol.md)을 참조하세요.
+
+기존 `CSI_UDP_TARGET=IPv4:port` WCSI v1 디버그 송신은 선택적으로 유지되며 PC 도구는 `pc/backend/tools/udp_receiver.py`로 이동했습니다. TCP Backend는 UDP 패킷을 입력으로 받지 않습니다. `_bypass` 임시 파일명은 일반 live/pipeline 이름으로 정리하고 PetaLinux recipe에 `wise_server.c/.h`와 `-pthread`를 추가했습니다.
+
+호스트 컴파일/전송 회귀 테스트는 완료했으며 이 TCP 추가분의 실제 Zybo/ARM/PetaLinux 전체 빌드는 수행하지 않았습니다. 위 2026-09-30 보드 기록은 이번 TCP 코드의 검증 기록이 아닙니다.
