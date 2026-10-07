@@ -37,13 +37,15 @@ ESP-RX는 ESP-IDF 기반의 CSI(Channel State Information) 수신 노드 펌웨�
 | 기본 UDP 슬롯 간격 | `2000` us |
 | Heartbeat 주기 | `1000` ms |
 
+표의 채널/slot gap은 RX 부팅 기본값이다. 현재 TX 기본값은 채널 9·slot gap 500µs이며 NVS·TX 제어/assignment에 따라 실제 값이 달라진다. 연결 후 TX STATUS와 RX 슬롯을 확인한다. UDP record에는 trigger_seq가 없어 trigger별 정합은 [점검 기록](../../../docs/reviews/2026-10-07-pc-integration.md)의 남은 항목이다.
+
 ## 업로드된 ESP의 역할
 
 이 펌웨어가 올라간 ESP는 독립적으로 데이터를 생성하는 장치가 아니라, TX 장치의 명령을 받아 동작하는 CSI 수신기 역할을 한다. TX가 실행 모드로 전환하고 이 RX에 슬롯을 할당하면, RX는 TX에서 오는 Wi-Fi 신호의 CSI와 RSSI를 캡처해서 TX의 UDP 서버로 전달한다. 여러 RX를 동시에 사용할 경우 각 RX는 할당된 슬롯 시간에 맞춰 UDP를 보내도록 설계되어 있다.
 
 ## 빌드
 
-ESP-IDF 환경에서 다음 명령으로 빌드할 수 있다.
+이 폴더의 ESP-IDF 환경에서 빌드한다. 현재 sdkconfig/defaults의 target은 `esp32s3`다. 실제 RX가 ESP32-WROOM-32라면 target·보드 설정을 확인하고 해당 장비에서 빌드/수신을 검증해야 한다. [ESP32 안내](../../README.md)를 참고한다.
 
 ```powershell
 idf.py build

@@ -17,6 +17,8 @@ Pool의 두 번째 반올림도 같은 원칙입니다. `/48`은 `sign(p)*((abs(
 
 ## 검증
 
+저장소 루트에서 NumPy·pytest와 Icarus Verilog(`iverilog`, `vvp`)가 필요합니다. runner의 도구 경로 옵션과 검증 범위는 [RTL 회귀 안내](../../pl/cnn/testbench/rounding/README.md)에 있습니다.
+
 ```bash
 python -m pytest ml/pose/tests -q
 python pl/cnn/testbench/rounding/run_regression.py
@@ -25,6 +27,8 @@ python pl/cnn/testbench/rounding/run_regression.py
 두 requantizer는 독립 정수 oracle, 동기 RAM, 연속 입력/빈 cycle, signed 경계값으로 확인합니다. Pool은 중간값 `-8191..8191`의 `/48`을 전부 비교합니다. RX5 Encoder 기대값도 새 reference로 매번 생성합니다. 실패·누락·timeout은 simulator의 실패 exit로 처리합니다.
 
 Colab v5의 golden 셀은 실제 export 가중치와 test window 하나로 `golden_input.bin`(19,200 bytes), `golden_pose.bin`(24 bytes), 중간값 NPZ와 scale/commit/SHA256 manifest를 만듭니다. 가중치가 달라지면 golden도 다시 만들어야 합니다. 이는 해당 모델의 정수 기준 출력이며 실제 장비 테스트가 완료됐다는 표시가 아닙니다.
+
+기존 [PS 시험 벡터](../../ps/test_vectors/README.md)의 기대 출력은 새 규칙과 15/24 bytes가 다릅니다. 최종 모델과 같은 export에서 golden을 생성하세요.
 
 전체 RTL 비교에는 export 폴더에서 아래 testbench를 사용합니다. `REPO_ROOT`를 저장소의 절대 경로로 설정하고 Verilator와 C++ compiler를 설치합니다.
 

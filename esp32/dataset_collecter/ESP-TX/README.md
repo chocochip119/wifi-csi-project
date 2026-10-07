@@ -8,7 +8,7 @@ ESP-TX는 ESP-IDF 기반의 CSI(Channel State Information) 송신/수집 코디�
 2. TinyUSB CDC ACM을 초기화해 PC/FPGA host와 통신할 USB serial 포트를 연다.
 3. Wi-Fi SoftAP를 시작한다.
    - SSID는 `CSI_TX`이다.
-   - 기본 채널은 6번, 기본 second channel은 `above`이다.
+   - 기본 채널은 9번, 기본 second channel은 `above`이다.
    - Wi-Fi는 11b/g/n, HT40, trigger 송신 rate는 `WIFI_PHY_RATE_MCS3_LGI`로 설정한다.
 4. RX가 SoftAP에 접속하거나 끊기면 MAC 주소와 연결 순서를 관리한다.
 5. wait mode에서는 연결된 RX 목록과 설정 상태를 1초마다 USB host로 보낸다.
@@ -16,7 +16,7 @@ ESP-TX는 ESP-IDF 기반의 CSI(Channel State Information) 송신/수집 코디�
 7. running mode 진입 시 live RX 목록을 고정하고 각 RX에 slot 번호를 ESP-NOW 제어 패킷으로 알려준다.
 8. 각 cycle마다 raw 802.11 trigger frame을 broadcast로 송신한다.
 9. RX들은 trigger를 보고 CSI를 캡처한 뒤 자신에게 할당된 slot 시간에 맞춰 UDP `3333` 포트로 CSI record를 TX에 보낸다.
-10. TX는 모든 RX record를 받거나 timeout이 발생하면 cycle 결과를 하나의 USB binary frame으로 묶어 host에 전송하고 다음 cycle을 바로 시작한다.
+10. TX는 모든 RX record를 받거나 timeout이 발생하면 cycle 결과를 하나의 USB binary frame으로 묶어 host에 전송하고 pacing 지연을 거쳐 다음 cycle을 시작한다.
 
 ## 주요 설정값
 
@@ -24,15 +24,19 @@ ESP-TX는 ESP-IDF 기반의 CSI(Channel State Information) 송신/수집 코디�
 | --- | --- |
 | SoftAP SSID | `CSI_TX` |
 | 최대 RX 수 | `8` |
-| 기본 Wi-Fi 채널 | `6` |
+| 기본 Wi-Fi 채널 | `9` |
 | Wi-Fi 대역폭 | HT40 |
 | Trigger TX rate | `WIFI_PHY_RATE_MCS3_LGI` |
 | UDP 수신 포트 | `3333` |
 | 최대 CSI 길이 | `512` bytes |
-| 기본 slot timeout | `2000` us |
-| 기본 UDP slot gap | `2000` us |
+| 기본 slot timeout | `4000` us |
+| 기본 UDP slot gap | `500` us |
 | 상태 전송 주기 | `1000` ms |
 | RX heartbeat live 기준 | `3000` ms |
+| Cycle pacing 지연 | `5` ms |
+| USB cycle 대기 나이 제한 | `200` ms |
+
+위 값은 소스 기본값이며 NVS에 저장된 설정이 우선한다. 실제 동작값은 STATUS로 확인한다. 현재 RX의 초기 채널/slot gap은 TX와 다를 수 있으며 연결·assignment 적용 후 상태를 확인한다. raw trigger는 `frame_ctrl=0x0208`의 data frame이다.
 
 ## TX-RX 통신 프로토콜
 
@@ -120,7 +124,7 @@ RX는 CSI를 캡처한 뒤 TX의 UDP port `3333`으로 `udp_csi_packet_header_t 
 | `checksum` | 4 | header 일부와 raw CSI를 이어 계산한 checksum32 |
 | `raw CSI` | 가변 | CSI byte 배열 |
 
-TX는 `magic`, `version`, `csi_len`, 전체 길이, checksum을 검증하고, `generation`과 `rx_index`가 현재 cycle과 맞는 record만 cycle buffer에 반영한다.
+TX는 `magic`, `version`, `csi_len`, 전체 길이, checksum을 검증하고 현재 running `generation`과 할당된 `rx_index`에 맞는 record를 cycle buffer에 반영한다. UDP header에는 `trigger_seq`가 없으므로 이전 trigger의 지연 CSI를 현재 cycle과 구별하는 보장은 없다. 남은 동기화 항목은 [점검 기록](../../../docs/reviews/2026-10-07-pc-integration.md)을 참고한다.
 
 ## TX-USB Host 통신 프로토콜
 
@@ -192,7 +196,7 @@ running mode에서 한 cycle이 끝날 때마다 전송된다. 모든 RX record�
 
 ## 빌드
 
-ESP-IDF 5.5 이상과 `espressif/esp_tinyusb` 컴포넌트를 사용한다.
+ESP-IDF 5.5 이상과 `espressif/esp_tinyusb` 컴포넌트를 사용한다. 이 폴더에서 실행하며 현재 저장된 target은 `esp32s3`다. [ESP32 전체 안내](../../README.md)와 실제 보드를 먼저 확인한다.
 
 ```powershell
 idf.py build
