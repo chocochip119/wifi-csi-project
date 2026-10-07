@@ -1,4 +1,4 @@
-#include "csi_pipeline_bypass.h"
+#include "csi_pipeline.h"
 
 #include <math.h>
 #include <stdbool.h>
@@ -59,6 +59,8 @@ struct csi_pipeline {
     uint64_t next_window_seq;
 
     csi_pipeline_stats_t stats;
+    csi_frame_callback_t frame_callback;
+    void *frame_user;
 };
 
 static uint16_t rd16(const uint8_t *p)
@@ -302,6 +304,11 @@ static int pop_cycle(csi_pipeline_t *pipeline, cycle_t *cycle)
         }
 
         pipeline->stats.valid_frames++;
+        if (pipeline->frame_callback) {
+            pipeline->frame_callback(frame_type, rd32(pipeline->rx_buffer + 8u),
+                pipeline->rx_buffer + SERIAL_HEADER_BYTES, payload_length,
+                pipeline->frame_user);
+        }
         if (frame_type == FRAME_CYCLE) {
             int record_count = parse_cycle_payload(
                 pipeline,
@@ -393,7 +400,10 @@ static int parse_csi_feature(
 
 static int8_t quantize_int8(float value, float scale)
 {
-    int quantized = (int)lrintf(value / scale);
+    float scaled = value / scale;
+    if (scaled >= 127.0f) return 127;
+    if (scaled <= -127.0f) return -127;
+    int quantized = (int)lrintf(scaled);
     if (quantized > 127) quantized = 127;
     if (quantized < -127) quantized = -127;
     return (int8_t)quantized;
@@ -654,4 +664,10 @@ void csi_pipeline_get_stats(
     if (pipeline != NULL && stats != NULL) {
         *stats = pipeline->stats;
     }
+}
+
+void csi_pipeline_set_frame_callback(csi_pipeline_t *pipeline,
+    csi_frame_callback_t callback, void *user)
+{
+    if (pipeline) { pipeline->frame_callback = callback; pipeline->frame_user = user; }
 }

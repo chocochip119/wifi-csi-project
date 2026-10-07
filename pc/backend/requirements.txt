@@ -1,0 +1,8 @@
+# Portable Ridge mode: versions do not need to match the training PC exactly.
+numpy>=2.0
+pandas>=2.0
+scikit-learn>=1.5
+joblib>=1.4
+threadpoolctl>=3.0
+fastapi>=0.115
+uvicorn[standard]>=0.30

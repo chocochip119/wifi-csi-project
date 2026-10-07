@@ -1,0 +1,146 @@
+{
+  "schema": "wise_portable_ridge_v1",
+  "npz_sha256": "db3cb2e4902062703430ac7e014891607c25f394bc42786e1074690206b3ce61",
+  "source_model": "1004_localization_11class/csi_studio_py314_11class/runs/run_20261005_162053_c2b8fb09/fit/models/window__amp_rssi__ridge.joblib",
+  "source_model_sha256": "9e5b748f199117910523bce53edd79788ce5946b8bd47c3afa15182f1682e88c",
+  "source_versions": {
+    "python": "3.14.7",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "pandas": "3.0.6",
+    "sklearn": "1.9.1",
+    "joblib": "1.6.0"
+  },
+  "studio_schema": "csi_studio_model_v2_presence",
+  "family": "ridge",
+  "variant": "amp_rssi",
+  "task": "presence_and_ninepoint_plus_p05_seated_location",
+  "empty_label": "empty",
+  "location_classes": [
+    "p01",
+    "p02",
+    "p03",
+    "p04",
+    "p05",
+    "p06",
+    "p07",
+    "p08",
+    "p09",
+    "p10"
+  ],
+  "bundle_classes": [
+    "p01",
+    "p02",
+    "p03",
+    "p04",
+    "p05",
+    "p06",
+    "p07",
+    "p08",
+    "p09",
+    "p10",
+    "empty"
+  ],
+  "estimator_classes_order": [
+    "empty",
+    "p01",
+    "p02",
+    "p03",
+    "p04",
+    "p05",
+    "p06",
+    "p07",
+    "p08",
+    "p09",
+    "p10"
+  ],
+  "points_cm": {
+    "p01": [
+      30,
+      30
+    ],
+    "p02": [
+      90,
+      30
+    ],
+    "p03": [
+      150,
+      30
+    ],
+    "p04": [
+      30,
+      90
+    ],
+    "p05": [
+      90,
+      90
+    ],
+    "p06": [
+      150,
+      90
+    ],
+    "p07": [
+      30,
+      150
+    ],
+    "p08": [
+      90,
+      150
+    ],
+    "p09": [
+      150,
+      150
+    ],
+    "p10": [
+      90,
+      90
+    ]
+  },
+  "config": {
+    "layout_id": "layout_02",
+    "mode": "window",
+    "variant": "amp_rssi",
+    "rx_ids": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "rx_mac_by_index": null,
+    "csi_len": 384,
+    "drop_pairs": 2,
+    "window_s": 2.0,
+    "stride_s": 2.0,
+    "min_interval_s": 0.1,
+    "max_cycle_span_s": 0.1,
+    "min_window_cycles": 10,
+    "min_window_span_s": 1.0,
+    "trim_start_s": 2.0,
+    "trim_end_s": 2.0
+  },
+  "feature_contract": {
+    "rx_order": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "layout_id": "layout_02",
+    "csi_bytes_per_rx": 384,
+    "drop_pairs": 2,
+    "iq_order": "imaginary_then_real",
+    "amplitude": "hypot(imag, real)",
+    "rssi": "arithmetic mean of dBm values",
+    "order": "amplitude, RSSI, optional relative cosine then relative sine",
+    "phase_fit_split": "train",
+    "scaler_fit_split": "train",
+    "phase_aggregation": "cycle cos/sin then window mean",
+    "coordinate_source": "nine nominal points; p10 (p05 seated) shares p05 coordinate; empty has no coordinate",
+    "empty_label": "empty",
+    "task": "presence_and_ninepoint_plus_p05_seated_location"
+  },
+  "math": "z=(x-scaler_mean)/scaler_scale; score=z@coef.T+intercept; label=estimator_classes[argmax(score)]",
+  "note": "decision column j = estimator_classes[j] (empty first), not bundle_classes[j]"
+}

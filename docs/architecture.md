@@ -1,33 +1,12 @@
 # System Architecture
 
-## 목표
+ESP32 RX 5대의 CSI를 TX Coordinator가 모아 USB로 PS에 전달합니다. PS는 같은 cycle을 두 경로에 사용합니다.
 
-Wi-Fi CSI를 수집해 Zynq PS/PL에서 처리하고, 자세·호흡·위치 정보를 추정하는 시스템을 구성한다.
+- 자세: PS 전처리 → DDR의 INT8 `[15,128,10]` → FPGA CNN → PS에서 24좌표와 scale 읽기 → TCP 5001 → PC.
+- 위치: PS에서 원본 CSI cycle/STATUS/ACK를 TCP 5000으로 전달 → PC의 11클래스 Portable Ridge 실시간 엔진.
 
-## 현재 구상
+PC Backend는 두 입력을 최신 스냅샷으로 합쳐 HTTP/WebSocket으로 제공합니다. 위치/Pose의 유효성은 각각 관리하며 누락·연결 종료·오래된 결과는 unavailable입니다. 프런트엔드와 호흡 통합은 현재 구현에 포함되지 않습니다.
 
-```text
-ESP32 TX
-   ↓ Wi-Fi
-ESP32 RX
-   ↓ CSI
-Zynq PS
-   ├─ CSI parsing / buffering
-   └─ PL control
-        ↓ AXI
-Zynq PL
-   ├─ CNN → Pose Estimation
-   ├─ FFT → Respiration Analysis
-   ├─ Localization → Position Estimation
-   └─ TOP → Module Integration
-```
+학습/실험은 `ml/`, PC 실행은 `pc/backend/`, 보드 프로그램은 `ps/`, 하드웨어는 `pl/`과 `integration/`에서 관리합니다. 세부 인터페이스는 [interface.md](interface.md)를 참조합니다.
 
-## TODO
-
-- [ ] ESP32 수량 및 배치 확정
-- [ ] CSI packet format 확정
-- [ ] PS/PL 역할 분담 확정
-- [ ] CNN 입력 형상 확정
-- [ ] FFT 적용 위치 및 호흡 추정 방식 확정
-- [ ] 위치 추정 방식 확정
-- [ ] 전체 블록다이어그램 작성
+FPGA FC 원본 RTL과 패키지 IP/INT8 참고 구현의 음수 반올림 규칙이 현재 다릅니다. 최종 모델 배포 전에 [점검 기록](reviews/2026-10-07-pc-integration.md)의 bit-exact 항목을 해결해야 합니다.
