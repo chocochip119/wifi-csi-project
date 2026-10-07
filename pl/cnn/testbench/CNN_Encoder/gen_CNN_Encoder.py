@@ -3,13 +3,17 @@
 사용: python gen_CNN_Encoder.py [RX]   (기본 3, tb_CNN_Encoder 의 RX 와 같게)
 
 RX마다 Conv1 → requant → GELU1 → Conv2 → requant → GELU2 → AdaptiveAvgPool(8,4)
-수치 규칙은 ML/src/int8_reference.py 와 같다.
+수치 규칙은 ml/pose/int8_reference.py 와 같다.
 출력: enc_in64.hex (입력 RX*480 x 64-bit), enc_wram.hex (333 x 128-bit),
       enc_param.hex (48 x {shift, mult, bias}), enc_lut.hex (GELU LUT 1024 B),
       enc_pool.hex (pool_mult, pool_shift), enc_feat.hex (기대 Pool 결과 RX*128 x 64-bit)
 """
 import sys
+from pathlib import Path
 import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4] / "ml" / "pose"))
+from int8_reference import _rounding_right_shift as round_shift, _rounding_divide
 
 RX = int(sys.argv[1]) if len(sys.argv) > 1 else 3
 
@@ -32,11 +36,6 @@ m1, m2 = rng.integers(2**30, 2**31, 16), rng.integers(2**30, 2**31, 32)
 s1, s2 = rng.integers(39, 42, 16), rng.integers(40, 43, 32)  # 출력이 대부분 포화되지 않게
 lut = rng.integers(-127, 128, size=(2, 256))
 pmult, pshift = int(rng.integers(2**30, 2**31)), 31
-
-
-def round_shift(v, s):
-    o = np.int64(1) << np.int64(s - 1)
-    return np.where(v >= 0, (v + o) >> s, (v - o) >> s)
 
 
 def conv(x, w, ph, pw):
@@ -70,7 +69,7 @@ for rx in range(RX):
         for ow, (ws, we) in enumerate([(0, 3), (2, 5), (5, 8), (7, 10)]):
             s = f2[:, oh * 16:oh * 16 + 16, ws:we].sum(axis=(1, 2))
             p = round_shift(s * pmult, pshift)
-            p = np.clip(np.where(p >= 0, (p + 24) // 48, (p - 24) // 48), -127, 127)
+            p = np.clip(_rounding_divide(p, 48), -127, 127)
             for oc in range(32):
                 feat[rx * 1024 + oc * 32 + oh * 4 + ow] = p[oc]
 

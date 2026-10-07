@@ -19,38 +19,39 @@ GitHub main `5715bf5a2af2e005325b3134701d365e8ac553a4`와 사용자 첨부 `wise
 | 잘못된 Pose scale NaN/Inf가 JSON 상태에 유입될 수 있음 | 유한 양수 scale 검사, 유한 좌표만 상태에 포함 |
 | Pose 종료/접속 오류 시 cached Pose 및 스레드 정리 부족 | socket shutdown, 연결 종료 시 cached Pose 삭제, start 실패 자원 정리 |
 | PS 입력 scale이 매우 작을 때 float→int 변환 전에 오버플로 | float 범위에서 ±127로 먼저 포화 |
-| v5가 기존 외부 prepare를 계속 불러 빈 CSI를 mask=1로 표시 | 검증된 팀 `ml/pose/prepare.py`와 43개 회귀 테스트 추가, v5에서 수정 commit을 별도 모듈명으로 고정 로드 |
+| v5가 기존 외부 prepare를 계속 불러 빈 CSI를 mask=1로 표시 | 검증된 팀 `ml/pose/prepare.py`와 전처리 회귀 테스트 추가, v5에서 수정 commit을 별도 모듈명으로 고정 로드 |
 | CLI `--reload`가 실제로 무시됨 | 실행하지 않는 옵션 제거 |
+| FC 원본 / Encoder / Pool / 패키지 IP / Python의 음수 반올림 불일치 | 최신 FC의 nearest, halfway away from zero 계약으로 소스와 Python/golden 생성 통일 |
+| PR 리뷰: 잘못된 trigger_seq 한 행이 전체 전처리를 중단 | iterator에서 uint32를 한 번 검증/파싱, 해당 행만 제외하고 invalid_trigger_rows 집계 |
+| PR 리뷰: v5 첫 markdown 셀에 ID 없음 | ID 추가, notebook 4.5 schema와 모든 코드 셀 검증 |
 
 `handoff/`, pycache 및 임시 원본 디렉터리를 GitHub 실행 구조에 넣지 않습니다. 모델 NPZ와 40-window 회귀 fixture는 전달받은 바이트를 유지합니다. JSON의 설정값을 유지하고 줄바꿈만 저장소의 LF 규칙으로 통일합니다. `pc/frontend`에는 구현 상태와 연결 API를 안내하는 README만 추가합니다. 원래 ZIP에 프런트엔드/GLB/텍스처가 없으므로 만들어진 것으로 표시하지 않습니다.
 
 ## 검증 결과
 
-환경: Linux x86_64, Python 3.12, GCC, Icarus Verilog 12. 사용한 Python 버전은 전달 모델 제작 환경과 다르지만 Portable Ridge 수치 회귀는 일치했습니다.
+환경: Linux x86_64, Python 3.12, GCC, Icarus Verilog 12, Verilator 5.020. 사용한 Python 버전은 전달 모델 제작 환경과 다르지만 Portable Ridge 수치 회귀는 일치했습니다.
 
-- `python -m pytest pc/backend/tests ml/pose/tests -q`: **69 passed**, 테스트 클라이언트 의존성의 deprecation warning 1개.
+- `python -m pytest pc/backend/tests ml/pose/tests -q`: **102 passed**, 테스트 클라이언트 의존성의 deprecation warning 1개.
 - Backend/순수 protocol/model/lifecycle: 21개 테스트.
 - C↔Python 실제 TCP: 5개 테스트. USB 프레임을 7-byte 조각으로 PS 파서에 입력하고 헤더/페이로드, checksum 거부, 누락 RX, STATUS/ACK/Pose, 실제 위치 추론, cached STATUS 재접속, 느린 CSI 수신자와 Pose 포트 분리를 확인했습니다.
-- 수정 prepare: 43개 테스트. 빈/잘못된 CSI mask, 정상 zero CSI, shape/값 계약, CLI 경로 등을 확인했습니다.
+- 수정 prepare: 51개 테스트. 빈/잘못된 CSI mask, 정상 zero CSI, shape/값 계약, CLI 경로, 손상/범위 밖 trigger 행을 제외한 뒤 처리 지속, UINT32_MAX와 정수 기준 그룹화를 확인했습니다.
 - 모델 회귀: 전달된 40개 윈도우를 원본 I/Q에서 재계산. 특징 955개, 11-class 점수, 라벨 모두 전달된 sklearn 기준과 일치했습니다. 새 현장 데이터 정확도를 측정한 것은 아닙니다.
 - PS live/board-test 앱: `gcc -std=c11 -Wall -Wextra -Werror` 호스트 컴파일 통과. live에는 `-lm -pthread` 적용.
 - PetaLinux 설치 스크립트: bash 구문, source-only 배치, recipe가 참조하는 파일 존재, 배치된 소스의 호스트 컴파일, 선택 바이너리 배치 확인. 선택 바이너리 배치 시험에는 합성 파일을 사용했고 배포 모델로 저장하지 않았습니다.
-- Colab v5: 코드 셀 17개 구문 검증. GPU 학습/실제 CSV/INT8 최종 export 실행은 수행하지 않았습니다.
+- INT8 Python: 25개 테스트. 음수 exact division/tie/zero, signed int64 경계, 33-bit bias 합과 +2**63 product, Pool 상수 -1, IP 소스 동일성을 확인했습니다.
+- RTL requant: 동기 BRAM/빈 cycle/변하는 파라미터로 독립 정수 oracle 8,000개를 Encoder와 FC 각각 비교해 모두 일치. 기존 requant 벡터 5,000개도 새 reference로 재생성해 통과했습니다.
+- RTL Pool: /48 중간값 -8191..8191의 16,383개를 전부 비교하고 shift 12,950개를 추가 확인했습니다.
+- RX5 Encoder: 새 reference로 재생성한 5,120 feature bytes(640 words), enc_done 1회 확인.
+- 전체 RX5 RTL: 합성 회귀 가중치/입력의 golden을 새 Python으로 생성해 LOAD 후 reset 없는 INFER 2회, 각각 24/24 bytes 일치. 실제 학습 모델/측정 데이터 성능 검증으로 해석하지 않습니다.
+- Colab v5: 셀 ID 포함 notebook schema 검증, 코드 셀 18개 구문 검증. 팀 정수 reference로 test window의 input/pose golden 및 commit/scale/hash manifest를 생성하는 셀 추가. GPU 학습/실제 CSV/최종 학습 모델 export 실행은 수행하지 않았습니다.
 
 ## 남은 배포 확인 항목
 
-### FC 원본 RTL / 패키지 IP / Python INT8 규칙 불일치
+### Vivado 재패키징 / 최종 모델 golden / 보드 적용
 
-최신 main의 `pl/cnn/rtl/FC/Common/requant_core.v`는 음수에서 `value+half-1`을 shift합니다. `integration/pose_cnn_1.1/src/requant_core.v`와 v5가 고정한 외부 INT8 참고 구현은 기존 음수 offset 방식입니다.
+원본 FC·Encoder·Pool과 패키지 IP의 세 소스를 통일했고, 팀 Python 및 v5의 golden 생성도 같은 계약으로 수정했습니다. 상세 식과 재실행 방법은 [INT8 계약](../../ml/pose/INT8.md)을 참조합니다. shift를 6비트로 잘라 쓰는 문제와 Encoder product 폭도 함께 고쳤습니다. FC pipeline의 파라미터 정렬은 유지합니다.
 
-Icarus로 `acc=-4, bias=0, multiplier=1, shift=2`를 넣은 결과:
-
-| 구현 | 출력 |
-|---|---:|
-| 현재 FC 원본 RTL | -1 |
-| 현재 패키지 IP의 requant_core | -2 |
-
-두 경로가 수치적으로 같지 않으므로 v5에서 생성한 golden vector/실제 보드와 최신 FC RTL의 bit-exact 일치를 가정하면 안 됩니다. 이번 TCP 작업에서는 RTL 정책을 임의로 변경하지 않았습니다. 하드웨어 담당자가 Encoder/FC/export/reference/IP의 반올림 계약을 통일하고 IP 재패키징, Vivado 구현, 최종 모델 golden 비교를 해야 합니다.
+Vivado synthesis/implementation, IP 재패키징, bitstream/XSA 생성은 이 환경에서 실행하지 않았습니다. 저장소의 기존 바이너리에 새 RTL이 적용된 것으로 해석하면 안 됩니다. 최종 학습 가중치로 v5 golden을 다시 생성하고 새 bitstream과 실제 보드 출력을 비교해야 합니다. Verilator 빌드에는 기존 RTL의 폭 관련 경고가 남아 있으며 합성 자원·타이밍 통과를 보장하지 않습니다.
 
 ### 기존 ESP32 수집 동기화 결함
 

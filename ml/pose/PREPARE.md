@@ -25,6 +25,7 @@ python ml/pose/prepare.py --input-dir <수집한_CSV_폴더> --output-dir ml/pos
 
 기존 코드는 `iq_pairs="[]"`를 0 벡터로 반환한 뒤 `mask=1`로 표시했다. 이제 빈 CSI를 거부하므로 해당 RX의 base와 mask는 초기 0을 유지한다.
 
+- `trigger_seq`는 0..4294967295의 십진 정수여야 한다. 잘못된 값/빈 값은 해당 행만 제외하고 전체 CSV 처리를 계속한다. 숫자로 파싱한 값으로 그룹화한다.
 - JSON 최상위 값은 비어 있지 않은 배열이어야 한다.
 - 각 항목은 정확히 `[I, Q]` 두 값으로 구성한다.
 - I/Q는 `-128..127` 정수다. bool, 소수, 문자열, null, NaN, 무한대는 거부한다.
@@ -49,13 +50,14 @@ NPZ에는 `features`, `labels`, `file_ids`, `trigger_seq`, `frame_size`를 저�
 
 | 필드 | 의미 |
 |---|---|
+| `invalid_trigger_rows` | trigger_seq가 빈 값/잘못된 정수/uint32 범위 밖인 행 수 |
 | `invalid_rx_rows` | RX 번호가 없거나 범위 밖인 행 수 |
 | `rx.<번호>.accepted_rows` | 유효한 CSI 행 수 |
 | `rx.<번호>.rejected_rows` | CSI 검증에서 거부한 행 수 |
 | `rx.<번호>.missing_frames` | 해당 RX의 유효 데이터가 없는 trigger 그룹 수 |
 | `rx.<번호>.reasons` | `empty` / `format` / `value` / `length` / `feature`별 거부 수 |
 
-위 집계는 **관절 정답이 완전한 trigger 그룹만 대상으로 하며 forward-fill 이전 기준**이다. missing_frames에는 행 자체가 없는 경우와 잘못된 행만 있는 경우가 모두 포함된다. 모든 RX가 무효라 NPZ에서 제외된 그룹도 집계한다. 따라서 accepted_rows와 저장 프레임 수, missing_frames는 서로 다른 단위이며 단순히 더하거나 빼서 해석하지 않는다.
+RX별 집계는 **관절 정답이 완전한 trigger 그룹만 대상으로 하며 forward-fill 이전 기준**이다. `invalid_trigger_rows`는 그룹 생성 전에 CSV의 모든 행에서 집계한다. missing_frames에는 행 자체가 없는 경우와 잘못된 행만 있는 경우가 모두 포함된다. 모든 RX가 무효라 NPZ에서 제외된 그룹도 집계한다. 따라서 accepted_rows와 저장 프레임 수, missing_frames는 서로 다른 단위이며 단순히 더하거나 빼서 해석하지 않는다.
 
 모든 행이 무효라 쌍 개수를 추론할 수 없으면 명확한 오류로 중단한다. 원본 수집 규격에 맞춰 데이터를 고친 후 다시 실행한다. 기존에 만들어 둔 NPZ의 잘못된 mask는 자동 수정되지 않으므로 **이 변경을 사용하려면 CSV에서 cache를 다시 생성**해야 한다.
 

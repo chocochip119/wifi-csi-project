@@ -5,16 +5,19 @@ round_shift 는 reference(round_shift_signed / _rounding_right_shift)와 같은 
 출력: rq_param.hex (48 x {shift, mult, bias}), rq_vec.hex ({tag, acc}), rq_exp.hex ({tag, rq})
 """
 import random
+import sys
+from pathlib import Path
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[4] / "ml" / "pose"))
+from int8_reference import _rounding_right_shift
 
 random.seed(1)
 N = 5000
 
 
 def round_shift(v, s):
-    if s <= 0:
-        return v << (-s)
-    o = 1 << (s - 1)
-    return (v + o) >> s if v >= 0 else (v - o) >> s
+    return int(_rounding_right_shift(np.array([v], dtype=object), s)[0])
 
 
 params = []

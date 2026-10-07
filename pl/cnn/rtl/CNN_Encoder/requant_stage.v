@@ -15,7 +15,9 @@ module requant_stage #(
     output reg [TAG_W - 1:0] rq_tag
 );
 
-    reg signed [63:0] acc_r1, acc_r2, acc_r3, acc_r4;
+    reg signed [63:0] acc_r1, acc_r2;
+    reg signed [64:0] acc_r3;
+    reg signed [65:0] acc_r4;
     reg valid_r1, valid_r2, valid_r3, valid_r4;
     reg [TAG_W - 1:0] tag_r1, tag_r2, tag_r3, tag_r4;
 
@@ -37,15 +39,27 @@ module requant_stage #(
     reg [95:0] param3;
     wire signed [31:0] mult2 = param2[63:32];
 
-    wire signed [63:0] acc_mult = acc_r2 * mult2;
+    wire signed [64:0] acc_mult = $signed(acc_r2[32:0]) * mult2;
 
     // stage 3, round shift
     wire signed [31:0] sh3 = param3[95:64];
 
-    wire signed [63:0] half = 64'sd1 <<< (sh3[5:0] - 6'd1);
-    wire signed [63:0] acc_sh = (sh3 <= 0) ?(acc_r3 <<< (-sh3)) :
-                                (acc_r3 >= 0) ? ((acc_r3 + half) >>> sh3[5:0]) :
-                                                ((acc_r3 - half) >>> sh3[5:0]);
+    // Nearest, halfway away from zero. Keep the full signed shift count:
+    // masking it to six bits would turn shift=64 into shift=0.
+    wire signed [65:0] value = {acc_r3[64], acc_r3};
+    wire signed [65:0] half = 66'sd1 <<< (sh3 - 1);
+    reg signed [65:0] acc_sh;
+    always @* begin
+        if (sh3 > 65) acc_sh = 0;
+        else if (sh3 > 0)
+            acc_sh = (value + half - ((value < 0) ? 66'sd1 : 66'sd0)) >>> sh3;
+        else if (sh3 == 0) acc_sh = value;
+        else if (sh3 <= -7)
+            acc_sh = (value > 0) ? 66'sd127 : (value < 0) ? -66'sd127 : 66'sd0;
+        else if (value > (66'sd127 >>> (-sh3))) acc_sh = 66'sd127;
+        else if (value < -(66'sd127 >>> (-sh3))) acc_sh = -66'sd127;
+        else acc_sh = value <<< (-sh3);
+    end
 
     // stage 4, saturate
     wire signed [7:0] acc_sat = (acc_r4 < -127) ? -8'sd127 : (acc_r4 > 127) ? 8'sd127 : acc_r4[7:0]; 

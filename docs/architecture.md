@@ -9,4 +9,4 @@ PC Backend는 두 입력을 최신 스냅샷으로 합쳐 HTTP/WebSocket으로 �
 
 학습/실험은 `ml/`, PC 실행은 `pc/backend/`, 보드 프로그램은 `ps/`, 하드웨어는 `pl/`과 `integration/`에서 관리합니다. 세부 인터페이스는 [interface.md](interface.md)를 참조합니다.
 
-FPGA FC 원본 RTL과 패키지 IP/INT8 참고 구현의 음수 반올림 규칙이 현재 다릅니다. 최종 모델 배포 전에 [점검 기록](reviews/2026-10-07-pc-integration.md)의 bit-exact 항목을 해결해야 합니다.
+FPGA FC·Encoder·Pool·패키지 IP 소스와 팀 Python의 정수 반올림 계약을 통일했습니다. [INT8 계약과 golden 비교](../ml/pose/INT8.md)를 따라 최종 학습 가중치의 golden을 생성하고, Vivado IP/bitstream을 재빌드한 뒤 실제 보드 출력을 확인해야 합니다. [점검 기록](reviews/2026-10-07-pc-integration.md)에 검증 범위를 기록합니다.

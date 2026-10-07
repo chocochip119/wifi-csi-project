@@ -263,6 +263,7 @@ def _parse_iq_pairs(raw_pairs: str, pair_count: int, subcarrier_remap: str) -> n
 def _new_csi_quality(node_count: int) -> dict:
     return {
         "invalid_rx_rows": 0,
+        "invalid_trigger_rows": 0,
         "rx": {
             str(index): {"accepted_rows": 0, "rejected_rows": 0, "missing_frames": 0, "reasons": {}}
             for index in range(node_count)
@@ -354,6 +355,7 @@ def _finalize_group(
     subcarrier_remap: str,
     previous_base: np.ndarray | None,
     csi_quality: dict | None = None,
+    trigger_seq: int | None = None,
 ) -> tuple[FrameRecord | None, np.ndarray | None]:
     if not group_rows:
         return None, previous_base
@@ -412,7 +414,7 @@ def _finalize_group(
         label=label.astype(np.float32, copy=False),
         width=width,
         height=height,
-        trigger_seq=int(group_rows[0]["trigger_seq"]),
+        trigger_seq=int(group_rows[0]["trigger_seq"]) if trigger_seq is None else trigger_seq,
     )
     return frame, base
 
@@ -426,14 +428,21 @@ def _iter_file_frames(
     csi_quality: dict | None = None,
 ) -> Iterable[FrameRecord]:
     previous_base: np.ndarray | None = None
-    current_trigger: str | None = None
+    current_trigger: int | None = None
     group_rows: list[dict[str, str]] = []
 
     with csv_path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         for row in reader:
-            trigger_seq = row.get("trigger_seq")
-            if not trigger_seq:
+            raw_trigger = (row.get("trigger_seq") or "").strip()
+            if not raw_trigger.isascii() or not raw_trigger.isdecimal() or len(raw_trigger) > 10:
+                if csi_quality is not None:
+                    csi_quality["invalid_trigger_rows"] += 1
+                continue
+            trigger_seq = int(raw_trigger)
+            if trigger_seq > 0xFFFFFFFF:
+                if csi_quality is not None:
+                    csi_quality["invalid_trigger_rows"] += 1
                 continue
             if current_trigger is None:
                 current_trigger = trigger_seq
@@ -446,6 +455,7 @@ def _iter_file_frames(
                     subcarrier_remap,
                     previous_base,
                     csi_quality,
+                    trigger_seq=current_trigger,
                 )
                 if frame is not None:
                     yield frame
@@ -461,6 +471,7 @@ def _iter_file_frames(
         subcarrier_remap,
         previous_base,
         csi_quality,
+        trigger_seq=current_trigger,
     )
     if frame is not None:
         yield frame

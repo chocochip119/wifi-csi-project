@@ -145,6 +145,25 @@ def test_pair_count_inference_rejects_no_valid_data(tmp_path):
         prepare._infer_pair_count([path], subcarrier_remap=MODE)
 
 
+@pytest.mark.parametrize("bad_trigger", ["broken", "", "12.0", "-1", "4294967296", "1_0", "１２"])
+def test_bad_trigger_rows_are_counted_and_do_not_abort_csv(tmp_path, bad_trigger):
+    path = tmp_path / "sync_csi_pose.csv"
+    write_csv(path, [row(trigger=0), row(trigger=bad_trigger), row(trigger=1)])
+    quality = prepare._new_csi_quality(3)
+    frames = list(prepare._iter_file_frames(path, 3, 192, 128, MODE, quality))
+    assert [frame.trigger_seq for frame in frames] == [0, 1]
+    assert quality["invalid_trigger_rows"] == 1
+    assert quality["rx"]["0"]["accepted_rows"] == 2
+
+
+def test_trigger_grouping_uses_parsed_uint32(tmp_path):
+    path = tmp_path / "sync_csi_pose.csv"
+    write_csv(path, [row(0, trigger="012"), row(1, trigger="12"), row(2, trigger="4294967295")])
+    frames = list(prepare._iter_file_frames(path, 3, 192, 128, MODE))
+    assert [frame.trigger_seq for frame in frames] == [12, 4294967295]
+    np.testing.assert_array_equal(frames[0].feature[6:, 0], [1, 1, 0])
+
+
 @pytest.mark.parametrize("count, output_count", [(64, 128), (128, 128), (192, 256)])
 def test_combined_remap_declares_actual_segment_shape(tmp_path, count, output_count):
     input_dir = tmp_path / "input"

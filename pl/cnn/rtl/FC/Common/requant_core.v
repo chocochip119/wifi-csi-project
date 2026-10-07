@@ -148,10 +148,7 @@ module requant_core #(
             tag_r5   <= tag_r4;
 
             if (shift_r5 > 65) begin
-                if (rounded_r5 < 0)
-                    shifted_r6 <= -66'sd1;
-                else
-                    shifted_r6 <= 66'sd0;
+                shifted_r6 <= 66'sd0;
             end else if (shift_r5 > 0) begin
                 shifted_r6 <= rounded_r5 >>> shift_r5;
             end else if (shift_r5 == 0) begin

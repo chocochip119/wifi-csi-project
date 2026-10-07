@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module Pool #(
-    parameter RX = 5,  // number of receivers
+    parameter RX = 3,  // number of receivers
     // derived from RX, do not override
     parameter RX_W        = (RX > 1) ? $clog2(RX) : 1,
     parameter TAG_W       = RX_W + 17,
@@ -104,15 +104,28 @@ module Pool #(
     // stage 3 : round shift
     wire signed [31:0] sh = pool_shift;
     wire signed [63:0] p64 = prod_r2;
-    wire signed [63:0] half = 64'sd1 <<< (sh[5:0] - 6'd1);
-    wire signed [63:0] rs = (sh <= 0) ? (p64 <<< (-sh)) : (p64 >= 0) ? ((p64 + half) >>> sh[5:0]) : ((p64 - half) >>> sh[5:0]);
+    wire signed [63:0] half = 64'sd1 <<< (sh - 1);
+    reg signed [63:0] rs;
+    always @* begin
+        // prod_r2 is signed 48-bit, so shifts >= 49 always round to zero.
+        if (sh >= 49) rs = 0;
+        else if (sh > 0)
+            rs = (p64 + half - ((p64 < 0) ? 64'sd1 : 64'sd0)) >>> sh;
+        else if (sh == 0) rs = p64;
+        else if (sh <= -13)
+            rs = (p64 > 0) ? 64'sd8191 : (p64 < 0) ? -64'sd8191 : 64'sd0;
+        else if (p64 > (64'sd8191 >>> (-sh))) rs = 64'sd8191;
+        else if (p64 < -(64'sd8191 >>> (-sh))) rs = -64'sd8191;
+        else rs = p64 <<< (-sh);
+    end
 
     // stage 4 : saturation
     wire signed [14:0] p_sat = (rs_r3 > 8191) ? 15'sd8191 : (rs_r3 < - 8191) ? -15'sd8191 : rs_r3[14:0];
 
     // stage 5 : /48
     wire signed [16:0] pp = p_r4;
-    wire        [16:0] num = pp[16] ? (17'sd71 - pp) : (pp + 17'sd24);
+    // Round the magnitude by /48, then restore the sign (ties away from zero).
+    wire        [16:0] num = pp[16] ? (17'sd24 - pp) : (pp + 17'sd24);
     wire        [8:0] dq = (num * 5462) >> 18;
 
     // stage 6 : sign + clamp
