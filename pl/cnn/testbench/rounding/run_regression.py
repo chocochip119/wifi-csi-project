@@ -11,6 +11,12 @@ parser.add_argument("--iverilog", default="iverilog")
 parser.add_argument("--vvp", default="vvp")
 parser.add_argument("--ivl-base", help="optional Icarus -B installation directory")
 args = parser.parse_args()
+for name in ("iverilog", "vvp"):
+    value = getattr(args, name)
+    if "/" in value or "\\" in value:
+        setattr(args, name, str(Path(value).resolve()))
+if args.ivl_base:
+    args.ivl_base = str(Path(args.ivl_base).resolve())
 
 
 def run(command, cwd):
