@@ -1,5 +1,11 @@
 # 2026-10-07 PS↔PC TCP 통합 점검
 
+## main 반영 및 문서 보완
+
+이 작업은 [PR #29](https://github.com/chocochip119/wifi-csi-project/pull/29)로 2026-10-07 main에 병합되었습니다(merge commit `b630ac94ce918e0381cc204e5c38154f1c213dc9`). 아래는 당시 코드 검증 기록입니다. 현재 구조와 실행 순서는 [문서 목록](../README.md) 및 [통합 실행](../bringup.md)에 연결했습니다.
+
+추가 자산 확인: 기존 `integration/design_1_wrapper.xsa`에는 bitstream이 포함되어 있고 `ps/test_vectors/`에는 과거 시험 `.bin` 세 개가 추적되어 있습니다. 같은 blob/input을 새 반올림으로 계산한 결과 기존 pose_expected와 15/24 bytes가 달라집니다. [시험 벡터 안내](../../ps/test_vectors/README.md)에 따라 최신 golden을 사용해야 하며, 이번 문서 정리에서 바이너리나 기존 보드 검증 기록을 변경하지 않았습니다.
+
 ## 기준
 
 GitHub main `5715bf5a2af2e005325b3134701d365e8ac553a4`와 사용자 첨부 `wise_backend_ready_v1.zip`, Colab v5 notebook을 확인했습니다. 사전 상태를 먼저 보고한 후 사용자가 TCP 선택을 확정했습니다. 기존 전체 코드 점검의 후속으로, 이번 검증은 최신 PS 변경과 전달 Backend/노트북의 연결에 집중합니다.

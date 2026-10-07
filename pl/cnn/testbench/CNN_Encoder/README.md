@@ -1,35 +1,32 @@
-# CNN_Encoder testbench
+# CNN Encoder testbench
 
-RTL: `pl/cnn/rtl/CNN_Encoder/`
+원본 RTL은 [CNN_Encoder](../../rtl/CNN_Encoder/)에 있습니다. 기대값은 현재 팀 [int8_reference.py](../../../../ml/pose/int8_reference.py)의 nearest, halfway away from zero·Pool·±127 포화를 사용합니다. Loader 소유 weight/parameter/GELU RAM은 testbench에서 1-cycle 동기 RAM으로 모델링합니다.
 
-| testbench | 대상 | 벡터 생성 | 확인 내용 |
-|---|---|---|---|
-| `tb_requant_stage.v` | requant_stage | `gen_requant_stage.py` | 5,000개 rq · rq_tag |
-| `tb_Conv_MAC.v` | Conv_MAC | `gen_Conv_MAC.py` | 3 RX acc 184,320개 값 · tag · 순서 |
-| `tb_CNN_Encoder.v` | CNN_Encoder (전체) | `gen_CNN_Encoder.py <RX>` (numpy) | Pool 결과 RX*1024 B, enc_done |
+| Testbench | 벡터 생성 | 확인 |
+|---|---|---|
+| `tb_requant_stage.v` | `gen_requant_stage.py` | requant 5000개·tag |
+| `tb_Conv_MAC.v` | `gen_Conv_MAC.py` | RX3 accumulator·tag·순서 |
+| `tb_CNN_Encoder.v` | `gen_CNN_Encoder.py <RX>` | RX당 Pool 1024 bytes, done 1회 |
 
-기대값은 `ML/src/int8_reference.py` 와 같은 수치 규칙(round shift, ÷48, ±127 clamp)으로 계산한다.
-Loader 소유 RAM(Conv weight / Param / GELU LUT)은 testbench 안에서 1-cycle 동기 RAM으로 모델링한다.
+## 현재 RX5 실행
 
-## 실행 (Vivado xsim, 이 폴더에서)
+저장소 루트에서 NumPy와 Icarus Verilog를 준비하고 실행합니다.
 
+```bash
+python pl/cnn/testbench/rounding/run_regression.py
 ```
+
+runner가 RX5 벡터를 새 reference로 생성하고 `tb_CNN_Encoder.RX=5`로 컴파일합니다. 5120 bytes(640 words)·done 1회를 비교합니다. FC/Encoder/Pool 수치 경계 검사도 포함합니다. 도구 옵션은 [rounding 안내](../rounding/README.md)를 참고하세요.
+
+## Vivado xsim에서 직접 실행
+
+이 폴더에서 실행하는 기본 RX3 예시입니다. TB parameter 기본값과 벡터 생성 인자를 함께 3으로 맞춥니다.
+
+```bash
 python gen_CNN_Encoder.py 3
 xvlog ../../rtl/CNN_Encoder/*.v tb_CNN_Encoder.v
 xelab tb_CNN_Encoder -s enc_sim
 xsim enc_sim -R
 ```
 
-`tb_Conv_MAC`, `tb_requant_stage` 도 같은 방식으로 `gen_*.py` 를 먼저 실행한 뒤 top 이름만 바꿔서 돌린다.
-Vivado GUI 에서는 `*.hex` 를 simulation 실행 디렉터리(`<project>.sim/sim_1/behav/xsim`)에 두면 된다.
-
-`tb_CNN_Encoder` 는 `parameter RX` (기본 3) 로 DUT 의 RX 를 정한다. `gen_CNN_Encoder.py` 인자와 같은 값을 쓴다.
-RX = 1 ~ 5 에서 확인했다.
-
-통과 시 출력:
-
-```
-checked=5000 errors=0                                   # tb_requant_stage
-checked=184320 errors=0 bad_addr=0 state=0              # tb_Conv_MAC
-RX=3 feat words checked=384 errors=0 enc_done pulses=1  # tb_CNN_Encoder (RX=3)
-```
+RX5에는 벡터 인자와 elaboration의 `tb_CNN_Encoder.RX`를 모두 5로 설정해야 합니다. Vivado GUI에서는 생성된 `*.hex`를 simulation 실행 디렉터리에 둡니다. 현재 정수 규칙으로 생성한 벡터만 사용하세요. 전체 RX5 CNN/LOAD/INFER 비교는 [전체 golden TB](../rounding/README.md)와 [INT8 계약](../../../../ml/pose/INT8.md)에 있습니다.

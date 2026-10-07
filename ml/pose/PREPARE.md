@@ -17,6 +17,12 @@ python ml/pose/prepare.py --input-dir <수집한_CSV_폴더> --output-dir ml/pos
 & .\.venv\Scripts\python.exe .\ml\pose\prepare.py --input-dir <수집한_CSV_폴더> --output-dir .\ml\pose\data_cache
 ```
 
+현재 RX5 직접 전처리에는 기본값을 바꾸는 인자를 명시한다.
+
+```text
+python ml/pose/prepare.py --input-dir <수집한_CSV_폴더> --output-dir ml/pose/data_cache --node-count 5
+```
+
 기본 파일 패턴은 `sync_csi_pose*.csv`이며 하위 폴더도 탐색한다. 기본 RX는 3개, remap은 `esp32_htltf_ht40_above_nonstbc`, seed는 42다. `--pair-count 0`은 첫 유효 행에서 I/Q 쌍 개수를 추론한다. 수신 규격을 알고 있다면 `--pair-count 192`처럼 명시할 수 있다.
 
 같은 부모 폴더의 파일을 그룹으로 묶고, 그룹마다 test 1개를 먼저 확보한 뒤 남은 파일을 train/val에 배정한다. 기본 설정에서 각 그룹에 파일 3개 이상이 있어야 세 split을 모두 채울 수 있다. 이는 최소 분할 조건이며 실제 데이터 충분성을 의미하지 않는다.
@@ -44,7 +50,7 @@ python ml/pose/prepare.py --input-dir <수집한_CSV_폴더> --output-dir ml/pos
 train.npz / val.npz / test.npz / metadata.json
 ```
 
-NPZ에는 `features`, `labels`, `file_ids`, `trigger_seq`, `frame_size`를 저장한다. 기본 입력의 프레임 특징은 `[N,9,128]`, 정답은 `[N,24]`다. 각 프레임에서 유효한 RX가 하나라도 있으면 나머지 RX의 mask는 0으로 남기고 프레임을 저장한다. 모두 무효이면 원본처럼 프레임을 제외한다.
+NPZ에는 `features`, `labels`, `file_ids`, `trigger_seq`, `frame_size`를 저장한다. 기본 RX3의 프레임 특징은 `[N,9,128]`, RX5는 `[N,15,128]`, 정답은 `[N,24]`다. window를 묶은 RX5 학습 입력은 `[B,15,128,10]`이다. [학습 순서](README.md)와 [INT8 계약](INT8.md)을 참고한다. 각 프레임에서 유효한 RX가 하나라도 있으면 나머지 RX의 mask는 0으로 남기고 프레임을 저장한다. 모두 무효이면 원본처럼 프레임을 제외한다.
 
 `metadata.json`의 `splits.<train|val|test>.summary.csi_quality`에서 RX별 상태를 확인한다.
 

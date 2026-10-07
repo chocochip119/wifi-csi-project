@@ -1,118 +1,74 @@
 # GitHub 팀 작업 가이드
 
-Git을 처음 쓰는 팀원은 **일단 push까지 할 수 있으면 됩니다.**
-PR(Pull Request)은 나중에 익숙해진 뒤 사용합니다.
+현재 작업 흐름은 **main 최신화 → 작업 브랜치 → commit/push → PR → 검토·병합**입니다. push는 브랜치 업로드이며 main 반영은 PR 병합 단계입니다. 폴더 역할은 [저장소 구조](repository_structure.md)를 먼저 확인하세요.
 
-## 1. 저장소 초대 수락
+## 처음 한 번
 
-저장소 관리자가 GitHub의 `Settings → Collaborators → Add people`에서 팀원을 초대합니다.
-
-초대받은 사람은 GitHub 알림 또는 이메일에서 초대를 수락하면 됩니다.
-
-## 2. 처음 한 번만 Clone
-
-> 저장소는 **Google Drive / OneDrive 같은 동기화 폴더가 아닌 일반 로컬 폴더**에 Clone하는 것을 권장합니다.
+초대받은 팀원은 GitHub 알림/이메일에서 저장소 초대를 수락합니다. 일반 로컬 폴더에 clone합니다.
 
 ```bash
 git clone https://github.com/chocochip119/wifi-csi-project.git
 cd wifi-csi-project
 ```
 
-`clone`은 GitHub 저장소를 내 컴퓨터로 복사하는 작업입니다.
+## 작업 시작
 
-## 3. 작업 전 최신 내용 받기
-
-먼저 현재 작업 상태를 확인합니다.
-
-```bash
-git status
-```
-
-작업 중인 변경사항이 없다면 최신 내용을 받습니다.
+`git status`로 기존 변경을 확인합니다. 작업 중인 파일이 있으면 현재 브랜치에서 정리한 뒤 이동합니다. 작업 트리가 깨끗할 때:
 
 ```bash
 git switch main
-git pull
+git pull --ff-only
+git switch -c docs/update-structure
 ```
 
-`pull`은 GitHub의 최신 변경 내용을 내 컴퓨터로 가져오는 작업입니다.
+위 브랜치 이름은 문서 수정 예시입니다. 자신의 작업에 맞는 이름 하나를 사용합니다.
 
-## 4. 내 작업 브랜치 만들기
+| 작업 | 브랜치 예시 |
+|---|---|
+| ESP32 수집 | `feature/esp32-trigger` |
+| CNN RTL | `fix/cnn-rounding` |
+| PS↔PC | `feature/ps-pc-tcp` |
+| 문서 | `docs/update-structure` |
 
-예시:
+이미 있는 작업 브랜치에는 `git switch 브랜치이름`으로 이동합니다.
 
-```bash
-git switch -c feature/cnn
-git switch -c feature/fft
-git switch -c feature/esp32
-git switch -c feature/axi
-```
+## 확인하고 업로드
 
-`branch`는 main을 바로 수정하지 않고 각자 작업 공간을 따로 만드는 기능입니다.
-
-이미 만든 브랜치로 이동할 때는:
-
-```bash
-git switch feature/cnn
-```
-
-## 5. 작업한 내용 올리기 — 여기까지 필수
+문서 수정 예시입니다. `git add`에는 자신이 실제로 수정한 경로만 선택합니다.
 
 ```bash
 git status
-git add .
-git commit -m "feat: add cnn module"
-git push -u origin feature/cnn
+git diff
+git add README.md docs/repository_structure.md
+git diff --cached
+git commit -m "docs: align repository structure with RX5 integration"
+git push -u origin docs/update-structure
 ```
 
-- `git status` : 변경된 파일 확인
-- `git add` : 커밋할 파일 선택
-- `git commit` : 변경 내용을 하나의 기록으로 저장
-- `git push` : 내 브랜치의 커밋을 GitHub에 업로드
+첫 push 뒤 같은 브랜치에는 `git push`를 사용합니다. 모델 원본·실측 데이터·Vivado/Vitis/PetaLinux 빌드 결과를 추가하기 전 기존 `.gitignore`와 팀의 공유 기준을 확인합니다. `.gitignore`는 이미 추적 중인 파일을 자동으로 제거하지 않습니다.
 
-첫 push 이후에는 보통 아래만 해도 됩니다.
+## PR과 main 반영
+
+GitHub의 `Pull requests → New pull request`에서 base를 `main`, compare를 자신의 브랜치로 선택합니다. 무엇이 바뀌는지, 실행한 검증, 아직 장비에서 확인하지 못한 부분을 본문에 적습니다.
+
+리뷰 수정은 같은 브랜치에서 commit/push하면 PR에 이어집니다. 검토와 필요한 검증이 끝나면 팀의 병합 담당자가 PR을 main에 합칩니다. 자동 리뷰·호스트 테스트·RTL 시뮬레이션과 실제 장비 검증은 각각 결과를 기록합니다.
+
+병합 후 작업 트리가 깨끗할 때 main을 다시 최신화합니다.
 
 ```bash
-git push
+git switch main
+git pull --ff-only
 ```
 
-### 처음에는 이 흐름만 기억
+`--ff-only`가 실패하면 main에 별도 로컬 commit이 있는지 먼저 확인합니다. 기존 변경을 버리는 명령으로 해결하지 말고 원인을 확인하세요.
 
-```text
-status 확인
-   ↓
-main 최신화
-   ↓
-내 branch 생성
-   ↓
-코드 작성
-   ↓
-add → commit → push
-```
+## 변경이 함께 필요한 경우
 
-## PR(Pull Request)은 나중에
-
-PR은 **내 브랜치의 내용을 main에 합치기 전에 확인하는 기능**입니다.
-
-처음에는 필수가 아닙니다. Git 사용에 익숙해진 뒤 팀에서 PR 방식을 추가하면 됩니다.
-
-## 자주 쓰는 명령어
-
-```bash
-git status           # 현재 상태 확인
-git branch           # 브랜치 목록 확인
-git switch main      # main으로 이동
-git pull             # 최신 내용 받기
-git add .            # 변경 파일 선택
-git commit -m "..."  # 커밋
-git push             # GitHub에 업로드
-```
+- 원본 CNN RTL을 고치면 `integration/pose_cnn_1.1/src/`의 같은 모듈과 Python INT8/golden 계약도 확인합니다.
+- PS↔PC 바이트를 바꾸면 C 서버·Python protocol·[통신규격](ps_pc_protocol.md)·회귀 테스트를 함께 맞춥니다.
+- 모델을 바꾸면 가중치·metadata·scale·golden·manifest를 같은 export run으로 유지합니다.
+- 실행 방법·폴더 위치를 바꾸면 해당 README와 [루트 README](../README.md)의 링크를 확인합니다.
 
 ## 충돌 줄이기
 
-- 저장소는 Google Drive / OneDrive 동기화 폴더 안에 두지 않습니다.
-- 가능하면 `main`에서 직접 작업하지 않습니다.
-- `git pull` 전에 `git status`로 작업 중인 변경사항이 없는지 확인합니다.
-- 다른 사람 파일을 수정해야 하면 먼저 이야기하고 진행합니다.
-- `.gitignore`는 공통 설정이므로 필요한 항목이 있으면 임의로 여러 명이 동시에 수정하지 말고 관리자에게 알려주세요.
-- Vivado/Vitis 빌드 결과, Python 캐시, 모델 출력 등은 `.gitignore`로 제외되어 있습니다.
+동기화 폴더의 자동 파일 변경을 피하고, main을 최신화한 뒤 짧은 작업 브랜치를 사용합니다. 다른 영역을 함께 수정할 때에는 담당자와 경계·계약을 맞춥니다. 충돌이 발생하면 양쪽 변경을 확인하고 실제 의도에 맞춰 수정·검증합니다. 담당자를 적는 [팀 템플릿](members/README.md)은 아직 이름이 배정되지 않은 양식입니다.
