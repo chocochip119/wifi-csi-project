@@ -50,7 +50,25 @@ typedef struct {
 typedef int (*csi_window_callback_t)(
     const int8_t *input,
     size_t input_bytes,
+    uint64_t window_seq,
     uint32_t trigger_seq,
+    void *user);
+
+/*
+ * Passive tap for checksum-valid CSI records.  It cannot fail the
+ * parser/preprocessing/CNN path because it has no return value.
+ */
+typedef void (*csi_record_callback_t)(
+    uint64_t window_seq,
+    uint8_t window_pos,
+    uint32_t trigger_seq,
+    uint8_t active_nodes,
+    uint8_t received_nodes,
+    uint8_t present_mask,
+    uint8_t rx_index,
+    int8_t rssi,
+    const int8_t *csi,
+    uint16_t csi_len,
     void *user);
 
 /*
@@ -73,7 +91,8 @@ int csi_pipeline_feed(
     csi_pipeline_t *pipeline,
     const uint8_t *data,
     size_t length,
-    csi_window_callback_t callback,
+    csi_window_callback_t window_callback,
+    csi_record_callback_t record_callback,
     void *user);
 
 void csi_pipeline_get_stats(

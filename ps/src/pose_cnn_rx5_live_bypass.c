@@ -1,12 +1,15 @@
 #define _DEFAULT_SOURCE
 #define _POSIX_C_SOURCE 200809L
 
-#include "csi_pipeline.h"
+#include "csi_pipeline_bypass.h"
 #include "pose_cnn_regs.h"
 #include "pose_cnn_lock.h"
 
+#include <arpa/inet.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <netinet/in.h>
+#include <pthread.h>
 #include <inttypes.h>
 #include <math.h>
 #include <poll.h>
@@ -17,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <sys/socket.h>
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
@@ -36,6 +40,18 @@
 #define LOAD_TIMEOUT_MS            1000L
 #define INFER_TIMEOUT_MS           1000L
 
+#define UDP_QUEUE_DEPTH            1024u
+#define UDP_PACKET_MAX_BYTES       1200u
+#define UDP_MAGIC_0                'W'
+#define UDP_MAGIC_1                'C'
+#define UDP_MAGIC_2                'S'
+#define UDP_MAGIC_3                'I'
+#define UDP_VERSION                1u
+#define UDP_TYPE_CSI               1u
+#define UDP_TYPE_POSE              2u
+#define UDP_POSE_RX_ID             0xffu
+#define UDP_POSE_WINDOW_POS        0xffu
+
 typedef struct {
     void *mapping;
     size_t mapping_bytes;
@@ -53,12 +69,59 @@ typedef struct {
     uint32_t scale_bits;
 } cnn_engine_t;
 
+
+typedef struct __attribute__((packed)) {
+    uint8_t magic[4];
+    uint8_t version;
+    uint8_t type;
+    uint8_t rx_id;
+    uint8_t window_pos;
+    uint32_t packet_seq;
+    uint64_t window_seq;
+    uint32_t trigger_seq;
+    uint8_t present_mask;
+    uint8_t active_nodes;
+    uint8_t received_nodes;
+    int8_t rssi;
+    uint16_t payload_len;
+    uint64_t timestamp_ns;
+} udp_wire_header_t;
+
+typedef struct {
+    uint16_t length;
+    uint8_t data[UDP_PACKET_MAX_BYTES];
+} udp_slot_t;
+
+typedef struct {
+    int fd;
+    bool enabled;
+    bool thread_started;
+    bool running;
+    pthread_t thread;
+    struct sockaddr_in target;
+    udp_slot_t *slots;
+    uint32_t head;
+    uint32_t tail;
+    uint32_t packet_seq;
+
+    uint64_t enqueued;
+    uint64_t queue_dropped;
+    uint64_t sent;
+    uint64_t send_errors;
+    uint64_t eagain;
+    uint64_t enobufs;
+    uint64_t bytes_sent;
+} udp_sender_t;
+
+_Static_assert(sizeof(udp_wire_header_t) == 38u, "unexpected UDP header size");
+
 typedef struct {
     FILE *dump;
     uint64_t windows;
     uint64_t max_windows;
     csi_pipeline_t *pipeline;
     cnn_engine_t *engine;
+    udp_sender_t udp;
 } live_context_t;
 
 static volatile sig_atomic_t stop_requested = 0;
@@ -77,6 +140,15 @@ static uint64_t monotonic_ms(void)
     return (uint64_t)now.tv_sec * 1000u + (uint64_t)now.tv_nsec / 1000000u;
 }
 
+static uint64_t monotonic_ns(void)
+{
+    struct timespec now;
+    if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
+        return 0u;
+    }
+    return (uint64_t)now.tv_sec * 1000000000ull + (uint64_t)now.tv_nsec;
+}
+
 static long elapsed_ms(const struct timespec *start, const struct timespec *now)
 {
     return (now->tv_sec - start->tv_sec) * 1000L +
@@ -87,6 +159,320 @@ static void on_signal(int signal_number)
 {
     (void)signal_number;
     stop_requested = 1;
+}
+
+static int udp_enqueue(
+    udp_sender_t *sender,
+    const uint8_t *data,
+    size_t length)
+{
+    uint32_t head;
+    uint32_t next;
+    uint32_t tail;
+    udp_slot_t *slot;
+
+    if (sender == NULL || !sender->enabled) {
+        return 0;
+    }
+    if (data == NULL || length == 0u || length > UDP_PACKET_MAX_BYTES) {
+        sender->queue_dropped++;
+        return -1;
+    }
+
+    head = __atomic_load_n(&sender->head, __ATOMIC_RELAXED);
+    tail = __atomic_load_n(&sender->tail, __ATOMIC_ACQUIRE);
+    next = (head + 1u) % UDP_QUEUE_DEPTH;
+    if (next == tail) {
+        sender->queue_dropped++;
+        return -1;
+    }
+
+    slot = &sender->slots[head];
+    memcpy(slot->data, data, length);
+    slot->length = (uint16_t)length;
+    __atomic_store_n(&sender->head, next, __ATOMIC_RELEASE);
+    sender->enqueued++;
+    return 0;
+}
+
+static void *udp_sender_thread(void *arg)
+{
+    udp_sender_t *sender = (udp_sender_t *)arg;
+    const struct timespec idle_sleep = {0, 1000000L};
+
+    for (;;) {
+        uint32_t tail = __atomic_load_n(&sender->tail, __ATOMIC_RELAXED);
+        uint32_t head = __atomic_load_n(&sender->head, __ATOMIC_ACQUIRE);
+
+        if (tail == head) {
+            if (!__atomic_load_n(&sender->running, __ATOMIC_ACQUIRE)) {
+                break;
+            }
+            nanosleep(&idle_sleep, NULL);
+            continue;
+        }
+
+        {
+            udp_slot_t *slot = &sender->slots[tail];
+            ssize_t sent = sendto(
+                sender->fd,
+                slot->data,
+                slot->length,
+                MSG_DONTWAIT,
+                (const struct sockaddr *)&sender->target,
+                sizeof(sender->target));
+
+            if (sent == (ssize_t)slot->length) {
+                sender->sent++;
+                sender->bytes_sent += (uint64_t)sent;
+            } else {
+                int saved_errno = errno;
+                sender->send_errors++;
+                if (sent < 0 &&
+                    (saved_errno == EAGAIN || saved_errno == EWOULDBLOCK)) {
+                    sender->eagain++;
+                } else if (sent < 0 && saved_errno == ENOBUFS) {
+                    sender->enobufs++;
+                }
+            }
+        }
+
+        __atomic_store_n(
+            &sender->tail,
+            (tail + 1u) % UDP_QUEUE_DEPTH,
+            __ATOMIC_RELEASE);
+    }
+
+    return NULL;
+}
+
+static int udp_sender_start(udp_sender_t *sender, const char *target)
+{
+    char address[64];
+    const char *colon;
+    char *end;
+    unsigned long port;
+    size_t address_length;
+    int flags;
+
+    memset(sender, 0, sizeof(*sender));
+    sender->fd = -1;
+
+    if (target == NULL || *target == '\0') {
+        return 0;
+    }
+
+    colon = strrchr(target, ':');
+    if (colon == NULL || colon == target || colon[1] == '\0') {
+        fprintf(stderr, "CSI_UDP_TARGET must be IPv4:PORT, got: %s\n", target);
+        return -1;
+    }
+
+    address_length = (size_t)(colon - target);
+    if (address_length >= sizeof(address)) {
+        fprintf(stderr, "UDP IPv4 address is too long: %s\n", target);
+        return -1;
+    }
+    memcpy(address, target, address_length);
+    address[address_length] = '\0';
+
+    errno = 0;
+    port = strtoul(colon + 1, &end, 10);
+    if (errno != 0 || *end != '\0' || port == 0ul || port > 65535ul) {
+        fprintf(stderr, "invalid UDP port in CSI_UDP_TARGET: %s\n", target);
+        return -1;
+    }
+
+    sender->fd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (sender->fd < 0) {
+        fprintf(stderr, "UDP socket failed: %s\n", strerror(errno));
+        return -1;
+    }
+
+    flags = fcntl(sender->fd, F_GETFL, 0);
+    if (flags < 0 ||
+        fcntl(sender->fd, F_SETFL, flags | O_NONBLOCK) != 0) {
+        fprintf(stderr, "UDP nonblocking setup failed: %s\n", strerror(errno));
+        close(sender->fd);
+        sender->fd = -1;
+        return -1;
+    }
+
+    memset(&sender->target, 0, sizeof(sender->target));
+    sender->target.sin_family = AF_INET;
+    sender->target.sin_port = htons((uint16_t)port);
+    if (inet_pton(AF_INET, address, &sender->target.sin_addr) != 1) {
+        fprintf(stderr, "invalid UDP IPv4 address: %s\n", address);
+        close(sender->fd);
+        sender->fd = -1;
+        return -1;
+    }
+
+    sender->slots = (udp_slot_t *)calloc(UDP_QUEUE_DEPTH, sizeof(*sender->slots));
+    if (sender->slots == NULL) {
+        fprintf(stderr, "UDP queue allocation failed\n");
+        close(sender->fd);
+        sender->fd = -1;
+        return -1;
+    }
+
+    sender->enabled = true;
+    __atomic_store_n(&sender->running, true, __ATOMIC_RELEASE);
+    if (pthread_create(&sender->thread, NULL, udp_sender_thread, sender) != 0) {
+        fprintf(stderr, "UDP sender thread creation failed\n");
+        __atomic_store_n(&sender->running, false, __ATOMIC_RELEASE);
+        sender->enabled = false;
+        free(sender->slots);
+        sender->slots = NULL;
+        close(sender->fd);
+        sender->fd = -1;
+        return -1;
+    }
+
+    sender->thread_started = true;
+    printf(
+        "UDP bypass ON -> %s:%lu queue_depth=%u packet_max=%u\n",
+        address,
+        port,
+        (unsigned)UDP_QUEUE_DEPTH,
+        (unsigned)UDP_PACKET_MAX_BYTES);
+    return 0;
+}
+
+static void udp_sender_stop(udp_sender_t *sender)
+{
+    if (sender == NULL) {
+        return;
+    }
+
+    if (sender->thread_started) {
+        __atomic_store_n(&sender->running, false, __ATOMIC_RELEASE);
+        (void)pthread_join(sender->thread, NULL);
+        sender->thread_started = false;
+    }
+
+    if (sender->fd >= 0) {
+        close(sender->fd);
+        sender->fd = -1;
+    }
+    free(sender->slots);
+    sender->slots = NULL;
+    sender->enabled = false;
+}
+
+static void udp_fill_header(
+    live_context_t *context,
+    udp_wire_header_t *header,
+    uint8_t type,
+    uint8_t rx_id,
+    uint8_t window_pos,
+    uint64_t window_seq,
+    uint32_t trigger_seq,
+    uint8_t present_mask,
+    uint8_t active_nodes,
+    uint8_t received_nodes,
+    int8_t rssi,
+    uint16_t payload_len)
+{
+    memset(header, 0, sizeof(*header));
+    header->magic[0] = UDP_MAGIC_0;
+    header->magic[1] = UDP_MAGIC_1;
+    header->magic[2] = UDP_MAGIC_2;
+    header->magic[3] = UDP_MAGIC_3;
+    header->version = UDP_VERSION;
+    header->type = type;
+    header->rx_id = rx_id;
+    header->window_pos = window_pos;
+    header->packet_seq = context->udp.packet_seq++;
+    header->window_seq = window_seq;
+    header->trigger_seq = trigger_seq;
+    header->present_mask = present_mask;
+    header->active_nodes = active_nodes;
+    header->received_nodes = received_nodes;
+    header->rssi = rssi;
+    header->payload_len = payload_len;
+    header->timestamp_ns = monotonic_ns();
+}
+
+static void on_csi_record_udp(
+    uint64_t window_seq,
+    uint8_t window_pos,
+    uint32_t trigger_seq,
+    uint8_t active_nodes,
+    uint8_t received_nodes,
+    uint8_t present_mask,
+    uint8_t rx_index,
+    int8_t rssi,
+    const int8_t *csi,
+    uint16_t csi_len,
+    void *user)
+{
+    live_context_t *context = (live_context_t *)user;
+    uint8_t packet[UDP_PACKET_MAX_BYTES];
+    udp_wire_header_t header;
+    size_t packet_bytes;
+
+    if (context == NULL || !context->udp.enabled) {
+        return;
+    }
+
+    packet_bytes = sizeof(header) + (size_t)csi_len;
+    if (packet_bytes > sizeof(packet)) {
+        context->udp.queue_dropped++;
+        return;
+    }
+
+    udp_fill_header(
+        context,
+        &header,
+        UDP_TYPE_CSI,
+        rx_index,
+        window_pos,
+        window_seq,
+        trigger_seq,
+        present_mask,
+        active_nodes,
+        received_nodes,
+        rssi,
+        csi_len);
+
+    memcpy(packet, &header, sizeof(header));
+    memcpy(packet + sizeof(header), csi, csi_len);
+    (void)udp_enqueue(&context->udp, packet, packet_bytes);
+}
+
+static void enqueue_pose_udp(
+    live_context_t *context,
+    uint64_t window_seq,
+    uint32_t trigger_seq,
+    uint8_t active_nodes,
+    uint8_t received_nodes,
+    const int8_t pose[POSE_CNN_OUTPUT_BYTES])
+{
+    uint8_t packet[sizeof(udp_wire_header_t) + POSE_CNN_OUTPUT_BYTES];
+    udp_wire_header_t header;
+
+    if (context == NULL || !context->udp.enabled) {
+        return;
+    }
+
+    udp_fill_header(
+        context,
+        &header,
+        UDP_TYPE_POSE,
+        UDP_POSE_RX_ID,
+        UDP_POSE_WINDOW_POS,
+        window_seq,
+        trigger_seq,
+        0u,
+        active_nodes,
+        received_nodes,
+        0,
+        (uint16_t)POSE_CNN_OUTPUT_BYTES);
+
+    memcpy(packet, &header, sizeof(header));
+    memcpy(packet + sizeof(header), pose, POSE_CNN_OUTPUT_BYTES);
+    (void)udp_enqueue(&context->udp, packet, sizeof(packet));
 }
 
 static uint32_t reg_read(volatile uint32_t *csr, unsigned offset)
@@ -582,6 +968,7 @@ static void print_pose(
 static int on_window(
     const int8_t *input,
     size_t input_bytes,
+    uint64_t window_seq,
     uint32_t trigger_seq,
     void *user)
 {
@@ -607,6 +994,15 @@ static int on_window(
             &infer_ms) != 0) {
         return -1;
     }
+
+    enqueue_pose_udp(
+        context,
+        window_seq,
+        trigger_seq,
+        stats.last_active_nodes,
+        stats.last_received_nodes,
+        pose);
+
     context->windows = window;
     printf(
         "LIVE window=%llu trigger=%u shape=[%u,%u,%u] bytes=%zu "
@@ -660,7 +1056,9 @@ static void usage(const char *program)
 {
     fprintf(stderr,
         "usage: %s TTY INPUT_SCALE [MAX_WINDOWS] [BLOB] [DUMP_BIN]\n"
-        "example: %s /dev/ttyACM0 0.02 10\n",
+        "example: %s /dev/ttyACM0 0.02 10\n"
+        "UDP: CSI_UDP_TARGET=10.10.20.2:5000 %s /dev/ttyACM0 0.02 0\n",
+        program,
         program,
         program);
 }
@@ -684,8 +1082,10 @@ int main(int argc, char **argv)
     uint64_t last_ack_frames = 0u;
     unsigned watchdog_restarts = 0u;
     int exit_code = EXIT_FAILURE;
+    const char *udp_target = getenv("CSI_UDP_TARGET");
 
     memset(&engine, 0, sizeof(engine));
+    context.udp.fd = -1;
     engine.mem_fd = -1;
     if (argc < 3 || argc > 6) {
         usage(argv[0]);
@@ -727,6 +1127,14 @@ int main(int argc, char **argv)
     if (cnn_engine_open(&engine, blob_path) != 0) {
         goto cleanup;
     }
+
+    if (udp_sender_start(&context.udp, udp_target) != 0) {
+        fprintf(stderr, "UDP bypass disabled after setup failure; CNN path continues\n");
+    }
+    if (!context.udp.enabled) {
+        printf("UDP bypass OFF\n");
+    }
+
     descriptor = open(tty_path, O_RDWR | O_NOCTTY | O_NONBLOCK);
     if (descriptor < 0) {
         fprintf(stderr, "cannot open %s: %s\n", tty_path, strerror(errno));
@@ -836,6 +1244,7 @@ int main(int argc, char **argv)
             buffer,
             (size_t)count,
             on_window,
+            on_csi_record_udp,
             &context);
         if (result < 0) {
             fprintf(stderr, "CSI pipeline or CNN inference failed\n");
@@ -909,6 +1318,19 @@ cleanup:
                     (unsigned long long)stats.rx_missing[node]);
         }
     }
+
+    udp_sender_stop(&context.udp);
+    fprintf(stderr,
+        "UDP STATS enqueued=%llu queue_dropped=%llu sent=%llu "
+        "send_errors=%llu eagain=%llu enobufs=%llu bytes=%llu\n",
+        (unsigned long long)context.udp.enqueued,
+        (unsigned long long)context.udp.queue_dropped,
+        (unsigned long long)context.udp.sent,
+        (unsigned long long)context.udp.send_errors,
+        (unsigned long long)context.udp.eagain,
+        (unsigned long long)context.udp.enobufs,
+        (unsigned long long)context.udp.bytes_sent);
+
     csi_pipeline_destroy(pipeline);
     if (context.dump != NULL) {
         fclose(context.dump);
