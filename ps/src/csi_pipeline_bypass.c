@@ -1,4 +1,4 @@
-#include "csi_pipeline.h"
+#include "csi_pipeline_bypass.h"
 
 #include <math.h>
 #include <stdbool.h>
@@ -54,6 +54,10 @@ struct csi_pipeline {
     bool seed_has_last_valid[CSI_RX_COUNT];
 
     int8_t output[CSI_INPUT_BYTES];
+
+    uint64_t current_window_seq;
+    uint64_t next_window_seq;
+
     csi_pipeline_stats_t stats;
 };
 
@@ -465,6 +469,7 @@ static int push_cycle(
     csi_window_callback_t callback,
     void *user)
 {
+    uint64_t window_seq = pipeline->current_window_seq;
     float base[CSI_RX_COUNT][CSI_SUBCARRIERS] = {{0}};
     float mask[CSI_RX_COUNT] = {0};
     unsigned node;
@@ -510,9 +515,15 @@ static int push_cycle(
 
     encode_window(pipeline);
     pipeline->raw_count = 0u;
+    pipeline->current_window_seq = 0u;
     pipeline->stats.windows_emitted++;
     if (callback != NULL) {
-        return callback(pipeline->output, CSI_INPUT_BYTES, cycle->trigger_seq, user);
+        return callback(
+            pipeline->output,
+            CSI_INPUT_BYTES,
+            window_seq,
+            cycle->trigger_seq,
+            user);
     }
     return 0;
 }
@@ -530,6 +541,8 @@ csi_pipeline_t *csi_pipeline_create(float input_scale)
         return NULL;
     }
     pipeline->input_scale = input_scale;
+    pipeline->current_window_seq = 0u;
+    pipeline->next_window_seq = 1u;
     for (node = 0u; node < CSI_RX_COUNT; ++node) {
         pipeline->stream_gap[node] = CSI_MAX_FILL_GAP;
         pipeline->seed_gap[node] = CSI_MAX_FILL_GAP;
@@ -551,6 +564,7 @@ void csi_pipeline_resync(csi_pipeline_t *pipeline)
     }
     pipeline->rx_length = 0u;
     pipeline->raw_count = 0u;
+    pipeline->current_window_seq = 0u;
     memset(pipeline->raw_base, 0, sizeof(pipeline->raw_base));
     memset(pipeline->raw_mask, 0, sizeof(pipeline->raw_mask));
     memset(pipeline->stream_last_valid, 0, sizeof(pipeline->stream_last_valid));
@@ -567,7 +581,8 @@ int csi_pipeline_feed(
     csi_pipeline_t *pipeline,
     const uint8_t *data,
     size_t length,
-    csi_window_callback_t callback,
+    csi_window_callback_t window_callback,
+    csi_record_callback_t record_callback,
     void *user)
 {
     cycle_t cycle;
@@ -582,11 +597,50 @@ int csi_pipeline_feed(
 
     for (;;) {
         int callback_result;
+        uint64_t window_seq;
+        uint8_t window_pos;
+        uint8_t present_mask = 0u;
+        unsigned node;
+
         result = pop_cycle(pipeline, &cycle);
         if (result <= 0) {
             return result;
         }
-        callback_result = push_cycle(pipeline, &cycle, callback, user);
+
+        if (pipeline->raw_count == 0u) {
+            pipeline->current_window_seq = pipeline->next_window_seq++;
+        }
+        window_seq = pipeline->current_window_seq;
+        window_pos = (uint8_t)pipeline->raw_count;
+
+        for (node = 0u; node < CSI_RX_COUNT; ++node) {
+            if (cycle.records[node].present) {
+                present_mask |= (uint8_t)(1u << node);
+            }
+        }
+
+        if (record_callback != NULL) {
+            for (node = 0u; node < CSI_RX_COUNT; ++node) {
+                const cycle_record_t *record = &cycle.records[node];
+                if (!record->present) {
+                    continue;
+                }
+                record_callback(
+                    window_seq,
+                    window_pos,
+                    cycle.trigger_seq,
+                    cycle.active_nodes,
+                    cycle.received_nodes,
+                    present_mask,
+                    record->rx_index,
+                    record->rssi,
+                    record->csi,
+                    record->csi_len,
+                    user);
+            }
+        }
+
+        callback_result = push_cycle(pipeline, &cycle, window_callback, user);
         if (callback_result != 0) {
             return callback_result;
         }
