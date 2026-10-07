@@ -57,7 +57,7 @@ IP 설정 창(BD에서 IP 더블클릭)에서 아래 값을 바꿀 수 있게 �
 
 - M00 RTL은 64-bit 전송으로 고정돼 있습니다(`WSTRB = 8'hff`, `AWSIZE = 3'd3`, 내부 데이터선 64-bit).
 - 폭 검사는 `synthesis translate_off` 안에 있어서 **시뮬레이션에서만** 동작합니다.
-- GUI의 값 검사 함수(`xgui/pose_cnn_v1_0_v1_0.tcl`)도 모든 값을 통과시킵니다.
+- GUI의 값 검사 함수(`xgui/pose_cnn_v1_0_v1_2.tcl`)도 모든 값을 통과시킵니다.
 
 ### 확인 방법
 
