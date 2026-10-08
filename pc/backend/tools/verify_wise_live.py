@@ -49,6 +49,9 @@ def main():
     except (URLError, HTTPError, ValueError, TimeoutError) as exc:
         print(f'[FAIL] Backend HTTP 연결 실패: {exc}', file=sys.stderr)
         return 2
+    if not isinstance(health, dict):
+        print('[FAIL] /health 응답은 JSON 객체여야 합니다.', file=sys.stderr)
+        return 2
     print('[BACKEND]', json.dumps(health, ensure_ascii=False))
     if not health.get('ok'):
         print('[FAIL] HTTP Backend 자체가 준비되지 않았습니다.')
@@ -76,6 +79,9 @@ def main():
                 print(f'[WARN] snapshot 연결 실패: {exc}')
                 time.sleep(args.interval)
                 continue
+            if not isinstance(snap, dict):
+                print('[FAIL] /api/snapshot 응답은 JSON 객체여야 합니다.', file=sys.stderr)
+                return 2
             seq = snap.get('seq')
             if seq in seen:
                 time.sleep(args.interval)

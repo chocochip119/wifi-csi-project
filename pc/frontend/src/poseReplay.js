@@ -47,7 +47,11 @@ export function parsePoseRecording(text) {
   let parsed
   try { parsed = JSON.parse(text.replace(/^\uFEFF/, '')) }
   catch {
-    parsed = text.replace(/^\uFEFF/, '').split(/\r?\n/).filter(line => line.trim()).map(line => JSON.parse(line))
+    parsed = text.replace(/^\uFEFF/, '').split(/\r?\n/).map((line, index) => ({ line, index }))
+      .filter(({ line }) => line.trim()).map(({ line, index }) => {
+        try { return JSON.parse(line) }
+        catch { throw new Error(`JSONL ${index + 1}행을 파싱할 수 없습니다.`) }
+      })
   }
   const candidates = Array.isArray(parsed) ? parsed : Array.isArray(parsed?.frames) ? parsed.frames : [parsed]
   if (candidates.length > 6000) throw new Error('최대 6000 프레임까지 재생 가능')

@@ -108,6 +108,7 @@ class EthernetInput:
         self._connected = False
         self._last_error: str | None = None
         self._last_status: dict | None = None
+        self._last_status_received_ns: int | None = None
         self._counts = {"connections": 0, "csi_packets": 0, "status_packets": 0, "ack_packets": 0,
                         "pose_packets_ignored": 0, "sequence_gaps": 0, "protocol_errors": 0}
         self._last_sequence: int | None = None
@@ -135,7 +136,9 @@ class EthernetInput:
     def snapshot(self) -> dict[str, Any]:
         with self._lock:
             return {"port": f"{self.host}:{self.port}", "connected": self._connected,
-                    "status": copy.deepcopy(self._last_status), "last_error": self._last_error,
+                    "status": copy.deepcopy(self._last_status),
+                    "status_received_ns": self._last_status_received_ns,
+                    "last_error": self._last_error,
                     "counts": dict(self._counts), "received_rows_by_rx": dict(self._rx_rows),
                     "csi_len_by_rx": dict(self._csi_lengths), "clock_offset_ns": self.clock.offset_ns,
                     "timestamp_basis": "PS CLOCK_MONOTONIC at TX cycle parse, offset to PC perf_counter_ns"}
@@ -174,6 +177,7 @@ class EthernetInput:
             with self._lock:
                 self._connected = False
                 self._last_status = None
+                self._last_status_received_ns = None
                 if reason and not self._stop.is_set():
                     self._last_error = reason
             if not self._stop.is_set():
@@ -222,6 +226,7 @@ class EthernetInput:
             with self._lock:
                 self._counts["status_packets"] += 1
                 self._last_status = copy.deepcopy(status)
+                self._last_status_received_ns = recv_ns
             self._emit("status", status)
             # The worker stamped STATUS inside _emit; later CSI must not map before it.
             self.clock.set_floor(time.perf_counter_ns())

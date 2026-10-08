@@ -50,7 +50,10 @@ curl http://127.0.0.1:8000/api/rx-layout
 배치/순서가 맞는지 확인한 뒤 다음 POST를 실행합니다. 확인 전에는 위치 `status_ready=false`일 수 있으며, 확인 후 다음 STATUS를 받아 준비가 완료됩니다.
 
 ```bash
-curl -X POST http://127.0.0.1:8000/api/confirm-rx-layout
+# Windows PowerShell: 현재 RX 서명 조회 후 MAC/배치/학습 순서를 직접 대조
+$layout = Invoke-RestMethod http://127.0.0.1:8000/api/rx-layout
+$layout
+Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/api/confirm-rx-layout -ContentType 'application/json' -Body (@{rx_signature=$layout.rx_signature} | ConvertTo-Json)
 curl http://127.0.0.1:8000/api/snapshot
 ```
 

@@ -1,4 +1,4 @@
-# 저장소 루트에서 또는 scripts 폴더에서 실행 가능.
+﻿# 저장소 루트에서 또는 scripts 폴더에서 실행 가능.
 # 예: .\scripts\start_backend_real.ps1 -PsIp 192.168.10.2
 param(
   [Parameter(Mandatory=$true)][string]$PsIp,
