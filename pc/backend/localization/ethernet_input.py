@@ -311,8 +311,8 @@ class PoseInput:
 
 def make_live_session_class():
     """LiveSession whose input is EthernetInput; TX commands belong to the PS."""
-    from . import fivepoint_live
-    from .fivepoint_live import LiveSession
+    from . import location_live
+    from .location_live import LiveSession
 
     def load_any(path):
         # .npz = portable Ridge (no training-version check); else the Studio joblib loader.
@@ -322,9 +322,9 @@ def make_live_session_class():
         return studio_load_model(path)
 
     # In-process only (no file is changed); joblib paths keep the original loader.
-    studio_load_model = getattr(fivepoint_live, "_studio_load_model", fivepoint_live.load_model)
-    fivepoint_live._studio_load_model = studio_load_model
-    fivepoint_live.load_model = load_any   # used by LiveSession.__init__ / switch_model
+    studio_load_model = getattr(location_live, "_studio_load_model", location_live.load_model)
+    location_live._studio_load_model = studio_load_model
+    location_live.load_model = load_any   # used by LiveSession.__init__ / switch_model
 
     class EthernetLiveSession(LiveSession):
         def __init__(self, model_path=DEFAULT_MODEL, host="192.168.10.2", csi_port=5000,

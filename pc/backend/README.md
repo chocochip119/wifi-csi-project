@@ -32,11 +32,12 @@ fake 모드는 모델/PS/FPGA 검증이 아닙니다.
 - `app/`: 설정, 상태 통합, FastAPI 서버, 실행 CLI
 - `protocol/wise_protocol.py`: v1.1 규격(wire version **2**)의 순수 바이트 인코더/디코더
 - `localization/`: TCP 입력, 위치 실시간 엔진, 955개 특징의 Portable Ridge
-- `localization/models/`: 전달받은 모델과 SHA-256/특징 계약 JSON. 두 파일을 함께 유지합니다.
+- `localization/models/`: Portable Ridge NPZ와 SHA-256/특징 계약 JSON. 두 파일을 함께 유지합니다. 현재 모델은 `run_20261008_091144_37cf3fcf`(10/08 학습)이며 `ml/localization/export_portable_model.py`로 생성합니다.
 - `tests/`: 프로토콜, 모델 수치 회귀, HTTP/WebSocket, 실제 C↔Python TCP 테스트
 - `tools/udp_receiver.py`: 기존 WCSI v1 UDP 경로 확인용. 현재 Backend 입력과 다른 규격입니다.
+- `tools/replay_ps_server.py`: 가짜 PS. 녹화 위치 CSV를 wire v2로 TCP 5000에 재생해 보드 없이 Backend/GUI를 시험합니다(STATUS는 합성값, Pose 없음, 모델 정확도 시험 아님). 예: `python pc/backend/tools/replay_ps_server.py a.csv b.csv --port 5000`
 
-`fivepoint_model.py`, `phase_features.py`, `labels.py`도 엔진 import에 필요한 동반 모듈입니다. 파일 두 개만 옮겨서는 실행되지 않습니다. 학습 원본/데이터 분석은 `ml/localization/`, PC 실행은 이 폴더로 분리합니다. 이 ZIP에는 위치 모델의 학습 원본 전체가 포함되지 않았습니다.
+`location_model.py`, `phase_features.py`, `labels.py`도 엔진 import에 필요한 동반 모듈입니다. 파일 두 개만 옮겨서는 실행되지 않습니다. 학습 코드는 `ml/localization/`, PC 실행은 이 폴더로 분리합니다. 두 곳의 `location_*.py`는 import 방식만 다르며, 특징 계산을 바꾸면 양쪽을 함께 고치고 NPZ와 fixture를 다시 생성합니다.
 
 ## 상태 및 API
 

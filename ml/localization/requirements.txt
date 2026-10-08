@@ -1,0 +1,7 @@
+# Public installation entry point: python -m pip install -r requirements.txt
+# Exact CPython 3.14.7 standard build, Windows x64.
+# Full dependency versions and wheel SHA-256 hashes live in the lock file.
+# Change the lock and environment/model compatibility checks together.
+--require-hashes
+--only-binary=:all:
+-r requirements-lock.txt

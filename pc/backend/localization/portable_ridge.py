@@ -2,12 +2,12 @@
 
 Same math as the saved Studio bundle (StandardScaler -> RidgeClassifier):
     z = (x - mean) / scale ;  score = z @ coef.T + intercept ;  label = classes_[argmax]
-Features follow fivepoint_core (amp_rssi): per cycle, RX 0..4 in order, 384 CSI
+Features follow location_core (amp_rssi): per cycle, RX 0..4 in order, 384 CSI
 bytes = 192 (imag, real) int8 pairs, drop the first 2 pairs, amplitude =
 hypot(imag, real); window feature = [mean amplitude (950), mean RSSI (5)].
 
 Windowing (2 s, 10 Hz selection, >= 10 cycles, >= 1 s span) is NOT here; it is
-the live engine's job (fivepoint_core.make_windows / LiveInferenceEngine).
+the live engine's job (location_core.make_windows / LiveInferenceEngine).
 """
 from __future__ import annotations
 
@@ -80,7 +80,7 @@ class PortableRidge:
 
     # -- optional: plug into the unchanged Studio live engine -------------
     def as_studio_bundle(self):
-        """Duck-typed bundle for fivepoint_live/fivepoint_model.predict_windows
+        """Duck-typed bundle for location_live/location_model.predict_windows
         (needs those modules importable, but not the training library versions)."""
         owner = self
 

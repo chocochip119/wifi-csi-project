@@ -1,0 +1,4 @@
+﻿candidate,model_path,feature_count,train_samples,validation_samples,validation_accuracy,validation_balanced_accuracy,validation_macro_f1,validation_file_majority_accuracy,fit_seconds
+window__amp_rssi__ridge,models/window__amp_rssi__ridge.joblib,955,6837,563,0.9449378330373002,0.9618828043485579,0.9591625676807843,0.9347826086956522,0.4691457999870181
+window__amp_rssi__mlp,models/window__amp_rssi__mlp.joblib,955,6837,563,0.8756660746003553,0.8986486486486487,0.8621857312677573,0.8913043478260869,4.626688099990133
+window__amp_rssi__knn,models/window__amp_rssi__knn.joblib,955,6837,563,0.8792184724689165,0.8537569699213534,0.8413696741495958,0.9130434782608695,1.9195084999664687
