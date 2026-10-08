@@ -61,9 +61,11 @@ class DesktopController:
         if command not in ('status', 'mode run', 'mode wait'):
             raise ValueError('이 화면은 Status / TX Run / TX Wait만 전송합니다.')
         session = self._session()
+        # Send first: a refused command (e.g. Ethernet, where the PS owns the TX)
+        # must not end the running trial. A sent TX command still ends it.
+        session.send_command(command)
         if command != 'status':
             self.finish_trial('tx_command')
-        session.send_command(command)
         return '전송: CMD ' + command
 
     def apply_model(self, model_id):

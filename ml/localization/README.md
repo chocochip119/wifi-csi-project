@@ -21,7 +21,7 @@ Wi-Fi CSI(RX 5대)로 **사람 없음 + 9개 지점 + p05 의자 앉기(p10)**, 
 | `studio_training.py`, `manifest_editor.py`, `build_notebook.py`, `01_Train_and_Evaluate.ipynb` | 학습 절차(노트북)와 manifest 편집 |
 | `environment_probe.py`, `requirements*.txt`, `setup_windows.ps1`/`.cmd` | 실행 환경 확인·고정 의존성·자동 설치(PC의 Python 3.14.7을 찾아 `.venv` 생성) |
 | `export_portable_model.py` | 학습 run → Backend용 `ridge_portable.npz/json` + 회귀 fixture |
-| `csi_live_gui.py` 외 `desktop_controller.py`, `live_*.py`, `serial_input.py`, `vendor/` | 실시간 확인 GUI (USB 직결) |
+| `csi_live_gui.py` 외 `desktop_controller.py`, `live_*.py`, `serial_input.py` | 실시간 확인 GUI (USB 직결). USB 모드는 외부 참고 파서 `vendor/sync_csi_input.py`가 필요하며 라이선스 미확인으로 저장소에 넣지 않았습니다([THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md)) |
 | `tools/csi_live_gui_ethernet.py` | 같은 GUI를 **보드 경유 Ethernet(TCP 5000)**으로 실행 |
 | `tests/` | 60개 단위 테스트 (하드웨어·실데이터 불필요) |
 | `results/<run>/` | 배포 모델의 설정·데이터 구성·검증 성능 요약 |

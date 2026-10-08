@@ -2,18 +2,21 @@
 
     python export_portable_model.py --run <runs/run_...> [--replace]
 
-Writes   pc/backend/localization/models/ridge_portable.{npz,json}
+First checks, in memory, that the exported arrays give the same scores/labels as
+the saved scikit-learn bundle on every validation window of the run (files are
+identified by the hashes frozen in the bundle). Only then writes
+         pc/backend/localization/models/ridge_portable.{npz,json}
          pc/backend/tests/fixtures/selfcheck_fixture.npz  (validation windows only)
-and checks that the npz gives the same features/scores/labels as the saved
-scikit-learn bundle on every validation window of the run. Run it with the
-training environment (exact versions; the joblib loader checks them).
-The held-out test split is never read. The run folder is only read.
+via temporary files; on any failure the backend files are left unchanged.
+Run it with the training environment (exact versions; the joblib loader checks
+them). The held-out test split is never read. The run folder is only read.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -25,7 +28,7 @@ REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 
 from location_core import make_features  # noqa: E402
-from location_data import _read_record, file_sha256  # noqa: E402
+from location_data import _enabled, _read_record, file_sha256  # noqa: E402
 from location_model import load_model, predict_windows  # noqa: E402
 
 SCHEMA = "wise_portable_ridge_v1"   # must match pc/backend/localization/portable_ridge.py
@@ -37,21 +40,29 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def validation_windows(run: Path, config: dict):
-    """Windows of the run's validation files, read exactly as in training (no test rows)."""
+def validation_windows(run: Path, config: dict, trusted_hashes):
+    """Windows of the run's validation files, read exactly as in training (no test rows).
+
+    File identity is checked against the hashes frozen in the model bundle, not the
+    editable manifest sha256 column; `enabled` is parsed like training (_enabled)."""
+    trusted = set(trusted_hashes)
     manifest = pd.read_csv(run / "manifest.csv", encoding="utf-8-sig").fillna("")
-    rows = manifest[(manifest["split"] == "validation") & (manifest["enabled"].astype(str).str.lower() == "true")]
-    windows, labels = [], []
+    rows = manifest[(manifest["split"] == "validation") & manifest["enabled"].map(_enabled)]
+    windows, labels, seen = [], [], set()
     for i, row in enumerate(rows.itertuples(index=False)):
         path = (run / str(row.path).replace("\\", "/")).resolve()
-        if file_sha256(path) != row.sha256:
-            raise SystemExit(f"validation file changed since training: {row.path}")
-        record = {"resolved_path": str(path), "sha256": row.sha256, "path": row.path, "source_id": i,
+        digest = file_sha256(path)
+        if digest not in trusted:
+            raise SystemExit(f"not a validation file of this run (or changed since training): {row.path}")
+        seen.add(digest)
+        record = {"resolved_path": str(path), "sha256": digest, "path": row.path, "source_id": i,
                   "split": "validation", "point_id": row.point_id, "participant": row.person,
                   "block": row.session, "repeat": row.repeat}
         _, found = _read_record(record, config)
         windows += found
         labels += [row.point_id] * len(found)
+    if seen != trusted:
+        raise SystemExit(f"{len(trusted - seen)} validation files used in training are missing from the manifest")
     return windows, labels
 
 
@@ -88,14 +99,38 @@ def main():
     if any(p.exists() for p in targets) and not args.replace:
         raise SystemExit("backend model/fixture exists; pass --replace to overwrite")
 
-    npz = MODEL_DIR / "ridge_portable.npz"
-    np.savez(npz, coef=np.asarray(estimator.coef_, dtype=np.float64),
-             intercept=np.asarray(estimator.intercept_, dtype=np.float64),
-             scaler_mean=np.asarray(scaler.mean_, dtype=np.float64),
-             scaler_scale=np.asarray(scaler.scale_, dtype=np.float64),
-             estimator_classes=np.asarray([str(c) for c in estimator.classes_], dtype="<U8"))
+    # 1) Everything in memory; nothing in pc/backend is touched until the parity check passes.
+    arrays = {"coef": np.asarray(estimator.coef_, dtype=np.float64),
+              "intercept": np.asarray(estimator.intercept_, dtype=np.float64),
+              "scaler_mean": np.asarray(scaler.mean_, dtype=np.float64),
+              "scaler_scale": np.asarray(scaler.scale_, dtype=np.float64),
+              "estimator_classes": np.asarray([str(c) for c in estimator.classes_], dtype="<U8")}
+    windows, truth = validation_windows(run, bundle["config"], bundle["validation_raw_hashes"])
+    features = make_features(windows, bundle["config"])
+    sk_scores = estimator.decision_function(scaler.transform(features))
+    sk_labels = predict_windows(bundle, windows)
+    np_scores = ((features - arrays["scaler_mean"]) / arrays["scaler_scale"]) @ arrays["coef"].T + arrays["intercept"]
+    np_labels = arrays["estimator_classes"][np.argmax(np_scores, axis=1)]
+    mismatches = int((np_labels != sk_labels).sum())
+    pick = np.unique(np.linspace(0, len(windows) - 1, args.fixture_windows).astype(int))
+    report = {"run": run.name, "model": selected["model_path"], "validation_windows": len(windows),
+              "score_max_abs_diff": float(np.abs(np_scores - sk_scores).max()), "label_mismatches": mismatches,
+              "validation_accuracy": round(float(np.mean(np.asarray(sk_labels) == np.asarray(truth))), 4),
+              "fixture_windows": int(len(pick)), "fixture_classes": sorted(set(map(str, sk_labels[pick])))}
+    if mismatches or report["score_max_abs_diff"] > 1e-9:
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        raise SystemExit("portable model does not match the saved model; backend files left unchanged")
+
+    # 2) Write to temporary files, re-read the NPZ, then swap all three into place.
+    raw, rssi, counts = raw_fixture([windows[i] for i in pick], bundle["config"]["drop_pairs"])
+    tmp_npz, tmp_json, tmp_fixture = (MODEL_DIR / "ridge_portable.tmp.npz", MODEL_DIR / "ridge_portable.tmp.json",
+                                      FIXTURE.with_name(FIXTURE.stem + ".tmp.npz"))
+    np.savez(tmp_npz, **arrays)
+    with np.load(tmp_npz, allow_pickle=False) as written:
+        if any(not np.array_equal(written[k], v) for k, v in arrays.items()):
+            raise SystemExit("NPZ round-trip mismatch; backend files left unchanged")
     meta = {
-        "schema": SCHEMA, "npz_sha256": sha256(npz),
+        "schema": SCHEMA, "npz_sha256": sha256(tmp_npz),
         "source_run": run.name, "source_model": f"{run.name}/fit/{selected['model_path']}",
         "source_model_sha256": sha256(model_path), "source_versions": bundle["versions"],
         "studio_schema": bundle["schema"], "family": bundle["family"], "variant": bundle["variant"],
@@ -107,33 +142,14 @@ def main():
         "math": "z=(x-scaler_mean)/scaler_scale; score=z@coef.T+intercept; label=estimator_classes[argmax(score)]",
         "note": "decision column j = estimator_classes[j] (empty first), not bundle_classes[j]",
     }
-    (MODEL_DIR / "ridge_portable.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n",
-                                                   encoding="utf-8", newline="\n")
-
-    # Check every validation window, then keep evenly spaced ones as the fixture.
-    windows, truth = validation_windows(run, bundle["config"])
-    features = make_features(windows, bundle["config"])
-    sk_scores = estimator.decision_function(scaler.transform(features))
-    sk_labels = predict_windows(bundle, windows)
-    data = np.load(npz, allow_pickle=False)
-    z = (features - data["scaler_mean"]) / data["scaler_scale"]
-    np_scores = z @ data["coef"].T + data["intercept"]
-    np_labels = data["estimator_classes"][np.argmax(np_scores, axis=1)]
-    mismatches = int((np_labels != sk_labels).sum())
-    pick = np.unique(np.linspace(0, len(windows) - 1, args.fixture_windows).astype(int))
-    chosen = [windows[i] for i in pick]
-    raw, rssi, counts = raw_fixture(chosen, bundle["config"]["drop_pairs"])
-    np.savez(FIXTURE, raw_csi=raw, rssi=rssi, cycle_counts=counts, features=features[pick],
+    tmp_json.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    np.savez(tmp_fixture, raw_csi=raw, rssi=rssi, cycle_counts=counts, features=features[pick],
              sklearn_scores=sk_scores[pick], sklearn_labels=np.asarray(sk_labels[pick], dtype="<U8"))
-    report = {"run": run.name, "model": selected["model_path"], "validation_windows": len(windows),
-              "score_max_abs_diff": float(np.abs(np_scores - sk_scores).max()), "label_mismatches": mismatches,
-              "validation_accuracy": round(float(np.mean(np.asarray(sk_labels) == np.asarray(truth))), 4),
-              "fixture_windows": int(len(pick)), "fixture_classes": sorted(set(map(str, sk_labels[pick]))),
-              "npz_sha256": meta["npz_sha256"]}
+    for tmp, final in ((tmp_npz, MODEL_DIR / "ridge_portable.npz"), (tmp_json, MODEL_DIR / "ridge_portable.json"),
+                       (tmp_fixture, FIXTURE)):
+        os.replace(tmp, final)
+    report["npz_sha256"] = meta["npz_sha256"]
     print(json.dumps(report, ensure_ascii=False, indent=2))
-    if mismatches or report["score_max_abs_diff"] > 1e-9:
-        raise SystemExit("portable model does not match the saved model")
-
 
 if __name__ == "__main__":
     main()

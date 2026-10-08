@@ -45,7 +45,7 @@ code --new-window .
 ```
 
 가상환경 활성화는 필요 없습니다. `.cmd` 없이 설치하는 방법과 run/COM 지정,
-별도 라벨 편집·터미널 학습/시험 명령은 `POWERSHELL_COMMANDS_KO.md`에 있습니다.
+설치·학습·실시간 실행 명령은 같은 폴더의 `README.md`에 있습니다.
 ''')
 code('''from pathlib import Path
 import sys, subprocess
@@ -245,7 +245,7 @@ else:
 ''')
 md('''## 7 실시간 GUI
 
-`run_live_gui.cmd`를 더블클릭하고 **학습 결과 폴더**로 위 RUN_DIR을 선택합니다. 또는 다음 셀에서 실행할 수 있습니다.
+`python csi_live_gui.py --run-dir <RUN_DIR>`(보드 경유 Ethernet은 `python tools/csi_live_gui_ethernet.py --run-dir <RUN_DIR>`)로 실행하고 **학습 결과 폴더**로 위 RUN_DIR을 선택합니다. 또는 다음 셀에서 실행할 수 있습니다.
 수집기가 같은 TX COM을 사용하고 있으면 수집기에서 연결을 해제한 뒤 GUI로 연결하세요.
 모델 선택 → TX 데이터 COM 연결 → Status → 필요 시 TX Run → 학습 배치/RX 순서/HT40 확인 → 추론 시작 순서입니다.
 
@@ -263,7 +263,7 @@ if OPEN_LIVE_GUI:
     gui = subprocess.Popen([sys.executable, str(ROOT / "csi_live_gui.py"), "--run-dir", str(RUN_DIR)], cwd=ROOT)
     print("GUI에서 TX 연결과 추론을 시작하세요.")
 else:
-    print("run_live_gui.cmd를 사용하거나 OPEN_LIVE_GUI=True로 실행하세요.")
+    print("python csi_live_gui.py --run-dir <RUN_DIR>로 실행하거나 OPEN_LIVE_GUI=True로 실행하세요.")
 ''')
 md('''## 팀원에게 전달하기
 
@@ -271,7 +271,7 @@ md('''## 팀원에게 전달하기
 실시간 추론만 할 때 원본 학습 CSV는 필요하지 않습니다. 기존 run의 보류 시험은 학습 당시 원본 절대 경로와 SHA를 검사하므로 경로를 바꾸면 거부합니다.
 다른 위치로 원본을 옮겨 새 실험을 할 때는 새 manifest와 새 run을 만드세요. 기존 결과는 보존합니다.
 모델만 골라 복사하지 말고 `fit/models`, 버전 sidecar, model_catalog 및 기록을 포함한 결과 폴더 전체를 옮기세요.
-변경한 사람·시간대 분리와 모델 설정, 실제 현장 조건을 기록합니다. 상세 설명은 README_KO.md와 TEAM_HANDOFF_KO.md를 참고하세요.
+변경한 사람·시간대 분리와 모델 설정, 실제 현장 조건을 기록합니다. 상세 설명은 README.md를 참고하세요.
 ''')
 book={'cells':cells,'metadata':{'kernelspec':{'display_name':'CSI Studio Python 3.14.7','language':'python','name':'csi-studio-py314'},'language_info':{'name':'python','version':'3.14.7'}},'nbformat':4,'nbformat_minor':5}
 (ROOT/'01_Train_and_Evaluate.ipynb').write_text(json.dumps(book,ensure_ascii=False,indent=1),encoding='utf-8')

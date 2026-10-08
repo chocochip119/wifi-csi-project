@@ -42,7 +42,9 @@ def _load_reference(path: Path) -> Any:
     if path.is_dir():
         path = path / "tools" / "sync_csi_input.py"
     if not path.is_file():
-        raise FileNotFoundError(f"Reference USB parser not found: {path}")
+        raise FileNotFoundError(f"Reference USB parser not found: {path}. USB mode needs the third-party "
+                                "parser placed at ml/localization/vendor/sync_csi_input.py (see THIRD_PARTY_NOTICES.md); "
+                                "Ethernet mode does not use it.")
     name = f"_localization_usb_reference_{uuid.uuid4().hex}"
     spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:

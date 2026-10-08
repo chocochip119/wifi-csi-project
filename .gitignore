@@ -153,5 +153,10 @@ Release/
 ml/localization/data/
 ml/localization/metadata/
 ml/localization/live_results/
-!ml/localization/results/**/*.csv
+# Only these publication tables; manifests (participant names) never match.
+!ml/localization/results/**/leaderboard.csv
+!ml/localization/results/**/*_per_point_metrics.csv
+!ml/localization/results/**/*_confusion_matrix.csv
+# Third-party USB parser (license unconfirmed): each user places it locally.
+ml/localization/vendor/
 ml/localization/environment_check.json

@@ -136,6 +136,8 @@ class LiveChecks(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, '11클래스'):
             LiveInferenceEngine(old)
 
+    @unittest.skipUnless(Path(DEFAULT_REFERENCE).is_file(),
+                         'third-party USB parser not present (see THIRD_PARTY_NOTICES.md)')
     def test_fast_usb_cycles_keep_inference_and_trial_on_the_same_clock(self):
         # Reproduce short USB arrivals while the Windows-style coarse clock
         # repeats. Exercise the actual bundled parser and serial adapter,

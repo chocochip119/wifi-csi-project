@@ -84,6 +84,18 @@ class DesktopChecks(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.control.command('save_nodes')
 
+    def test_refused_tx_command_keeps_trial_and_sent_command_ends_it(self):
+        self.connect_and_start()
+        self.control.start_trial(self.model, True, 'p01', 5)
+        refuse = RuntimeError('PS owns the TX on Ethernet')
+        with patch.object(self.control.session, 'send_command', side_effect=refuse):
+            with self.assertRaises(RuntimeError):
+                self.control.command('mode run')
+        self.assertTrue(self.control.recorder.snapshot()['active'])
+        self.control.command('mode run')
+        self.assertFalse(self.control.recorder.snapshot()['active'])
+        self.assertEqual(self.control.session.calls[-1], ('command', 'mode run'))
+
     def test_selection_requires_apply_and_finishes_old_model_trial(self):
         self.connect_and_start()
         with self.assertRaises(RuntimeError):

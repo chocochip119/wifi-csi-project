@@ -2,7 +2,9 @@
 
 ## 수집기 패킷 파서
 
-- 파일: `vendor/sync_csi_input.py`
+- 파일: `vendor/sync_csi_input.py` — **이 저장소에는 포함하지 않습니다.** 재배포 라이선스를 확인하지 못했기 때문입니다.
+  USB 직결 모드를 쓰는 사람만 아래 참고 저장소의 원본을 직접 받아 이 경로에 두고, 해당 저장소의 이용 조건을 따릅니다.
+  Ethernet(PS 경유) 모드, 학습, Backend는 이 파일이 필요 없습니다.
 - 참고 저장소: [ziziccc/wifi-csi-pose](https://github.com/ziziccc/wifi-csi-pose)
 - 원본 상대 경로: `tools/sync_csi_input.py`
 - SHA-256: `df01454247955677f56ad5e8516013b61b9aad47a05e753a04c23c3c3201816e`
