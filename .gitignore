@@ -160,3 +160,20 @@ ml/localization/live_results/
 # Third-party USB parser (license unconfirmed): each user places it locally.
 ml/localization/vendor/
 ml/localization/environment_check.json
+
+# ==================================================
+# PC Frontend (Node.js / Vite)
+# Keep package.json and package-lock.json tracked.
+# ==================================================
+node_modules/
+dist/
+.vite/
+coverage/
+
+# ==================================================
+# Local environment and runtime recordings
+# ==================================================
+.env
+.env.*
+!.env.example
+recordings/
