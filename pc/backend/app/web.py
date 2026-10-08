@@ -4,7 +4,7 @@ import asyncio
 from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import Body, FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import Settings
@@ -53,8 +53,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return service.rx_layout()
 
     @app.post("/api/confirm-rx-layout")
-    async def confirm_rx_layout() -> dict[str, Any]:
-        return service.confirm_rx_layout()
+    async def confirm_rx_layout(payload: dict[str, Any] | None = Body(default=None)) -> dict[str, Any]:
+        return service.confirm_rx_layout((payload or {}).get('rx_signature'))
 
     @app.post("/api/inference/stop")
     async def stop_inference() -> dict[str, Any]:
@@ -78,7 +78,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
                 kind = message.get("type") if isinstance(message, dict) else None
                 if kind == "confirm_rx_layout":
-                    result = service.confirm_rx_layout()
+                    result = service.confirm_rx_layout(message.get('rx_signature'))
                     await ws.send_json({"type": "command_result", "command": kind, **result})
                 elif kind == "stop_inference":
                     result = service.stop_inference()

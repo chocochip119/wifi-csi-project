@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import copy
+import hashlib
+import json
 import math
 import threading
 import time
@@ -65,6 +67,7 @@ class BackendService:
                 "rx_active": 0,
                 "rx_total": 5,
                 "rx_nodes": [],
+                "rx_signature": None,
                 "wifi_channel": None,
                 "second_channel": None,
                 "tx_mac": None,
@@ -154,19 +157,76 @@ class BackendService:
         with self._lock:
             self._last_prediction = copy.deepcopy(prediction)
 
-    def confirm_rx_layout(self) -> dict[str, Any]:
+    @staticmethod
+    def _rx_signature(status: dict[str, Any] | None) -> str | None:
+        """Stable proof of the complete five-RX identity; ignores changing counters."""
+        if not status:
+            return None
+        try:
+            from localization.location_live import status_identity
+            mapping, radio = status_identity(status)
+            nodes = status.get("nodes", [])
+            if (status.get("connected_count") != 5 or status.get("saved_count") != 5
+                    or len(nodes) != 5 or not all(n.get("saved") for n in nodes)):
+                return None
+            identity = {"generation": int(status["generation"]),
+                        "mapping": sorted(mapping.items()), "radio": radio}
+            return hashlib.sha256(
+                json.dumps(identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
+            ).hexdigest()
+        except (KeyError, TypeError, ValueError):
+            return None
+
+    @classmethod
+    def _current_rx_signature(cls, serial: dict[str, Any]) -> str | None:
+        """Only expose an RX identity while its transport and STATUS are fresh."""
+        seen = serial.get("status_received_ns")
+        if not serial.get("connected") or not isinstance(seen, int):
+            return None
+        age = time.perf_counter_ns() - seen
+        if age < 0 or age > 10_000_000_000:
+            return None
+        return cls._rx_signature(serial.get("status"))
+
+    def confirm_rx_layout(self, rx_signature: str | None = None) -> dict[str, Any]:
+        """Require a matching operator-inspected RX identity before enabling inference."""
         if self.settings.fake:
             return {"ok": True, "message": "fake mode: RX 배치 확인 완료"}
         if self._live is None:
             return {"ok": False, "message": "Backend가 시작되지 않았습니다."}
-        snap = self._live.snapshot()
-        status = (snap.get("serial") or {}).get("status")
-        if status is None:
+        live_snap = self._live.snapshot()
+        serial = live_snap.get("serial") or {}
+        if not serial.get("connected"):
+            return {"ok": False, "message": "CSI TCP 연결이 끊겨 RX 배치를 확인할 수 없습니다."}
+        if serial.get("status") is None:
             return {"ok": False, "message": "STATUS를 아직 받지 못했습니다."}
+        signature = self._current_rx_signature(serial)
+        if signature is None:
+            return {"ok": False, "message": "최신 STATUS에서 RX0~RX4 connected/live/saved 및 RUN 상태를 확인할 수 없습니다."}
+        if not isinstance(rx_signature, str) or rx_signature != signature:
+            return {"ok": False, "message": "RX 배치가 바뀌었거나 확인 토큰이 없습니다. 화면에서 다시 대조해 주세요."}
         try:
+            from localization.location_live import status_identity
+            mapping, radio = status_identity(serial["status"])
+            config = self._live.bundle["config"]
+            if config.get("layout_id") != "layout_02":
+                raise ValueError("위치 모델의 layout_02 설정이 필요합니다.")
+            expected_mapping = config.get("rx_mac_by_index")
+            if expected_mapping:
+                expected = {int(k): str(v).upper() for k, v in expected_mapping.items()}
+                if mapping != expected:
+                    raise ValueError("학습 모델과 실제 RX index↔MAC이 다릅니다.")
+            expected_radio = config.get("radio")
+            if expected_radio:
+                expected_radio = dict(expected_radio)
+                if "tx_mac" in expected_radio:
+                    expected_radio["tx_mac"] = str(expected_radio["tx_mac"]).upper()
+                if any(radio.get(k) != v for k, v in expected_radio.items()):
+                    raise ValueError("학습 모델과 TX/무선 설정이 다릅니다.")
+            # The worker revalidates the next STATUS before producing predictions.
             self._live.start_inference(identity_confirmed=True)
-            return {"ok": True, "message": "RX 배치를 확인했습니다. 위치 추론을 시작합니다."}
-        except Exception as exc:
+            return {"ok": True, "message": "현재 RX 배치를 확인했습니다. 다음 STATUS 검증 뒤 위치 추론을 시작합니다."}
+        except (KeyError, TypeError, ValueError, RuntimeError) as exc:
             return {"ok": False, "message": str(exc)}
 
     def stop_inference(self) -> dict[str, Any]:
@@ -190,6 +250,7 @@ class BackendService:
             "status_ready": snap["system"]["status_ready"],
             "identity_confirmed": snap["system"]["identity_confirmed"],
             "rx_nodes": copy.deepcopy(snap["system"]["rx_nodes"]),
+            "rx_signature": snap["system"].get("rx_signature"),
             "wifi_channel": snap["system"]["wifi_channel"],
             "second_channel": snap["system"]["second_channel"],
             "tx_mac": snap["system"]["tx_mac"],
@@ -310,6 +371,7 @@ class BackendService:
                     "rx_active": int(status.get("active_count", 0)) if status else 0,
                     "rx_total": 5,
                     "rx_nodes": self._rx_nodes(status),
+                    "rx_signature": self._current_rx_signature(serial),
                     "wifi_channel": status.get("wifi_channel") if status else None,
                     "second_channel": status.get("second_channel") if status else None,
                     "tx_mac": status.get("tx_mac") if status else None,
@@ -346,11 +408,33 @@ class BackendService:
                 "window_cycles": 20,
             }
             location, person = self._location_state(prediction, "FAKE MODE")
+            base_joints = {
+                "left_shoulder":  (0.40, 0.20),
+                "right_shoulder": (0.60, 0.20),
+                "left_elbow":     (0.30, 0.36),
+                "right_elbow":    (0.70, 0.36),
+                "left_wrist":     (0.23, 0.52),
+                "right_wrist":    (0.77, 0.52),
+                "left_hip":       (0.42, 0.52),
+                "right_hip":      (0.58, 0.52),
+                "left_knee":      (0.41, 0.73),
+                "right_knee":     (0.59, 0.73),
+                "left_ankle":     (0.40, 0.94),
+                "right_ankle":    (0.60, 0.94),
+            }
+
             joints = []
-            for i, (name, joint_id) in enumerate(JOINT_IDS.items()):
-                x = 0.5 + 0.12 * math.sin(t * 2.0 + i * 0.3)
-                y = 0.15 + (i // 2) * 0.11
-                joints.append({"id": joint_id, "name": name, "x": x, "y": y})
+            sway = 0.008 * math.sin(t * 2.0)
+
+            for name, joint_id in JOINT_IDS.items():
+                x, y = base_joints[name]
+
+                joints.append({
+                    "id": joint_id,
+                    "name": name,
+                    "x": x + sway,
+                    "y": y,
+                })
             pose = {
                 "valid": point == "p05",
                 "window_id": phase,

@@ -49,12 +49,15 @@ curl http://127.0.0.1:8000/api/rx-layout
 
 배치/순서가 맞는지 확인한 뒤 다음 POST를 실행합니다. 확인 전에는 위치 `status_ready=false`일 수 있으며, 확인 후 다음 STATUS를 받아 준비가 완료됩니다.
 
-```bash
-curl -X POST http://127.0.0.1:8000/api/confirm-rx-layout
-curl http://127.0.0.1:8000/api/snapshot
+```powershell
+# 현재 RX 서명 조회 후 MAC/배치/학습 순서를 직접 대조
+$layout = Invoke-RestMethod http://127.0.0.1:8000/api/rx-layout
+$layout
+Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/api/confirm-rx-layout -ContentType 'application/json' -Body (@{rx_signature=$layout.rx_signature} | ConvertTo-Json)
+Invoke-RestMethod http://127.0.0.1:8000/api/snapshot
 ```
 
-Windows PowerShell의 curl 별칭 때문에 옵션이 다르게 처리되면 `curl.exe`를 사용합니다. 스냅샷에서 위치/Pose의 availability와 stale를 각각 확인하세요. Pose는 model_output 좌표이며 화면의 0..1 좌표로 가정하지 않습니다. Frontend 구현은 현재 없고 API/`/ws`가 연결 지점입니다.
+Windows PowerShell의 curl 별칭 때문에 옵션이 다르게 처리되면 `curl.exe`를 사용합니다. 스냅샷에서 위치/Pose의 availability와 stale를 각각 확인하세요. Pose는 model_output 좌표이며 화면의 0..1 좌표로 가정하지 않습니다. Frontend 실행과 화면 연결 점검은 [Frontend README](../pc/frontend/README.md)를 참고하세요.
 
 ## PC만으로 확인
 

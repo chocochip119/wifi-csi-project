@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="wise-backend-url" content="" />
+  <title>WiSensing · 실장비 연결 점검</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,Arial,sans-serif;background:#0c1219;color:#f1f7fa}
+    body{margin:0;padding:26px;max-width:1240px;margin:auto}
+    h1{margin:0 0 6px;font-size:26px} h2{font-size:17px;margin:0 0 16px}
+    p{color:#a8b9c6} .note{font-size:13px;line-height:1.6} .good{color:#5ff5af} .bad{color:#fda799}
+    .muted{color:#a8b9c6} .warn{color:#ffd292}
+    .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:22px 0}
+    .card{background:#16212b;border:1px solid #2b4050;border-radius:14px;padding:18px;min-width:0}
+    .card small{display:block;color:#a8b9c6;letter-spacing:.06em;font-size:11px;margin-bottom:10px}
+    .card strong{font-size:17px;word-break:break-word}
+    .main{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    table{border-collapse:collapse;width:100%;font-size:13px} th{text-align:left;color:#a8b9c6;font-weight:500}td,th{padding:9px;border-bottom:1px solid #2a3c49}
+    pre{font-size:12px;line-height:1.4;overflow:auto;max-height:240px;background:#0b141c;padding:10px;border-radius:8px;white-space:pre-wrap;word-break:break-word}
+    button{background:#187e87;color:white;border:0;border-radius:9px;padding:11px 15px;cursor:pointer;font-weight:700}button:disabled{opacity:.4;cursor:not-allowed}
+    label{font-size:13px;line-height:1.7}input[type=checkbox]{accent-color:#42d9da;transform:scale(1.15);margin-right:7px}
+    a{color:#60eaf2} .hint{border-left:3px solid #e6be72;padding-left:12px;margin:14px 0}
+    @media(max-width:870px){.summary{grid-template-columns:repeat(2,1fr)}.main{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="row" style="justify-content:space-between">
+    <div><h1>WiSensing · 실장비 연결 점검</h1><p class="note">ESP32 → Zybo TCP 5000/5001 → PC Backend → WebSocket</p></div>
+    <a href="/">시연 화면으로 돌아가기</a>
+  </div>
+  <p class="hint note"><strong>실제 하드웨어 확인용 화면입니다.</strong> "연결됨"은 TCP 연결 상태를 뜻하며 모델 정확도를 의미하지 않습니다. <code>--fake</code> 실행 중이면 RX 확인 버튼을 사용할 수 없습니다.</p>
+  <div class="summary">
+    <div class="card"><small>BACKEND</small><strong id="api">확인 중</strong></div>
+    <div class="card"><small>PS / CSI 5000</small><strong id="csi">확인 중</strong></div>
+    <div class="card"><small>POSE 5001</small><strong id="pose-tcp">확인 중</strong></div>
+    <div class="card"><small>INFERENCE</small><strong id="inference">확인 중</strong></div>
+  </div>
+  <div class="main">
+    <section class="card">
+      <h2>RX0~RX4 배치·MAC 검증</h2>
+      <p class="note">표의 RX 번호, 실제 위치, 장치 MAC, 학습 수집 당시 배치가 맞는지 직접 대조해 주세요. MAC은 자동으로 정답 여부를 판단할 수 없습니다.</p>
+      <div class="row"><span id="radio" class="muted">STATUS 대기 중</span></div>
+      <table><thead><tr><th>RX</th><th>Slot</th><th>Saved</th><th>MAC</th><th>Live</th></tr></thead><tbody id="rx-tbody"><tr><td colspan="5">상태 대기 중</td></tr></tbody></table>
+      <p id="rx-message" class="warn note"></p>
+      <label><input type="checkbox" id="confirmed-physical" />RX0~RX4의 MAC·물리 배치·학습 순서를 직접 확인했습니다.</label>
+      <div class="row" style="margin-top:12px">
+        <button type="button" id="confirm" disabled>RX 배치 확인 후 위치 추론 시작</button>
+        <button type="button" id="stop" style="background:#624855">위치 추론 정지</button>
+      </div>
+      <p id="action-message" class="note"></p>
+    </section>
+    <section class="card">
+      <h2>실시간 수신 데이터</h2>
+      <div id="metrics" class="note">Backend 대기 중</div>
+      <h2 style="margin-top:20px">원인·오류 진단</h2>
+      <pre id="details">데이터 수신 대기 중</pre>
+      <p class="note">POSE valid는 12관절 x/y가 들어왔다는 의미이며, 사람이 정확하게 추정되었다는 의미는 아닙니다.</p>
+    </section>
+  </div>
+<script>
+  const queryBackend = new URLSearchParams(location.search).get('backend');
+  const metaBackend = document.querySelector('meta[name="wise-backend-url"]')?.content;
+  const defaultBackend = `${location.protocol}//${location.hostname}:8000`;
+  const backendUrl = new URL(queryBackend || metaBackend || defaultBackend, location.href);
+  if (!['http:', 'https:'].includes(backendUrl.protocol)) throw new Error('HTTP(S) Backend 주소만 지원합니다.');
+  const base = backendUrl.origin;
+  const $ = (id) => document.getElementById(id);
+  let health = null, snapshot = null, lastRxSignature = '', lastPoseWindow = null;
+  let uniquePoseWindows = 0, busy = false;
+  function label(id, value, good) {
+    $(id).textContent = value;
+    $(id).className = good === null ? 'warn' : good ? 'good' : 'bad';
+  }
+  async function api(path, method='GET', body=null) {
+    const controller = new AbortController();
+    const timeout = setTimeout(()=>controller.abort(), 2500);
+    try {
+      const options = {method, cache:'no-store', signal:controller.signal};
+      if(body!==null){options.headers={'Content-Type':'application/json'};options.body=JSON.stringify(body);}
+      const result = await fetch(base + path, options);
+      if (!result.ok) throw new Error(`${path}: HTTP ${result.status}`);
+      return await result.json();
+    } finally { clearTimeout(timeout); }
+  }
+  function showRx(nodes) {
+    const tbody = $('rx-tbody');
+    tbody.replaceChildren();
+    if (!nodes.length) {
+      const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=5;td.textContent='STATUS/RX 정보 없음';tr.append(td);tbody.append(tr);return;
+    }
+    for(const n of [...nodes].sort((a,b)=>(a.rx_id ?? 99)-(b.rx_id ?? 99))) {
+      const tr=document.createElement('tr');
+      [n.rx_id, n.slot_index, n.saved_order, n.mac, n.live?'LIVE':'OFF'].forEach((value)=>{
+        const td=document.createElement('td');td.textContent=String(value ?? '--');tr.append(td);
+      });tbody.append(tr);
+    }
+  }
+  function refresh() {
+    if (!snapshot) return;
+    const s = snapshot.system || {}, p = snapshot.pose || {}, l = snapshot.location || {};
+    const fake=health?.fake === true || String(s.reason || '').includes('FAKE MODE');
+    label('api', fake?'FAKE MODE':'정상 응답', !fake);
+    label('csi',s.csi_connected?'연결됨':'끊김',!!s.csi_connected);
+    label('pose-tcp',s.pose_connected?'연결됨':'끊김',!!s.pose_connected);
+    label('inference',s.inference_running?'추론 실행 중':'대기 / 중지',s.inference_running?true:null);
+    $('radio').textContent=`TX ${s.tx_mac ?? '--'} | 채널 ${s.wifi_channel ?? '--'} | Second ${s.second_channel ?? '--'} | RX ${s.rx_active ?? 0}/${s.rx_total ?? 5}`;
+    const nodes=Array.isArray(s.rx_nodes)?s.rx_nodes:[];
+    const token = typeof s.rx_signature === 'string' ? s.rx_signature : '';
+    const sig=JSON.stringify(nodes.map(n=>[n.rx_id,n.slot_index,n.saved_order,n.mac,n.live,n.saved,n.connected]))+':'+token;
+    if(sig!==lastRxSignature){lastRxSignature=sig;$('confirmed-physical').checked=false;showRx(nodes);}
+    const byId = new Set(nodes.filter(n=>n.connected && n.live && n.saved).map(n=>Number(n.rx_id)));
+    const rxReady = !!token && s.csi_connected === true && [0,1,2,3,4].every(i=>byId.has(i));
+    $('rx-message').textContent = fake?'FAKE MODE에서는 실제 RX 배치를 확인할 수 없습니다.' :
+      !rxReady?'RX0~RX4 모두 connected/live/saved인지 확인하세요. 배치 확인이 불가능하면 먼저 TX/RX STATUS 문제를 해결하세요.' :
+      s.identity_confirmed?'RX 배치 확인됨. 위치가 나오지 않으면 CSI 윈도우와 학습 모델 조건을 확인하세요.' :
+      'RX 상태가 준비되었습니다. 실제 배치·MAC을 확인한 뒤 아래 버튼을 누르세요.';
+    $('confirm').disabled = fake || !rxReady || !$('confirmed-physical').checked;
+    const poseValid = p.valid === true && Array.isArray(p.joints) && p.joints.length === 12;
+    if(poseValid && p.window_id!==null && p.window_id!==undefined && p.window_id!==lastPoseWindow) {
+      uniquePoseWindows++;lastPoseWindow=p.window_id;
+    }
+    $('metrics').textContent=`Seq ${snapshot.seq ?? '--'} | Pose ${poseValid?'유효':'Unavailable'} | 관절 ${p.joints?.length ?? 0}/12 | 최근 ${p.age_ms ?? '--'}ms | 신규 Pose windows ${uniquePoseWindows} | 3D 입력 좌표계 ${p.coordinate_space ?? '--'} | 위치 ${l.valid?(l.point_id ?? '--'):'Unavailable'} | 자세 ${snapshot.person?.posture ?? '--'}`;
+    $('details').textContent=JSON.stringify({fake, status_ready:s.status_ready,identity_confirmed:s.identity_confirmed,reason:s.reason,last_error:s.last_error,location_reason:l.reason,pose_age_ms:p.age_ms,pose_infer_ms:p.infer_ms},null,2);
+  }
+  async function tick(){
+    if(busy) return;busy=true;
+    try{const values=await Promise.all([api('/health'),api('/api/snapshot')]);health=values[0];snapshot=values[1];refresh();}
+    catch(e){health=null;snapshot=null;lastRxSignature='';$('confirmed-physical').checked=false;label('api','연결 실패',false);label('csi','정보 없음',null);label('pose-tcp','정보 없음',null);label('inference','정보 없음',null);$('details').textContent=String(e);$('confirm').disabled=true;}
+    finally{busy=false;}
+  }
+  $('confirmed-physical').addEventListener('change',refresh);
+  $('confirm').addEventListener('click', async()=>{
+    if(!snapshot || health?.fake || !$('confirmed-physical').checked) return;
+    if(!window.confirm('현장 RX0~RX4 MAC/배치/학습 순서를 확인했고 위치 추론을 시작합니까?'))return;
+    try {const r=await api('/api/confirm-rx-layout','POST',{rx_signature:snapshot.system.rx_signature});$('action-message').textContent=JSON.stringify(r);if(!r.ok){$('confirmed-physical').checked=false;lastRxSignature='';}await tick();}
+    catch(e){$('action-message').textContent='오류: '+e;}
+  });
+  $('stop').addEventListener('click',async()=>{
+    if(!window.confirm('위치 추론을 정지합니까? (Pose TCP는 별도로 계속될 수 있습니다.)'))return;
+    try{const r=await api('/api/inference/stop','POST');$('action-message').textContent=JSON.stringify(r);await tick();}
+    catch(e){$('action-message').textContent='오류: '+e;}
+  });
+  tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
