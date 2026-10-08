@@ -147,3 +147,11 @@ Release/
 # Reviewed PC runtime model and numerical regression fixture
 !pc/backend/localization/models/ridge_portable.npz
 !pc/backend/tests/fixtures/selfcheck_fixture.npz
+
+# Location model (ml/localization): raw CSV, manifests with participant names,
+# training runs and live trial records stay local. Small result tables are tracked.
+ml/localization/data/
+ml/localization/metadata/
+ml/localization/live_results/
+!ml/localization/results/**/*.csv
+ml/localization/environment_check.json

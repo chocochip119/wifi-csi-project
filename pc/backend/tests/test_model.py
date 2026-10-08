@@ -1,7 +1,7 @@
 from pathlib import Path
 import numpy as np
 from localization.portable_ridge import PortableRidge
-from localization.fivepoint_live import LiveInferenceEngine
+from localization.location_live import LiveInferenceEngine
 
 BASE = Path(__file__).resolve().parents[1]
 

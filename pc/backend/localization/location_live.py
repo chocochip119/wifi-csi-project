@@ -1,7 +1,7 @@
 """Presence and nine-point + p05-seated inference from the existing TX USB aggregate stream.
 
 No serial port is opened and no TX command is sent at import/model loading.
-Training and inference share fivepoint_core transforms. Coordinates denote
+Training and inference share location_core transforms. Coordinates denote
 the nine collection points; p10 is p05 seated. The trained empty class has no coordinate. Missing
 or invalid CSI is an unavailable prediction, never an empty-room prediction.
 """
@@ -18,8 +18,8 @@ import re
 import threading
 import time
 
-from .fivepoint_core import cycle_from_rows, make_windows, inference_config
-from .fivepoint_model import load_model, predict_windows
+from .location_core import cycle_from_rows, make_windows, inference_config
+from .location_model import load_model, predict_windows
 from .labels import CLASSES, EMPTY_LABEL, LOCATION_CLASSES
 
 
@@ -414,7 +414,7 @@ class _InferenceWorker:
         self.state_lock = threading.Lock()
         self.state = self.engine.snapshot()
         self.block_reason = None
-        self.thread = threading.Thread(target=self._run, name='fivepoint-model', daemon=True)
+        self.thread = threading.Thread(target=self._run, name='location-model', daemon=True)
         self.thread.start()
 
     def _prediction_event(self, prediction):
@@ -547,7 +547,7 @@ class LiveSession:
         self.serial = SerialInput(self.port, self._on_sample, self._on_event, baudrate=self.baudrate)
         try:
             self.serial.start()
-            self._poll_thread = threading.Thread(target=self._poll, name='fivepoint-status', daemon=True)
+            self._poll_thread = threading.Thread(target=self._poll, name='location-status', daemon=True)
             self._poll_thread.start()
         except Exception:
             self.stop()

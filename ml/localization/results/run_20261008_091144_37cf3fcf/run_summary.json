@@ -1,0 +1,200 @@
+{
+  "schema": "csi_studio_run_v2_presence",
+  "created_utc": "2026-10-08T00:11:56.252997+00:00",
+  "seed": 17,
+  "families": [
+    "knn",
+    "ridge",
+    "mlp"
+  ],
+  "variant": "amp_rssi",
+  "config": {
+    "layout_id": "layout_02",
+    "mode": "window",
+    "variant": "amp_rssi",
+    "rx_ids": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "rx_mac_by_index": null,
+    "csi_len": 384,
+    "drop_pairs": 2,
+    "window_s": 2.0,
+    "stride_s": 2.0,
+    "min_interval_s": 0.1,
+    "max_cycle_span_s": 0.1,
+    "min_window_cycles": 10,
+    "min_window_span_s": 1.0,
+    "trim_start_s": 2.0,
+    "trim_end_s": 2.0
+  },
+  "test_config": {
+    "layout_id": "layout_02",
+    "mode": "window",
+    "variant": "amp_rssi",
+    "rx_ids": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "rx_mac_by_index": null,
+    "csi_len": 384,
+    "drop_pairs": 2,
+    "window_s": 2.0,
+    "stride_s": 0.5,
+    "min_interval_s": 0.1,
+    "max_cycle_span_s": 0.1,
+    "min_window_cycles": 10,
+    "min_window_span_s": 1.0,
+    "trim_start_s": 2.0,
+    "trim_end_s": 2.0
+  },
+  "model_params": {
+    "knn": {
+      "n_neighbors": 5,
+      "weights": "distance",
+      "n_jobs": 1
+    },
+    "ridge": {
+      "alpha": 10.0
+    },
+    "mlp": {
+      "hidden_layer_sizes": [
+        64,
+        32
+      ],
+      "alpha": 0.001,
+      "max_iter": 300,
+      "early_stopping": false,
+      "n_iter_no_change": 25,
+      "solver": "adam",
+      "warm_start": false
+    }
+  },
+  "selection_rule": "validation balanced accuracy, macro F1, declared candidate order",
+  "split_mode": "sessions",
+  "empty_split_mode": "main_plan_or_manifest_explicit",
+  "classes": [
+    "p01",
+    "p02",
+    "p03",
+    "p04",
+    "p05",
+    "p06",
+    "p07",
+    "p08",
+    "p09",
+    "p10",
+    "empty"
+  ],
+  "empty_label": "empty",
+  "test_scores_computed": false,
+  "refit_train_plus_validation": false,
+  "limitations": [
+    "Eleven classes: nine nominal points, p10 = p05 seated (same coordinate as p05), plus empty; not continuous coordinates.",
+    "Empty means the marked area is unoccupied; reception failure is not an empty prediction.",
+    "Empty classification requires separately labelled empty recordings in train/validation/test.",
+    "Test windows overlap 75%; window count is not an independent trial count.",
+    "Same-person/session repeat split is a pilot, not unseen-person/time evidence.",
+    "Phase variant is experimental relative cos/sin, not calibrated physical phase."
+  ],
+  "selected_model": "window__amp_rssi__ridge",
+  "splits": {
+    "test": {
+      "files": 85,
+      "sessions": [
+        "1007_16시"
+      ],
+      "participants": [
+        "A",
+        "B",
+        "C",
+        "E",
+        "F"
+      ],
+      "files_per_class": {
+        "empty": 10,
+        "p01": 5,
+        "p02": 10,
+        "p03": 5,
+        "p04": 10,
+        "p05": 5,
+        "p06": 10,
+        "p07": 5,
+        "p08": 10,
+        "p09": 5,
+        "p10": 10
+      }
+    },
+    "train": {
+      "files": 562,
+      "sessions": [
+        "1003_19시",
+        "1003_20시",
+        "1003_22시",
+        "1004_14시반",
+        "1004_15시",
+        "1004_16시",
+        "1004_17시",
+        "1004_18시반",
+        "1004_19시",
+        "1004_19시반",
+        "1004_20시",
+        "1004_20시반",
+        "1004_21시",
+        "1006_14시",
+        "1007_9시반"
+      ],
+      "participants": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "files_per_class": {
+        "empty": 72,
+        "p01": 38,
+        "p02": 60,
+        "p03": 38,
+        "p04": 60,
+        "p05": 38,
+        "p06": 60,
+        "p07": 38,
+        "p08": 60,
+        "p09": 38,
+        "p10": 60
+      }
+    },
+    "validation": {
+      "files": 46,
+      "sessions": [
+        "1007_13시"
+      ],
+      "participants": [
+        "C",
+        "F"
+      ],
+      "files_per_class": {
+        "empty": 6,
+        "p01": 2,
+        "p02": 6,
+        "p03": 2,
+        "p04": 6,
+        "p05": 2,
+        "p06": 6,
+        "p07": 2,
+        "p08": 6,
+        "p09": 2,
+        "p10": 6
+      }
+    }
+  },
+  "participants_note": "pseudonymized (A-G); the name map is not part of the repository"
+}

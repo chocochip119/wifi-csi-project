@@ -26,7 +26,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from threadpoolctl import threadpool_limits
 
-from .fivepoint_core import fit_phase, make_features, validate_config, inference_config
+from .location_core import fit_phase, make_features, validate_config, inference_config
 from .labels import CLASSES as LABEL_CLASSES, LOCATION_CLASSES, EMPTY_LABEL, POINTS_CM, TASK
 
 CLASSES = list(LABEL_CLASSES)

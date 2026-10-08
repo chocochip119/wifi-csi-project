@@ -1,8 +1,9 @@
 {
   "schema": "wise_portable_ridge_v1",
-  "npz_sha256": "db3cb2e4902062703430ac7e014891607c25f394bc42786e1074690206b3ce61",
-  "source_model": "1004_localization_11class/csi_studio_py314_11class/runs/run_20261005_162053_c2b8fb09/fit/models/window__amp_rssi__ridge.joblib",
-  "source_model_sha256": "9e5b748f199117910523bce53edd79788ce5946b8bd47c3afa15182f1682e88c",
+  "npz_sha256": "9c4ab0f5bf3a54bd84f3518cd843dd5b5dfd3c1361507442cd58661b2671e902",
+  "source_run": "run_20261008_091144_37cf3fcf",
+  "source_model": "run_20261008_091144_37cf3fcf/fit/models/window__amp_rssi__ridge.joblib",
+  "source_model_sha256": "5add60d7fcdfcb20a533e5e2517772050b2d97853da62f2b839fdf7af89429f9",
   "source_versions": {
     "python": "3.14.7",
     "numpy": "2.5.3",
@@ -141,6 +142,7 @@
     "empty_label": "empty",
     "task": "presence_and_ninepoint_plus_p05_seated_location"
   },
+  "test_evaluated": false,
   "math": "z=(x-scaler_mean)/scaler_scale; score=z@coef.T+intercept; label=estimator_classes[argmax(score)]",
   "note": "decision column j = estimator_classes[j] (empty first), not bundle_classes[j]"
 }
