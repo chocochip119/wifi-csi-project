@@ -346,11 +346,33 @@ class BackendService:
                 "window_cycles": 20,
             }
             location, person = self._location_state(prediction, "FAKE MODE")
+            base_joints = {
+                "left_shoulder":  (0.40, 0.20),
+                "right_shoulder": (0.60, 0.20),
+                "left_elbow":     (0.30, 0.36),
+                "right_elbow":    (0.70, 0.36),
+                "left_wrist":     (0.23, 0.52),
+                "right_wrist":    (0.77, 0.52),
+                "left_hip":       (0.42, 0.52),
+                "right_hip":      (0.58, 0.52),
+                "left_knee":      (0.41, 0.73),
+                "right_knee":     (0.59, 0.73),
+                "left_ankle":     (0.40, 0.94),
+                "right_ankle":    (0.60, 0.94),
+            }
+
             joints = []
-            for i, (name, joint_id) in enumerate(JOINT_IDS.items()):
-                x = 0.5 + 0.12 * math.sin(t * 2.0 + i * 0.3)
-                y = 0.15 + (i // 2) * 0.11
-                joints.append({"id": joint_id, "name": name, "x": x, "y": y})
+            sway = 0.008 * math.sin(t * 2.0)
+
+            for name, joint_id in JOINT_IDS.items():
+                x, y = base_joints[name]
+
+                joints.append({
+                    "id": joint_id,
+                    "name": name,
+                    "x": x + sway,
+                    "y": y,
+                })
             pose = {
                 "valid": point == "p05",
                 "window_id": phase,
