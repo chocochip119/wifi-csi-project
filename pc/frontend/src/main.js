@@ -697,182 +697,99 @@ characterButtons.forEach((button) => {
 })
 loadCharacter('Male01')
 
-const poseTestBar = document.querySelector('#pose-test-bar')
-const poseTestButtons = [...document.querySelectorAll('[data-pose-test]')]
-const poseTestNote = document.querySelector('#pose-test-note')
-const sideViewButton = document.querySelector('#demo-side-view')
-const legToggleButton = document.querySelector('#demo-leg-toggle')
-
-function refreshLegControls() {
-  legToggleButton.textContent = experimentalLegs ? 'K · 다리 각도 ON' : 'K · 다리 각도 OFF'
-  legToggleButton.classList.toggle('active', experimentalLegs)
-  legToggleButton.setAttribute('aria-pressed', String(experimentalLegs))
-  poseTestButtons.forEach((button) => {
-    if (button.dataset.poseTest === 'squat' || button.dataset.poseTest === 'legLift') {
-      button.disabled = !experimentalLegs
-      button.title = experimentalLegs ? '같은 12관절의 고관절/무릎 각도로 움직입니다 (깊이 추정)' : 'K를 눌러 다리 각도 추종을 켜세요'
-    }
+// 화면 테스트 설정: Backend/FPGA 동작을 바꾸지 않고 표시할 소스만 전환합니다.
+const settingsPanel = document.querySelector('#viewer-settings-panel')
+const settingsOpen = document.querySelector('#viewer-settings-open')
+const settingsClose = document.querySelector('#viewer-settings-close')
+const settingControlIds = {
+  locationMode: 'settings-location-mode', jointsMode: 'settings-joints-mode',
+  jointsSample: 'settings-joints-sample', motionMode: 'settings-motion-mode',
+  motionSample: 'settings-motion-sample', liveArms: 'settings-live-arms',
+  liveLegs: 'settings-live-legs'
+}
+function refreshViewer() {
+  const snapshot = replayActive ? activeReplaySnapshot : latestSnapshot
+  if (snapshot) handleSnapshot(snapshot, replayActive ? 'replay' : 'settings')
+  else handleSnapshot({type: 'snapshot', version: 1, pose: null, location: {valid: false}}, 'settings')
+}
+function refreshSettingsControls() {
+  for (const [key, id] of Object.entries(settingControlIds)) {
+    const control = document.getElementById(id)
+    if (control.type === 'checkbox') control.checked = Boolean(viewerSettings[key])
+    else control.value = viewerSettings[key]
+  }
+  document.querySelector('#settings-manual-fields').hidden = viewerSettings.locationMode !== 'manual'
+  document.querySelector('#settings-joints-sample-field').hidden = viewerSettings.jointsMode !== 'sample'
+  document.querySelector('#settings-motion-sample-field').hidden = viewerSettings.motionMode !== 'sample'
+  document.querySelector('#settings-motion-live-options').hidden = viewerSettings.motionMode !== 'live'
+  document.querySelectorAll('[data-manual-point]').forEach(button => {
+    button.classList.toggle('active', button.dataset.manualPoint === viewerSettings.manualPoint)
+  })
+  const labels = {live: 'LIVE', manual: 'TEST', sample: 'TEST', off: 'OFF'}
+  document.querySelector('#viewer-settings-summary').textContent =
+    `위치 ${labels[viewerSettings.locationMode]} · 관절 ${labels[viewerSettings.jointsMode]} · 모션 ${labels[viewerSettings.motionMode]}` +
+    (viewerSettings.locationMode === 'manual' ? ` · ${viewerSettings.manualPoint.toUpperCase()}` : '')
+}
+function updateSetting(key, value) {
+  viewerSettings[key] = value
+  poseFilter.reset()
+  if (poseRig?.active) poseRig.clear()
+  refreshSettingsControls()
+  refreshViewer()
+}
+function showSettings(open) {
+  settingsPanel.hidden = !open
+  settingsOpen.setAttribute('aria-expanded', String(open))
+  if (open) document.querySelector('#settings-location-mode').focus()
+  else settingsOpen.focus()
+}
+settingsOpen.addEventListener('click', () => showSettings(settingsPanel.hidden))
+settingsClose.addEventListener('click', () => showSettings(false))
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !settingsPanel.hidden) showSettings(false)
+})
+for (const [key,id] of Object.entries(settingControlIds)) {
+  document.getElementById(id).addEventListener('change', event => {
+    updateSetting(key, event.target.type === 'checkbox' ? event.target.checked : event.target.value)
   })
 }
-
-function toggleLegAngles() {
-  experimentalLegs = !experimentalLegs
-  if (!experimentalLegs && (demoPoseName === 'squat' || demoPoseName === 'legLift')) {
-    selectPoseTest('stand')
-  }
-  refreshLegControls()
-  if (rigDemoMode) {
-    poseTestNote.textContent = experimentalLegs
-      ? '다리 각도 ON: Pose Result와 동일한 12관절로 고관절/무릎 각도를 계산합니다. 안전 범위를 넘으면 Idle로 되돌립니다.'
-      : TEST_POSES[demoPoseName].hint
-  }
-  console.log(`[PoseRig v13] 2D angle leg tracking: ${experimentalLegs ? 'ON' : 'OFF'}`)
-}
-legToggleButton.addEventListener('click', toggleLegAngles)
-refreshLegControls()
-
-// V는 테스트 전용 카메라 확인: 최종 UI 카메라는 변경하지 않는다.
-function updateDemoView() {
-  const active = rigDemoMode && demoSideView
-  camera.position.set(active ? 4.6 : 0, active ? 3.2 : 3.4, active ? 5.5 : 7)
-  camera.lookAt(0, 1.05, 0)
-  sideViewButton.classList.toggle('active', active)
-  sideViewButton.setAttribute('aria-pressed', String(active))
-}
-sideViewButton.addEventListener('click', () => {
-  if (!rigDemoMode) return
-  demoSideView = !demoSideView
-  updateDemoView()
-})
-
-function selectPoseTest(name) {
-  if (!TEST_POSES[name] || (!experimentalLegs && (name === 'squat' || name === 'legLift'))) return
-  demoPoseName = name
-  poseTestButtons.forEach((button) => {
-    button.classList.toggle('active', button.dataset.poseTest === name)
+document.querySelectorAll('[data-manual-point]').forEach(button => {
+  button.addEventListener('click', () => {
+    viewerSettings.manualPoint = button.dataset.manualPoint
+    viewerSettings.locationMode = 'manual'
+    refreshSettingsControls()
+    refreshViewer()
   })
-  poseTestNote.textContent = TEST_POSES[name].hint
-  demoLastRenderAt = 0
-  // 버튼만 눌러도 테스트 모드 진입.
-  if (!rigDemoMode) setPoseTestMode(true)
-  poseRig?.clear()
-  refreshIdleAnimation()
-  console.log(`[PoseRig] Test pose: ${TEST_POSES[name].label}`)
-}
-
-function setPoseTestMode(enabled) {
-  rigDemoMode = enabled
-  if (enabled) setLiveBadge('TEST MODE')
-  else if (replayActive) setLiveBadge('FILE REPLAY')
-  else updateLiveBadge(latestSnapshot)
-  poseTestBar.hidden = !enabled
-  if (!enabled) demoSideView = false
-  updateDemoView()
-  poseRig?.clear()
-  console.log(`[PoseRig] Test mode ${enabled ? 'ON' : 'OFF'}`)
-  if (enabled) {
-    poseFilter.reset()
-    isMoving = false
-    currentZone = targetZone = 5
-    if (character) {
-      character.visible = true
-      character.position.x = zonePositions[5].x
-      character.position.z = zonePositions[5].z
-      character.rotation.y = 0
-      playAnimation('Idle_Neutral')
-    }
-    updateLocationUI(5)
-    updatePostureUI('standing')
-    poseTestNote.textContent = TEST_POSES[demoPoseName].hint
-    demoLastRenderAt = 0
-  } else {
-    renderPose(null)
-    if (replayActive && activeReplaySnapshot) handleSnapshot(activeReplaySnapshot, 'replay')
-    else if (latestSnapshot) handleSnapshot(latestSnapshot)
-    else disableRig()
-    refreshIdleAnimation()
-  }
-}
-
-poseTestButtons.forEach((button) => {
-  button.addEventListener('click', () => selectPoseTest(button.dataset.poseTest))
 })
+document.querySelector('#settings-all-live').addEventListener('click', () => {
+  viewerSettings.locationMode = 'live'
+  viewerSettings.jointsMode = 'live'
+  viewerSettings.motionMode = 'live'
+  poseFilter.reset()
+  refreshSettingsControls()
+  refreshViewer()
+})
+document.querySelector('#settings-reset').addEventListener('click', () => {
+  Object.assign(viewerSettings, DEFAULT_VIEWER_SETTINGS)
+  poseFilter.reset()
+  refreshSettingsControls()
+  refreshViewer()
+})
+refreshSettingsControls()
 
-// 키보드 1~9=위치 이동. T=테스트, S=기본 서기, P=실제 팔, L=실제 다리 추종 토글.
-
+// O: 실제 기록 JSON/JSONL 재생. B: 실시간 복귀. M: 좌우 반전.
+// 위치/관절/모션 테스트 변경은 설정 패널에서만 합니다.
 window.addEventListener('keydown', (event) => {
   if (event.altKey || event.ctrlKey || event.metaKey) return
-  if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return
-
-  if (event.key.toLowerCase() === 't') {
-    setPoseTestMode(!rigDemoMode)
-    return
-  }
-
-  const keyToPose = { s: 'stand', q: 'armUp', w: 'armsWide', e: 'squat', r: 'legLift' }
-  const testName = keyToPose[event.key.toLowerCase()]
-  if (testName && rigDemoMode) {
-    selectPoseTest(testName)
-    return
-  }
-
-  if (event.key.toLowerCase() === 'k' && rigDemoMode) {
-    toggleLegAngles()
-    return
-  }
-
-  // V: 테스트 중에만 대각선 측면 확인(스쿼트 깊이 확인용).
-  if (event.key.toLowerCase() === 'v' && rigDemoMode) {
-    demoSideView = !demoSideView
-    updateDemoView()
-    return
-  }
-
-  // P/L: 실제 CNN 팔/다리 각도 추종을 각각 토글. Walk 중에는 자동 중지.
-  if (event.key.toLowerCase() === 'o' && !rigDemoMode) {
-    document.querySelector('#pose-replay-file').click()
-    return
-  }
-  if (event.key.toLowerCase() === 'b' && !rigDemoMode && replayActive) {
-    stopPoseReplay()
-    return
-  }
-
-  if (event.key.toLowerCase() === 'p' && !rigDemoMode) {
-    liveArmTracking = !liveArmTracking
-    if (!liveArmTracking) disableRig()
-    if (replayActive && activeReplaySnapshot) handleSnapshot(activeReplaySnapshot, 'replay')
-    else if (latestSnapshot) handleSnapshot(latestSnapshot)
-    console.log(`[PoseRig v13] Live arm tracking: ${liveArmTracking ? 'ON' : 'OFF'}`)
-    return
-  }
-
-  if (event.key.toLowerCase() === 'l' && !rigDemoMode) {
-    liveLegTracking = !liveLegTracking
-        poseRig?.clear()
-    if (replayActive && activeReplaySnapshot) handleSnapshot(activeReplaySnapshot, 'replay')
-    else if (latestSnapshot) handleSnapshot(latestSnapshot)
-    console.log(`[WiSensing v13] Live 2D knee/hip angle tracking: ${liveLegTracking ? 'ON (bounded)' : 'OFF'}`)
-    return
-  }
-
-  // M: 자동 → 강제 반전 → 반전 없음 (실제 CNN 좌표계 보정용)
-  if (event.key.toLowerCase() === 'm') {
-    const next = (MIRROR_MODES.indexOf(mirrorMode) + 1) % MIRROR_MODES.length
-    mirrorMode = MIRROR_MODES[next]
-    console.log(`[PoseRig] X axis mode: ${mirrorMode}`)
+  if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(event.target.tagName)) return
+  const key = event.key.toLowerCase()
+  if (key === 'o' && !replayActive) document.querySelector('#pose-replay-file').click()
+  if (key === 'b' && replayActive) stopPoseReplay()
+  if (key === 'm') {
+    mirrorMode = MIRROR_MODES[(MIRROR_MODES.indexOf(mirrorMode) + 1) % MIRROR_MODES.length]
     poseRig?.clear()
-    if (!rigDemoMode && replayActive && activeReplaySnapshot) handleSnapshot(activeReplaySnapshot, 'replay')
-    else if (!rigDemoMode && latestSnapshot) handleSnapshot(latestSnapshot)
-    return
-  }
-
-  if (rigDemoMode) return
-  const zone = Number(event.key)
-  if (Number.isInteger(zone) && zone >= 1 && zone <= 9) {
-    updateLocationUI(zone)
-    updatePostureUI('standing')
-    moveCharacterTo(zone)
+    refreshViewer()
+    console.log('[WiSensing] X axis mode:', mirrorMode)
   }
 })
 
@@ -936,7 +853,7 @@ connectBackend((snapshot) => {
   handleSnapshot(snapshot, 'backend')
 }, (connected) => {
   liveConnection = connected
-  if (!connected && !rigDemoMode && !replayActive) {
+  if (!connected && !replayActive) {
     setLiveBadge('DISCONNECTED')
     backendLastSeenAt = 0
     backendExpired = true
@@ -979,7 +896,7 @@ function animate(now) {
   }
 
   // Backend가 끊기면 마지막 Pose가 계속 실시간인 것처럼 보이지 않도록 비활성화.
-  if (!rigDemoMode && !replayActive && backendLastSeenAt &&
+  if (!replayActive && backendLastSeenAt &&
       now - backendLastSeenAt > 5000 && !backendExpired) {
     backendExpired = true
     poseFilter.reset()
@@ -991,21 +908,10 @@ function animate(now) {
     console.warn('[WiSensing] Backend snapshot timeout; Pose hidden')
   }
 
-  // Backend Fake는 팔·다리 각도가 거의 바뀌지 않는다.
-  // T 키를 누르면 테스트용 12관절을 만들어 GLTF 본 연결을 눈으로 확인한다.
-  if (rigDemoMode) {
-    const demoPose = createTestPose(demoPoseName)
-    const mirrored = resolvePoseMirror(demoPose, mirrorMode, lastMirror)
-    lastMirror = mirrored
-    const arms = demoPoseName === 'armUp' || demoPoseName === 'armsWide'
-    const legs = experimentalLegs && (demoPoseName === 'squat' || demoPoseName === 'legLift')
-    if (arms || legs) poseRig?.setPose(demoPose, mirrored, { arms, legs })
-    else if (poseRig?.active) poseRig.clear()
-    refreshIdleAnimation()
-    if (now - demoLastRenderAt >= 80) {
-      renderPose(demoPose, mirrored)
-      demoLastRenderAt = now
-    }
+  // 샘플 3D 모션은 WebSocket이 없어도 유지하며, 실제 위치와 독립적입니다.
+  if (viewerSettings.motionMode === 'sample' && !replayActive) {
+    const motionPose = createTestPose(viewerSettings.motionSample)
+    updateMotionRig(motionPose, resolvePoseMirror(motionPose, mirrorMode, lastMirror))
   }
 
   if (character && isMoving) {
@@ -1023,7 +929,7 @@ function animate(now) {
       character.rotation.y = 0
       // Sit 애니메이션은 아직 없으므로 기본 서기 애니메이션을 유지.
       refreshIdleAnimation()
-      updateLocationUI(currentZone)
+      updateLocationUI(currentZone, selectedPointId)
       updatePostureUI(targetPosture)
     } else {
       const vx = dx / distance
@@ -1037,6 +943,7 @@ function animate(now) {
   // Idle/Walk 이후 한 번만 동일 좌표의 팔·다리 방향을 적용한다.
   // 안전 범위를 벗어난 발 이동은 해당 다리의 IK를 적용하지 않는다.
   const rigWasActive = Boolean(poseRig?.active)
+  applySittingFallback()
   poseRig?.update(delta, Boolean(character?.visible) && !isMoving)
   if (rigWasActive && !poseRig?.active) refreshIdleAnimation()
 
