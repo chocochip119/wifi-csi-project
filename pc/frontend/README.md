@@ -1,5 +1,7 @@
 # WiSensing PC Frontend
 
+Windows에서 더블클릭으로 Backend+Frontend를 자동 실행하려면 **[원클릭 실행 가이드](../../docs/oneclick_launcher.md)**의 `WiSensing_Start.bat`를 사용하세요. 브라우저 화면의 종료 버튼은 이 실행기로 시작했을 때에만 활성화됩니다.
+
 Three.js/Vite 기반 위치·12관절 시각화 UI입니다. 실제 PS/FPGA 통신과 위치 추론은 PC Backend에서 수행합니다.
 
 ## 실행
@@ -62,7 +64,7 @@ Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/api/confirm-rx-layout 
 python pc\backend\tools\verify_wise_live.py --seconds 30 --require-pose --require-location --record recordings\live.jsonl
 ```
 
-시연 페이지 오른쪽 상단의 **⚙ 설정 · 테스트** 버튼으로 위치·12관절 그림·3D 모션을 각각 독립적으로 제어할 수 있습니다.
+시연 페이지 오른쪽 상단의 **⚙ 설정 · 테스트** 버튼을 누르면 **별도 브라우저 설정 창**이 열립니다. 위치·12관절 그림·3D 모션을 각각 독립적으로 제어하고, 변경을 메인 3D 화면에 즉시 반영합니다. 팝업이 차단된다면 해당 사이트의 팝업을 허용하세요.
 
 | 설정 | LIVE | TEST / OFF |
 |---|---|---|
