@@ -119,7 +119,7 @@ Max window rate : PS 12.5 win/s, PL 43.1 win/s
 
 - 기존 PL live 앱이 찍는 `infer_ms`는 ms 단위 정수인 데다 100µs 쉬면서 상태를 확인하는 방식이라 정밀하지 않습니다. 비교 수치는 bench의 `PL HW` / `PL e2e`를 쓰세요.
 - window 하나가 CSI 10 cycle이라, 추론이 그보다 빠르면 실시간 처리량은 PS든 PL이든 CSI 수신 속도에서 막힙니다. 그 경우 차이는 추론 지연과 CPU 점유율에서 드러납니다.
-- live 앱에서 `-t 2`(또는 `POSE_SW_THREADS=2`)를 쓰면 USB/TCP 스레드와 코어를 나눠 씁니다.
+- live 앱에서 `POSE_SW_THREADS=2` 쓰면 USB/TCP 스레드와 코어를 나눠 씁니다.
 
 ## 문제 해결
 
