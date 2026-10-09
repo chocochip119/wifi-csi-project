@@ -550,6 +550,86 @@ function moveCharacterTo(zone, posture = 'standing') {
   playAnimation('Walk')
 }
 
+// P10은 P05와 같은 좌표에서 앉은 자세를 적용합니다.
+// GLTF에 앉기 idle clip이 있으면 우선 사용하고, 없으면 안전한 제한적 본 포즈로 대체합니다.
+const sitChair = new THREE.Group()
+const sitMat = new THREE.MeshStandardMaterial({color: 0x48565a, roughness: 0.9})
+const seat = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.075, 0.66), sitMat)
+seat.position.set(0, 0.47, 0.08)
+sitChair.add(seat)
+for (const x of [-0.27, 0.27]) {
+  for (const z of [-0.15, 0.30]) {
+    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.45, 0.055), sitMat)
+    leg.position.set(x, 0.225, z)
+    sitChair.add(leg)
+  }
+}
+const chairBack = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.53, 0.065), sitMat)
+chairBack.position.set(0, 0.77, -0.22)
+sitChair.add(chairBack)
+sitChair.position.copy(zonePositions[5])
+sitChair.visible = false
+scene.add(sitChair)
+
+function restoreSittingFallback() {
+  if (!sitFallbackBase) return
+  const original = sitFallbackBase
+  original.body.position.copy(original.bodyPosition)
+  for (const item of original.legs) {
+    item.upper.quaternion.copy(item.upperRotation)
+    item.lower.quaternion.copy(item.lowerRotation)
+    item.foot.position.copy(item.footPosition)
+  }
+  sitFallbackBase = null
+  character?.updateMatrixWorld(true)
+}
+function applySittingFallback() {
+  if (!character || !poseRig?.ready) {sitChair.visible = false; return}
+  const sitting = character.visible && !isMoving && targetPosture === 'sitting'
+  sitChair.visible = sitting
+  if (!sitting || sitAnimationName) {
+    if (sitFallbackBase) restoreSittingFallback()
+    return
+  }
+  const body = poseRig.body
+  if (!sitFallbackBase) {
+    sitFallbackBase = {
+      body, bodyPosition: body.position.clone(),
+      legs: poseRig.legs.map(leg => ({
+        upper: leg.upper, lower: leg.lower, foot: leg.foot,
+        upperRotation: leg.upper.quaternion.clone(),
+        lowerRotation: leg.lower.quaternion.clone(),
+        footPosition: leg.foot.position.clone()
+      }))
+    }
+    if (!poseRig.calibrated) poseRig.calibrate()
+  }
+  const rest = sitFallbackBase
+  const parentScale = body.parent.getWorldScale(new THREE.Vector3())
+  body.position.copy(rest.bodyPosition)
+  body.position.y -= 0.40 / Math.max(Math.abs(parentScale.y), 0.01)
+  const axis = new THREE.Vector3(1, 0, 0)
+  for (const leg of rest.legs) {
+    leg.upper.quaternion.copy(leg.upperRotation)
+      .multiply(new THREE.Quaternion().setFromAxisAngle(axis, -1.10))
+    leg.lower.quaternion.copy(leg.lowerRotation)
+      .multiply(new THREE.Quaternion().setFromAxisAngle(axis, 1.22))
+  }
+  character.updateMatrixWorld(true)
+  // Foot 본이 다리 본의 자식이 아닌 GLTF에서도 정강이 끝과 신발을 맞춥니다.
+  for (let i = 0; i < rest.legs.length; i++) {
+    const item = rest.legs[i]
+    const leg = poseRig.legs[i]
+    if (!leg.shinAxis || leg.length < 0.02) continue
+    const tip = item.lower.getWorldPosition(new THREE.Vector3()).add(
+      leg.shinAxis.clone().applyQuaternion(item.lower.getWorldQuaternion(new THREE.Quaternion())).normalize().multiplyScalar(leg.length)
+    )
+    item.foot.parent.updateWorldMatrix(true, false)
+    item.foot.position.copy(item.foot.parent.worldToLocal(tip))
+  }
+  character.updateMatrixWorld(true)
+}
+
 function setAbsentState(message, posture) {
   isMoving = false
   targetZone = currentZone
@@ -627,6 +707,8 @@ function loadCharacter(name) {
   isMoving = false
 
   if (mixer) mixer.stopAllAction()
+  restoreSittingFallback()
+  sitChair.visible = false
   poseRig = null
   mixer = null
   currentAction = null
@@ -812,8 +894,7 @@ function stopPoseReplay() {
   if (latestSnapshot && performance.now() - backendLastSeenAt < 5000) {
     handleSnapshot(latestSnapshot, 'backend')
   } else {
-    renderPose(null)
-    setAbsentState('Unavailable', 'unknown')
+    refreshViewer()
   }
 }
 
@@ -859,13 +940,13 @@ connectBackend((snapshot) => {
     backendExpired = true
     poseFilter.reset()
     poseRig?.clear()
-    renderPose(null)
-    setAbsentState('Unavailable', 'unknown')
+    latestSnapshot = null
+    refreshViewer()
   } else {
     updateLiveBadge(latestSnapshot)
   }
 })
-console.log('[WiSensing v13] T/K=12관절 다리 테스트, P/L=CNN 각도 추종, O=JSON 재생, B=복귀')
+console.log('[WiSensing] 설정창에서 위치·관절·모션 독립 테스트, O=JSON 재생, B=복귀')
 
 // ========================================
 // 화면 크기 및 매 프레임 이동
@@ -889,7 +970,7 @@ function animate(now) {
   if (mixer) mixer.update(delta)
 
   // 파일 재생은 시간 흐름에 따라 원본 snapshot/pose를 그대로 입력 파이프라인으로 보낸다.
-  if (replayActive && !rigDemoMode && replayFrames.length && now - replayLastTick >= 250) {
+  if (replayActive && replayFrames.length && now - replayLastTick >= 250) {
     replayLastTick = now
     replayIndex = (replayIndex + 1) % replayFrames.length
     handleSnapshot(replayFrames[replayIndex], 'replay')
@@ -901,11 +982,9 @@ function animate(now) {
     backendExpired = true
     poseFilter.reset()
     poseRig?.clear()
-    renderPose(null)
-    clearLocationUI('Unavailable')
-    updatePostureUI('unknown')
-    refreshIdleAnimation()
-    console.warn('[WiSensing] Backend snapshot timeout; Pose hidden')
+    latestSnapshot = null
+    refreshViewer()
+    console.warn('[WiSensing] Backend snapshot timeout; live inputs discarded')
   }
 
   // 샘플 3D 모션은 WebSocket이 없어도 유지하며, 실제 위치와 독립적입니다.
