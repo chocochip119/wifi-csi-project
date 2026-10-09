@@ -10,7 +10,7 @@ Zybo Z7-20(PetaLinux 2020.2) 보드에서 같은 입력으로 **PS(ARM 소프트
 실행파일과 테스트 파일을 보드로 복사합니다.
 
 ```bash
-scp PS_SW_RX5/bin/* PS_SW_RX5/test_vectors/* root@<ZYBO_IP>:/root/
+scp ps_onlysw/bin/* ps_onlysw/test_vectors/* root@<ZYBO_IP>:/root/
 ```
 
 복사되는 파일:
