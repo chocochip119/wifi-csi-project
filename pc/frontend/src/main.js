@@ -1,4 +1,6 @@
 import './style.css'
+import { setupManagedShutdown } from './launcherControl.js'
+setupManagedShutdown()
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { connectBackend } from './websocket.js'
@@ -24,54 +26,12 @@ app.innerHTML = `
 
       <div class="topbar-actions">
         <span class="viewer-badge" id="viewer-live-state">CONNECTING</span>
-        <button id="viewer-settings-open" class="settings-trigger" type="button" aria-controls="viewer-settings-panel" aria-expanded="false">⚙ 설정 · 테스트</button>
+        <button id="viewer-settings-open" class="settings-trigger" type="button">⚙ 설정 · 테스트</button>
+        <button id="viewer-stop-app" class="settings-trigger" type="button" hidden>⏻ 프로그램 종료</button>
       </div>
     </header>
 
-    <aside class="viewer-settings-panel" id="viewer-settings-panel" aria-label="시연 및 테스트 설정" hidden>
-      <div class="settings-header"><div><strong>시연 · 테스트 설정</strong><p>위치, 관절, 3D 모션을 서로 독립적으로 선택합니다.</p></div><button id="viewer-settings-close" type="button" aria-label="설정 닫기">닫기 ✕</button></div>
-      <div class="settings-section">
-        <label for="settings-location-mode">① 위치 입력</label>
-        <select id="settings-location-mode"><option value="live">실제 위치추적 (LIVE)</option><option value="manual">수동 위치 (TEST)</option></select>
-        <div id="settings-manual-fields" hidden>
-          <div class="settings-zone-grid" role="group" aria-label="수동 위치 선택">
-            <button type="button" data-manual-point="p01">P01</button>
-            <button type="button" data-manual-point="p02">P02</button>
-            <button type="button" data-manual-point="p03">P03</button>
-            <button type="button" data-manual-point="p04">P04</button>
-            <button type="button" data-manual-point="p05">P05</button>
-            <button type="button" data-manual-point="p06">P06</button>
-            <button type="button" data-manual-point="p07">P07</button>
-            <button type="button" data-manual-point="p08">P08</button>
-            <button type="button" data-manual-point="p09">P09</button>
-            <button type="button" data-manual-point="p10" class="settings-p10">P10 · 앉기</button>
-          </div>
-          <p class="settings-help">P05와 P10 모두 중앙 Zone 5입니다. P10은 앉은 자세로 표시합니다.</p>
-        </div>
-      </div>
-      <div class="settings-section">
-        <label for="settings-joints-mode">② 오른쪽 12관절 그림</label>
-        <select id="settings-joints-mode"><option value="live">실제 FPGA 관절 (LIVE)</option><option value="sample">샘플 관절 (TEST)</option><option value="off">숨김</option></select>
-        <div id="settings-joints-sample-field" hidden><label for="settings-joints-sample">샘플 관절 자세</label><select id="settings-joints-sample"><option value="stand">기본 서기</option><option value="armUp">한 팔 올리기</option><option value="armsWide">양팔 벌리기</option><option value="squat">스쿼트</option><option value="legLift">다리 들기</option></select></div>
-      </div>
-      <div class="settings-section">
-        <label for="settings-motion-mode">③ 3D 캐릭터 모션</label>
-        <select id="settings-motion-mode"><option value="live">실제 FPGA 관절 추종 (LIVE)</option><option value="sample">샘플 모션 (TEST)</option><option value="off">기본 서기/앉기 자세</option></select>
-        <div id="settings-motion-sample-field" hidden><label for="settings-motion-sample">샘플 모션 자세</label><select id="settings-motion-sample"><option value="stand">기본 서기</option><option value="armUp">한 팔 올리기</option><option value="armsWide">양팔 벌리기</option><option value="squat">스쿼트</option><option value="legLift">다리 들기</option></select></div>
-        <div id="settings-motion-live-options" class="settings-checks">
-          <label><input id="settings-live-arms" type="checkbox" checked> 실제 팔 추종</label>
-          <label><input id="settings-live-legs" type="checkbox"> 실제 다리 추종 (실험적)</label>
-        </div>
-      </div>
-      <div class="settings-section">
-        <label for="settings-camera-view">④ 테스트 시점 · 좌우 보정</label>
-        <select id="settings-camera-view"><option value="front">정면 카메라</option><option value="side">측면 카메라 (다리 확인)</option></select>
-        <select id="settings-mirror-mode"><option value="auto">좌우 자동</option><option value="mirrored">좌우 반전</option><option value="normal">좌우 반전 없음</option></select>
-      </div>
-      <p id="viewer-settings-summary" class="settings-summary" aria-live="polite"></p>
-      <div class="settings-actions"><button id="settings-all-live" type="button">전체 LIVE</button><button id="settings-reset" type="button">설정 초기화</button></div>
-      <p class="settings-help">TEST 값은 화면에만 반영합니다. Zybo·Backend 추론 결과는 바꾸지 않습니다.</p>
-    </aside>
+
 
     <main class="dashboard">
       <section class="scene-card">
@@ -786,102 +746,74 @@ characterButtons.forEach((button) => {
 loadCharacter('Male01')
 
 // 화면 테스트 설정: Backend/FPGA 동작을 바꾸지 않고 표시할 소스만 전환합니다.
-const settingsPanel = document.querySelector('#viewer-settings-panel')
 const settingsOpen = document.querySelector('#viewer-settings-open')
-const settingsClose = document.querySelector('#viewer-settings-close')
-const settingControlIds = {
-  locationMode: 'settings-location-mode', jointsMode: 'settings-joints-mode',
-  jointsSample: 'settings-joints-sample', motionMode: 'settings-motion-mode',
-  motionSample: 'settings-motion-sample', liveArms: 'settings-live-arms',
-  liveLegs: 'settings-live-legs'
-}
+const settingsChannel = new BroadcastChannel('wisensing-viewer-settings-v1')
+let settingsPopup = null
 function refreshViewer() {
   const snapshot = replayActive ? activeReplaySnapshot : latestSnapshot
   if (snapshot) handleSnapshot(snapshot, replayActive ? 'replay' : 'settings')
-  else handleSnapshot({type: 'snapshot', version: 1, pose: null, location: {valid: false}}, 'settings')
+  else handleSnapshot({type:'snapshot',version:1,pose:null,location:{valid:false}}, 'settings')
 }
-function refreshSettingsControls() {
-  for (const [key, id] of Object.entries(settingControlIds)) {
-    const control = document.getElementById(id)
-    if (control.type === 'checkbox') control.checked = Boolean(viewerSettings[key])
-    else control.value = viewerSettings[key]
-  }
-  document.querySelector('#settings-manual-fields').hidden = viewerSettings.locationMode !== 'manual'
-  document.querySelector('#settings-joints-sample-field').hidden = viewerSettings.jointsMode !== 'sample'
-  document.querySelector('#settings-motion-sample-field').hidden = viewerSettings.motionMode !== 'sample'
-  document.querySelector('#settings-motion-live-options').hidden = viewerSettings.motionMode !== 'live'
-  document.querySelector('#settings-camera-view').value = cameraView
-  document.querySelector('#settings-mirror-mode').value = mirrorMode
-  document.querySelectorAll('[data-manual-point]').forEach(button => {
-    button.classList.toggle('active', button.dataset.manualPoint === viewerSettings.manualPoint)
-  })
-  const labels = {live: 'LIVE', manual: 'TEST', sample: 'TEST', off: 'OFF'}
-  document.querySelector('#viewer-settings-summary').textContent =
-    `위치 ${labels[viewerSettings.locationMode]} · 관절 ${labels[viewerSettings.jointsMode]} · 모션 ${labels[viewerSettings.motionMode]}` +
-    (viewerSettings.locationMode === 'manual' ? ` · ${viewerSettings.manualPoint.toUpperCase()}` : '')
+function broadcastSettings() {
+  settingsChannel.postMessage({type:'state', settings:{...viewerSettings}, cameraView, mirrorMode})
 }
-function updateSetting(key, value) {
-  viewerSettings[key] = value
-  poseFilter.reset()
-  if (poseRig?.active) poseRig.clear()
-  refreshSettingsControls()
-  refreshViewer()
-}
-function showSettings(open) {
-  settingsPanel.hidden = !open
-  settingsOpen.setAttribute('aria-expanded', String(open))
-  if (open) document.querySelector('#settings-location-mode').focus()
-  else settingsOpen.focus()
-}
-settingsOpen.addEventListener('click', () => showSettings(settingsPanel.hidden))
-settingsClose.addEventListener('click', () => showSettings(false))
-document.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && !settingsPanel.hidden) showSettings(false)
-})
-for (const [key,id] of Object.entries(settingControlIds)) {
-  document.getElementById(id).addEventListener('change', event => {
-    updateSetting(key, event.target.type === 'checkbox' ? event.target.checked : event.target.value)
-  })
-}
-document.querySelectorAll('[data-manual-point]').forEach(button => {
-  button.addEventListener('click', () => {
-    viewerSettings.manualPoint = button.dataset.manualPoint
-    viewerSettings.locationMode = 'manual'
-    refreshSettingsControls()
-    refreshViewer()
-  })
-})
-document.querySelector('#settings-all-live').addEventListener('click', () => {
-  viewerSettings.locationMode = 'live'
-  viewerSettings.jointsMode = 'live'
-  viewerSettings.motionMode = 'live'
-  poseFilter.reset()
-  refreshSettingsControls()
-  refreshViewer()
-})
 function updateCameraView() {
   camera.position.set(cameraView === 'side' ? 4.6 : 0, cameraView === 'side' ? 3.2 : 3.4, cameraView === 'side' ? 5.5 : 7)
   camera.lookAt(0, 1.05, 0)
 }
-document.querySelector('#settings-camera-view').addEventListener('change', event => {
-  cameraView = event.target.value
-  updateCameraView()
-})
-document.querySelector('#settings-mirror-mode').addEventListener('change', event => {
-  mirrorMode = event.target.value
-  if (poseRig?.active) poseRig.clear()
-  refreshViewer()
-})
-document.querySelector('#settings-reset').addEventListener('click', () => {
-  Object.assign(viewerSettings, DEFAULT_VIEWER_SETTINGS)
+function updateViewerSettings(key, value) {
+  const allowed = {
+    locationMode: ['live','manual'],
+    manualPoint: ['p01','p02','p03','p04','p05','p06','p07','p08','p09','p10'],
+    jointsMode: ['live','sample','off'], jointsSample: ['stand','armUp','armsWide','squat','legLift'],
+    motionMode: ['live','sample','off'], motionSample: ['stand','armUp','armsWide','squat','legLift']
+  }
+  if (Object.hasOwn(allowed,key) && allowed[key].includes(value)) viewerSettings[key] = value
+  else if (key === 'liveArms' || key === 'liveLegs') {
+    if (typeof value !== 'boolean') return
+    viewerSettings[key] = value
+  } else if (key === 'cameraView' && ['front','side'].includes(value)) {
+    cameraView = value
+    updateCameraView()
+  } else if (key === 'mirrorMode' && MIRROR_MODES.includes(value)) mirrorMode = value
+  else return
   poseFilter.reset()
-  refreshSettingsControls()
+  poseRig?.clear()
   refreshViewer()
+  broadcastSettings()
+}
+settingsOpen.addEventListener('click', () => {
+  settingsPopup = window.open('/settings.html', 'wisensing-settings', 'popup=yes,width=510,height=810,resizable=yes,scrollbars=yes')
+  if (settingsPopup) {
+    settingsPopup.focus()
+    broadcastSettings()
+  } else window.alert('설정 팝업이 차단되었습니다. 브라우저에서 이 사이트의 팝업을 허용해 주세요.')
 })
-refreshSettingsControls()
-
-// O: 실제 기록 JSON/JSONL 재생. B: 실시간 복귀. M: 좌우 반전.
-// 위치/관절/모션 테스트 변경은 설정 패널에서만 합니다.
+settingsChannel.addEventListener('message', event => {
+  const msg = event.data
+  if (!msg || typeof msg !== 'object') return
+  if (msg.type === 'hello') { broadcastSettings(); return }
+  if (msg.type === 'update') { updateViewerSettings(msg.key, msg.value); return }
+  if (msg.type === 'all-live') {
+    viewerSettings.locationMode = 'live'
+    viewerSettings.jointsMode = 'live'
+    viewerSettings.motionMode = 'live'
+  } else if (msg.type === 'reset') {
+    Object.assign(viewerSettings, DEFAULT_VIEWER_SETTINGS)
+    cameraView = 'front'
+    mirrorMode = 'auto'
+    updateCameraView()
+  } else return
+  poseFilter.reset()
+  poseRig?.clear()
+  refreshViewer()
+  broadcastSettings()
+})
+window.addEventListener('beforeunload', () => {
+  if (settingsPopup && !settingsPopup.closed) settingsPopup.close()
+  settingsChannel.close()
+})
+// O=기록 재생, B=실시간 복귀, M=좌우 모드 순환.
 window.addEventListener('keydown', (event) => {
   if (event.altKey || event.ctrlKey || event.metaKey) return
   if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(event.target.tagName)) return
@@ -889,11 +821,8 @@ window.addEventListener('keydown', (event) => {
   if (key === 'o' && !replayActive) document.querySelector('#pose-replay-file').click()
   if (key === 'b' && replayActive) stopPoseReplay()
   if (key === 'm') {
-    mirrorMode = MIRROR_MODES[(MIRROR_MODES.indexOf(mirrorMode) + 1) % MIRROR_MODES.length]
-    poseRig?.clear()
-    refreshSettingsControls()
-    refreshViewer()
-    console.log('[WiSensing] X axis mode:', mirrorMode)
+    updateViewerSettings('mirrorMode', MIRROR_MODES[(MIRROR_MODES.indexOf(mirrorMode) + 1) % MIRROR_MODES.length])
+    console.log('[WiSensing] X axis mode:',mirrorMode)
   }
 })
 
