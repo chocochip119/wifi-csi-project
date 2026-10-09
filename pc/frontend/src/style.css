@@ -186,3 +186,61 @@ button { font: inherit; }
   pointer-events: none;
 }
 .pose-replay-label[hidden] { display: none !important; }
+
+
+/* v18: 위치 / 관절 / 캐릭터 모션을 독립적으로 선택하는 설정 패널 */
+.topbar-actions { display:flex; align-items:center; gap:10px; }
+.settings-trigger, .settings-header button, .settings-actions button {
+  cursor:pointer; border:1px solid rgba(96,234,242,.35); border-radius:10px;
+  background:rgba(26,95,105,.25); color:#c5fbff; padding:9px 12px;
+  font-size:12px; font-weight:700;
+}
+.settings-trigger:hover, .settings-actions button:hover { background:rgba(39,160,171,.35); }
+.viewer-settings-panel[hidden], .viewer-settings-panel [hidden] { display:none !important; }
+.viewer-settings-panel {
+  position:fixed; z-index:1000; top:80px; right:24px; bottom:24px;
+  width:min(400px,calc(100vw - 32px)); overflow-y:auto;
+  border:1px solid rgba(74,220,229,.45); border-radius:18px;
+  background:rgba(12,23,31,.98); padding:18px;
+  box-shadow:0 22px 100px rgba(0,0,0,.7);
+  backdrop-filter:blur(20px); font-size:12px;
+}
+.settings-header { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:16px; }
+.settings-header strong { font-size:17px; }
+.settings-header p { margin:6px 0 0; font-size:11px; line-height:1.5; color:#8faeb7; }
+.settings-section { padding:14px 0; border-top:1px solid rgba(255,255,255,.09); }
+.settings-section label:not(.settings-checks label) {
+  display:block; margin-bottom:9px; font-weight:700; color:#c4e9ee;
+}
+.settings-section select {
+  display:block; width:100%; padding:11px; border:1px solid #375461;
+  border-radius:9px; color:#e9f7f7; background:#182731; margin:7px 0 10px;
+  font-size:12px;
+}
+.settings-zone-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; padding-top:8px; }
+.settings-zone-grid button {
+  cursor:pointer; min-width:0; padding:10px 5px; border-radius:8px;
+  color:#c2d6da; background:#1a2b34; border:1px solid #36515e; font-size:12px;
+}
+.settings-zone-grid button.active {
+  border-color:#4be1e9; background:#125560; color:#d9ffff;
+}
+.settings-zone-grid .settings-p10 { grid-column:1 / -1; }
+.settings-help { font-size:11px; line-height:1.6; color:#8ba6b0; margin:8px 0 0; }
+.settings-checks { display:flex; flex-direction:column; gap:8px; padding-top:6px; }
+.settings-checks label { color:#bcd1d6; cursor:pointer; }
+.settings-checks input { accent-color:#42d9da; margin-right:7px; }
+.settings-summary {
+  border:1px solid rgba(82,221,213,.24); border-radius:9px; padding:12px;
+  color:#75f5e3; background:rgba(13,83,87,.2); font-weight:700;
+}
+.settings-actions { display:flex; gap:8px; margin:12px 0; }
+.settings-actions button { flex:1; }
+@media (max-width:700px) {
+  .app-shell { padding:12px; }
+  .topbar h1 { font-size:19px; }
+  .topbar p { font-size:9px; letter-spacing:.5px; }
+  .topbar-actions { gap:6px; }
+  .settings-trigger { padding:8px; font-size:11px; }
+  .viewer-settings-panel { top:65px; right:8px; bottom:8px; }
+}
