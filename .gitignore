@@ -171,6 +171,12 @@ dist/
 coverage/
 
 # ==================================================
+# WiSensing one-click launcher private state and local character models
+# ==================================================
+.wisensing_runtime/
+pc/frontend/public/models/
+
+# ==================================================
 # Local environment and runtime recordings
 # ==================================================
 .env
