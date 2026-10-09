@@ -63,6 +63,11 @@ app.innerHTML = `
           <label><input id="settings-live-legs" type="checkbox"> 실제 다리 추종 (실험적)</label>
         </div>
       </div>
+      <div class="settings-section">
+        <label for="settings-camera-view">④ 테스트 시점 · 좌우 보정</label>
+        <select id="settings-camera-view"><option value="front">정면 카메라</option><option value="side">측면 카메라 (다리 확인)</option></select>
+        <select id="settings-mirror-mode"><option value="auto">좌우 자동</option><option value="mirrored">좌우 반전</option><option value="normal">좌우 반전 없음</option></select>
+      </div>
       <p id="viewer-settings-summary" class="settings-summary" aria-live="polite"></p>
       <div class="settings-actions"><button id="settings-all-live" type="button">전체 LIVE</button><button id="settings-reset" type="button">설정 초기화</button></div>
       <p class="settings-help">TEST 값은 화면에만 반영합니다. Zybo·Backend 추론 결과는 바꾸지 않습니다.</p>
@@ -439,6 +444,7 @@ let backendExpired = false
 const poseFilter = new PoseFilter()
 let mirrorMode = 'auto'
 let lastMirror = false
+let cameraView = 'front'
 // 본 화면에는 기술 상태를 늘어놓지 않고 LIVE/DEMO/WAITING만 표시한다.
 // MAC, RX 배치, 모델 출력 검증은 별도 integration.html에서 확인한다.
 const liveBadge = document.querySelector('#viewer-live-state')
@@ -804,6 +810,8 @@ function refreshSettingsControls() {
   document.querySelector('#settings-joints-sample-field').hidden = viewerSettings.jointsMode !== 'sample'
   document.querySelector('#settings-motion-sample-field').hidden = viewerSettings.motionMode !== 'sample'
   document.querySelector('#settings-motion-live-options').hidden = viewerSettings.motionMode !== 'live'
+  document.querySelector('#settings-camera-view').value = cameraView
+  document.querySelector('#settings-mirror-mode').value = mirrorMode
   document.querySelectorAll('[data-manual-point]').forEach(button => {
     button.classList.toggle('active', button.dataset.manualPoint === viewerSettings.manualPoint)
   })
@@ -851,6 +859,19 @@ document.querySelector('#settings-all-live').addEventListener('click', () => {
   refreshSettingsControls()
   refreshViewer()
 })
+function updateCameraView() {
+  camera.position.set(cameraView === 'side' ? 4.6 : 0, cameraView === 'side' ? 3.2 : 3.4, cameraView === 'side' ? 5.5 : 7)
+  camera.lookAt(0, 1.05, 0)
+}
+document.querySelector('#settings-camera-view').addEventListener('change', event => {
+  cameraView = event.target.value
+  updateCameraView()
+})
+document.querySelector('#settings-mirror-mode').addEventListener('change', event => {
+  mirrorMode = event.target.value
+  if (poseRig?.active) poseRig.clear()
+  refreshViewer()
+})
 document.querySelector('#settings-reset').addEventListener('click', () => {
   Object.assign(viewerSettings, DEFAULT_VIEWER_SETTINGS)
   poseFilter.reset()
@@ -870,6 +891,7 @@ window.addEventListener('keydown', (event) => {
   if (key === 'm') {
     mirrorMode = MIRROR_MODES[(MIRROR_MODES.indexOf(mirrorMode) + 1) % MIRROR_MODES.length]
     poseRig?.clear()
+    refreshSettingsControls()
     refreshViewer()
     console.log('[WiSensing] X axis mode:', mirrorMode)
   }
