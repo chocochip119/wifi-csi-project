@@ -1,6 +1,5 @@
 import './style.css'
 import { setupManagedShutdown } from './launcherControl.js'
-setupManagedShutdown()
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { connectBackend } from './websocket.js'
@@ -94,6 +93,7 @@ app.innerHTML = `
     </main>
   </div>
 `
+setupManagedShutdown()
 
 // ========================================
 // Three.js: 카메라, 방, 조명
