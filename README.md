@@ -14,7 +14,7 @@ TX Coordinator가 RX의 CSI를 모아 USB CDC ACM(`/dev/ttyACM0`)으로 PS에 �
 | 위치 | PS에서 원본 CSI/STATUS/ACK 전달 → PC Portable Ridge | TCP **5000** |
 | 화면 연결 | PC Backend가 위치/Pose 최신 상태 통합 | HTTP/WebSocket **8000** 기본값 |
 
-전체 연결 그림은 [시스템 구조](docs/architecture.md), 바이트 규격은 [PS↔PC 규격](docs/ps_pc_protocol.md)을 참고하세요. 실행 프런트엔드와 호흡 통합은 현재 미구현입니다.
+전체 연결 그림은 [시스템 구조](docs/architecture.md), 바이트 규격은 [PS↔PC 규격](docs/ps_pc_protocol.md)을 참고하세요. 실시간 Three.js 프런트엔드는 구현되어 있으며, Windows에서는 [원클릭 실행기](docs/oneclick_launcher.md)로 PC Backend/Frontend를 함께 실행할 수 있습니다. 호흡 통합은 별도 개발 범위입니다.
 
 ## 현재 CNN 기준
 
@@ -43,6 +43,10 @@ TX Coordinator가 RX의 CSI를 모아 USB CDC ACM(`/dev/ttyACM0`)으로 PS에 �
 | `docs/` | 구조·규격·실행 순서·검증 기록·팀 작업 안내 | [문서 목록](docs/README.md) |
 
 세부 파일 위치와 소스 수정 순서는 [저장소 구조](docs/repository_structure.md)에 정리했습니다. `pl/fft`, `pl/localization`은 이전 실험/빈 골격이고, 현재 위치 추론은 `pc/backend/localization/`에서 실행됩니다.
+
+## Windows 시연 원클릭 실행
+
+이미 Python `.venv`, Node.js, Frontend 의존성이 설치된 개발 PC에서는 `WiSensing_Start.bat`를 더블클릭하세요. 실제 Zybo의 CNN은 별도로 먼저 실행해야 하며, 설정은 별도 팝업으로 열리고 PC 앱은 화면의 종료 버튼 또는 `WiSensing_Stop.bat`로 종료합니다. 상세 내용은 [원클릭 실행 가이드](docs/oneclick_launcher.md)를 참고하세요. 로컬 GLTF 캐릭터 파일은 Git에서 제외되어 그대로 유지됩니다.
 
 ## 먼저 실행하기
 

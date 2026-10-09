@@ -1,0 +1,22 @@
+html, body {height:100%; width:100%; overflow:auto; background:#0a1118; color:#e5f8f8; }
+body { margin:0; padding:0; }
+.viewer-settings-panel {
+  position:relative !important; inset:auto !important; top:auto !important; right:auto !important; bottom:auto !important;
+  width:100% !important; min-height:100vh; max-height:none;
+  border:0 !important; border-radius:0 !important; box-shadow:none !important;
+  overflow:visible !important; padding:22px 24px !important;
+  background:linear-gradient(155deg,#101f28,#0a1118) !important; backdrop-filter:none !important;
+  font-family:Inter,Arial,sans-serif;
+}
+.settings-window-status {
+  display:flex; align-items:center; padding:9px 12px;
+  color:#82f2de; background:rgba(28,128,126,.14);
+  border:1px solid rgba(81,225,208,.25); border-radius:10px;
+  font-size:11px; margin:0 0 16px;
+}
+.settings-header strong {font-size:20px;}
+.settings-section label:not(.settings-checks label) {font-size:13px;}
+.settings-section select {font-size:13px;}
+.settings-zone-grid button {font-size:13px;padding:12px 6px;}
+button {cursor:pointer;}
+:focus-visible {outline:2px solid #55e9ea;outline-offset:2px;}
