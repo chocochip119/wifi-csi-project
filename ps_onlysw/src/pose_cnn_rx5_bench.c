@@ -37,6 +37,7 @@
 #endif
 
 #define DEFAULT_ITERATIONS  100u
+#define MAX_ITERATIONS      100000u   /* keeps iterations * sizeof(double) far from 32-bit wrap */
 #define WARMUP_ITERATIONS   3u
 
 typedef struct {
@@ -266,17 +267,35 @@ static int pl_infer(pl_engine_t *pl, const int8_t *input, int8_t *out,
 
 /* ---------------------------------------------------------------- main */
 
+/** Parse an unsigned decimal in [min, max]; rejects signs, spaces and trailing text. */
+static int parse_uint_arg(const char *text, unsigned min, unsigned max, unsigned *value)
+{
+    const char *p = text;
+    unsigned long parsed;
+    char *end;
+    if (*p == '\0') return -1;
+    for (; *p != '\0'; ++p) {
+        if (*p < '0' || *p > '9') return -1;
+    }
+    errno = 0;
+    parsed = strtoul(text, &end, 10);
+    if (errno != 0 || *end != '\0' || parsed < min || parsed > max) return -1;
+    *value = (unsigned)parsed;
+    return 0;
+}
+
 static void usage(const char *prog)
 {
     fprintf(stderr,
         "usage: %s BLOB INPUT_BIN [-n ITER] [-t THREADS] [-e EXPECTED_BIN] [--pl]\n"
         "  BLOB          weights_5rx.bin (685136 bytes)\n"
         "  INPUT_BIN     N x 19200-byte INT8 windows (live DUMP_BIN works)\n"
-        "  -n ITER       timed iterations per engine (default %u)\n"
+        "  -n ITER       timed iterations per engine 1..%u (default %u)\n"
         "  -t THREADS    SW threads 1..%u (default 1; Zynq-7020 has 2 cores)\n"
         "  -e EXPECTED   24-byte expected pose for the first window\n"
-        "  --pl          also run the FPGA IP via /dev/mem (root, bitstream loaded)\n",
-        prog, DEFAULT_ITERATIONS, POSE_SW_MAX_THREADS);
+        "  --pl          also run the FPGA IP via /dev/mem (root, bitstream loaded,\n"
+        "                device tree must reserve 0x3F000000..0x3FFFFFFF as no-map)\n",
+        prog, MAX_ITERATIONS, DEFAULT_ITERATIONS, POSE_SW_MAX_THREADS);
 }
 
 int main(int argc, char **argv)
@@ -307,9 +326,15 @@ int main(int argc, char **argv)
     input_path = argv[2];
     for (argi = 3; argi < argc; ++argi) {
         if (strcmp(argv[argi], "-n") == 0 && argi + 1 < argc) {
-            iterations = (unsigned)strtoul(argv[++argi], NULL, 10);
+            if (parse_uint_arg(argv[++argi], 1u, MAX_ITERATIONS, &iterations) != 0) {
+                fprintf(stderr, "invalid ITER: %s (1..%u)\n", argv[argi], MAX_ITERATIONS);
+                return 2;
+            }
         } else if (strcmp(argv[argi], "-t") == 0 && argi + 1 < argc) {
-            threads = (unsigned)strtoul(argv[++argi], NULL, 10);
+            if (parse_uint_arg(argv[++argi], 1u, POSE_SW_MAX_THREADS, &threads) != 0) {
+                fprintf(stderr, "invalid THREADS: %s (1..%u)\n", argv[argi], POSE_SW_MAX_THREADS);
+                return 2;
+            }
         } else if (strcmp(argv[argi], "-e") == 0 && argi + 1 < argc) {
             expected_path = argv[++argi];
         } else if (strcmp(argv[argi], "--pl") == 0) {
@@ -318,10 +343,6 @@ int main(int argc, char **argv)
             usage(argv[0]);
             return 2;
         }
-    }
-    if (iterations == 0u) {
-        fprintf(stderr, "ITER must be > 0\n");
-        return 2;
     }
 #ifdef POSE_BENCH_NO_PL
     if (use_pl) {
