@@ -1,505 +1,257 @@
-/*
- * PS(software) vs PL(FPGA) inference speed and bit-exactness benchmark.
- *
- * Feeds the same INT8 windows to the ARM software CNN (pose_cnn_sw.c) and,
- * with --pl, to the pose_cnn IP through /dev/mem, then prints latency
- * statistics and byte-exact comparison results.
- *
- * INPUT_BIN may hold several windows (N x 19200 bytes), e.g. the DUMP_BIN
- * written by pose_cnn_rx5_live / pose_cnn_rx5_live_sw.
- *
- * Build without PL support (host PC test): -DPOSE_BENCH_NO_PL
- */
-#define _DEFAULT_SOURCE
 #define _POSIX_C_SOURCE 200809L
-
-#include "pose_cnn_sw.h"
-
+#include "wise_server.h"
+#include <arpa/inet.h>
 #include <errno.h>
-#include <inttypes.h>
+#include <fcntl.h>
+#include <math.h>
+#include <netinet/tcp.h>
+#include <poll.h>
+#include <pthread.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
 #include <time.h>
-
-#ifndef POSE_BENCH_NO_PL
-#include "pose_cnn_regs.h"
-#include "pose_cnn_lock.h"
-#include <fcntl.h>
-#include <sys/mman.h>
 #include <unistd.h>
 
-#define CSR_MAP_BYTES       0x00010000u
-#define WEIGHT_PHYS         0x3F000000u
-#define INPUT_PHYS          0x3F100000u
-#define OUTPUT_PHYS         0x3F200000u
-#define PL_TIMEOUT_NS       1000000000ull
-#endif
-
-#define DEFAULT_ITERATIONS  100u
-#define MAX_ITERATIONS      100000u   /* keeps iterations * sizeof(double) far from 32-bit wrap */
-#define WARMUP_ITERATIONS   3u
+#define MAX_PAYLOAD 8272u
+#define QUEUE_DEPTH 64u
+#define MAX_AGE_US 250000u
+#define STATUS_TTL_US 5000000u
 
 typedef struct {
-    double *ms;
-    unsigned count;
-} samples_t;
-
-static int cmp_double(const void *a, const void *b)
-{
-    double x = *(const double *)a, y = *(const double *)b;
-    return (x > y) - (x < y);
-}
-
-/* Prints min/avg/p50/p95/max and returns the average. */
-static double print_stats(const char *name, samples_t *s)
-{
-    double sum = 0.0, avg;
-    unsigned i;
-    if (s->count == 0u) return 0.0;
-    for (i = 0u; i < s->count; ++i) sum += s->ms[i];
-    avg = sum / s->count;
-    qsort(s->ms, s->count, sizeof(double), cmp_double);
-    printf("  %-22s min %9.3f  avg %9.3f  p50 %9.3f  p95 %9.3f  max %9.3f ms\n",
-           name, s->ms[0], avg, s->ms[s->count / 2u],
-           s->ms[(s->count * 95u) / 100u < s->count ? (s->count * 95u) / 100u : s->count - 1u],
-           s->ms[s->count - 1u]);
-    return avg;
-}
-
-static uint8_t *read_file(const char *path, size_t *bytes)
-{
-    FILE *f = fopen(path, "rb");
-    uint8_t *buf;
-    long len;
-    if (f == NULL) {
-        fprintf(stderr, "open %s: %s\n", path, strerror(errno));
-        return NULL;
-    }
-    if (fseek(f, 0, SEEK_END) != 0 || (len = ftell(f)) < 0 || fseek(f, 0, SEEK_SET) != 0) {
-        fprintf(stderr, "size %s failed\n", path);
-        fclose(f);
-        return NULL;
-    }
-    buf = (uint8_t *)malloc(len > 0 ? (size_t)len : 1u);
-    if (buf == NULL || fread(buf, 1u, (size_t)len, f) != (size_t)len) {
-        fprintf(stderr, "read %s failed\n", path);
-        free(buf);
-        fclose(f);
-        return NULL;
-    }
-    fclose(f);
-    *bytes = (size_t)len;
-    return buf;
-}
-
-static void print_pose(const char *tag, const int8_t *p)
-{
-    unsigned i;
-    printf("%s", tag);
-    for (i = 0u; i < POSE_SW_OUTPUT_BYTES; ++i) printf(" %d", p[i]);
-    putchar('\n');
-}
-
-static unsigned count_diff(const int8_t *a, const int8_t *b)
-{
-    unsigned i, n = 0u;
-    for (i = 0u; i < POSE_SW_OUTPUT_BYTES; ++i) n += a[i] != b[i];
-    return n;
-}
-
-/* ------------------------------------------------------------------ PL */
-#ifndef POSE_BENCH_NO_PL
+    uint8_t type;
+    size_t length;
+    uint64_t timestamp_us;
+    uint8_t payload[MAX_PAYLOAD];
+} packet_t;
 typedef struct {
-    void *mapping;
-    size_t mapping_bytes;
-    volatile uint8_t *ptr;
-} phys_mapping_t;
+    int listener;
+    pthread_t thread;
+    pthread_mutex_t lock;
+    bool running, connected, reset;
+    unsigned head, count;
+    uint32_t sequence;
+    packet_t queue[QUEUE_DEPTH], status;
+    uint64_t sent, dropped, reconnects;
+} channel_t;
+struct wise_server { channel_t csi, pose; };
 
-typedef struct {
-    int mem_fd;
-    phys_mapping_t csr_map, weight_map, input_map, output_map;
-    volatile uint32_t *csr;
-} pl_engine_t;
-
-static void barrier(void) { __sync_synchronize(); }
-
-static uint64_t now_ns(void)
+static uint64_t now_us(void)
 {
-    struct timespec ts;
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    return (uint64_t)ts.tv_sec * 1000000000ull + (uint64_t)ts.tv_nsec;
+    struct timespec t;
+    clock_gettime(CLOCK_MONOTONIC, &t);
+    return (uint64_t)t.tv_sec * 1000000u + (uint64_t)t.tv_nsec / 1000u;
+}
+static uint16_t rd16(const uint8_t *p) { return p[0] | (uint16_t)p[1] << 8; }
+static void wr16(uint8_t *p, uint16_t x) { p[0] = x; p[1] = x >> 8; }
+static void wr32(uint8_t *p, uint32_t x)
+{ for (unsigned i = 0; i < 4; ++i) p[i] = (uint8_t)(x >> (8u * i)); }
+static void wr64(uint8_t *p, uint64_t x)
+{ for (unsigned i = 0; i < 8; ++i) p[i] = (uint8_t)(x >> (8u * i)); }
+
+static int publish(channel_t *c, uint8_t type, const uint8_t *data, size_t length)
+{
+    packet_t *p;
+    uint64_t stamp = now_us();
+    pthread_mutex_lock(&c->lock);
+    if (type == 3u) {
+        c->status.type = type; c->status.length = length;
+        c->status.timestamp_us = stamp;
+        memcpy(c->status.payload, data, length);
+    }
+    if (!c->connected || c->reset) { pthread_mutex_unlock(&c->lock); return 0; }
+    if (c->count == QUEUE_DEPTH) {
+        /* Close the whole TCP stream, never discard part of a framed message. */
+        c->dropped += c->count + 1u;
+        c->reset = true; c->count = 0;
+        pthread_mutex_unlock(&c->lock); return 0;
+    }
+    p = &c->queue[(c->head + c->count) % QUEUE_DEPTH];
+    p->type = type; p->length = length; p->timestamp_us = stamp;
+    memcpy(p->payload, data, length); ++c->count;
+    pthread_mutex_unlock(&c->lock);
+    return 0;
 }
 
-static uint32_t reg_read(volatile uint32_t *csr, unsigned offset)
+static bool cancelled(channel_t *c)
 {
-    uint32_t value = csr[offset / 4u];
-    barrier();
+    bool value;
+    pthread_mutex_lock(&c->lock);
+    value = !c->running || c->reset;
+    pthread_mutex_unlock(&c->lock);
     return value;
 }
-
-static void reg_write(volatile uint32_t *csr, unsigned offset, uint32_t value)
+static int send_packet(channel_t *c, int fd, const packet_t *p)
 {
-    barrier();
-    csr[offset / 4u] = value;
-    barrier();
-}
-
-static int map_physical(int fd, uint32_t phys, size_t bytes, phys_mapping_t *out)
-{
-    long page_size = sysconf(_SC_PAGESIZE);
-    uint32_t page_base = phys & ~((uint32_t)page_size - 1u);
-    size_t page_offset = (size_t)(phys - page_base);
-    size_t map_bytes = (page_offset + bytes + (size_t)page_size - 1u) & ~((size_t)page_size - 1u);
-    void *mapping = mmap(NULL, map_bytes, PROT_READ | PROT_WRITE, MAP_SHARED, fd, (off_t)page_base);
-    if (mapping == MAP_FAILED) {
-        fprintf(stderr, "mmap phys=0x%08" PRIx32 ": %s\n", phys, strerror(errno));
+    uint8_t wire[24u + MAX_PAYLOAD];
+    size_t offset = 0, length = 24u + p->length;
+    uint64_t deadline = now_us() + MAX_AGE_US;
+    memcpy(wire, "WISE", 4); wire[4] = 2; wire[5] = p->type;
+    wr16(wire + 6, 24); wr32(wire + 8, (uint32_t)p->length);
+    wr32(wire + 12, c->sequence++); wr64(wire + 16, p->timestamp_us);
+    memcpy(wire + 24, p->payload, p->length);
+    while (offset < length && !cancelled(c) && now_us() < deadline) {
+        ssize_t n = send(fd, wire + offset, length - offset, MSG_NOSIGNAL | MSG_DONTWAIT);
+        if (n > 0) { offset += (size_t)n; continue; }
+        if (n < 0 && errno == EINTR) continue;
+        if (n < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
+            struct pollfd out = {fd, POLLOUT, 0};
+            if (poll(&out, 1, 20) < 0 && errno != EINTR) return -1;
+            if (out.revents & (POLLERR | POLLHUP | POLLNVAL)) return -1;
+            continue;
+        }
         return -1;
     }
-    out->mapping = mapping;
-    out->mapping_bytes = map_bytes;
-    out->ptr = (volatile uint8_t *)mapping + page_offset;
+    if (offset != length) return -1;
+    ++c->sent;
     return 0;
 }
-
-static void unmap_physical(phys_mapping_t *m)
+static void disconnect(channel_t *c, int fd)
 {
-    if (m->mapping != NULL && m->mapping != MAP_FAILED) munmap(m->mapping, m->mapping_bytes);
-    memset(m, 0, sizeof(*m));
+    pthread_mutex_lock(&c->lock);
+    c->connected = false; c->count = 0; c->reset = false;
+    pthread_mutex_unlock(&c->lock);
+    if (fd >= 0) { shutdown(fd, SHUT_RDWR); close(fd); }
 }
-
-/* Busy-polls STATUS (no sleep) so the measured time is the IP latency. */
-static int pl_run(pl_engine_t *pl, uint32_t cmd, uint32_t *status_out, uint64_t *hw_ns)
+static void *worker(void *arg)
 {
-    uint64_t t0, t;
-    uint32_t status;
-    reg_write(pl->csr, POSE_CNN_CONTROL, POSE_CNN_CTRL_CLEAR);
-    reg_write(pl->csr, POSE_CNN_CMD, cmd);
-    t0 = now_ns();
-    reg_write(pl->csr, POSE_CNN_CONTROL, POSE_CNN_CTRL_START);
+    channel_t *c = arg;
+    int client = -1;
+    packet_t p;
     for (;;) {
-        status = reg_read(pl->csr, POSE_CNN_STATUS);
-        t = now_ns();
-        if ((status & POSE_CNN_ST_BUSY) == 0u &&
-            (status & (POSE_CNN_ST_DONE | POSE_CNN_ST_ERROR)) != 0u) break;
-        if (t - t0 > PL_TIMEOUT_NS) {
-            fprintf(stderr, "PL %s timeout status=0x%08" PRIx32 "\n",
-                    cmd == POSE_CNN_CMD_LOAD ? "LOAD" : "INFER", status);
-            return -1;
-        }
-    }
-    *status_out = status;
-    *hw_ns = t - t0;
-    if ((status & POSE_CNN_ST_ERROR) != 0u || (status & POSE_CNN_ST_CFG_OK) == 0u) {
-        fprintf(stderr, "PL %s failed status=0x%08" PRIx32 " err=%" PRIu32 "\n",
-                cmd == POSE_CNN_CMD_LOAD ? "LOAD" : "INFER", status, POSE_CNN_ST_ERR_CODE(status));
-        return -1;
-    }
-    return 0;
-}
-
-static void pl_close(pl_engine_t *pl)
-{
-    unmap_physical(&pl->output_map);
-    unmap_physical(&pl->input_map);
-    unmap_physical(&pl->weight_map);
-    unmap_physical(&pl->csr_map);
-    if (pl->mem_fd >= 0) close(pl->mem_fd);
-    pl->mem_fd = -1;
-}
-
-static int pl_open(pl_engine_t *pl, const uint8_t *blob, uint32_t sw_scale_bits)
-{
-    uint32_t status, scale_bits;
-    uint64_t load_ns;
-
-    memset(pl, 0, sizeof(*pl));
-    pl->mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
-    if (pl->mem_fd < 0) {
-        fprintf(stderr, "open /dev/mem: %s (root required)\n", strerror(errno));
-        return -1;
-    }
-    if (map_physical(pl->mem_fd, POSE_CNN_BASEADDR, CSR_MAP_BYTES, &pl->csr_map) ||
-        map_physical(pl->mem_fd, WEIGHT_PHYS, POSE_CNN_BLOB_BYTES, &pl->weight_map) ||
-        map_physical(pl->mem_fd, INPUT_PHYS, POSE_CNN_INPUT_BYTES, &pl->input_map) ||
-        map_physical(pl->mem_fd, OUTPUT_PHYS, POSE_CNN_OUTPUT_BYTES, &pl->output_map)) {
-        pl_close(pl);
-        return -1;
-    }
-    pl->csr = (volatile uint32_t *)pl->csr_map.ptr;
-    if ((reg_read(pl->csr, POSE_CNN_STATUS) & POSE_CNN_ST_BUSY) != 0u) {
-        fprintf(stderr, "PL busy before LOAD\n");
-        pl_close(pl);
-        return -1;
-    }
-    reg_write(pl->csr, POSE_CNN_WEIGHT_ADDR, WEIGHT_PHYS);
-    reg_write(pl->csr, POSE_CNN_INPUT_ADDR, INPUT_PHYS);
-    reg_write(pl->csr, POSE_CNN_OUTPUT_ADDR, OUTPUT_PHYS);
-    memcpy((void *)pl->weight_map.ptr, blob, POSE_CNN_BLOB_BYTES);
-    barrier();
-    if (pl_run(pl, POSE_CNN_CMD_LOAD, &status, &load_ns) != 0) {
-        pl_close(pl);
-        return -1;
-    }
-    scale_bits = reg_read(pl->csr, POSE_CNN_SCALE);
-    printf("PL  LOAD PASS status=0x%08" PRIx32 " load=%.3f ms scale_bits=0x%08" PRIx32 "%s\n",
-           status, load_ns / 1e6, scale_bits,
-           scale_bits == sw_scale_bits ? " (== SW)" : " (!= SW scale)");
-    return 0;
-}
-
-/* e2e = input copy + START..DONE + output copy, i.e. what the live app pays. */
-static int pl_infer(pl_engine_t *pl, const int8_t *input, int8_t *out,
-                    uint64_t *hw_ns, uint64_t *e2e_ns)
-{
-    uint32_t status;
-    uint64_t t0 = now_ns();
-    memcpy((void *)pl->input_map.ptr, input, POSE_CNN_INPUT_BYTES);
-    memset((void *)pl->output_map.ptr, 0, POSE_CNN_OUTPUT_BYTES);
-    barrier();
-    if (pl_run(pl, POSE_CNN_CMD_INFER, &status, hw_ns) != 0) return -1;
-    barrier();
-    memcpy(out, (const void *)pl->output_map.ptr, POSE_CNN_OUTPUT_BYTES);
-    *e2e_ns = now_ns() - t0;
-    return 0;
-}
+        bool running;
+        pthread_mutex_lock(&c->lock); running = c->running; pthread_mutex_unlock(&c->lock);
+        if (!running) break;
+        if (client < 0) {
+            struct pollfd in = {c->listener, POLLIN, 0};
+            if (poll(&in, 1, 20) <= 0) continue;
+            client = accept(c->listener, NULL, NULL);
+            if (client < 0) continue;
+            int one = 1, buffer_bytes = 32768;
+            setsockopt(client, IPPROTO_TCP, TCP_NODELAY, &one, sizeof(one));
+            setsockopt(client, SOL_SOCKET, SO_SNDBUF, &buffer_bytes, sizeof(buffer_bytes));
+#ifdef TCP_NOTSENT_LOWAT
+            setsockopt(client, IPPROTO_TCP, TCP_NOTSENT_LOWAT, &one, sizeof(one));
 #endif
-
-/* ---------------------------------------------------------------- main */
-
-/** Parse an unsigned decimal in [min, max]; rejects signs, spaces and trailing text. */
-static int parse_uint_arg(const char *text, unsigned min, unsigned max, unsigned *value)
-{
-    const char *p = text;
-    unsigned long parsed;
-    char *end;
-    if (*p == '\0') return -1;
-    for (; *p != '\0'; ++p) {
-        if (*p < '0' || *p > '9') return -1;
-    }
-    errno = 0;
-    parsed = strtoul(text, &end, 10);
-    if (errno != 0 || *end != '\0' || parsed < min || parsed > max) return -1;
-    *value = (unsigned)parsed;
-    return 0;
-}
-
-static void usage(const char *prog)
-{
-    fprintf(stderr,
-        "usage: %s BLOB INPUT_BIN [-n ITER] [-t THREADS] [-e EXPECTED_BIN] [--pl]\n"
-        "  BLOB          weights_5rx.bin (685136 bytes)\n"
-        "  INPUT_BIN     N x 19200-byte INT8 windows (live DUMP_BIN works)\n"
-        "  -n ITER       timed iterations per engine 1..%u (default %u)\n"
-        "  -t THREADS    SW threads 1..%u (default 1; Zynq-7020 has 2 cores)\n"
-        "  -e EXPECTED   24-byte expected pose for the first window\n"
-        "  --pl          also run the FPGA IP via /dev/mem (root, bitstream loaded,\n"
-        "                device tree must reserve 0x3F000000..0x3FFFFFFF as no-map)\n",
-        prog, MAX_ITERATIONS, DEFAULT_ITERATIONS, POSE_SW_MAX_THREADS);
-}
-
-int main(int argc, char **argv)
-{
-    const char *blob_path, *input_path, *expected_path = NULL;
-    unsigned iterations = DEFAULT_ITERATIONS, threads = 1u, windows, i;
-    int use_pl = 0, argi, exit_code = 1, all_match = 1;
-    uint8_t *blob = NULL, *inputs = NULL, *expected = NULL;
-    size_t blob_bytes = 0u, input_bytes = 0u, expected_bytes = 0u;
-    pose_cnn_sw_t *sw = NULL;
-    int8_t *sw_out = NULL;
-    samples_t sw_total = {0}, sw_enc = {0}, sw_fc = {0};
-    double sw_avg;
-    char err[160];
-#ifndef POSE_BENCH_NO_PL
-    pl_engine_t pl;
-    int lock_fd = -1, pl_open_ok = 0;
-    samples_t pl_hw = {0}, pl_e2e = {0};
-    unsigned pl_mismatch_windows = 0u;
-    pl.mem_fd = -1;
-#endif
-
-    if (argc < 3) {
-        usage(argv[0]);
-        return 2;
-    }
-    blob_path = argv[1];
-    input_path = argv[2];
-    for (argi = 3; argi < argc; ++argi) {
-        if (strcmp(argv[argi], "-n") == 0 && argi + 1 < argc) {
-            if (parse_uint_arg(argv[++argi], 1u, MAX_ITERATIONS, &iterations) != 0) {
-                fprintf(stderr, "invalid ITER: %s (1..%u)\n", argv[argi], MAX_ITERATIONS);
-                return 2;
+            pthread_mutex_lock(&c->lock);
+            c->head = c->count = 0; c->reset = false; ++c->reconnects;
+            p = c->status;
+            c->connected = true;
+            pthread_mutex_unlock(&c->lock);
+            /* Replay only a recent STATUS; otherwise wait for PS's periodic request. */
+            if (p.length && now_us() - p.timestamp_us <= STATUS_TTL_US && send_packet(c, client, &p)) {
+                disconnect(c, client); client = -1;
             }
-        } else if (strcmp(argv[argi], "-t") == 0 && argi + 1 < argc) {
-            if (parse_uint_arg(argv[++argi], 1u, POSE_SW_MAX_THREADS, &threads) != 0) {
-                fprintf(stderr, "invalid THREADS: %s (1..%u)\n", argv[argi], POSE_SW_MAX_THREADS);
-                return 2;
-            }
-        } else if (strcmp(argv[argi], "-e") == 0 && argi + 1 < argc) {
-            expected_path = argv[++argi];
-        } else if (strcmp(argv[argi], "--pl") == 0) {
-            use_pl = 1;
-        } else {
-            usage(argv[0]);
-            return 2;
+            continue;
         }
-    }
-#ifdef POSE_BENCH_NO_PL
-    if (use_pl) {
-        fprintf(stderr, "built with POSE_BENCH_NO_PL: --pl unavailable\n");
-        return 2;
-    }
-#endif
-
-    blob = read_file(blob_path, &blob_bytes);
-    inputs = read_file(input_path, &input_bytes);
-    if (blob == NULL || inputs == NULL) goto cleanup;
-    if (input_bytes == 0u || input_bytes % POSE_SW_INPUT_BYTES != 0u) {
-        fprintf(stderr, "INPUT_BIN size %zu is not a multiple of %u\n",
-                input_bytes, POSE_SW_INPUT_BYTES);
-        goto cleanup;
-    }
-    windows = (unsigned)(input_bytes / POSE_SW_INPUT_BYTES);
-    if (expected_path != NULL) {
-        expected = read_file(expected_path, &expected_bytes);
-        if (expected == NULL || expected_bytes != POSE_SW_OUTPUT_BYTES) {
-            fprintf(stderr, "EXPECTED must be %u bytes\n", POSE_SW_OUTPUT_BYTES);
-            goto cleanup;
-        }
-    }
-
-    sw = pose_cnn_sw_create(blob, blob_bytes, threads, err, sizeof(err));
-    if (sw == NULL) {
-        fprintf(stderr, "SW create failed: %s\n", err);
-        goto cleanup;
-    }
-    sw_out = (int8_t *)malloc((size_t)windows * POSE_SW_OUTPUT_BYTES);
-    sw_total.ms = (double *)malloc(iterations * sizeof(double));
-    sw_enc.ms = (double *)malloc(iterations * sizeof(double));
-    sw_fc.ms = (double *)malloc(iterations * sizeof(double));
-    if (sw_out == NULL || sw_total.ms == NULL || sw_enc.ms == NULL || sw_fc.ms == NULL) {
-        fprintf(stderr, "out of memory\n");
-        goto cleanup;
-    }
-
-    printf("RX5 pose CNN benchmark: windows=%u iterations=%u sw_threads=%u output_scale=%.9g\n",
-           windows, iterations, threads, (double)pose_cnn_sw_output_scale(sw));
-
-    /* reference outputs for every window (also serves as warm-up) */
-    for (i = 0u; i < windows; ++i) {
-        pose_cnn_sw_infer(sw, (const int8_t *)inputs + (size_t)i * POSE_SW_INPUT_BYTES,
-                          POSE_SW_INPUT_BYTES, sw_out + (size_t)i * POSE_SW_OUTPUT_BYTES,
-                          NULL, NULL);
-    }
-    for (i = windows; i < WARMUP_ITERATIONS; ++i) {
-        int8_t tmp[POSE_SW_OUTPUT_BYTES];
-        pose_cnn_sw_infer(sw, (const int8_t *)inputs, POSE_SW_INPUT_BYTES, tmp, NULL, NULL);
-    }
-    print_pose("SW  pose[0]:", sw_out);
-    if (expected != NULL) {
-        unsigned d = count_diff(sw_out, (const int8_t *)expected);
-        printf("SW  vs EXPECTED: %s (%u/24 bytes differ)\n", d == 0u ? "BIT-EXACT PASS" : "FAIL", d);
-        if (d != 0u) {
-            print_pose("EXP pose[0]:", (const int8_t *)expected);
-            all_match = 0;
-        }
-    }
-
-    for (i = 0u; i < iterations; ++i) {
-        pose_cnn_sw_timing_t t;
-        int8_t tmp[POSE_SW_OUTPUT_BYTES];
-        unsigned w = i % windows;
-        pose_cnn_sw_infer(sw, (const int8_t *)inputs + (size_t)w * POSE_SW_INPUT_BYTES,
-                          POSE_SW_INPUT_BYTES, tmp, &t, NULL);
-        sw_total.ms[i] = t.total_ns / 1e6;
-        sw_enc.ms[i] = t.encoder_ns / 1e6;
-        sw_fc.ms[i] = t.fc_ns / 1e6;
-    }
-    sw_total.count = sw_enc.count = sw_fc.count = iterations;
-
-#ifndef POSE_BENCH_NO_PL
-    if (use_pl) {
-        int8_t *pl_out = NULL;
-        lock_fd = pose_cnn_lock_acquire();
-        if (lock_fd < 0) goto cleanup;
-        if (pl_open(&pl, blob, pose_cnn_sw_scale_bits(sw)) != 0) goto cleanup;
-        pl_open_ok = 1;
-        pl_hw.ms = (double *)malloc(iterations * sizeof(double));
-        pl_e2e.ms = (double *)malloc(iterations * sizeof(double));
-        pl_out = (int8_t *)malloc((size_t)windows * POSE_SW_OUTPUT_BYTES);
-        if (pl_hw.ms == NULL || pl_e2e.ms == NULL || pl_out == NULL) {
-            free(pl_out);
-            fprintf(stderr, "out of memory\n");
-            goto cleanup;
-        }
-        for (i = 0u; i < windows; ++i) {
-            uint64_t hw, e2e;
-            int8_t *o = pl_out + (size_t)i * POSE_SW_OUTPUT_BYTES;
-            if (pl_infer(&pl, (const int8_t *)inputs + (size_t)i * POSE_SW_INPUT_BYTES,
-                         o, &hw, &e2e) != 0) {
-                free(pl_out);
-                goto cleanup;
-            }
-            if (count_diff(o, sw_out + (size_t)i * POSE_SW_OUTPUT_BYTES) != 0u) {
-                if (pl_mismatch_windows == 0u) {
-                    printf("first PL/SW mismatch at window %u\n", i);
-                    print_pose("  SW:", sw_out + (size_t)i * POSE_SW_OUTPUT_BYTES);
-                    print_pose("  PL:", o);
-                }
-                pl_mismatch_windows++;
+        struct pollfd in = {client, POLLIN, 0};
+        if (poll(&in, 1, 0) > 0) {
+            /* This version is PS -> PC only: EOF or unexpected PC data resets it. */
+            if (in.revents & (POLLIN | POLLERR | POLLHUP | POLLNVAL)) {
+                disconnect(c, client); client = -1; continue;
             }
         }
-        printf("PL  vs SW: %u/%u windows differ -> %s\n", pl_mismatch_windows, windows,
-               pl_mismatch_windows == 0u ? "BIT-EXACT PASS" : "FAIL");
-        if (pl_mismatch_windows != 0u) all_match = 0;
-        free(pl_out);
-
-        for (i = 0u; i < iterations; ++i) {
-            uint64_t hw, e2e;
-            int8_t tmp[POSE_SW_OUTPUT_BYTES];
-            unsigned w = i % windows;
-            if (pl_infer(&pl, (const int8_t *)inputs + (size_t)w * POSE_SW_INPUT_BYTES,
-                         tmp, &hw, &e2e) != 0) goto cleanup;
-            pl_hw.ms[i] = hw / 1e6;
-            pl_e2e.ms[i] = e2e / 1e6;
+        bool have = false, reset;
+        pthread_mutex_lock(&c->lock);
+        reset = c->reset;
+        if (!reset && c->count) {
+            p = c->queue[c->head]; c->head = (c->head + 1u) % QUEUE_DEPTH;
+            --c->count; have = true;
         }
-        pl_hw.count = pl_e2e.count = iterations;
+        pthread_mutex_unlock(&c->lock);
+        if (reset || (have && (now_us() - p.timestamp_us > MAX_AGE_US || send_packet(c, client, &p)))) {
+            disconnect(c, client); client = -1;
+        } else if (!have) {
+            struct timespec pause = {0, 1000000}; nanosleep(&pause, NULL);
+        }
     }
-#endif
-
-    printf("\nLatency per window (%u iterations)\n", iterations);
-    sw_avg = print_stats("PS  SW total", &sw_total);
-    print_stats("PS  SW encoder", &sw_enc);
-    print_stats("PS  SW fc", &sw_fc);
-#ifndef POSE_BENCH_NO_PL
-    if (use_pl) {
-        double hw_avg = print_stats("PL  HW (START->DONE)", &pl_hw);
-        double e2e_avg = print_stats("PL  e2e (copy+run)", &pl_e2e);
-        printf("\nSpeed-up PL vs PS: %.1fx (e2e), %.1fx (HW only)\n",
-               e2e_avg > 0.0 ? sw_avg / e2e_avg : 0.0, hw_avg > 0.0 ? sw_avg / hw_avg : 0.0);
-        printf("Max window rate : PS %.1f win/s, PL %.1f win/s\n",
-               sw_avg > 0.0 ? 1000.0 / sw_avg : 0.0, e2e_avg > 0.0 ? 1000.0 / e2e_avg : 0.0);
-    } else
-#endif
-    {
-        printf("Max window rate : PS %.1f win/s\n", sw_avg > 0.0 ? 1000.0 / sw_avg : 0.0);
+    disconnect(c, client);
+    return NULL;
+}
+static int start_channel(channel_t *c, const char *ip, uint16_t port)
+{
+    struct sockaddr_in addr = {.sin_family = AF_INET, .sin_port = htons(port)};
+    int one = 1;
+    c->listener = -1;
+    if (inet_pton(AF_INET, ip, &addr.sin_addr) != 1) return -1;
+    if (pthread_mutex_init(&c->lock, NULL)) return -1;
+    c->listener = socket(AF_INET, SOCK_STREAM, 0);
+    if (c->listener < 0) goto fail;
+    setsockopt(c->listener, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
+    if (bind(c->listener, (struct sockaddr *)&addr, sizeof(addr)) || listen(c->listener, 1)) goto fail;
+    if (fcntl(c->listener, F_SETFL, O_NONBLOCK) < 0) goto fail;
+    c->running = true;
+    if (pthread_create(&c->thread, NULL, worker, c)) goto fail;
+    return 0;
+fail:
+    if (c->listener >= 0) close(c->listener);
+    pthread_mutex_destroy(&c->lock); return -1;
+}
+static void stop_channel(channel_t *c)
+{
+    pthread_mutex_lock(&c->lock); c->running = false; pthread_mutex_unlock(&c->lock);
+    pthread_join(c->thread, NULL); close(c->listener);
+    fprintf(stderr, "WISE TCP sent=%llu resets/accepts=%llu dropped=%llu\n",
+            (unsigned long long)c->sent, (unsigned long long)c->reconnects,
+            (unsigned long long)c->dropped);
+    pthread_mutex_destroy(&c->lock);
+}
+wise_server_t *wise_server_start(const char *ip, uint16_t csi_port, uint16_t pose_port)
+{
+    if (!ip || !csi_port || !pose_port || csi_port == pose_port) return NULL;
+    wise_server_t *s = calloc(1, sizeof(*s));
+    if (!s) return NULL;
+    if (start_channel(&s->csi, ip, csi_port)) { free(s); return NULL; }
+    if (start_channel(&s->pose, ip, pose_port)) { stop_channel(&s->csi); free(s); return NULL; }
+    return s;
+}
+void wise_server_stop(wise_server_t *s)
+{ if (s) { stop_channel(&s->csi); stop_channel(&s->pose); free(s); } }
+int wise_server_usb(wise_server_t *s, uint8_t type, uint32_t uart_seq,
+                    const uint8_t *payload, size_t length)
+{
+    if (!s) return 0;
+    if (!payload || length > MAX_PAYLOAD) return -1;
+    if (type == 1u) {
+        if (length < 44u || payload[7] > 8u || length != 44u + 22u * payload[7]) return -1;
+        return publish(&s->csi, 3, payload, length);
     }
-    exit_code = all_match ? 0 : 1;
-
-cleanup:
-#ifndef POSE_BENCH_NO_PL
-    if (pl_open_ok) pl_close(&pl);
-    if (lock_fd >= 0) close(lock_fd);
-    free(pl_hw.ms);
-    free(pl_e2e.ms);
-#endif
-    free(sw_total.ms);
-    free(sw_enc.ms);
-    free(sw_fc.ms);
-    free(sw_out);
-    pose_cnn_sw_destroy(sw);
-    free(expected);
-    free(inputs);
-    free(blob);
-    return exit_code;
+    if (type == 3u) {
+        if (length != 76u) return -1;
+        return publish(&s->csi, 4, payload, length);
+    }
+    if (type != 2u || length < 32u || payload[28] > 8u || payload[30] > 1u) return -1;
+    uint8_t out[MAX_PAYLOAD] = {0}, seen = 0, mask = 0, received = 0;
+    size_t cursor = 32, dest = 16;
+    for (unsigned i = 0; i < payload[28]; ++i) {
+        if (cursor + 6u > length) return -1;
+        uint8_t id = payload[cursor], valid = payload[cursor + 1];
+        uint16_t n = rd16(payload + cursor + 4);
+        if (id >= 8 || (seen & (1u << id)) || valid > 1u || n > 1024 || (n & 1u) ||
+            (bool)valid != (bool)n || cursor + 6u + n > length || dest + 8u + n > MAX_PAYLOAD) return -1;
+        seen |= 1u << id; mask |= valid << id; received += valid;
+        out[dest] = id; out[dest + 1] = valid; out[dest + 2] = payload[cursor + 2];
+        wr16(out + dest + 4, n);
+        memcpy(out + dest + 8, payload + cursor + 6, n);
+        cursor += 6u + n; dest += 8u + n;
+    }
+    if (cursor != length || received != payload[29]) return -1;
+    memcpy(out, payload + 4, 4); wr32(out + 4, uart_seq);
+    out[8] = payload[28]; out[9] = received; out[10] = payload[28];
+    out[11] = mask; out[12] = payload[30];
+    return publish(&s->csi, 1, out, dest);
+}
+int wise_server_pose(wise_server_t *s, uint32_t window, uint32_t end_seq,
+                     uint32_t infer_us, float scale, const int8_t pose[24])
+{
+    uint8_t out[40]; uint32_t bits;
+    if (!s) return 0;
+    if (!pose || !isfinite(scale) || scale <= 0) return -1;
+    _Static_assert(sizeof(float) == 4, "IEEE binary32 required");
+    memcpy(&bits, &scale, 4);
+    wr32(out, window); wr32(out + 4, end_seq); wr32(out + 8, infer_us); wr32(out + 12, bits);
+    memcpy(out + 16, pose, 24);
+    return publish(&s->pose, 2, out, sizeof(out));
 }
