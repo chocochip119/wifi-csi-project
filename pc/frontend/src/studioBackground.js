@@ -74,7 +74,7 @@ export function createStudioBackground(scene) {
   }
   block(9, 0.095, 0.15, 0, 0.16, -3.89, trimMat)
   block(9, 0.06, 0.11, 0, 4.13, -3.92, trimMat)
-  block(8, 0.065, 0.1, -4.41, 0.16, 0, trimMat)
+  block(0.1, 0.065, 8, -4.41, 0.16, 0, trimMat)
 
   // Indirect accent lines stay behind the occupied 3x3 detection area.
   for (const x of [-4.02, 4.02]) {
