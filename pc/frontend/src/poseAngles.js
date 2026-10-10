@@ -37,6 +37,28 @@ export function kneePoseMetrics(point,torso,side) {
   return {lateral,vertical,flex}
 }
 
+// 좌표계가 y-아래 방향이라고 가정하는 보수적 '팔 들기/벌리기' 감지.
+// 무조건 서기 자세까지 강제로 뼈에 적용하지 않도록 방어한다.
+export function hasMeaningfulArmPose(pose) {
+  if (!pose?.valid || !Array.isArray(pose.joints)) return false
+  const points = new Map(pose.joints.map((joint) => [Number(joint.id), joint]))
+  for (const [shoulderId, wristId, hipId] of [[11, 15, 23], [12, 16, 24]]) {
+    const shoulder = points.get(shoulderId)
+    const wrist = points.get(wristId)
+    const hip = points.get(hipId)
+    if (!shoulder || !wrist || !hip) continue
+    const vals = [shoulder.x, shoulder.y, wrist.x, wrist.y, hip.y].map(Number)
+    if (!vals.every(Number.isFinite)) continue
+    const torso = Math.abs(Number(hip.y) - Number(shoulder.y))
+    if (torso < 1e-5) continue
+    const dx = Math.abs(Number(wrist.x) - Number(shoulder.x)) / torso
+    const dy = (Number(wrist.y) - Number(shoulder.y)) / torso
+    // 손목이 어깨보다 높거나, 손목이 어깨 높이 근처에서 바깥으로 뻗은 경우.
+    if (dy < 0.80 || (dx > 0.58 && dy < 0.95)) return true
+  }
+  return false
+}
+
 export function solvePoseAngles(pose, mirrored = false) {
   if (!pose?.valid || !Array.isArray(pose.joints)) return null
   const point = new Map()
