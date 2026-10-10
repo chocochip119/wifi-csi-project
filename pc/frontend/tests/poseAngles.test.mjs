@@ -19,7 +19,7 @@ test('feet never spread beyond the pelvis and cannot overlap',()=>{
   const wide=solvePoseAngles(setFootSpan(2))
   assert.equal(narrow.footSpacingRatio,FOOT_STANCE_MIN)
   assert.equal(wide.footSpacingRatio,FOOT_STANCE_MAX)
-  assert.equal(FOOT_STANCE_MAX,1)
+  assert.equal(FOOT_STANCE_MAX,1.5)
 })
 
 test('ankles within the range retain the expected ratio after mirroring',()=>{
@@ -37,4 +37,23 @@ test('near-zero horizontal pelvis width does not produce an unstable stance',()=
   const l=pose.joints.find(j=>j.id===23),r=pose.joints.find(j=>j.id===24)
   r.x=l.x
   assert.equal(solvePoseAngles(pose)?.footSpacingRatio,null)
+})
+
+test('knee direction is derived from knee coordinate, not just ankle height',()=>{
+  const a=createEditorPreset('legLift')
+  const b=createEditorPreset('legLift')
+  b.joints.find(j=>j.id===25).x-=0.15
+  const first=solvePoseAngles(a)
+  const second=solvePoseAngles(b)
+  assert.ok(first?.kneeL && second?.kneeL)
+  assert.ok(Math.abs(first.kneeL.lateral-second.kneeL.lateral)>0.05)
+  assert.ok(Math.abs(first.kneeL.flex-second.kneeL.flex)>0.05)
+})
+
+test('mirroring flips the knee sideways direction but preserves its flex',()=>{
+  const pose=createEditorPreset('legLift')
+  const front=solvePoseAngles(pose)
+  const mirrored=solvePoseAngles(pose,true)
+  assert.ok(Math.abs(front.kneeL.lateral+mirrored.kneeL.lateral)<1e-8)
+  assert.ok(Math.abs(front.kneeL.flex-mirrored.kneeL.flex)<1e-8)
 })
