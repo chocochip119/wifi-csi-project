@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { LIMB_SEGMENTS, solvePoseAngles } from './poseAngles.js'
+import { FOOT_STANCE_MIN, FOOT_STANCE_MAX, LIMB_SEGMENTS, solvePoseAngles } from './poseAngles.js'
 import {DEFAULT_ANATOMY_CONFIG, normalizeAnatomyConfig, calculateSeatDrop, 
   twoBoneTriangle, resolveTorsoHandClearance} from './anatomySolver.js'
 
@@ -78,6 +78,7 @@ export class PoseRigController {
     // Fixed starting shoe location for a single R hold (character local space).
     // Never recompute R target relative to the shoe modified by last frame's IK.
     this.liftAnchorLocal=null
+    this.footStanceRatio=null
     if (!this.ready) console.warn('[PoseRig anatomical] Missing required model bones — using Idle/Walk only')
     else console.log('[PoseRig anatomical] 12 joints / 8 segments ready (planted seat IK + chest clearance)')
   }
@@ -119,11 +120,57 @@ export class PoseRigController {
     this.calibrated=true
     return true
   }
+  // Restrict shoe-center distance to the model's actual 3D pelvis width.
+  // AnimationMixer restores the original independent Foot bones every frame.
+  applyFootStance(state,dt,xWorld) {
+    if(!Number.isFinite(state?.footSpacingRatio)) return false
+    this.character.updateMatrixWorld(true)
+    const left=this.legs.find(leg=>leg.side==='L')
+    const right=this.legs.find(leg=>leg.side==='R')
+    const hipL=left.upper.getWorldPosition(vec())
+    const hipR=right.upper.getWorldPosition(vec())
+    const pelvisWidth=Math.abs(hipR.clone().sub(hipL).dot(xWorld))
+    if(pelvisWidth<1e-5) return false
+    const footL=left.foot.getWorldPosition(vec())
+    const footR=right.foot.getWorldPosition(vec())
+    const neutralWidth=Math.abs(footR.clone().sub(footL).dot(xWorld))
+    if(this.footStanceRatio===null)
+      this.footStanceRatio=clamp(neutralWidth/pelvisWidth,FOOT_STANCE_MIN,FOOT_STANCE_MAX)
+    const targetRatio=clamp(state.footSpacingRatio,FOOT_STANCE_MIN,FOOT_STANCE_MAX)
+    const alpha=clamp(1-Math.exp(-Math.max(0,dt)*9),0,0.45)
+    if(Math.abs(targetRatio-this.footStanceRatio)>0.015)
+      this.footStanceRatio+=(targetRatio-this.footStanceRatio)*alpha
+    this.footStanceRatio=clamp(this.footStanceRatio,FOOT_STANCE_MIN,FOOT_STANCE_MAX)
+
+    const center=hipL.clone().add(hipR).multiplyScalar(0.5).dot(xWorld)
+    const leftSign=Math.sign(hipL.clone().sub(hipR).dot(xWorld)) || -1
+    const width=pelvisWidth*this.footStanceRatio
+    const proposals=[
+      {leg:left,hip:hipL,original:footL,target:center+leftSign*width*0.5},
+      {leg:right,hip:hipR,original:footR,target:center-leftSign*width*0.5}
+    ]
+    // Reject unreachable targets for BOTH legs before writing either shoe.
+    for(const item of proposals) {
+      item.goal=item.original.clone().addScaledVector(xWorld,item.target-item.original.dot(xWorld))
+      const upper=this.segments.find(seg=>seg.key===`thigh${item.leg.side}`)?.length
+      const lower=item.leg.length
+      const dist=item.hip.distanceTo(item.goal)
+      if(!Number.isFinite(dist)||!upper||!lower ||
+         dist > (upper+lower)*1.03 || dist < Math.abs(upper-lower)*0.97) return false
+    }
+    for(const {leg,goal} of proposals) {
+      leg.foot.parent.updateWorldMatrix(true,false)
+      leg.foot.position.copy(leg.foot.parent.worldToLocal(goal.clone()))
+    }
+    this.character.updateMatrixWorld(true)
+    return true
+  }
   setPose(pose,mirrored=false,options={}) {
     const solution=solvePoseAngles(pose,mirrored)
     if (!this.ready || !solution) { this.clear();return }
     const arms=options.arms===true
-    const legs=options.legs===true && solution.activity>0.14
+    const legs=options.legs===true &&
+      (solution.activity>0.14 || Number.isFinite(solution.footSpacingRatio))
     if (!arms && !legs) { this.clear();return }
     this.solution=solution
     this.armEnabled=arms
@@ -141,6 +188,7 @@ export class PoseRigController {
     this.lastSeatedDrop=0
     this.lastSeatedFlex=0
     this.lastArmCorrected=0
+    this.footStanceRatio=null
     for(const entry of Object.values(this.armIK)){entry.upper=null;entry.lower=null}
     if (this.hips&&this.baseHipsRotation) this.hips.quaternion.copy(this.baseHipsRotation)
     for(const s of this.segments) s.filtered=null
@@ -207,6 +255,8 @@ export class PoseRigController {
       bodyPosition:this.body.position.clone(), hipsRotation:this.hips.quaternion.clone(),
       legs:this.legs.map(l=>({upper:l.upper.quaternion.clone(),lower:l.lower.quaternion.clone(),foot:l.foot.position.clone()}))
     } : null
+    const stanceApplied=Boolean(liveState && this.legEnabled && !liftedLeg &&
+      this.applyFootStance(liveState,dt,xWorld))
     // Compute the seat height using EACH leg's calibrated lengths and its
     // neutral hip-to-foot spacing. The shallower reachable leg is the limit.
     this.lastSeatedDrop=0
@@ -241,7 +291,7 @@ export class PoseRigController {
     // Calibrated bone axes plus the SAME 2D segment headings used by the SVG.
     // Apply upper before lower: the child rotates with its parent.
     for(const s of this.segments) {
-      if((s.type==='arm'&&!this.armEnabled) || (s.type==='leg'&&(!this.legEnabled||plantedSquat||liftedLeg))) continue
+      if((s.type==='arm'&&!this.armEnabled) || (s.type==='leg'&&(!this.legEnabled||plantedSquat||liftedLeg||stanceApplied))) continue
       const heading=state.directions.get(s.key)?.angle
       if(!Number.isFinite(heading)) continue
       // Preserve frontal direction; add limited inferred knee forward bend only
@@ -325,9 +375,10 @@ export class PoseRigController {
       }
     }
 
-    // Squat: both shoes stay planted; the very same knee/hip input controls
-    // lateral knee bias. The missing depth comes from a constrained forward bend.
-    if(plantedSquat) {
+    // Grounded standing and squat use the same two-bone IK, so shoes never
+    // slide away from their shins as the stance width changes.
+    if(plantedSquat || stanceApplied) {
+      const targets=[]
       for(const leg of this.legs) {
         const upperSeg=this.segments.find(s=>s.key===`thigh${leg.side}`)
         const hip=leg.upper.getWorldPosition(vec())
@@ -338,15 +389,32 @@ export class PoseRigController {
         const bend=zWorld.clone().multiplyScalar(this.config.kneeForward)
           .addScaledVector(yWorld,-(1-this.config.kneeForward)*0.75)
           .addScaledVector(xWorld,lateral*0.55).normalize()
-        const desiredKnee=plantedKnee(hip,ankle,upperSeg.length,leg.length,bend)
-        if(!desiredKnee) continue
-        aim(leg.upper,upperSeg.axis,desiredKnee.sub(hip))
+        const knee=plantedKnee(hip,ankle,upperSeg.length,leg.length,bend)
+        if(!knee) break
+        targets.push({leg,upperSeg,hip,ankle,knee})
+      }
+      if(targets.length!==2) {
+        if(restFrame) {
+          this.body.position.copy(restFrame.bodyPosition)
+          this.hips.quaternion.copy(restFrame.hipsRotation)
+          this.legs.forEach((leg,i)=>{
+            leg.upper.quaternion.copy(restFrame.legs[i].upper)
+            leg.lower.quaternion.copy(restFrame.legs[i].lower)
+            leg.foot.position.copy(restFrame.legs[i].foot)
+          })
+          this.lastBodyBase=null
+          this.character.updateMatrixWorld(true)
+        }
+        return
+      }
+      for(const {leg,upperSeg,hip,ankle,knee} of targets) {
+        aim(leg.upper,upperSeg.axis,knee.sub(hip))
         this.character.updateMatrixWorld(true)
         const currentKnee=leg.lower.getWorldPosition(vec())
         aim(leg.lower,leg.shinAxis,ankle.sub(currentKnee))
         this.character.updateMatrixWorld(true)
       }
-      return // The foot positions remain exactly as provided by Idle_Neutral.
+      return
     }
 
     // R hold: one stable shoe anchor + one shared 2-bone IK target.
