@@ -13,7 +13,7 @@ export const LIMB_SEGMENTS = Object.freeze([
 ])
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 const signedDelta = (a,b) => Math.atan2(Math.sin(a-b),Math.cos(a-b))
-// Limit the distance between the shoes to the avatar's pelvis width.
+// Allow 55% to 150% of the avatar pelvis width between shoe centers.
 export const FOOT_STANCE_MIN = 0.55
 export const FOOT_STANCE_MAX = 1.5
 
