@@ -49,3 +49,8 @@ test('2D joint sources can be independently LIVE, TEST, or OFF', () => {
   assert.strictEqual(selectViewerPose('off',live,'stand',gen),null)
   assert.strictEqual(selectViewerPose('live',{valid:false},'stand',gen),null)
 })
+
+test('live arm and leg tracking are enabled by default for live pose validation', () => {
+  assert.equal(DEFAULT_VIEWER_SETTINGS.liveArms, true)
+  assert.equal(DEFAULT_VIEWER_SETTINGS.liveLegs, true)
+})

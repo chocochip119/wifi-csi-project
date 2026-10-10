@@ -428,8 +428,8 @@ function updateLiveBadge(snapshot) {
   setLiveBadge(system.ps_connected && system.pose_connected ? 'LIVE' : 'WAITING')
 }
 
-// 팔은 기본 ON, 다리는 안전을 위해 실제 Backend에서 L 키를 눌러야 ON.
-// 로컬 샘플 재생은 관절 각도 확인을 위해 다리도 자동 적용한다.
+// 실제 FPGA 12관절 입력에 대해 팔과 다리 추종 모두 기본 ON.
+// 사용자 설정으로 다리 추종을 끌 수 있고, 로컬 샘플 재생도 동일 리그를 사용한다.
 let currentZone = 5
 let targetZone = 5
 let isMoving = false

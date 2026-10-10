@@ -7,7 +7,7 @@ export const DEFAULT_VIEWER_SETTINGS = Object.freeze({
   motionMode: 'live',
   motionSample: 'stand',
   liveArms: true,
-  liveLegs: false
+  liveLegs: true
 })
 
 export function resolveViewerLocation(snapshot, settings) {
