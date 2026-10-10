@@ -32,7 +32,7 @@ fake 모드는 모델/PS/FPGA 검증이 아닙니다.
 - `app/`: 설정, 상태 통합, FastAPI 서버, 실행 CLI
 - `protocol/wise_protocol.py`: v1.1 규격(wire version **2**)의 순수 바이트 인코더/디코더
 - `localization/`: TCP 입력, 위치 실시간 엔진, 955개 특징의 Portable Ridge
-- `localization/models/`: Portable Ridge NPZ와 SHA-256/특징 계약 JSON. 두 파일을 함께 유지합니다. 현재 모델은 `run_20261008_091144_37cf3fcf`(10/08 학습)이며 `ml/localization/export_portable_model.py`로 생성합니다.
+- `localization/models/`: 위치추론용 Portable Ridge `ridge_portable.npz`와 SHA-256/특징 계약 `ridge_portable.json`. 두 파일은 항상 함께 유지합니다. 현재 모델은 업로드한 `run_20261010_162043_79e78e64`(10/10 학습)의 **Ridge만** 변환한 것입니다. ZIP에는 원본 validation CSI CSV가 없어 기존 `ml/localization/export_portable_model.py`의 전체 검증 절차는 실행할 수 없었습니다. 대신 원본 Ridge 분류기와 NumPy 행렬 출력을 합성 40개 입력에 대해 비교했습니다. 검증용 fixture도 같은 합성 입력으로 교체했으므로 모델의 실제 정확도를 검증했다는 의미는 아닙니다.
 - `tests/`: 프로토콜, 모델 수치 회귀, HTTP/WebSocket, 실제 C↔Python TCP 테스트
 - `tools/udp_receiver.py`: 기존 WCSI v1 UDP 경로 확인용. 현재 Backend 입력과 다른 규격입니다.
 - `tools/replay_ps_server.py`: 가짜 PS. 녹화 위치 CSV를 wire v2로 TCP 5000에 재생해 보드 없이 Backend/GUI를 시험합니다(STATUS는 합성값, Pose 없음, 모델 정확도 시험 아님). 예: `python pc/backend/tools/replay_ps_server.py a.csv b.csv --port 5000`
@@ -67,4 +67,4 @@ python -m pip install -r pc/backend/requirements-dev.txt
 python -m pytest pc/backend/tests ml/pose/tests -q
 ```
 
-C 통합 테스트는 Linux/POSIX와 GCC가 필요합니다. `/dev/mem`이나 보드 없이 checksum-valid USB 프레임을 PS 파서에 넣고 TCP/실제 Backend까지 검증합니다. 40개 전달된 회귀 윈도우의 특징/점수/라벨 일치는 확인하며, 새 현장 데이터의 정확도 평가는 별도입니다. 보드/ARM/PetaLinux 전체 빌드와 실제 모델 정확도 검증은 [점검 기록](../../docs/reviews/2026-10-07-pc-integration.md)을 참고하세요.
+C 통합 테스트는 Linux/POSIX와 GCC가 필요합니다. `/dev/mem`이나 보드 없이 checksum-valid USB 프레임을 PS 파서에 넣고 TCP/실제 Backend까지 검증합니다. 현재 모델의 회귀 fixture 40개는 **합성 CSI 입력**으로, 특징/점수/라벨 계산 일치만 확인합니다. 현장 데이터 정확도나 원본 validation 점수는 재검증하지 못했습니다. 보드/ARM/PetaLinux 전체 빌드와 실제 모델 정확도 검증은 [점검 기록](../../docs/reviews/2026-10-07-pc-integration.md)을 참고하세요.
