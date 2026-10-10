@@ -42,19 +42,24 @@ export function kneePoseMetrics(point,torso,side) {
 export function hasMeaningfulArmPose(pose) {
   if (!pose?.valid || !Array.isArray(pose.joints)) return false
   const points = new Map(pose.joints.map((joint) => [Number(joint.id), joint]))
-  for (const [shoulderId, wristId, hipId] of [[11, 15, 23], [12, 16, 24]]) {
+  for (const [shoulderId, elbowId, wristId, hipId] of [[11, 13, 15, 23], [12, 14, 16, 24]]) {
     const shoulder = points.get(shoulderId)
+    const elbow = points.get(elbowId)
     const wrist = points.get(wristId)
     const hip = points.get(hipId)
-    if (!shoulder || !wrist || !hip) continue
-    const vals = [shoulder.x, shoulder.y, wrist.x, wrist.y, hip.y].map(Number)
+    if (!shoulder || !elbow || !wrist || !hip) continue
+    const vals = [shoulder.x, shoulder.y, elbow.x, elbow.y, wrist.x, wrist.y, hip.y].map(Number)
     if (!vals.every(Number.isFinite)) continue
     const torso = Math.abs(Number(hip.y) - Number(shoulder.y))
     if (torso < 1e-5) continue
     const dx = Math.abs(Number(wrist.x) - Number(shoulder.x)) / torso
     const dy = (Number(wrist.y) - Number(shoulder.y)) / torso
-    // 손목이 어깨보다 높거나, 손목이 어깨 높이 근처에서 바깥으로 뻗은 경우.
-    if (dy < 0.80 || (dx > 0.58 && dy < 0.95)) return true
+    const elbowDx = Math.abs(Number(elbow.x) - Number(shoulder.x)) / torso
+    const elbowDy = (Number(elbow.y) - Number(shoulder.y)) / torso
+    // Wrist motion or a distinctly raised/spread elbow can activate arm IK.
+    // Keep the naturally hanging elbow in Idle even if the wrist is near the hip.
+    if (dy < 0.80 || (dx > 0.58 && dy < 0.95) ||
+        elbowDy < 0.18 || (elbowDx > 0.62 && elbowDy < 0.90)) return true
   }
   return false
 }
