@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { connectBackend } from './websocket.js'
 import { PoseRigController } from './poseRig.js'
 import {normalizeAnatomyConfig,DEFAULT_ANATOMY_CONFIG} from './anatomySolver.js'
-import { solvePoseAngles } from './poseAngles.js'
+import { solvePoseAngles, hasMeaningfulArmPose } from './poseAngles.js'
 import { createTestPose } from './poseTests.js'
 import { DEFAULT_VIEWER_SETTINGS, resolveViewerLocation, selectViewerPose } from './viewerSettings.js'
 import { MIRROR_MODES, resolvePoseMirror, toDisplayX } from './poseOrientation.js'
@@ -471,28 +471,6 @@ function refreshIdleAnimation() {
 function disableRig() {
   if (poseRig?.active) poseRig.clear()
   refreshIdleAnimation()
-}
-
-// 좌표계가 y-아래 방향이라고 가정하는 보수적 '팔 들기/벌리기' 감지.
-// 무조건 서기 자세까지 강제로 뼈에 적용하지 않도록 방어한다.
-function hasMeaningfulArmPose(pose) {
-  if (!pose?.valid || !Array.isArray(pose.joints)) return false
-  const points = new Map(pose.joints.map((joint) => [Number(joint.id), joint]))
-  for (const [shoulderId, wristId, hipId] of [[11, 15, 23], [12, 16, 24]]) {
-    const shoulder = points.get(shoulderId)
-    const wrist = points.get(wristId)
-    const hip = points.get(hipId)
-    if (!shoulder || !wrist || !hip) continue
-    const vals = [shoulder.x, shoulder.y, wrist.x, wrist.y, hip.y].map(Number)
-    if (!vals.every(Number.isFinite)) continue
-    const torso = Math.abs(Number(hip.y) - Number(shoulder.y))
-    if (torso < 1e-5) continue
-    const dx = Math.abs(Number(wrist.x) - Number(shoulder.x)) / torso
-    const dy = (Number(wrist.y) - Number(shoulder.y)) / torso
-    // 손목이 어깨보다 높거나, 손목이 어깨 높이 근처에서 바깥으로 뻗은 경우.
-    if (dy < 0.80 || (dx > 0.58 && dy < 0.95)) return true
-  }
-  return false
 }
 
 function moveCharacterTo(zone, posture = 'standing') {
