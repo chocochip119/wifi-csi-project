@@ -25,7 +25,7 @@ app.innerHTML = `
 
       <div class="topbar-actions">
         <span class="viewer-badge" id="viewer-live-state">CONNECTING</span>
-        <button id="viewer-settings-open" class="settings-trigger" type="button">⚙ 설정 · 테스트</button>
+        <button id="viewer-settings-open" class="settings-trigger" type="button">⚙ 관리자 · 관절 테스트</button>
         <button id="viewer-stop-app" class="settings-trigger" type="button" hidden>⏻ 프로그램 종료</button>
       </div>
     </header>
@@ -398,6 +398,7 @@ let selectedPointId = 'p05'
 let sitFallbackBase = null
 let sitAnimationName = null
 let latestSnapshot = null
+let customPose = null // 관리자에서 편집 중인 12관절. 실제 Backend 데이터는 그대로 유지합니다.
 let activeReplaySnapshot = null
 let replayFrames = []
 let replayIndex = 0
@@ -418,7 +419,7 @@ function setLiveBadge(value) {
 }
 function updateLiveBadge(snapshot) {
   if (replayActive) { setLiveBadge('FILE REPLAY'); return }
-  if (viewerSettings.locationMode === 'manual' || viewerSettings.jointsMode !== 'live' || viewerSettings.motionMode !== 'live') {
+  if (viewerSettings.locationMode === 'manual' || viewerSettings.jointsMode !== 'live') {
     setLiveBadge(liveConnection ? 'LIVE + TEST' : 'TEST MODE')
     return
   }
@@ -610,21 +611,17 @@ function setAbsentState(message, posture) {
   updatePostureUI(posture)
 }
 
-// 관절 입력과 캐릭터 위치·모션은 화면에서만 독립적으로 선택합니다.
+// 하나의 Pose가 오른쪽 스켈레톤과 3D 관절 모두를 움직입니다.
 function updateMotionRig(pose, mirrored) {
-  if (!pose?.valid || viewerSettings.motionMode === 'off' || isMoving) {
+  if (!pose?.valid || isMoving) {
     if (poseRig?.active) poseRig.clear()
     refreshIdleAnimation()
     return
   }
-  const sample = viewerSettings.motionMode === 'sample'
   const angles = solvePoseAngles(pose, mirrored)
-  const arms = sample
-    ? ['armUp', 'armsWide'].includes(viewerSettings.motionSample)
-    : viewerSettings.liveArms && pose.coordinate_space === 'model_output' && hasMeaningfulArmPose(pose)
-  const legs = sample
-    ? ['squat', 'legLift'].includes(viewerSettings.motionSample)
-    : viewerSettings.liveLegs && pose.coordinate_space === 'model_output' && Boolean(angles && angles.activity > 0.14)
+  // LIVE/TEST 모두 동일 좌표로 관절을 계산합니다. 2D->3D 깊이는 리그가 추정합니다.
+  const arms = viewerSettings.liveArms && Boolean(angles)
+  const legs = viewerSettings.liveLegs && Boolean(angles && angles.activity > 0.14)
   if (arms || legs) poseRig?.setPose(pose, mirrored, {arms, legs})
   else if (poseRig?.active) poseRig.clear()
   refreshIdleAnimation()
@@ -641,13 +638,15 @@ function handleSnapshot(snapshot, source = 'backend') {
   const validPose = sanitizePose(snapshot.pose)
   const livePose = validPose ? poseFilter.push(validPose) : null
   if (!livePose) poseFilter.reset()
-  const displayPose = selectViewerPose(viewerSettings.jointsMode, livePose, viewerSettings.jointsSample, createTestPose)
-  const motionPose = selectViewerPose(viewerSettings.motionMode, livePose, viewerSettings.motionSample, createTestPose)
-  const displayMirror = resolvePoseMirror(displayPose, mirrorMode, lastMirror)
-  const motionMirror = resolvePoseMirror(motionPose, mirrorMode, lastMirror)
-  if (motionPose?.valid) lastMirror = motionMirror
-  else if (displayPose?.valid) lastMirror = displayMirror
-  renderPose(displayPose, displayMirror)
+  const sharedPose = viewerSettings.jointsMode === 'custom'
+    ? customPose
+    : selectViewerPose(viewerSettings.jointsMode, livePose, viewerSettings.jointsSample, createTestPose)
+  const displayPose = sharedPose
+  const motionPose = sharedPose
+  const poseMirror = resolvePoseMirror(sharedPose, mirrorMode, lastMirror)
+  if (sharedPose?.valid) lastMirror = poseMirror
+  renderPose(sharedPose, poseMirror)
+  const motionMirror = poseMirror
 
   const location = resolveViewerLocation(snapshot, viewerSettings)
   // 중앙 고정은 화면의 캐릭터 위치만 바꿉니다. 실제 위치 예측과 Pose는 항상 수신·표시합니다.
@@ -668,7 +667,13 @@ function handleSnapshot(snapshot, source = 'backend') {
     return
   }
   if (location.empty) {
-    setAbsentState('No person', 'empty')
+    if (viewerSettings.jointsMode !== 'live' && sharedPose?.valid) {
+      clearLocationUI('No person')
+      updatePostureUI('unknown')
+      if (character) character.visible = true
+      moveCharacterTo(5)
+      updateMotionRig(sharedPose, poseMirror)
+    } else setAbsentState('No person', 'empty')
     updateLiveBadge(snapshot)
     return
   }
@@ -681,9 +686,10 @@ function handleSnapshot(snapshot, source = 'backend') {
   } else {
     clearLocationUI('Unavailable')
     updatePostureUI('unknown')
-    if (character) character.visible = Boolean(displayPose || motionPose)
+    if (character) character.visible = Boolean(sharedPose)
+    if (sharedPose?.valid) moveCharacterTo(5)
   }
-  updateMotionRig(motionPose, motionMirror)
+  updateMotionRig(sharedPose, poseMirror)
   updateLiveBadge(snapshot)
 }
 
@@ -786,7 +792,7 @@ function updateViewerSettings(key, value) {
   const allowed = {
     locationMode: ['live','manual','center'],
     manualPoint: ['p01','p02','p03','p04','p05','p06','p07','p08','p09','p10'],
-    jointsMode: ['live','sample','off'], jointsSample: ['stand','armUp','armsWide','squat','legLift'],
+    jointsMode: ['live','sample','custom','off'], jointsSample: ['stand','armUp','armsWide','squat','legLift'],
     motionMode: ['live','sample','off'], motionSample: ['stand','armUp','armsWide','squat','legLift']
   }
   if (Object.hasOwn(allowed,key) && allowed[key].includes(value)) viewerSettings[key] = value
@@ -816,16 +822,23 @@ document.getElementById('mode-follow').addEventListener('click', () => updateVie
 document.getElementById('mode-center').addEventListener('click', () => updateViewerSettings('locationMode','center'))
 syncLocationViewSwitch()
 settingsOpen.addEventListener('click', () => {
-  settingsPopup = window.open('/settings.html', 'wisensing-settings', 'popup=yes,width=510,height=810,resizable=yes,scrollbars=yes')
+  settingsPopup = window.open('/integration.html', 'wisensing-admin', 'popup=yes,width=1300,height=950,resizable=yes,scrollbars=yes')
   if (settingsPopup) {
     settingsPopup.focus()
     broadcastSettings()
-  } else window.alert('설정 팝업이 차단되었습니다. 브라우저에서 이 사이트의 팝업을 허용해 주세요.')
+  } else window.location.href = '/integration.html'
 })
 settingsChannel.addEventListener('message', event => {
   const msg = event.data
   if (!msg || typeof msg !== 'object') return
   if (msg.type === 'hello') { broadcastSettings(); return }
+  if (msg.type === 'custom-pose') {
+    const nextPose = sanitizePose(msg.pose)
+    if (!nextPose) return
+    customPose = {...nextPose, coordinate_space:'fake_normalized', test_pose:'custom'}
+    if (viewerSettings.jointsMode === 'custom') refreshViewer()
+    return
+  }
   if (msg.type === 'update') { updateViewerSettings(msg.key, msg.value); return }
   if (msg.type === 'all-live') {
     viewerSettings.locationMode = 'live'
@@ -932,7 +945,7 @@ connectBackend((snapshot) => {
     updateLiveBadge(latestSnapshot)
   }
 })
-console.log('[WiSensing] 설정창에서 위치·관절·모션 독립 테스트, O=JSON 재생, B=복귀')
+console.log('[WiSensing] 관리자 통합 관절 테스트 / 동일 Pose가 2D와 3D를 동시 제어합니다; O=JSON 재생, B=복귀')
 
 // ========================================
 // 화면 크기 및 매 프레임 이동
@@ -973,10 +986,12 @@ function animate(now) {
     console.warn('[WiSensing] Backend snapshot timeout; live inputs discarded')
   }
 
-  // 샘플 3D 모션은 WebSocket이 없어도 유지하며, 실제 위치와 독립적입니다.
-  if (viewerSettings.motionMode === 'sample' && !replayActive) {
-    const motionPose = createTestPose(viewerSettings.motionSample)
-    updateMotionRig(motionPose, resolvePoseMirror(motionPose, mirrorMode, lastMirror))
+  // 관리자가 편집한 12관절은 WS 패킷이 없어도 리그에 계속 적용합니다.
+  if (!replayActive && viewerSettings.jointsMode === 'custom' && customPose?.valid) {
+    updateMotionRig(customPose, resolvePoseMirror(customPose, mirrorMode, lastMirror))
+  } else if (!replayActive && viewerSettings.jointsMode === 'sample') {
+    const pose = createTestPose(viewerSettings.jointsSample)
+    updateMotionRig(pose, resolvePoseMirror(pose, mirrorMode, lastMirror))
   }
 
   if (character && isMoving) {

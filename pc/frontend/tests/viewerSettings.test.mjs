@@ -54,3 +54,11 @@ test('live arm and leg tracking are enabled by default for live pose validation'
   assert.equal(DEFAULT_VIEWER_SETTINGS.liveArms, true)
   assert.equal(DEFAULT_VIEWER_SETTINGS.liveLegs, true)
 })
+
+test('a single selected 12-joint input can be shared by skeleton and rig', () => {
+  const live={valid:true,coordinate_space:'model_output',joints:[{id:11,x:0.4,y:0.2}]}
+  const samplePose={valid:true,coordinate_space:'fake_normalized',joints:[{id:11,x:0.3,y:0.15}]}
+  const select = () => selectViewerPose('live',live,'stand',()=>samplePose)
+  assert.strictEqual(select(),live)
+  assert.equal(DEFAULT_VIEWER_SETTINGS.jointsMode,'live')
+})
