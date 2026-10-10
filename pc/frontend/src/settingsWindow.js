@@ -28,7 +28,7 @@ function render(state) {
   document.querySelectorAll('[data-manual-point]').forEach(button => {
     button.classList.toggle('active', button.dataset.manualPoint === state.settings.manualPoint)
   })
-  const status = {live:'LIVE', manual:'TEST', sample:'TEST', off:'OFF'}
+  const status = {live:'LIVE', center:'LIVE · CENTER', manual:'TEST', sample:'TEST', off:'OFF'}
   $('viewer-settings-summary').textContent =
     `위치 ${status[state.settings.locationMode]} · 관절 ${status[state.settings.jointsMode]} · 모션 ${status[state.settings.motionMode]}` +
     (state.settings.locationMode === 'manual' ? ` · ${state.settings.manualPoint.toUpperCase()}` : '')

@@ -42,6 +42,10 @@ button { font: inherit; }
 }
 .scene-title span { color: #7b8d96; font-size: 10px; font-weight: 700; letter-spacing: 1.6px; }
 .scene-title strong { font-size: 17px; font-weight: 600; }
+.location-view-switch {position:absolute; z-index:21; top:82px; left:22px; display:flex; gap:5px; background:rgba(8,15,20,.84); border:1px solid #2d515b; border-radius:12px; padding:5px; backdrop-filter:blur(12px)}
+.location-view-switch button {cursor:pointer;border:1px solid transparent;border-radius:8px;padding:8px 11px;font-size:11px;color:#abc7cb;background:transparent}
+.location-view-switch button.selected {color:#d7fffa;border-color:#58d8ce;background:rgba(13,100,100,.42)}
+@media(max-width:650px){.location-view-switch{top:78px;left:12px;max-width:calc(100% - 24px)}.location-view-switch button{padding:7px;font-size:10px}}
 .character-selector {
   position: absolute; z-index: 20; left: 50%; bottom: 20px;
   transform: translateX(-50%); display: flex; gap: 8px; padding: 8px;

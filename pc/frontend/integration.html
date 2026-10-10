@@ -37,6 +37,13 @@
     <div class="card"><small>POSE 5001</small><strong id="pose-tcp">확인 중</strong></div>
     <div class="card"><small>INFERENCE</small><strong id="inference">확인 중</strong></div>
   </div>
+  <div class="summary" aria-label="실시간 위치 및 모션 추론 상태">
+    <div class="card"><small>실제 위치 결과</small><strong id="location-result">대기 중</strong></div>
+    <div class="card"><small>위치 추론 연산시간</small><strong id="location-infer">--</strong><p class="note" id="location-age">CSI 경과 --</p></div>
+    <div class="card"><small>모션 결과</small><strong id="pose-result">대기 중</strong></div>
+    <div class="card"><small>FPGA Pose 추론시간</small><strong id="pose-infer">--</strong><p class="note" id="pose-age">수신 경과 --</p></div>
+  </div>
+  <p class="note">위치 연산시간은 PC 모델 실행시간, Pose 추론시간은 FPGA에서 보고한 시간입니다. CSI 수집부터 화면까지의 전체 지연시간은 아닙니다.</p>
   <div class="main">
     <section class="card">
       <h2>RX0~RX4 배치·MAC 검증</h2>
@@ -117,17 +124,25 @@
       s.identity_confirmed?'RX 배치 확인됨. 위치가 나오지 않으면 CSI 윈도우와 학습 모델 조건을 확인하세요.' :
       'RX 상태가 준비되었습니다. 실제 배치·MAC을 확인한 뒤 아래 버튼을 누르세요.';
     $('confirm').disabled = fake || !rxReady || !$('confirmed-physical').checked;
+    const fmtMs = value => typeof value === 'number' && Number.isFinite(value) ? value.toFixed(1) + ' ms' : '측정 전';
+    const locResult = l.valid === true ? String(l.point_id ?? '--').toUpperCase() : 'Unavailable';
+    label('location-result',locResult,l.valid === true ? true : null);
+    $('location-infer').textContent = fmtMs(l.infer_ms);
+    $('location-age').textContent = 'CSI 윈도우 경과 ' + fmtMs(l.age_ms);
     const poseValid = p.valid === true && Array.isArray(p.joints) && p.joints.length === 12;
+    label('pose-result', poseValid ? '12관절 유효' : 'Unavailable', poseValid ? true : null);
+    $('pose-infer').textContent = fmtMs(p.infer_ms);
+    $('pose-age').textContent = '최신 Pose 수신 경과 ' + fmtMs(p.age_ms);
     if(poseValid && p.window_id!==null && p.window_id!==undefined && p.window_id!==lastPoseWindow) {
       uniquePoseWindows++;lastPoseWindow=p.window_id;
     }
     $('metrics').textContent=`Seq ${snapshot.seq ?? '--'} | Pose ${poseValid?'유효':'Unavailable'} | 관절 ${p.joints?.length ?? 0}/12 | 최근 ${p.age_ms ?? '--'}ms | 신규 Pose windows ${uniquePoseWindows} | 3D 입력 좌표계 ${p.coordinate_space ?? '--'} | 위치 ${l.valid?(l.point_id ?? '--'):'Unavailable'} | 자세 ${snapshot.person?.posture ?? '--'}`;
-    $('details').textContent=JSON.stringify({fake, status_ready:s.status_ready,identity_confirmed:s.identity_confirmed,reason:s.reason,last_error:s.last_error,location_reason:l.reason,pose_age_ms:p.age_ms,pose_infer_ms:p.infer_ms},null,2);
+    $('details').textContent=JSON.stringify({fake, status_ready:s.status_ready,identity_confirmed:s.identity_confirmed,reason:s.reason,last_error:s.last_error,location_reason:l.reason,pose_age_ms:p.age_ms,pose_infer_ms:p.infer_ms,location_age_ms:l.age_ms,location_infer_ms:l.infer_ms,pose_window_id:p.window_id,pose_coordinate_space:p.coordinate_space,raw_pose_joints:Array.isArray(p.joints)?p.joints:[]},null,2);
   }
   async function tick(){
     if(busy) return;busy=true;
     try{const values=await Promise.all([api('/health'),api('/api/snapshot')]);health=values[0];snapshot=values[1];refresh();}
-    catch(e){health=null;snapshot=null;lastRxSignature='';$('confirmed-physical').checked=false;label('api','연결 실패',false);label('csi','정보 없음',null);label('pose-tcp','정보 없음',null);label('inference','정보 없음',null);$('details').textContent=String(e);$('confirm').disabled=true;}
+    catch(e){health=null;snapshot=null;lastRxSignature='';$('confirmed-physical').checked=false;label('api','연결 실패',false);label('csi','정보 없음',null);label('pose-tcp','정보 없음',null);label('inference','정보 없음',null);$('details').textContent=String(e);for(const id of ['location-result','location-infer','pose-result','pose-infer','location-age','pose-age']) $(id).textContent='연결 대기';$('confirm').disabled=true;}
     finally{busy=false;}
   }
   $('confirmed-physical').addEventListener('change',refresh);
