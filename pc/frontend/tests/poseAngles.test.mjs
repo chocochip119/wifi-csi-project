@@ -14,7 +14,7 @@ function setFootSpan(ratio,preset='stand') {
   return pose
 }
 
-test('feet never spread beyond the pelvis and cannot overlap',()=>{
+test('foot spacing stays within 55 to 150 percent of pelvis width',()=>{
   const narrow=solvePoseAngles(setFootSpan(0.05))
   const wide=solvePoseAngles(setFootSpan(2))
   assert.equal(narrow.footSpacingRatio,FOOT_STANCE_MIN)
@@ -28,7 +28,7 @@ test('ankles within the range retain the expected ratio after mirroring',()=>{
   assert.ok(Math.abs(solvePoseAngles(pose,true).footSpacingRatio-0.8)<1e-8)
 })
 
-test('pelvis-width limit also applies to squat poses',()=>{
+test('150-percent pelvis stance limit also applies to squat poses',()=>{
   assert.equal(solvePoseAngles(setFootSpan(3,'squat')).footSpacingRatio,FOOT_STANCE_MAX)
 })
 
