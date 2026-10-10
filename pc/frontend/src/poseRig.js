@@ -78,8 +78,8 @@ export class PoseRigController {
     // Fixed starting shoe location for a single R hold (character local space).
     // Never recompute R target relative to the shoe modified by last frame's IK.
     this.liftAnchorLocal=null
-    if (!this.ready) console.warn('[PoseRig v13] Missing required model bones — using Idle/Walk only')
-    else console.log('[PoseRig v13] 12 joints / 8 segments ready (shared 2D angles, safety-limited legs)')
+    if (!this.ready) console.warn('[PoseRig anatomical] Missing required model bones — using Idle/Walk only')
+    else console.log('[PoseRig anatomical] 12 joints / 8 segments ready (planted seat IK + chest clearance)')
   }
   setConfig(next) {
     this.config=normalizeAnatomyConfig(next)
@@ -303,18 +303,21 @@ export class PoseRigController {
             .addScaledVector(zWorld,0.50).addScaledVector(yWorld,-0.10).normalize()
           const elbow=plantedKnee(shoulder,goal,upper.length,lower.length,pole)
           if(!elbow)continue
+          const priorUpper=upper.node.quaternion.clone()
           aim(upper.node,upper.axis,elbow.sub(shoulder))
           const targetUpper=upper.node.quaternion.clone()
           const armAlpha=clamp(1-Math.exp(-Math.max(0,dt)*15),0.04,0.65)
           const smoothed=this.armIK[side]
           if(smoothed.upper)upper.node.quaternion.copy(smoothed.upper).slerp(targetUpper,armAlpha)
-          else upper.node.quaternion.slerp(targetUpper,armAlpha)
+          else upper.node.quaternion.copy(priorUpper).slerp(targetUpper,armAlpha)
           smoothed.upper=upper.node.quaternion.clone()
           this.character.updateMatrixWorld(true)
           const elbowWorld=lower.node.getWorldPosition(vec())
+          const priorLower=lower.node.quaternion.clone()
           aim(lower.node,lower.axis,goal.sub(elbowWorld))
           const targetLower=lower.node.quaternion.clone()
           if(smoothed.lower)lower.node.quaternion.copy(smoothed.lower).slerp(targetLower,armAlpha)
+          else lower.node.quaternion.copy(priorLower).slerp(targetLower,armAlpha)
           smoothed.lower=lower.node.quaternion.clone()
           this.character.updateMatrixWorld(true)
           this.lastArmCorrected++
@@ -447,7 +450,7 @@ export class PoseRigController {
         for(const s of this.segments) if(s.type==='leg') s.filtered=null
         if(performance.now()-this.warnAt>2500) {
           this.warnAt=performance.now()
-          console.warn('[PoseRig v13] unsafe leg/foot frame rejected; neutral legs restored')
+          console.warn('[PoseRig anatomical] unsafe leg/foot frame rejected; neutral legs restored')
         }
       }
     }
