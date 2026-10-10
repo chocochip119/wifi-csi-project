@@ -127,7 +127,7 @@ export class PoseRigController {
     this.calibrated=true
     return true
   }
-  // Restrict shoe-center distance to the model's actual 3D pelvis width.
+  // Scale shoe-center distance from 55% to 150% of the measured 3D pelvis width.
   // AnimationMixer restores the original independent Foot bones every frame.
   applyFootStance(state,dt,xWorld) {
     if(!Number.isFinite(state?.footSpacingRatio)) return false
