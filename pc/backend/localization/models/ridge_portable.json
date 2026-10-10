@@ -1,9 +1,9 @@
 {
   "schema": "wise_portable_ridge_v1",
-  "npz_sha256": "9c4ab0f5bf3a54bd84f3518cd843dd5b5dfd3c1361507442cd58661b2671e902",
-  "source_run": "run_20261008_091144_37cf3fcf",
-  "source_model": "run_20261008_091144_37cf3fcf/fit/models/window__amp_rssi__ridge.joblib",
-  "source_model_sha256": "5add60d7fcdfcb20a533e5e2517772050b2d97853da62f2b839fdf7af89429f9",
+  "npz_sha256": "7709508fde7b0e81cefd77cb01550602c0db3e1b7ca2c685e37580d598081082",
+  "source_run": "run_20261010_162043_79e78e64",
+  "source_model": "run_20261010_162043_79e78e64/fit/models/window__amp_rssi__ridge.joblib",
+  "source_model_sha256": "9455145c22d956968a2503c4d63a0b04196587404719f498bce2f56518781443",
   "source_versions": {
     "python": "3.14.7",
     "numpy": "2.5.3",
@@ -144,5 +144,5 @@
   },
   "test_evaluated": false,
   "math": "z=(x-scaler_mean)/scaler_scale; score=z@coef.T+intercept; label=estimator_classes[argmax(score)]",
-  "note": "decision column j = estimator_classes[j] (empty first), not bundle_classes[j]"
+  "note": "User-uploaded 2026-10-10 Ridge, converted with a separate script under sklearn 1.8.0 (training sklearn 1.9.1). Ridge matrix parity and 40 synthetic input fixtures verified. Full exporter validation using original CSV records was not possible: ZIP does not contain raw validation CSVs."
 }
