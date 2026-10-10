@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import {createEditorPreset} from '../src/poseEditor.js'
-import {FOOT_STANCE_MIN,FOOT_STANCE_MAX,solvePoseAngles} from '../src/poseAngles.js'
+import {FOOT_STANCE_MIN,FOOT_STANCE_MAX,solvePoseAngles,hasMeaningfulArmPose} from '../src/poseAngles.js'
 
 function setFootSpan(ratio,preset='stand') {
   const pose=createEditorPreset(preset)
@@ -56,4 +56,11 @@ test('mirroring flips the knee sideways direction but preserves its flex',()=>{
   const mirrored=solvePoseAngles(pose,true)
   assert.ok(Math.abs(front.kneeL.lateral+mirrored.kneeL.lateral)<1e-8)
   assert.ok(Math.abs(front.kneeL.flex-mirrored.kneeL.flex)<1e-8)
+})
+
+test('natural idle arms stay neutral while deliberate arm movements enable IK',()=>{
+  for(const name of ['stand','squat','legLift','wideLegs'])
+    assert.equal(hasMeaningfulArmPose(createEditorPreset(name)),false,name)
+  for(const name of ['armUp','armsWide','bothArmsUp','handsForward','leftElbowBent'])
+    assert.equal(hasMeaningfulArmPose(createEditorPreset(name)),true,name)
 })
