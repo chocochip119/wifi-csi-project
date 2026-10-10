@@ -2,6 +2,7 @@ import {POSE_PRESETS, JOINT_NAMES, EDITOR_IDS, EDITOR_EDGES,
   createEditorPreset, asEditorPose, updateEditorJoint, blendEditorPose, normalizeBackendPose} from './poseEditor.js'
 import './adminController.css'
 import {solvePoseAngles} from './poseAngles.js'
+import {DEFAULT_ANATOMY_CONFIG,ANATOMY_LIMITS,normalizeAnatomyConfig} from './anatomySolver.js'
 
 const $ = id => document.getElementById(id)
 const channel = new BroadcastChannel('wisensing-viewer-settings-v1')
@@ -18,6 +19,7 @@ let dragging = null
 let playerIndex = 0
 let stepIndex = 0
 let originalLive = null
+let anatomyConfig=normalizeAnatomyConfig(DEFAULT_ANATOMY_CONFIG)
 
 function sendSetting(key,value){
   channel.postMessage({type:'update',key,value})
@@ -55,10 +57,44 @@ function sendRequest(){
 }
 channel.addEventListener('message',ev=>{
   const data=ev.data
+  if(data?.type==='anatomy-state'){
+    anatomyConfig=normalizeAnatomyConfig(data.config)
+    updateAnatomyControls()
+    return
+  }
+  if(data?.type==='anatomy-telemetry'){
+    const v=data.values
+    $('admin-ik-measured').textContent=v?.ready ?
+      `적용 골반 하강: ${((v.seatDropM||0)*100).toFixed(1)}cm / 무릎 목표 굽힘: ${v.targetKneeFlexDeg??'--'}° / 몸통 접근 팔 보정: ${v.armCollisionCorrections??0}개` :
+      '캐릭터 리그 준비 중'
+    return
+  }
   if(data?.type!=='state'||!data.settings)return
   receivedViewer=true
   state=data
   renderSettings()
+})
+function updateAnatomyControls(){
+  for(const key of Object.keys(ANATOMY_LIMITS)){
+    const el=$('admin-anatomy-'+key)
+    if(el && document.activeElement!==el)el.value=String(anatomyConfig[key])
+    const label=$('admin-anatomy-value-'+key)
+    if(label)label.textContent=String(anatomyConfig[key])
+  }
+}
+for(const key of Object.keys(ANATOMY_LIMITS)){
+  const el=$('admin-anatomy-'+key)
+  el.addEventListener('input',()=>{
+    const value=Number(el.value)
+    anatomyConfig=normalizeAnatomyConfig({...anatomyConfig,[key]:value})
+    channel.postMessage({type:'anatomy-set',values:{[key]:anatomyConfig[key]}})
+    $('admin-anatomy-value-'+key).textContent=String(anatomyConfig[key])
+  })
+}
+$('admin-anatomy-reset').addEventListener('click',()=>{
+  anatomyConfig=normalizeAnatomyConfig(DEFAULT_ANATOMY_CONFIG)
+  channel.postMessage({type:'anatomy-set',values:anatomyConfig})
+  updateAnatomyControls()
 })
 $('admin-location-mode').addEventListener('change',ev=>sendSetting('locationMode',ev.target.value))
 $('admin-source').addEventListener('change',ev=>{
@@ -283,4 +319,4 @@ $('admin-preview-refresh').addEventListener('click',()=>{
   receivedViewer=false;setTimeout(sendRequest,300)
 })
 window.addEventListener('beforeunload',()=>{stopPlayer();channel.close()})
-renderEditor();renderFrames();renderSettings();sendRequest()
+renderEditor();renderFrames();renderSettings();updateAnatomyControls();sendRequest()

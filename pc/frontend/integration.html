@@ -88,6 +88,21 @@
         <button type="button" id="admin-reset">설정 초기화</button>
       </div>
       <p id="admin-preview-status" class="admin-state">메인 화면 연결 확인 중...</p>
+      <div class="admin-anatomy">
+        <h3>인체 기반 IK 보정 (실제 LIVE/테스트 공통)</h3>
+        <p class="note">2D에는 몸 앞뒤 깊이가 없어 이 값들은 3D 시각화에 사용하는 가정입니다. FPGA 추론값 자체는 바꾸지 않습니다.</p>
+        <label for="admin-anatomy-seatedKneeDeg">깊이 앉기 무릎 목표 · <output id="admin-anatomy-value-seatedKneeDeg">105</output>°</label>
+        <input id="admin-anatomy-seatedKneeDeg" type="range" min="75" max="130" step="1" value="105">
+        <label for="admin-anatomy-seatDepthGain">골반 하강 보정 · <output id="admin-anatomy-value-seatDepthGain">1.12</output>배</label>
+        <input id="admin-anatomy-seatDepthGain" type="range" min="0.65" max="1.50" step="0.01" value="1.12">
+        <label for="admin-anatomy-kneeForward">무릎 앞쪽 굽힘 우선도 · <output id="admin-anatomy-value-kneeForward">0.95</output></label>
+        <input id="admin-anatomy-kneeForward" type="range" min="0.35" max="1" step="0.01" value="0.95">
+        <label for="admin-anatomy-armClearance">손·몸통 앞쪽 간격 · <output id="admin-anatomy-value-armClearance">0.11</output>m</label>
+        <input id="admin-anatomy-armClearance" type="range" min="0.04" max="0.25" step="0.01" value="0.11">
+        <div class="row"><button id="admin-anatomy-reset" type="button">IK 보정값 기본값 복원</button></div>
+        <p id="admin-ik-measured" class="admin-state" aria-live="polite">캐릭터 IK 측정값 대기 중</p>
+        <p class="note">슬라이더는 **브라우저 화면의 리그만 보정**합니다. 의자에 앉는 동작은 일반 얕은 스쿼트보다 깊게 낮아지도록 설계했습니다.</p>
+      </div>
     </section>
     <section class="card admin-editor">
       <h2>12관절 좌표 편집 · 동작 검증</h2>
