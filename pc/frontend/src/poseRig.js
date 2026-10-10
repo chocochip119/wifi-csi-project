@@ -70,6 +70,7 @@ export class PoseRigController {
     this.lastSeatedFlex=0
     this.lastArmCorrected=0
     this.armIK={L:{upper:null,lower:null},R:{upper:null,lower:null}}
+    this.armNeutral=null
     // Applied lift amount is rate-limited, independent of WebSocket/animation FPS.
     // Keep the last lift pose briefly during release so R -> S does not snap.
     this.liftAmount=0
@@ -117,6 +118,12 @@ export class PoseRigController {
       if (leg.length<0.02) return false
       leg.shinAxis=delta.normalize().applyQuaternion(leg.lower.getWorldQuaternion(quat()).invert()).normalize()
     }
+    // Neutral local rotations make repeated direction-only IK deterministic.
+    // Wrists have no orientation measurement in the 12-point CSI output.
+    const arms=this.segments.filter(s=>s.type==='arm')
+    const wrists=arms.filter(s=>s.key.startsWith('forearm')).map(s=>s.child)
+    this.armNeutral=[...arms.map(s=>s.node),...wrists]
+      .map(node=>({node,rotation:node.quaternion.clone()}))
     this.calibrated=true
     return true
   }
@@ -288,6 +295,12 @@ export class PoseRigController {
       }
     } else if(this.baseHipsRotation) this.hips.quaternion.copy(this.baseHipsRotation)
 
+    // Mixer/previous-frame rotations must not become the next frame's twist
+    // baseline: wrist orientation is unobservable from the twelve 2D joints.
+    if(this.armEnabled && this.armNeutral) {
+      for(const {node,rotation} of this.armNeutral)node.quaternion.copy(rotation)
+      this.character.updateMatrixWorld(true)
+    }
     // Calibrated bone axes plus the SAME 2D segment headings used by the SVG.
     // Apply upper before lower: the child rotates with its parent.
     for(const s of this.segments) {
@@ -436,10 +449,12 @@ export class PoseRigController {
       const hip=leg.upper.getWorldPosition(vec())
       const ankle2D=pose.point.get(liftSide==='L'?27:28)
       const hip2D=pose.point.get(liftSide==='L'?23:24)
+      const observedKnee=liftSide==='L'?pose.kneeL:pose.kneeR
+      const kneeFlex=clamp(observedKnee?.flex??0,0,1)
       if(!ankle2D || !hip2D) return
       const lateral=clamp((ankle2D.x-hip2D.x)/pose.torso,-0.6,0.6)
       const target=this.character.localToWorld(this.liftAnchorLocal.clone())
-        .addScaledVector(yWorld,0.25*amount)
+        .addScaledVector(yWorld,(0.25+0.10*kneeFlex)*amount)
         .addScaledVector(zWorld,0.19*amount)
         .addScaledVector(xWorld,lateral*0.065*amount)
       // Stay away from exact full extension (near-singular knee flip).
@@ -450,7 +465,12 @@ export class PoseRigController {
       if(!Number.isFinite(distance)||distance<0.02||maxReach<=minReach) return
       if(distance>maxReach) target.copy(hip).addScaledVector(delta,maxReach/distance)
       if(distance<minReach) target.copy(hip).addScaledVector(delta,minReach/distance)
-      const bend=zWorld.clone().addScaledVector(xWorld,lateral*0.12).normalize()
+      // Different 2D knee positions must produce visibly different bend
+      // directions even when ankle height (liftAmount) happens to be identical.
+      const bend=zWorld.clone().multiplyScalar(0.7)
+        .addScaledVector(xWorld,(observedKnee?.lateral??0)*2.2)
+        .addScaledVector(yWorld,(observedKnee?.vertical??0)*1.3)
+        .normalize()
       const knee=plantedKnee(hip,target,upperSeg.length,leg.length,bend)
       if(!knee) return
       const alpha=clamp(1-Math.exp(-Math.max(0,dt)*9),0,0.5)
