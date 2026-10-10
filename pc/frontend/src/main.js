@@ -831,6 +831,7 @@ settingsChannel.addEventListener('message', event => {
     viewerSettings.locationMode = 'live'
     viewerSettings.jointsMode = 'live'
     viewerSettings.motionMode = 'live'
+    syncLocationViewSwitch()
   } else if (msg.type === 'reset') {
     Object.assign(viewerSettings, DEFAULT_VIEWER_SETTINGS)
     syncLocationViewSwitch()
