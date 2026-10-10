@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { connectBackend } from './websocket.js'
 import { PoseRigController } from './poseRig.js'
+import { createStudioBackground } from './studioBackground.js'
 import {normalizeAnatomyConfig,DEFAULT_ANATOMY_CONFIG} from './anatomySolver.js'
 import { solvePoseAngles, hasMeaningfulArmPose } from './poseAngles.js'
 import { createTestPose } from './poseTests.js'
@@ -105,8 +106,6 @@ setupManagedShutdown()
 // ========================================
 const container = document.querySelector('#scene-container')
 const scene = new THREE.Scene()
-scene.background = new THREE.Color(0x12161b)
-scene.fog = new THREE.Fog(0x12161b, 9, 18)
 
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100)
 camera.position.set(0, 3.4, 7)
@@ -120,52 +119,21 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping
 renderer.toneMappingExposure = 1.1
 container.appendChild(renderer.domElement)
 
-const hemiLight = new THREE.HemisphereLight(0xffead8, 0x182333, 1.8)
+const hemiLight = new THREE.HemisphereLight(0xe0eef6, 0x172833, 1.75)
 scene.add(hemiLight)
-const mainLight = new THREE.DirectionalLight(0xffffff, 2.8)
+const mainLight = new THREE.DirectionalLight(0xf4faff, 2.6)
 mainLight.position.set(4, 8, 5)
 mainLight.castShadow = true
 scene.add(mainLight)
-const warmLight = new THREE.PointLight(0xffc58e, 25, 12)
+const warmLight = new THREE.PointLight(0xffd6a6, 10, 12)
 warmLight.position.set(-3, 3.5, 1)
 scene.add(warmLight)
-const cyanLight = new THREE.PointLight(0x00e8ff, 14, 8)
+const cyanLight = new THREE.PointLight(0x69d9e5, 9, 8)
 cyanLight.position.set(0, 1, 0)
 scene.add(cyanLight)
 
-const floor = new THREE.Mesh(
-  new THREE.PlaneGeometry(9, 8),
-  new THREE.MeshStandardMaterial({ color: 0x4f4843, roughness: 0.92 })
-)
-floor.rotation.x = -Math.PI / 2
-floor.receiveShadow = true
-scene.add(floor)
-
-const backWall = new THREE.Mesh(
-  new THREE.PlaneGeometry(9, 4.5),
-  new THREE.MeshStandardMaterial({ color: 0x312f30, roughness: 0.95 })
-)
-backWall.position.set(0, 2.25, -4)
-backWall.receiveShadow = true
-scene.add(backWall)
-
-const sideWall = new THREE.Mesh(
-  new THREE.PlaneGeometry(8, 4.5),
-  new THREE.MeshStandardMaterial({ color: 0x292a2d, roughness: 0.95, side: THREE.DoubleSide })
-)
-sideWall.rotation.y = Math.PI / 2
-sideWall.position.set(-4.5, 2.25, 0)
-scene.add(sideWall)
-
-const sofaMaterial = new THREE.MeshStandardMaterial({ color: 0x514b48, roughness: 0.85 })
-const sofaSeat = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.45, 0.85), sofaMaterial)
-sofaSeat.position.set(-2.4, 0.38, -3.15)
-sofaSeat.castShadow = true
-scene.add(sofaSeat)
-const sofaBack = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.9, 0.3), sofaMaterial)
-sofaBack.position.set(-2.4, 0.9, -3.5)
-sofaBack.castShadow = true
-scene.add(sofaBack)
+// Independent visual-only room: no changes to 9-zone or pose coordinates.
+createStudioBackground(scene)
 
 // ========================================
 // P01 ~ P09 바닥 그리드
