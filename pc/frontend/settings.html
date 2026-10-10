@@ -10,7 +10,8 @@
       <div class="settings-header"><div><strong>시연 · 테스트 설정</strong><p>위치, 관절, 3D 모션을 서로 독립적으로 선택합니다.</p></div><button id="viewer-settings-close" type="button" aria-label="설정 닫기">닫기 ✕</button></div>
       <div class="settings-section">
         <label for="settings-location-mode">① 위치 입력</label>
-        <select id="settings-location-mode"><option value="live">실제 위치추적 (LIVE)</option><option value="manual">수동 위치 (TEST)</option></select>
+        <select id="settings-location-mode"><option value="live">실제 위치추적 · 캐릭터 이동 (LIVE)</option><option value="center">실제 위치추적 유지 · 캐릭터 중앙 고정 (LIVE)</option><option value="manual">수동 위치 (TEST)</option></select>
+        <p class="settings-help">중앙 고정 모드에서도 오른쪽 위치 결과는 실제 위치 추론값으로 표시됩니다.</p>
         <div id="settings-manual-fields" hidden>
           <div class="settings-zone-grid" role="group" aria-label="수동 위치 선택">
             <button type="button" data-manual-point="p01">P01</button>

@@ -33,6 +33,14 @@ test('LIVE empty and invalid position are not converted to test positions', () =
   assert.equal(resolveViewerLocation(sample('empty',true,false), DEFAULT_VIEWER_SETTINGS).empty,true)
   assert.equal(resolveViewerLocation(sample('p04',false), DEFAULT_VIEWER_SETTINGS).valid,false)
 })
+test('center display mode keeps actual location result independent of 3D position', () => {
+  const incoming = sample('p03')
+  const location = resolveViewerLocation(incoming, {...DEFAULT_VIEWER_SETTINGS, locationMode:'center'})
+  assert.equal(location.valid,true)
+  assert.equal(location.zone,3)
+  assert.equal(location.pointId,'p03')
+  assert.equal(incoming.location.point_id,'p03')
+})
 test('2D joint sources can be independently LIVE, TEST, or OFF', () => {
   const live={valid:true,joints:[{id:11,x:0.1,y:0.2}]}
   const gen=(name)=>({valid:true,test_pose:name})

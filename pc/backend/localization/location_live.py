@@ -355,7 +355,9 @@ class LiveInferenceEngine:
             self.cycles = [c for c in self.cycles if c['time_s'] >= self.window_start_s - 1e-9]
 
     def _predict(self, windows, now_ns, *, window_start_s=None, window_end_s=None):
+        infer_started_ns = time.perf_counter_ns()
         labels = self.predictor(self.bundle, windows)
+        infer_ms = (time.perf_counter_ns() - infer_started_ns) / 1_000_000.0
         if len(labels) != len(windows):
             raise ValueError('모델 예측 개수가 창 개수와 다릅니다')
         point = str(labels[-1])
@@ -375,6 +377,8 @@ class LiveInferenceEngine:
                            window_start_ns=(None if window_start_s is None else int(round(window_start_s * 1e9))),
                            window_end_ns=(None if window_end_s is None else int(round(window_end_s * 1e9))),
                            variant=self.bundle['variant'], family=self.bundle['family'])
+        # 순수 모델 predict() 실행시간. CSI 윈도우 수집시간은 포함하지 않습니다.
+        self.latest['infer_ms'] = round(infer_ms, 3)
         self.counts['predictions'] += len(windows)
         self.reason = ('사람 없음(empty) 분류 결과 · 좌표 없음' if point == EMPTY_LABEL else
                        '사람 있음 · 9개 수집 지점 및 중앙 앉기 중 분류 결과 (좌표는 해당 지점의 대표값)')

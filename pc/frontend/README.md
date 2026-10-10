@@ -82,3 +82,10 @@ python pc\backend\tools\verify_wise_live.py --seconds 30 --require-pose --requir
 p10은 중앙 앉기 위치 클래스로, 전용 앉기 3D 애니메이션은 아직 구현되지 않았습니다.
 
 추가 자료: [통합 실행 순서](../../docs/bringup.md), [PS README](../../ps/README.md), [Backend README](../backend/README.md).
+
+
+## LIVE 위치/중앙 고정 + 실시간 관리자 (v18 호환)
+
+메인 화면 **위치 따라가기 / 중앙 고정 · 모션 보기** 스위치로 3D 캐릭터의 위치만 전환할 수 있습니다. 실제 P01~P10/empty 위치 결과와 12관절 Pose 데이터는 두 모드 모두 계속 수신합니다. 별도 설정 팝업에서도 동일한 중앙 고정 모드를 선택할 수 있습니다.
+
+`/integration.html` 관리자는 CSI/POSE 연결, RX 배치, 실제 위치·Pose 결과, 각 추론시간과 데이터 경과, 원본 12관절 좌표를 표시합니다. 처음 설치한 PC에서의 실행 순서는 [구동 PC 설치·운영 가이드](../../docs/wisensing_live_v18_operator.md)를 참고하세요.

@@ -311,6 +311,9 @@ class BackendService:
             "representative_x_cm": prediction.get("representative_x_cm"),
             "representative_y_cm": prediction.get("representative_y_cm"),
             "window_cycles": prediction.get("window_cycles"),
+            "infer_ms": prediction.get("infer_ms"),
+            "age_ms": (round(max(0.0, (time.perf_counter_ns() - int(prediction["monotonic_ns"])) / 1_000_000.0), 1)
+                       if isinstance(prediction.get("monotonic_ns"), int) else None),
             "reason": reason,
         }
         return location, person

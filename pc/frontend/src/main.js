@@ -38,6 +38,10 @@ app.innerHTML = `
           <span>SPACE VIEW</span>
           <strong>Zone 5</strong>
         </div>
+        <div class="location-view-switch" role="group" aria-label="3D 캐릭터 위치 표시 방식">
+          <button type="button" id="mode-follow" class="selected" aria-pressed="true">위치 따라가기</button>
+          <button type="button" id="mode-center" aria-pressed="false">중앙 고정 · 모션 보기</button>
+        </div>
         <div id="scene-container"></div>
         <input id="pose-replay-file" type="file" accept=".json,.jsonl,.ndjson,application/json,text/plain" hidden>
         <div class="pose-replay-label" id="pose-replay-label" hidden>LOCAL REPLAY · B: LIVE 복귀</div>
@@ -414,7 +418,7 @@ function setLiveBadge(value) {
 }
 function updateLiveBadge(snapshot) {
   if (replayActive) { setLiveBadge('FILE REPLAY'); return }
-  if (viewerSettings.locationMode !== 'live' || viewerSettings.jointsMode !== 'live' || viewerSettings.motionMode !== 'live') {
+  if (viewerSettings.locationMode === 'manual' || viewerSettings.jointsMode !== 'live' || viewerSettings.motionMode !== 'live') {
     setLiveBadge(liveConnection ? 'LIVE + TEST' : 'TEST MODE')
     return
   }
@@ -646,6 +650,23 @@ function handleSnapshot(snapshot, source = 'backend') {
   renderPose(displayPose, displayMirror)
 
   const location = resolveViewerLocation(snapshot, viewerSettings)
+  // 중앙 고정은 화면의 캐릭터 위치만 바꿉니다. 실제 위치 예측과 Pose는 항상 수신·표시합니다.
+  if (viewerSettings.locationMode === 'center') {
+    if (location.valid && !location.empty) {
+      selectedPointId = location.pointId
+      updateLocationUI(location.zone, selectedPointId)
+      updatePostureUI(location.posture)
+    } else {
+      clearLocationUI(location.empty ? 'No person' : 'Unavailable')
+      updatePostureUI(location.empty ? 'empty' : 'unknown')
+    }
+    const showPerson = Boolean(motionPose?.valid || displayPose?.valid || (location.valid && !location.empty))
+    if (character) character.visible = showPerson
+    if (showPerson) moveCharacterTo(5, location.posture === 'sitting' ? 'sitting' : 'standing')
+    updateMotionRig(motionPose, motionMirror)
+    updateLiveBadge(snapshot)
+    return
+  }
   if (location.empty) {
     setAbsentState('No person', 'empty')
     updateLiveBadge(snapshot)
@@ -763,7 +784,7 @@ function updateCameraView() {
 }
 function updateViewerSettings(key, value) {
   const allowed = {
-    locationMode: ['live','manual'],
+    locationMode: ['live','manual','center'],
     manualPoint: ['p01','p02','p03','p04','p05','p06','p07','p08','p09','p10'],
     jointsMode: ['live','sample','off'], jointsSample: ['stand','armUp','armsWide','squat','legLift'],
     motionMode: ['live','sample','off'], motionSample: ['stand','armUp','armsWide','squat','legLift']
@@ -780,8 +801,20 @@ function updateViewerSettings(key, value) {
   poseFilter.reset()
   poseRig?.clear()
   refreshViewer()
+  syncLocationViewSwitch()
   broadcastSettings()
 }
+function syncLocationViewSwitch() {
+  const center = viewerSettings.locationMode === 'center'
+  for (const [id, selected] of [['mode-follow', !center], ['mode-center', center]]) {
+    const button = document.getElementById(id)
+    button.classList.toggle('selected', selected)
+    button.setAttribute('aria-pressed', String(selected))
+  }
+}
+document.getElementById('mode-follow').addEventListener('click', () => updateViewerSettings('locationMode','live'))
+document.getElementById('mode-center').addEventListener('click', () => updateViewerSettings('locationMode','center'))
+syncLocationViewSwitch()
 settingsOpen.addEventListener('click', () => {
   settingsPopup = window.open('/settings.html', 'wisensing-settings', 'popup=yes,width=510,height=810,resizable=yes,scrollbars=yes')
   if (settingsPopup) {
@@ -798,8 +831,10 @@ settingsChannel.addEventListener('message', event => {
     viewerSettings.locationMode = 'live'
     viewerSettings.jointsMode = 'live'
     viewerSettings.motionMode = 'live'
+    syncLocationViewSwitch()
   } else if (msg.type === 'reset') {
     Object.assign(viewerSettings, DEFAULT_VIEWER_SETTINGS)
+    syncLocationViewSwitch()
     cameraView = 'front'
     mirrorMode = 'auto'
     updateCameraView()
