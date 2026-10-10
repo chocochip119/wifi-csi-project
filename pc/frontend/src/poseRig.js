@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 import { LIMB_SEGMENTS, solvePoseAngles } from './poseAngles.js'
+import {DEFAULT_ANATOMY_CONFIG, normalizeAnatomyConfig, calculateSeatDrop, 
+  twoBoneTriangle, resolveTorsoHandClearance} from './anatomySolver.js'
 
 const vec = () => new THREE.Vector3()
 const quat = () => new THREE.Quaternion()
@@ -29,10 +31,10 @@ function plantedKnee(hip,ankle,upperLen,lowerLen,bendWorld) {
   const delta=ankle.clone().sub(hip)
   const raw=delta.length()
   if(!Number.isFinite(raw) || raw<0.03 || upperLen<0.03 || lowerLen<0.03) return null
-  const length=clamp(raw,Math.abs(upperLen-lowerLen)+0.001,upperLen+lowerLen-0.001)
+  const triangle=twoBoneTriangle(upperLen,lowerLen,raw)
+  if(!triangle)return null
   const axis=delta.normalize()
-  const along=(upperLen*upperLen-lowerLen*lowerLen+length*length)/(2*length)
-  const outward=Math.sqrt(Math.max(0,upperLen*upperLen-along*along))
+  const {along,height:outward}=triangle
   const bend=bendWorld.clone().addScaledVector(axis,-bendWorld.dot(axis))
   if(bend.lengthSq()<1e-8) return null
   return hip.clone().addScaledVector(axis,along).addScaledVector(bend.normalize(),outward)
@@ -61,6 +63,13 @@ export class PoseRigController {
     this.solution=null
     this.inputAt=0
     this.warnAt=0
+    this.config=normalizeAnatomyConfig(DEFAULT_ANATOMY_CONFIG)
+    this.lastBodyBase=null
+    this.squatAmount=0
+    this.lastSeatedDrop=0
+    this.lastSeatedFlex=0
+    this.lastArmCorrected=0
+    this.armIK={L:{upper:null,lower:null},R:{upper:null,lower:null}}
     // Applied lift amount is rate-limited, independent of WebSocket/animation FPS.
     // Keep the last lift pose briefly during release so R -> S does not snap.
     this.liftAmount=0
@@ -69,8 +78,23 @@ export class PoseRigController {
     // Fixed starting shoe location for a single R hold (character local space).
     // Never recompute R target relative to the shoe modified by last frame's IK.
     this.liftAnchorLocal=null
-    if (!this.ready) console.warn('[PoseRig v13] Missing required model bones — using Idle/Walk only')
-    else console.log('[PoseRig v13] 12 joints / 8 segments ready (shared 2D angles, safety-limited legs)')
+    if (!this.ready) console.warn('[PoseRig anatomical] Missing required model bones — using Idle/Walk only')
+    else console.log('[PoseRig anatomical] 12 joints / 8 segments ready (planted seat IK + chest clearance)')
+  }
+  setConfig(next) {
+    this.config=normalizeAnatomyConfig(next)
+  }
+  // Undo the previous post-mixer pelvis offset before the next animation update.
+  // Without this, rigs where Body.position has no animation track sink every frame.
+  prepareFrame() {
+    if(this.lastBodyBase && this.body) this.body.position.copy(this.lastBodyBase)
+    this.lastBodyBase=null
+  }
+  diagnostics() {
+    return {seatDropM:Number(this.lastSeatedDrop.toFixed(3)),
+      targetKneeFlexDeg:Number(this.lastSeatedFlex.toFixed(1)),
+      armCollisionCorrections:this.lastArmCorrected, 
+      calibrated:this.calibrated,ready:this.ready, config:{...this.config}}
   }
   calibrate() {
     if (!this.ready) return false
@@ -113,6 +137,11 @@ export class PoseRigController {
     this.solution=null
     this.armEnabled=false
     this.legEnabled=false
+    this.squatAmount=0
+    this.lastSeatedDrop=0
+    this.lastSeatedFlex=0
+    this.lastArmCorrected=0
+    for(const entry of Object.values(this.armIK)){entry.upper=null;entry.lower=null}
     if (this.hips&&this.baseHipsRotation) this.hips.quaternion.copy(this.baseHipsRotation)
     for(const s of this.segments) s.filtered=null
     for(const leg of this.legs) leg.lastFootTarget=null
@@ -163,8 +192,11 @@ export class PoseRigController {
     const zWorld=new THREE.Vector3(0,0,1).applyQuaternion(rootQuaternion)
     const state=liveState || this.liftSource
     // Squat and leg lift are exclusive; prevent two IK solvers fighting.
-    const plantedSquat=Boolean(liveState && this.legEnabled && liveState.squat>0.22 &&
+    const plantedSquat=Boolean(liveState && this.legEnabled && liveState.squat>0.075 &&
       liveState.liftL<0.2 && liveState.liftR<0.2)
+    const targetSquat=plantedSquat?liveState.squat:0
+    const squatSmoothing=clamp(1-Math.exp(-Math.max(0,dt)*9),0,0.5)
+    this.squatAmount+=(targetSquat-this.squatAmount)*squatSmoothing
     if(plantedSquat && this.liftAmount>0) {
       this.liftAmount=0
       this.liftSource=null
@@ -175,18 +207,35 @@ export class PoseRigController {
       bodyPosition:this.body.position.clone(), hipsRotation:this.hips.quaternion.clone(),
       legs:this.legs.map(l=>({upper:l.upper.quaternion.clone(),lower:l.lower.quaternion.clone(),foot:l.foot.position.clone()}))
     } : null
-    // No body offset during normal standing or walking. Squat depth has no 2D
-    // measurement; this small displacement is explicitly a visual assumption.
-    if(plantedSquat) {
-      const depth=0.18*state.squat
-      const scale=this.body.parent.getWorldScale(vec())
-      this.body.position.y-=depth/Math.max(0.01,Math.abs(scale.y))
-      this.body.position.z-=0.038*state.squat/Math.max(0.01,Math.abs(scale.z))
-      if(this.baseHipsRotation) {
-        const lean=quat().setFromAxisAngle(new THREE.Vector3(1,0,0),0.12*state.squat)
-        this.hips.quaternion.copy(this.baseHipsRotation).premultiply(lean).normalize()
+    // Compute the seat height using EACH leg's calibrated lengths and its
+    // neutral hip-to-foot spacing. The shallower reachable leg is the limit.
+    this.lastSeatedDrop=0
+    this.lastSeatedFlex=0
+    if(plantedSquat && this.squatAmount>0.001) {
+      const results=[]
+      for(const leg of this.legs) {
+        const upperSeg=this.segments.find(seg=>seg.key===`thigh${leg.side}`)
+        const hip=leg.upper.getWorldPosition(vec())
+        const ankle=leg.foot.getWorldPosition(vec())
+        const knee=calculateSeatDrop(upperSeg.length,leg.length,
+          hip.distanceTo(ankle),this.squatAmount,this.config)
+        if(knee)results.push(knee)
       }
-      this.character.updateMatrixWorld(true)
+      if(results.length===2) {
+        const depth=Math.min(...results.map(item=>item.drop))
+        const scale=this.body.parent.getWorldScale(vec())
+        this.lastBodyBase=this.body.position.clone()
+        this.body.position.y-=depth/Math.max(0.01,Math.abs(scale.y))
+        this.body.position.z-=Math.min(0.08,depth*0.12)/Math.max(0.01,Math.abs(scale.z))
+        this.lastSeatedDrop=depth
+        this.lastSeatedFlex=Math.min(...results.map(item=>item.flexionDeg))
+        if(this.baseHipsRotation) {
+          const lean=quat().setFromAxisAngle(new THREE.Vector3(1,0,0),
+            0.25*this.squatAmount)
+          this.hips.quaternion.copy(this.baseHipsRotation).premultiply(lean).normalize()
+        }
+        this.character.updateMatrixWorld(true)
+      }
     } else if(this.baseHipsRotation) this.hips.quaternion.copy(this.baseHipsRotation)
 
     // Calibrated bone axes plus the SAME 2D segment headings used by the SVG.
@@ -206,6 +255,76 @@ export class PoseRigController {
       this.character.updateMatrixWorld(true)
     }
 
+    // Apply the chest clearance AFTER the ordinary screen-plane arm headings.
+    // End effectors near the torso are pushed forward and solved by a two-bone arm.
+    this.lastArmCorrected=0
+    if(liveState && this.armEnabled) {
+      const shoulders=this.segments.filter(seg=>seg.key==='upperArmL'||seg.key==='upperArmR')
+      const chest=shoulders[0].node.getWorldPosition(vec())
+        .add(shoulders[1].node.getWorldPosition(vec())).multiplyScalar(0.5)
+      const hips=this.legs[0].upper.getWorldPosition(vec())
+        .add(this.legs[1].upper.getWorldPosition(vec())).multiplyScalar(0.5)
+      const center=chest.clone().lerp(hips,0.43)
+      const shoulderWidth=shoulders[0].node.getWorldPosition(vec())
+        .distanceTo(shoulders[1].node.getWorldPosition(vec()))
+      const torsoHeight=chest.distanceTo(hips)
+      if(torsoHeight>0.09 && shoulderWidth>0.09) {
+        const uvScale=clamp(torsoHeight/liveState.torso,0.0001,100000)
+        for(const side of ['L','R']){
+          const id=side==='L' ? {sh:11,wr:15} : {sh:12,wr:16}
+          const sh2=liveState.point.get(id.sh),wr2=liveState.point.get(id.wr)
+          const upper=this.segments.find(seg=>seg.key===`upperArm${side}`)
+          const lower=this.segments.find(seg=>seg.key===`forearm${side}`)
+          const shoulder=upper.node.getWorldPosition(vec())
+          const goal=shoulder.clone()
+            .addScaledVector(xWorld,(wr2.x-sh2.x)*uvScale)
+            .addScaledVector(yWorld,-(wr2.y-sh2.y)*uvScale)
+          const relative=goal.clone().sub(center)
+          const boundary=resolveTorsoHandClearance({
+            x:relative.dot(xWorld),y:relative.dot(yWorld),z:relative.dot(zWorld),
+            halfWidth:shoulderWidth*0.48,halfHeight:torsoHeight*0.57,
+            clearance:this.config.armClearance})
+          if(!boundary?.corrected){
+            this.armIK[side].upper=null;this.armIK[side].lower=null
+            continue
+          }
+          goal.addScaledVector(zWorld,boundary.delta)
+          // Guard reach before the elbow plane solve; otherwise aim could flip.
+          const reach=goal.clone().sub(shoulder)
+          const maxReach=upper.length+lower.length-0.012
+          const minReach=Math.abs(upper.length-lower.length)+0.015
+          if(reach.length()<0.015 || maxReach<=minReach)continue
+          const length=reach.length()
+          if(length>maxReach)goal.copy(shoulder).addScaledVector(reach,maxReach/length)
+          if(length<minReach)goal.copy(shoulder).addScaledVector(reach,minReach/length)
+          const shoulderSide=shoulder.clone().sub(center).dot(xWorld)
+          const outward=shoulderSide===0?(side==='L'?-1:1):Math.sign(shoulderSide)
+          const pole=xWorld.clone().multiplyScalar(outward)
+            .addScaledVector(zWorld,0.50).addScaledVector(yWorld,-0.10).normalize()
+          const elbow=plantedKnee(shoulder,goal,upper.length,lower.length,pole)
+          if(!elbow)continue
+          const priorUpper=upper.node.quaternion.clone()
+          aim(upper.node,upper.axis,elbow.sub(shoulder))
+          const targetUpper=upper.node.quaternion.clone()
+          const armAlpha=clamp(1-Math.exp(-Math.max(0,dt)*15),0.04,0.65)
+          const smoothed=this.armIK[side]
+          if(smoothed.upper)upper.node.quaternion.copy(smoothed.upper).slerp(targetUpper,armAlpha)
+          else upper.node.quaternion.copy(priorUpper).slerp(targetUpper,armAlpha)
+          smoothed.upper=upper.node.quaternion.clone()
+          this.character.updateMatrixWorld(true)
+          const elbowWorld=lower.node.getWorldPosition(vec())
+          const priorLower=lower.node.quaternion.clone()
+          aim(lower.node,lower.axis,goal.sub(elbowWorld))
+          const targetLower=lower.node.quaternion.clone()
+          if(smoothed.lower)lower.node.quaternion.copy(smoothed.lower).slerp(targetLower,armAlpha)
+          else lower.node.quaternion.copy(priorLower).slerp(targetLower,armAlpha)
+          smoothed.lower=lower.node.quaternion.clone()
+          this.character.updateMatrixWorld(true)
+          this.lastArmCorrected++
+        }
+      }
+    }
+
     // Squat: both shoes stay planted; the very same knee/hip input controls
     // lateral knee bias. The missing depth comes from a constrained forward bend.
     if(plantedSquat) {
@@ -216,7 +335,9 @@ export class PoseRigController {
         const ids=leg.side==='L' ? [23,25] : [24,26]
         const p=state.point.get(ids[0]),k=state.point.get(ids[1])
         const lateral=clamp((k.x-p.x)/state.torso,-0.5,0.5)
-        const bend=zWorld.clone().addScaledVector(xWorld,lateral*0.55).normalize()
+        const bend=zWorld.clone().multiplyScalar(this.config.kneeForward)
+          .addScaledVector(yWorld,-(1-this.config.kneeForward)*0.75)
+          .addScaledVector(xWorld,lateral*0.55).normalize()
         const desiredKnee=plantedKnee(hip,ankle,upperSeg.length,leg.length,bend)
         if(!desiredKnee) continue
         aim(leg.upper,upperSeg.axis,desiredKnee.sub(hip))
@@ -329,7 +450,7 @@ export class PoseRigController {
         for(const s of this.segments) if(s.type==='leg') s.filtered=null
         if(performance.now()-this.warnAt>2500) {
           this.warnAt=performance.now()
-          console.warn('[PoseRig v13] unsafe leg/foot frame rejected; neutral legs restored')
+          console.warn('[PoseRig anatomical] unsafe leg/foot frame rejected; neutral legs restored')
         }
       }
     }

@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { connectBackend } from './websocket.js'
 import { PoseRigController } from './poseRig.js'
+import {normalizeAnatomyConfig,DEFAULT_ANATOMY_CONFIG} from './anatomySolver.js'
 import { solvePoseAngles } from './poseAngles.js'
 import { createTestPose } from './poseTests.js'
 import { DEFAULT_VIEWER_SETTINGS, resolveViewerLocation, selectViewerPose } from './viewerSettings.js'
@@ -392,6 +393,8 @@ let mixer = null
 let currentAction = null
 let characterAnimations = []
 let poseRig = null
+let anatomyConfig=normalizeAnatomyConfig(DEFAULT_ANATOMY_CONFIG)
+let anatomyTelemetryAt=0
 let characterRequestId = 0
 const viewerSettings = {...DEFAULT_VIEWER_SETTINGS}
 let selectedPointId = 'p05'
@@ -558,6 +561,11 @@ function applySittingFallback() {
   if (!character || !poseRig?.ready) {sitChair.visible = false; return}
   const sitting = character.visible && !isMoving && targetPosture === 'sitting'
   sitChair.visible = sitting
+  // Do not run procedural P10 seated fallback and live anatomical squat IK together.
+  if (poseRig.legEnabled && poseRig.solution?.squat>0.075) {
+    if (sitFallbackBase) restoreSittingFallback()
+    return
+  }
   if (!sitting || sitAnimationName) {
     if (sitFallbackBase) restoreSittingFallback()
     return
@@ -738,6 +746,7 @@ function loadCharacter(name) {
     })
     scene.add(character)
     poseRig = new PoseRigController(character)
+    poseRig.setConfig(anatomyConfig)
     mixer = new THREE.AnimationMixer(character)
     // 서기/걷기를 기본으로 유지하고 추종 중에만 Bone rotation을 프레임 끝에 덮어쓴다.
     const idleClip = THREE.AnimationClip.findByName(gltf.animations, 'Idle_Neutral')
@@ -783,6 +792,7 @@ function refreshViewer() {
 }
 function broadcastSettings() {
   settingsChannel.postMessage({type:'state', settings:{...viewerSettings}, cameraView, mirrorMode})
+  settingsChannel.postMessage({type:'anatomy-state', config:{...anatomyConfig}})
 }
 function updateCameraView() {
   camera.position.set(cameraView === 'side' ? 4.6 : 0, cameraView === 'side' ? 3.2 : 3.4, cameraView === 'side' ? 5.5 : 7)
@@ -832,6 +842,12 @@ settingsChannel.addEventListener('message', event => {
   const msg = event.data
   if (!msg || typeof msg !== 'object') return
   if (msg.type === 'hello') { broadcastSettings(); return }
+  if (msg.type === 'anatomy-set') {
+    anatomyConfig=normalizeAnatomyConfig({...anatomyConfig,...msg.values})
+    poseRig?.setConfig(anatomyConfig)
+    settingsChannel.postMessage({type:'anatomy-state',config:{...anatomyConfig}})
+    return
+  }
   if (msg.type === 'custom-pose') {
     const nextPose = sanitizePose(msg.pose)
     if (!nextPose) return
@@ -966,6 +982,8 @@ function animate(now) {
   requestAnimationFrame(animate)
   const delta = Math.min((now - lastFrame) / 1000, 0.05)
   lastFrame = now
+  // Restore last frame's additive pelvis IK offset BEFORE advancing animation.
+  poseRig?.prepareFrame()
   if (mixer) mixer.update(delta)
 
   // 파일 재생은 시간 흐름에 따라 원본 snapshot/pose를 그대로 입력 파이프라인으로 보낸다.
@@ -1025,6 +1043,11 @@ function animate(now) {
   const rigWasActive = Boolean(poseRig?.active)
   applySittingFallback()
   poseRig?.update(delta, Boolean(character?.visible) && !isMoving)
+  if (now-anatomyTelemetryAt>400) {
+    anatomyTelemetryAt=now
+    if (poseRig?.ready) settingsChannel.postMessage({type:'anatomy-telemetry',
+      values:poseRig.diagnostics()})
+  }
   if (rigWasActive && !poseRig?.active) refreshIdleAnimation()
 
 

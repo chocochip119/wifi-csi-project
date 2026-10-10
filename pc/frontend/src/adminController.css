@@ -16,6 +16,11 @@
 .admin-joint-controls{min-width:0}
 .admin-xy-inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .admin-state{padding:12px;margin:16px 0 0;line-height:1.5;background:#0f3138;border:1px solid #28545a;border-radius:9px;color:#b3fff2;font-size:13px}
+.admin-anatomy{border-top:1px solid #2b4050;padding-top:18px;margin-top:18px}
+.admin-anatomy h3{margin:0 0 12px;font-size:15px}
+.admin-anatomy label{display:block;margin:12px 0 4px;font-size:12px}
+.admin-anatomy input[type=range]{display:block;width:100%;margin:9px 0 15px;accent-color:#4ae8d6;cursor:pointer}
+.admin-anatomy output{color:#8affdc;font-variant-numeric:tabular-nums}
 .admin-keyframes{border-top:1px solid #2b4050;margin-top:18px;padding-top:15px}
 .admin-keyframes h3{font-size:15px;margin:0 0 12px}
 .admin-frame-list{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
