@@ -629,7 +629,12 @@ function updateMotionRig(pose, mirrored) {
   const angles = solvePoseAngles(pose, mirrored)
   // LIVE/TEST 모두 동일 좌표로 관절을 계산합니다. 2D->3D 깊이는 리그가 추정합니다.
   const arms = viewerSettings.liveArms && Boolean(angles)
-  const legs = viewerSettings.liveLegs && Boolean(angles && angles.activity > 0.14)
+  // When P10 uses the procedural seated fallback, leave its leg rotations
+  // untouched unless a real squat pose is being tracked.
+  const fallbackSeated=targetPosture==='sitting' && !sitAnimationName &&
+    (!angles || angles.squat<=0.075)
+  const legs = viewerSettings.liveLegs && !fallbackSeated && Boolean(angles &&
+    (angles.activity > 0.14 || Number.isFinite(angles.footSpacingRatio)))
   if (arms || legs) poseRig?.setPose(pose, mirrored, {arms, legs})
   else if (poseRig?.active) poseRig.clear()
   refreshIdleAnimation()
