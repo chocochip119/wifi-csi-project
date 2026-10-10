@@ -85,12 +85,21 @@ export function blendEditorPose(a,b,t){
   })))
 }
 export function normalizeBackendPose(raw){
-  const pose=asEditorPose(raw)
-  if(!pose)return null
-  const xs=pose.joints.map(j=>j.x),ys=pose.joints.map(j=>j.y)
+  const input=raw?.joints
+  if(!Array.isArray(input)||input.length!==12)return null
+  const seen=new Map()
+  for(const j of input){
+    const id=Number(j?.id),x=Number(j?.x),y=Number(j?.y)
+    if(!EDITOR_IDS.includes(id)||seen.has(id)||j?.x==null||j?.y==null ||
+      !Number.isFinite(x)||!Number.isFinite(y)||Math.max(Math.abs(x),Math.abs(y))>1e7)return null
+    seen.set(id,{id,x,y})
+  }
+  if(seen.size!==12)return null
+  const joints=EDITOR_IDS.map(id=>seen.get(id))
+  const xs=joints.map(j=>j.x),ys=joints.map(j=>j.y)
   const xMin=Math.min(...xs),xMax=Math.max(...xs),yMin=Math.min(...ys),yMax=Math.max(...ys)
   const span=Math.max(xMax-xMin,yMax-yMin)
   if(span<1e-8)return null
-  return asEditorPose(pose.joints.map(j=>({id:j.id,
+  return asEditorPose(joints.map(j=>({id:j.id,
     x:.10+(j.x-xMin)/span*.8,y:.10+(j.y-yMin)/span*.8})))
 }

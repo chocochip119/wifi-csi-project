@@ -1,6 +1,7 @@
 import {POSE_PRESETS, JOINT_NAMES, EDITOR_IDS, EDITOR_EDGES,
   createEditorPreset, asEditorPose, updateEditorJoint, blendEditorPose, normalizeBackendPose} from './poseEditor.js'
 import './adminController.css'
+import {solvePoseAngles} from './poseAngles.js'
 
 const $ = id => document.getElementById(id)
 const channel = new BroadcastChannel('wisensing-viewer-settings-v1')
@@ -148,6 +149,15 @@ function renderEditor(){
     if(document.activeElement!==$('admin-joint-x'))$('admin-joint-x').value=selected.x.toFixed(3)
     if(document.activeElement!==$('admin-joint-y'))$('admin-joint-y').value=selected.y.toFixed(3)
   }
+  const solved=solvePoseAngles(pose)
+  const angleText=$('admin-angle-output')
+  if(solved){
+    const shortName={upperArmL:'왼 위팔',forearmL:'왼 아래팔',upperArmR:'오른 위팔',forearmR:'오른 아래팔',
+      thighL:'왼 허벅지',shinL:'왼 종아리',thighR:'오른 허벅지',shinR:'오른 종아리'}
+    angleText.textContent=Array.from(solved.directions,([key,v])=>
+      (shortName[key]||key)+': '+(v.angle*180/Math.PI).toFixed(1)+'°').join(' / ')+
+      '  |  스쿼트 '+solved.squat.toFixed(2)+' · 왼발 들기 '+solved.liftL.toFixed(2)+' · 오른발 들기 '+solved.liftR.toFixed(2)
+  } else angleText.textContent='3D 각도 계산 불가: 어깨·골반 순서, 다리 길이와 겹친 관절을 확인하세요.'
   canvas.replaceChildren()
   canvas.appendChild(svgElem('rect',{x:30,y:20,width:340,height:450,rx:9,fill:'#0b1821',stroke:'#385363'}))
   const points=new Map(pose.joints.map(j=>[j.id,editorPixel(j)]))
