@@ -1,56 +1,9 @@
 <!doctype html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>WiSensing | 설정 · 테스트</title>
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WiSensing | 관리자 화면 이동</title>
+<meta http-equiv="refresh" content="0; url=/integration.html" />
 </head>
-<body>
-  <aside class="viewer-settings-panel" id="viewer-settings-panel" aria-label="시연 및 테스트 설정">
-      <div class="settings-header"><div><strong>시연 · 테스트 설정</strong><p>위치, 관절, 3D 모션을 서로 독립적으로 선택합니다.</p></div><button id="viewer-settings-close" type="button" aria-label="설정 닫기">닫기 ✕</button></div>
-      <div class="settings-section">
-        <label for="settings-location-mode">① 위치 입력</label>
-        <select id="settings-location-mode"><option value="live">실제 위치추적 · 캐릭터 이동 (LIVE)</option><option value="center">실제 위치추적 유지 · 캐릭터 중앙 고정 (LIVE)</option><option value="manual">수동 위치 (TEST)</option></select>
-        <p class="settings-help">중앙 고정 모드에서도 오른쪽 위치 결과는 실제 위치 추론값으로 표시됩니다.</p>
-        <div id="settings-manual-fields" hidden>
-          <div class="settings-zone-grid" role="group" aria-label="수동 위치 선택">
-            <button type="button" data-manual-point="p01">P01</button>
-            <button type="button" data-manual-point="p02">P02</button>
-            <button type="button" data-manual-point="p03">P03</button>
-            <button type="button" data-manual-point="p04">P04</button>
-            <button type="button" data-manual-point="p05">P05</button>
-            <button type="button" data-manual-point="p06">P06</button>
-            <button type="button" data-manual-point="p07">P07</button>
-            <button type="button" data-manual-point="p08">P08</button>
-            <button type="button" data-manual-point="p09">P09</button>
-            <button type="button" data-manual-point="p10" class="settings-p10">P10 · 앉기</button>
-          </div>
-          <p class="settings-help">P05와 P10 모두 중앙 Zone 5입니다. P10은 앉은 자세로 표시합니다.</p>
-        </div>
-      </div>
-      <div class="settings-section">
-        <label for="settings-joints-mode">② 오른쪽 12관절 그림</label>
-        <select id="settings-joints-mode"><option value="live">실제 FPGA 관절 (LIVE)</option><option value="sample">샘플 관절 (TEST)</option><option value="off">숨김</option></select>
-        <div id="settings-joints-sample-field" hidden><label for="settings-joints-sample">샘플 관절 자세</label><select id="settings-joints-sample"><option value="stand">기본 서기</option><option value="armUp">한 팔 올리기</option><option value="armsWide">양팔 벌리기</option><option value="squat">스쿼트</option><option value="legLift">다리 들기</option></select></div>
-      </div>
-      <div class="settings-section">
-        <label for="settings-motion-mode">③ 3D 캐릭터 모션</label>
-        <select id="settings-motion-mode"><option value="live">실제 FPGA 관절 추종 (LIVE)</option><option value="sample">샘플 모션 (TEST)</option><option value="off">기본 서기/앉기 자세</option></select>
-        <div id="settings-motion-sample-field" hidden><label for="settings-motion-sample">샘플 모션 자세</label><select id="settings-motion-sample"><option value="stand">기본 서기</option><option value="armUp">한 팔 올리기</option><option value="armsWide">양팔 벌리기</option><option value="squat">스쿼트</option><option value="legLift">다리 들기</option></select></div>
-        <div id="settings-motion-live-options" class="settings-checks">
-          <label><input id="settings-live-arms" type="checkbox" checked> 실제 팔 추종</label>
-          <label><input id="settings-live-legs" type="checkbox"> 실제 다리 추종 (실험적)</label>
-        </div>
-      </div>
-      <div class="settings-section">
-        <label for="settings-camera-view">④ 테스트 시점 · 좌우 보정</label>
-        <select id="settings-camera-view"><option value="front">정면 카메라</option><option value="side">측면 카메라 (다리 확인)</option></select>
-        <select id="settings-mirror-mode"><option value="auto">좌우 자동</option><option value="mirrored">좌우 반전</option><option value="normal">좌우 반전 없음</option></select>
-      </div>
-      <p id="viewer-settings-summary" class="settings-summary" aria-live="polite"></p>
-      <div class="settings-actions"><button id="settings-all-live" type="button">전체 LIVE</button><button id="settings-reset" type="button">설정 초기화</button></div>
-      <p class="settings-help">TEST 값은 화면에만 반영합니다. Zybo·Backend 추론 결과는 바꾸지 않습니다.</p>
-    </aside>
-  <script type="module" src="/src/settingsWindow.js"></script>
-</body>
+<body><p><a href="/integration.html">통합 관리자 화면으로 이동</a></p>
+<script>location.replace('/integration.html'+location.search)</script></body>
 </html>

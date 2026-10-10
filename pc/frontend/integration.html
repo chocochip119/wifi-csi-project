@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="wise-backend-url" content="" />
-  <title>WiSensing · 실장비 연결 점검</title>
+  <title>WiSensing · 통합 관리자 / 관절 테스트</title>
   <style>
     :root{color-scheme:dark;font-family:system-ui,Arial,sans-serif;background:#0c1219;color:#f1f7fa}
     body{margin:0;padding:26px;max-width:1240px;margin:auto}
@@ -27,7 +27,7 @@
 </head>
 <body>
   <div class="row" style="justify-content:space-between">
-    <div><h1>WiSensing · 실장비 연결 점검</h1><p class="note">ESP32 → Zybo TCP 5000/5001 → PC Backend → WebSocket</p></div>
+    <div><h1>WiSensing · 통합 관리자</h1><p class="note">실장비 수신 상태 · 위치/모션 결과 · 관절 편집 · 3D 동작 검증</p></div>
     <a href="/">시연 화면으로 돌아가기</a>
   </div>
   <p class="hint note"><strong>실제 하드웨어 확인용 화면입니다.</strong> "연결됨"은 TCP 연결 상태를 뜻하며 모델 정확도를 의미하지 않습니다. <code>--fake</code> 실행 중이면 RX 확인 버튼을 사용할 수 없습니다.</p>
@@ -44,6 +44,97 @@
     <div class="card"><small>FPGA Pose 추론시간</small><strong id="pose-infer">--</strong><p class="note" id="pose-age">수신 경과 --</p></div>
   </div>
   <p class="note">위치 연산시간은 PC 모델 실행시간, Pose 추론시간은 FPGA에서 보고한 시간입니다. CSI 수집부터 화면까지의 전체 지연시간은 아닙니다.</p>
+  <div class="admin-workspace">
+    <section class="card admin-controls">
+      <h2>관리자 · 시연 및 테스트 설정</h2>
+      <p class="note">테스트 입력은 화면에만 반영합니다. 실제 CSI/FPGA 데이터 수신과 위치 추론은 계속됩니다.</p>
+      <div class="admin-field-grid">
+        <label>캐릭터 위치 표시
+          <select id="admin-location-mode">
+            <option value="live">추론 위치 따라가기 (LIVE)</option>
+            <option value="center">중앙 고정 · 실제 위치 계속 표시 (LIVE)</option>
+            <option value="manual">수동 위치 (TEST)</option>
+          </select>
+        </label>
+        <label>관절 입력 — 스켈레톤 + 3D 캐릭터 공통
+          <select id="admin-source">
+            <option value="live">실제 FPGA 12관절 (LIVE)</option>
+            <option value="custom">편집 / 프리셋 12관절 (TEST)</option>
+            <option value="off">관절 비활성</option>
+          </select>
+        </label>
+      </div>
+      <div id="admin-manual-points" class="admin-point-grid" hidden>
+        <button type="button" data-admin-point="p01">P01</button><button type="button" data-admin-point="p02">P02</button>
+        <button type="button" data-admin-point="p03">P03</button><button type="button" data-admin-point="p04">P04</button>
+        <button type="button" data-admin-point="p05">P05</button><button type="button" data-admin-point="p06">P06</button>
+        <button type="button" data-admin-point="p07">P07</button><button type="button" data-admin-point="p08">P08</button>
+        <button type="button" data-admin-point="p09">P09</button><button type="button" data-admin-point="p10">P10 앉기</button>
+      </div>
+      <div class="admin-field-grid">
+        <label>카메라 시점
+          <select id="admin-camera"><option value="front">정면</option><option value="side">측면 · 깊이 확인</option></select>
+        </label>
+        <label>관절 좌우 정렬
+          <select id="admin-mirror"><option value="auto">자동</option><option value="mirrored">좌우 반전</option><option value="normal">반전 없음</option></select>
+        </label>
+      </div>
+      <div class="admin-toggle-row">
+        <label><input id="admin-arms" type="checkbox" checked /> 팔 추종 ON</label>
+        <label><input id="admin-legs" type="checkbox" checked /> 다리 추종 ON <span class="muted">(3D 깊이 추정은 실험적)</span></label>
+      </div>
+      <div class="row">
+        <button type="button" id="admin-all-live">전체 LIVE 복귀</button>
+        <button type="button" id="admin-reset">설정 초기화</button>
+      </div>
+      <p id="admin-preview-status" class="admin-state">메인 화면 연결 확인 중...</p>
+    </section>
+    <section class="card admin-editor">
+      <h2>12관절 좌표 편집 · 동작 검증</h2>
+      <p class="note">점을 드래그하거나 X/Y 수치를 바꾸면 **같은 좌표**가 오른쪽 스켈레톤과 3D 캐릭터에 즉시 적용됩니다. TEST 데이터가 실제 CNN 판정을 바꾸지는 않습니다.</p>
+      <label>자세 프리셋
+        <select id="admin-preset"></select>
+      </label>
+      <div class="admin-editor-grid">
+        <svg id="admin-joint-canvas" viewBox="0 0 400 500" role="img" aria-label="드래그로 편집하는 12관절 스켈레톤"></svg>
+        <div class="admin-joint-controls">
+          <label>편집할 관절<select id="admin-joint"></select></label>
+          <div class="admin-xy-inputs">
+            <label>X<input id="admin-joint-x" type="number" min="-2" max="2" step="0.01" inputmode="decimal" /></label>
+            <label>Y<input id="admin-joint-y" type="number" min="-2" max="2" step="0.01" inputmode="decimal" /></label>
+          </div>
+          <button id="admin-joint-nudge" type="button">현재 관절 좌표 소수점 정리</button>
+          <p class="note">Y는 아래로 갈수록 커집니다. 2D 입력만 있으므로 3D 앞뒤 깊이는 캐릭터 리그가 추정합니다.</p>
+          <button id="admin-capture-live" type="button">실제 CNN 좌표를 편집기로 가져오기</button>
+          <p class="note">실제 좌표는 편집하기 쉬운 화면 크기로 정규화됩니다. 원본 숫자는 아래 관리자 진단에 그대로 표시됩니다.</p>
+        </div>
+      </div>
+      <p class="admin-angle-output" id="admin-angle-output" aria-live="polite">관절 각도 계산 대기 중</p>
+      <div class="admin-keyframes">
+        <h3>연속 움직임 테스트</h3>
+        <div class="row">
+          <button id="admin-save-frame" type="button">＋ 현재 자세 저장</button>
+          <button id="admin-play-frames" type="button">▶ 연속 재생</button>
+          <button id="admin-clear-frames" type="button">자세 목록 비우기</button>
+        </div>
+        <p id="admin-frame-count" class="note">저장된 자세 0개</p>
+        <div id="admin-frame-list" class="admin-frame-list"></div>
+        <div class="row">
+          <button id="admin-export" type="button">관절 좌표 · 자세 JSON 저장</button>
+          <label class="admin-file-label">JSON 불러오기 <input id="admin-import-file" type="file" accept=".json,application/json" /></label>
+        </div>
+      </div>
+      <p class="admin-state" id="admin-test-message">관절 좌표를 편집하거나 자세를 선택하세요.</p>
+    </section>
+  </div>
+  <section class="card admin-preview">
+    <div class="row" style="justify-content:space-between">
+      <div><h2>시연 화면 미리보기</h2><p class="note">관절 편집·위치 설정이 스켈레톤과 3D 캐릭터에 반영되는지 비교합니다.</p></div>
+      <button type="button" id="admin-preview-refresh">미리보기 새로고침</button>
+    </div>
+    <iframe id="admin-main-preview" src="/" title="WiSensing 실시간 시연 화면"></iframe>
+    <p class="note">미리보기와 원래 시연 화면은 같은 설정 신호를 받습니다. 캐릭터 모델이 로컬 PC에 없으면 3D 로딩이 실패할 수 있습니다.</p>
+  </section>
   <div class="main">
     <section class="card">
       <h2>RX0~RX4 배치·MAC 검증</h2>
@@ -159,5 +250,6 @@
   });
   tick();setInterval(tick,1000);
 </script>
+<script type="module" src="/src/adminController.js"></script>
 </body>
 </html>
