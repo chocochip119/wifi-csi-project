@@ -28,7 +28,7 @@ with tempfile.TemporaryDirectory(prefix="wise-rounding-") as directory:
     compiler = [args.iverilog] + (["-B", args.ivl_base] if args.ivl_base else []) + ["-g2012"]
     run([sys.executable, ROOT / "pl/cnn/testbench/rounding/gen_vectors.py"], work)
     cases = [
-        ("rounding", ["CNN_Encoder/requant_stage.v", "FC/Common/requant_core.v"]),
+        ("rounding", ["CNN_Encoder/requant_stage.v", "FC/requant_core.v"]),
         ("pool_rounding", ["CNN_Encoder/Pool.v"]),
     ]
     for name, sources in cases:

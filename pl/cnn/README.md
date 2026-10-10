@@ -12,9 +12,9 @@
 | Requant + GELU | INT8 포화 후 LUT | `requant_stage.v`, `gelu_stage.v` |
 | Conv2 | `16→32`, kernel `3×3`, padding `1×1` | `rtl/CNN_Encoder/Conv_MAC.v` |
 | Requant + GELU + Pool | Pool 출력 `8×4`, RX당 1024 bytes | `rtl/CNN_Encoder/Pool.v` |
-| Flatten / FC1 | RX5의 5120개 특징 → 128 | `rtl/FC/fc_top.v`, `rtl/FC/Flatten/flatten.v` |
-| FC2 / FC3 | `128→128→24`, FC1/2 뒤 GELU | `rtl/FC/controller/fc_controller.v`, `rtl/FC/Common/` |
-| 출력 | INT8 24 bytes, 별도 output_scale | `rtl/FC/RAM/pose_buffer.v` |
+| Flatten / FC1 | RX5의 5120개 특징 → 128 | `rtl/FC/fc_top.v`, `rtl/FC/flatten.v` |
+| FC2 / FC3 | `128→128→24`, FC1/2 뒤 GELU | `rtl/FC/fc_controller.v`, `rtl/FC/` |
+| 출력 | INT8 24 bytes, 별도 output_scale | `rtl/FC/pose_buffer.v` |
 
 학습 모델의 BN은 export에서 folding된 가중치/bias로 반영하며 RTL에 별도 BN 단계가 없습니다. Pool/FC 정수 반올림은 [팀 INT8 계약](../../ml/pose/INT8.md)을 사용합니다.
 
@@ -28,6 +28,7 @@
 
 - [Encoder 단위/통합 TB](testbench/CNN_Encoder/README.md)
 - [반올림 회귀 및 RX5 전체 golden TB](testbench/rounding/README.md)
-- FC requant 단위 검증과 FC/controller/loader를 포함한 전체 경로 검증은 `rounding/`의 TB에 포함됩니다. 별도 FC/top testbench 디렉터리는 현재 없습니다.
+- [FC 전용 단위/통합 TB](testbench/FC/README.md): FIFO·MAC·Requant·GELU·RAM·Controller와 RX3/RX5 FC1→FC2→FC3를 자동 비교합니다.
+- FC/controller/loader를 포함한 전체 CNN 경로 검증은 `rounding/`의 golden TB를 사용합니다.
 
 소스와 golden의 일치는 실제 Vivado 타이밍/자원·보드 정확도 확인과 구분합니다. 기존 XSA/시험 벡터의 상태는 [통합 자료](../../integration/README.md), 실제로 수행한 검사는 [점검 기록](../../docs/reviews/2026-10-07-pc-integration.md)에 기록합니다.
