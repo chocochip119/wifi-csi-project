@@ -490,7 +490,7 @@ function hasMeaningfulArmPose(pose) {
     const dx = Math.abs(Number(wrist.x) - Number(shoulder.x)) / torso
     const dy = (Number(wrist.y) - Number(shoulder.y)) / torso
     // 손목이 어깨보다 높거나, 손목이 어깨 높이 근처에서 바깥으로 뻗은 경우.
-    if (dy < -0.12 || (dx > 0.58 && Math.abs(dy) < 0.66)) return true
+    if (dy < 0.80 || (dx > 0.58 && dy < 0.95)) return true
   }
   return false
 }
@@ -628,7 +628,7 @@ function updateMotionRig(pose, mirrored) {
   }
   const angles = solvePoseAngles(pose, mirrored)
   // LIVE/TEST 모두 동일 좌표로 관절을 계산합니다. 2D->3D 깊이는 리그가 추정합니다.
-  const arms = viewerSettings.liveArms && Boolean(angles)
+  const arms = viewerSettings.liveArms && Boolean(angles) && hasMeaningfulArmPose(pose)
   // When P10 uses the procedural seated fallback, leave its leg rotations
   // untouched unless a real squat pose is being tracked.
   const fallbackSeated=targetPosture==='sitting' && !sitAnimationName &&
