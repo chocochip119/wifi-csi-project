@@ -15,7 +15,27 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 const signedDelta = (a,b) => Math.atan2(Math.sin(a-b),Math.cos(a-b))
 // Limit the distance between the shoes to the avatar's pelvis width.
 export const FOOT_STANCE_MIN = 0.55
-export const FOOT_STANCE_MAX = 1.0
+export const FOOT_STANCE_MAX = 1.5
+
+// The knee's observed sideways deviation from the hip-to-ankle line determines
+// the IK bend plane. 2D cannot determine actual forward/backward knee depth.
+export function kneePoseMetrics(point,torso,side) {
+  const ids=side==='L' ? [23,25,27] : [24,26,28]
+  const [hip,knee,ankle]=ids.map(id=>point.get(id))
+  if(!hip||!knee||!ankle||!Number.isFinite(torso)||torso<=1e-6) return null
+  const dx=ankle.x-hip.x,dy=ankle.y-hip.y
+  const pathLength=dx*dx+dy*dy
+  if(pathLength<1e-10) return null
+  const t=clamp(((knee.x-hip.x)*dx+(knee.y-hip.y)*dy)/pathLength,0,1)
+  const lateral=clamp((knee.x-hip.x-dx*t)/torso,-0.6,0.6)
+  const vertical=clamp(-(knee.y-hip.y-dy*t)/torso,-0.6,0.6)
+  const ux=hip.x-knee.x,uy=hip.y-knee.y
+  const vx=ankle.x-knee.x,vy=ankle.y-knee.y
+  const length=Math.hypot(ux,uy)*Math.hypot(vx,vy)
+  const cosine=length>1e-8 ? clamp((ux*vx+uy*vy)/length,-1,1) : -1
+  const flex=clamp((Math.PI-Math.acos(cosine))/(Math.PI/2),0,1)
+  return {lateral,vertical,flex}
+}
 
 export function solvePoseAngles(pose, mirrored = false) {
   if (!pose?.valid || !Array.isArray(pose.joints)) return null
@@ -45,6 +65,8 @@ export function solvePoseAngles(pose, mirrored = false) {
   const outL = Math.abs(point.get(25).x - point.get(23).x)/torso
   const outR = Math.abs(point.get(26).x - point.get(24).x)/torso
   const legActivity = Math.max(liftL,liftR,squat,clamp((Math.max(outL,outR)-0.23)/0.48,0,1))
+  const kneeL=kneePoseMetrics(point,torso,'L')
+  const kneeR=kneePoseMetrics(point,torso,'R')
 
   const directions = new Map()
   for (const seg of LIMB_SEGMENTS) {
@@ -65,5 +87,5 @@ export function solvePoseAngles(pose, mirrored = false) {
       if (lower.startsWith('shin')) b.angle=clamp(b.angle,-1.30,1.30)
     }
   }
-  return { directions, point, torso, activity:legActivity, squat, liftL, liftR, footSpacingRatio }
+  return { directions, point, torso, activity:legActivity, squat, liftL, liftR, footSpacingRatio, kneeL, kneeR }
 }
