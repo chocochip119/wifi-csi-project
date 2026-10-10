@@ -6,8 +6,6 @@
 |---|---|
 | [ESP-TX](dataset_collecter/ESP-TX/README.md) | SoftAP/ESP-NOW로 RX 관리, trigger 송신, UDP CSI 수집, USB CDC ACM으로 PS 전달 |
 | [ESP-RX](dataset_collecter/ESP-RX/README.md) | TX 제어 적용, CSI 측정, RX slot에 맞춰 UDP로 TX에 반환 |
-| `rx/csi_test.py`, `rx/wave.py` | 이전 COM5·921600bps 텍스트 수신/CSI_DATA 그래프 도구 |
-| `tx/` | 현재 펌웨어 코드가 없는 자리 |
 
 RX→TX의 UDP 3333과 PS→PC의 TCP 5000/5001은 서로 다른 구간입니다. 현재 TX→PS는 네이티브 USB CDC ACM이고, 기존 Python 텍스트 도구는 TX의 binary USB cycle parser를 대신하지 않습니다.
 
