@@ -64,3 +64,25 @@ test('natural idle arms stay neutral while deliberate arm movements enable IK',(
   for(const name of ['armUp','armsWide','bothArmsUp','handsForward','leftElbowBent'])
     assert.equal(hasMeaningfulArmPose(createEditorPreset(name)),true,name)
 })
+
+test('elbow spreading activates arms even if both wrists stay by the hips',()=>{
+  const standing=createEditorPreset('stand')
+  assert.equal(hasMeaningfulArmPose(standing),false)
+  const left=createEditorPreset('stand')
+  left.joints.find(j=>j.id===13).x=0.10
+  assert.equal(hasMeaningfulArmPose(left),true)
+  assert.deepEqual(left.joints.filter(j=>[15,16].includes(j.id)),
+                   standing.joints.filter(j=>[15,16].includes(j.id)))
+  const right=createEditorPreset('stand')
+  right.joints.find(j=>j.id===14).x=0.90
+  assert.equal(hasMeaningfulArmPose(right),true)
+})
+
+test('a raised elbow with a low wrist activates arms, but small elbow jitter does not',()=>{
+  const raised=createEditorPreset('stand')
+  raised.joints.find(j=>j.id===13).y=0.24
+  assert.equal(hasMeaningfulArmPose(raised),true)
+  const subtle=createEditorPreset('stand')
+  subtle.joints.find(j=>j.id===13).x-=0.03
+  assert.equal(hasMeaningfulArmPose(subtle),false)
+})
