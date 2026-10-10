@@ -13,6 +13,9 @@ export const LIMB_SEGMENTS = Object.freeze([
 ])
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 const signedDelta = (a,b) => Math.atan2(Math.sin(a-b),Math.cos(a-b))
+// Limit the distance between the shoes to the avatar's pelvis width.
+export const FOOT_STANCE_MIN = 0.55
+export const FOOT_STANCE_MAX = 1.0
 
 export function solvePoseAngles(pose, mirrored = false) {
   if (!pose?.valid || !Array.isArray(pose.joints)) return null
@@ -34,6 +37,11 @@ export function solvePoseAngles(pose, mirrored = false) {
   const liftL = clamp((spanR-spanL-0.13)/0.37,0,1)
   const liftR = clamp((spanL-spanR-0.13)/0.37,0,1)
   const squat = clamp((1.10-Math.max(spanL,spanR))/0.27,0,1)*(1-Math.max(liftL,liftR))
+  const pelvisSpan = Math.abs(point.get(24).x - point.get(23).x)
+  const ankleSpan = Math.abs(point.get(28).x - point.get(27).x)
+  // Reject almost edge-on pelvis coordinates; they cannot define shoe spacing.
+  const footSpacingRatio = pelvisSpan >= torso*0.10 ?
+    clamp(ankleSpan/pelvisSpan,FOOT_STANCE_MIN,FOOT_STANCE_MAX) : null
   const outL = Math.abs(point.get(25).x - point.get(23).x)/torso
   const outR = Math.abs(point.get(26).x - point.get(24).x)/torso
   const legActivity = Math.max(liftL,liftR,squat,clamp((Math.max(outL,outR)-0.23)/0.48,0,1))
@@ -57,5 +65,5 @@ export function solvePoseAngles(pose, mirrored = false) {
       if (lower.startsWith('shin')) b.angle=clamp(b.angle,-1.30,1.30)
     }
   }
-  return { directions, point, torso, activity:legActivity, squat, liftL, liftR }
+  return { directions, point, torso, activity:legActivity, squat, liftL, liftR, footSpacingRatio }
 }
