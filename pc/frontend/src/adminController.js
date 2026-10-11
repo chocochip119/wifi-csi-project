@@ -1,6 +1,7 @@
 import {POSE_PRESETS, JOINT_NAMES, EDITOR_IDS, EDITOR_EDGES,
   createEditorPreset, asEditorPose, updateEditorJoint, blendEditorPose, normalizeBackendPose} from './poseEditor.js'
 import './adminController.css'
+import {setupCsvReplayControls} from './csvReplayAdmin.js'
 import {solvePoseAngles} from './poseAngles.js'
 import {DEFAULT_ANATOMY_CONFIG,ANATOMY_LIMITS,normalizeAnatomyConfig} from './anatomySolver.js'
 
@@ -320,3 +321,4 @@ $('admin-preview-refresh').addEventListener('click',()=>{
 })
 window.addEventListener('beforeunload',()=>{stopPlayer();channel.close()})
 renderEditor();renderFrames();renderSettings();updateAnatomyControls();sendRequest()
+setupCsvReplayControls({channel,backend})

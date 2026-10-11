@@ -5,19 +5,19 @@ import {DEFAULT_VIEWER_SETTINGS, resolveViewerLocation, selectViewerPose} from '
 const sample = (point, valid = true, presence = true) => ({
   location: {valid, point_id: point}, person: {presence, posture:'standing'}
 })
-test('P05 stands in Zone 5 and P10 sits in the SAME Zone 5', () => {
+test('P05 stands in Zone 5 and P10 uses squat visualization in the SAME Zone 5', () => {
   const p05 = resolveViewerLocation(sample('p05'), DEFAULT_VIEWER_SETTINGS)
   const p10 = resolveViewerLocation(sample('p10'), DEFAULT_VIEWER_SETTINGS)
   assert.equal(p05.zone, 5)
   assert.equal(p10.zone, 5)
   assert.equal(p05.posture, 'standing')
-  assert.equal(p10.posture, 'sitting')
+  assert.equal(p10.posture, 'squat')
 })
 test('manual P10 ignores unstable incoming location but not other signals', () => {
   const incoming = sample('p03')
   const position = resolveViewerLocation(incoming, {...DEFAULT_VIEWER_SETTINGS,locationMode:'manual',manualPoint:'p10'})
   assert.equal(position.zone,5)
-  assert.equal(position.posture,'sitting')
+  assert.equal(position.posture,'squat')
   assert.equal(incoming.location.point_id,'p03')
 })
 test('every manual zone is supported', () => {
