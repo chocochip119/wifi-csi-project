@@ -19,7 +19,7 @@ export function resolveViewerLocation(snapshot, settings) {
   if (!manual && (snapshot?.person?.presence === false || pointId === 'empty')) {
     return {valid: true, pointId: 'empty', zone: null, posture: 'empty', empty: true, manual}
   }
-  if (pointId === 'p10') return {valid: true, pointId, zone: 5, posture: 'sitting', empty: false, manual}
+  if (pointId === 'p10') return {valid: true, pointId, zone: 5, posture: 'squat', empty: false, manual}
   const match = /^p0?([1-9])$/.exec(pointId)
   const zone = match ? Number(match[1]) : (!manual ? Number(location.zone) : NaN)
   if (!Number.isInteger(zone) || zone < 1 || zone > 9) {

@@ -248,3 +248,7 @@ button { font: inherit; }
   .settings-trigger { padding:8px; font-size:11px; }
   .viewer-settings-panel { top:65px; right:8px; bottom:8px; }
 }
+
+/* Larger joint viewer: use empty card space without cropping wrists/ankles. */
+.pose-svg { width: 100%; height: 100%; max-height: none; }
+.pose-view { overflow: hidden; }

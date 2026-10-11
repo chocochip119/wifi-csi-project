@@ -25,16 +25,37 @@ export function sanitizePose(pose) {
 }
 
 export class PoseFilter {
-  constructor(timeConstantMs = 100) {
+  // 3-frame median removes isolated coordinate spikes; adaptive EMA reduces jitter.
+  // Keep all twelve joints coherent and use the same filtered data for 2D and 3D.
+  constructor(timeConstantMs = 220) {
     this.timeConstantMs = timeConstantMs
     this.reset()
   }
-  reset() { this.previous = null; this.previousAt = 0 }
+  reset() {
+    this.previous = null
+    this.previousAt = 0
+    this.lastFrameKey = null
+    this.rawHistory = []
+  }
   push(pose, at = now()) {
     if (!pose) { this.reset(); return null }
-    // 파일 재생 및 backend의 frame 간격이 길면 이전 프레임 값을 끌어오지 않는다.
-    if (!this.previous || this.previous.coordinate_space !== pose.coordinate_space ||
-        at - this.previousAt > 1200 || at < this.previousAt) {
+    const keySource = pose.source_timestamp_us ?? pose.end_trigger_seq ?? pose.window_id
+    const frameKey = keySource == null ? null : String(keySource)
+    // Backend sends snapshots every 100 ms; an unchanged pose must NOT be
+    // repeatedly counted as a fresh sample.
+    if (this.previous && frameKey !== null && frameKey === this.lastFrameKey)
+      return this.previous
+    if (this.previous && frameKey === null &&
+        pose.joints.every((j, i) => j.x === this.lastRaw?.joints[i]?.x && j.y === this.lastRaw?.joints[i]?.y))
+      return this.previous
+    const expired = !this.previous || this.previous.coordinate_space !== pose.coordinate_space ||
+      at - this.previousAt > 1200 || at < this.previousAt
+    if (expired) this.reset()
+    this.lastFrameKey = frameKey
+    this.lastRaw = pose
+    this.rawHistory.push(pose.joints)
+    if (this.rawHistory.length > 3) this.rawHistory.shift()
+    if (expired) {
       this.previous = pose
       this.previousAt = at
       return pose
@@ -42,9 +63,26 @@ export class PoseFilter {
     const dt = Math.max(1, at - this.previousAt)
     const alpha = 1 - Math.exp(-dt / this.timeConstantMs)
     const prevById = new Map(this.previous.joints.map(j => [j.id, j]))
-    const joints = pose.joints.map(j => {
+    const byId = new Map(pose.joints.map(j => [j.id, j]))
+    const torso = Math.abs(((byId.get(23)?.y ?? 0) + (byId.get(24)?.y ?? 0)
+      - (byId.get(11)?.y ?? 0) - (byId.get(12)?.y ?? 0))/2)
+    const spikeThreshold = Math.max(torso * 0.60, 1e-5)
+    const median = (values) => {
+      const ordered = values.slice().sort((a,b) => a-b)
+      const half = Math.floor(ordered.length / 2)
+      return ordered.length % 2 ? ordered[half] : (ordered[half-1]+ordered[half])/2
+    }
+    // Actual joint movement still passes; just suppress individual-frame spikes.
+    const joints = pose.joints.map((j, i) => {
       const p = prevById.get(j.id)
-      return { ...j, x: p.x + (j.x - p.x) * alpha, y: p.y + (j.y - p.y) * alpha }
+      // With only two frames, don't let one implausibly large jump leak
+      // through the average before the third-frame median can reject it.
+      const first = this.rawHistory[0][i]
+      const initialSpike = this.rawHistory.length === 2 &&
+        Math.hypot(j.x-first.x, j.y-first.y) > spikeThreshold
+      const x = initialSpike ? p.x : median(this.rawHistory.map(frame => frame[i].x))
+      const y = initialSpike ? p.y : median(this.rawHistory.map(frame => frame[i].y))
+      return { ...j, x: p.x + (x-p.x)*alpha, y: p.y + (y-p.y)*alpha }
     })
     this.previous = { ...pose, joints }
     this.previousAt = at

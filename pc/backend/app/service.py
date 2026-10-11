@@ -28,6 +28,51 @@ JOINT_IDS = {
 }
 
 
+
+class LocationStabilizer:
+    """Hold a published point until 3 distinct consecutive window predictions agree.
+
+    A stale/invalid prediction clears immediately. Repeated polls of the same
+    model window do not count as new votes. Raw inference remains unmodified.
+    """
+
+    def __init__(self, confirmations: int = 3):
+        self.confirmations = confirmations
+        self.reset()
+
+    def reset(self):
+        self.last_stamp = None
+        self.stable = None
+        self.candidate = None
+        self.count = 0
+
+    def update(self, prediction):
+        if prediction is None:
+            self.reset()
+            return None
+        stamp = prediction.get("monotonic_ns")
+        if stamp is None:
+            # Do not fabricate votes from snapshots without model-window identity.
+            return prediction
+        if stamp == self.last_stamp:
+            return self.stable
+        self.last_stamp = stamp
+        label = str(prediction.get("point_id"))
+        if self.stable is not None and label == str(self.stable["point_id"]):
+            self.stable = prediction.copy()
+            self.candidate = None
+            self.count = 0
+        else:
+            if label == self.candidate:
+                self.count += 1
+            else:
+                self.candidate, self.count = label, 1
+            if self.count >= self.confirmations:
+                self.stable = prediction.copy()
+                self.candidate = None
+                self.count = 0
+        return self.stable
+
 def _now_ms() -> int:
     return time.time_ns() // 1_000_000
 
@@ -47,6 +92,7 @@ class BackendService:
         self._pose = None
         self._seq = 0
         self._last_prediction: dict[str, Any] | None = None
+        self._location_stabilizer = LocationStabilizer(confirmations=3)
         self._last_error: str | None = None
         self._started = False
         self._snapshot: dict[str, Any] = self._empty_snapshot("Backend 시작 전")
@@ -105,6 +151,7 @@ class BackendService:
         if self._started:
             return
         self._started = True
+        self._location_stabilizer.reset()
         self._stop.clear()
         if self.settings.fake:
             self._monitor_thread = threading.Thread(target=self._fake_loop, name="wise-backend-fake", daemon=True)
@@ -362,7 +409,9 @@ class BackendService:
                 reason = str(live_snap.get("reason") or "")
                 latest_pose = self._pose.latest_pose() if self._pose is not None else None
 
-                location, person = self._location_state(prediction, reason)
+                # Do not re-vote the same inference window during 100 ms UI polls.
+                stable_prediction = self._location_stabilizer.update(prediction)
+                location, person = self._location_state(stable_prediction, reason)
                 pose = self._pose_state(latest_pose)
                 system = {
                     "ps_connected": bool(serial.get("connected")),

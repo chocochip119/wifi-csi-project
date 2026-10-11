@@ -6,7 +6,7 @@ import os
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_MODEL = ROOT / "localization" / "models" / "ridge_portable.npz"
+DEFAULT_MODEL = ROOT / "localization" / "models" / "localization" / "ridge_portable.npz"
 
 
 @dataclass(frozen=True)

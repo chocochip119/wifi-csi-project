@@ -147,7 +147,7 @@ const { zonePositions, updateZoneHighlight } = createLivingRoomScene(scene)
 // ========================================
 function updateLocationUI(zone, pointId = null) {
   const pointName = pointId === 'p10' ? 'P10' : `P${String(zone).padStart(2, '0')}`
-  document.querySelector('.scene-title strong').textContent = pointId === 'p10' ? 'Zone 5 · Sitting' : `Zone ${zone}`
+  document.querySelector('.scene-title strong').textContent = pointId === 'p10' ? 'Zone 5 · Squat' : `Zone ${zone}`
   document.querySelector('.location-number').textContent = pointName
   document.querySelector('.location-main strong').textContent = `Zone ${zone}`
   document.querySelectorAll('.mini-grid div').forEach((cell) => {
@@ -170,6 +170,7 @@ function updatePostureUI(posture) {
   const labels = {
     standing: 'Standing',
     sitting: 'Sitting',
+    squat: 'Squat (P10)',
     empty: 'No person',
     unknown: 'Unknown'
   }
@@ -229,7 +230,7 @@ function renderPose(pose, mirrored = false) {
   }
 
   // model_output, fake_normalized 모두 화면 안에 동일 비율로 맞춘다.
-  const scale = Math.min(180 / Math.max(spanX, 1e-8), 280 / Math.max(spanY, 1e-8))
+  const scale = Math.min(208 / Math.max(spanX, 1e-8), 302 / Math.max(spanY, 1e-8))
   const centerX = (minX + maxX) / 2
   const centerY = (minY + maxY) / 2
   const mapped = new Map()
@@ -283,8 +284,6 @@ let anatomyTelemetryAt=0
 let characterRequestId = 0
 const viewerSettings = {...DEFAULT_VIEWER_SETTINGS}
 let selectedPointId = 'p05'
-let sitFallbackBase = null
-let sitAnimationName = null
 let latestSnapshot = null
 let customPose = null // 관리자에서 편집 중인 12관절. 실제 Backend 데이터는 그대로 유지합니다.
 let activeReplaySnapshot = null
@@ -295,6 +294,12 @@ let replayActive = false
 let backendLastSeenAt = 0
 let backendExpired = false
 const poseFilter = new PoseFilter()
+// Standalone offline INT8 CNN replay; never mutates incoming hardware packets.
+let csvReplayActive = false
+let csvPostprocess = true
+let replayPaused = false
+let replayIntervalMs = 250
+
 let mirrorMode = 'auto'
 let lastMirror = false
 let cameraView = 'front'
@@ -306,7 +311,7 @@ function setLiveBadge(value) {
   if (liveBadge) liveBadge.textContent = value
 }
 function updateLiveBadge(snapshot) {
-  if (replayActive) { setLiveBadge('FILE REPLAY'); return }
+  if (replayActive) { setLiveBadge(csvReplayActive ? 'CSV CNN TEST' : 'FILE REPLAY'); return }
   if (viewerSettings.locationMode === 'manual' || viewerSettings.jointsMode !== 'live') {
     setLiveBadge(liveConnection ? 'LIVE + TEST' : 'TEST MODE')
     return
@@ -346,10 +351,6 @@ function playAnimation(name, fadeTime = 0.25) {
 // 12관절 추종은 유효한 좌표가 있을 때만 mixer 뒤에 회전을 덮어쓴다.
 function refreshIdleAnimation() {
   if (!character || isMoving) return
-  if (targetPosture === 'sitting' && sitAnimationName) {
-    playAnimation(sitAnimationName)
-    return
-  }
   playAnimation(poseRig?.ready && poseRig.armEnabled ? 'ArmPoseIdle' : 'Idle_Neutral')
 }
 
@@ -387,91 +388,6 @@ function moveCharacterTo(zone, posture = 'standing') {
   playAnimation('Walk')
 }
 
-// P10은 P05와 같은 좌표에서 앉은 자세를 적용합니다.
-// GLTF에 앉기 idle clip이 있으면 우선 사용하고, 없으면 안전한 제한적 본 포즈로 대체합니다.
-const sitChair = new THREE.Group()
-const sitMat = new THREE.MeshStandardMaterial({color: 0x48565a, roughness: 0.9})
-const seat = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.075, 0.66), sitMat)
-seat.position.set(0, 0.47, 0.08)
-sitChair.add(seat)
-for (const x of [-0.27, 0.27]) {
-  for (const z of [-0.15, 0.30]) {
-    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.45, 0.055), sitMat)
-    leg.position.set(x, 0.225, z)
-    sitChair.add(leg)
-  }
-}
-const chairBack = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.53, 0.065), sitMat)
-chairBack.position.set(0, 0.77, -0.22)
-sitChair.add(chairBack)
-sitChair.position.copy(zonePositions[5])
-sitChair.visible = false
-scene.add(sitChair)
-
-function restoreSittingFallback() {
-  if (!sitFallbackBase) return
-  const original = sitFallbackBase
-  original.body.position.copy(original.bodyPosition)
-  for (const item of original.legs) {
-    item.upper.quaternion.copy(item.upperRotation)
-    item.lower.quaternion.copy(item.lowerRotation)
-    item.foot.position.copy(item.footPosition)
-  }
-  sitFallbackBase = null
-  character?.updateMatrixWorld(true)
-}
-function applySittingFallback() {
-  if (!character || !poseRig?.ready) {sitChair.visible = false; return}
-  const sitting = character.visible && !isMoving && targetPosture === 'sitting'
-  sitChair.visible = sitting
-  // Do not run procedural P10 seated fallback and live anatomical squat IK together.
-  if (poseRig.legEnabled && poseRig.solution?.squat>0.075) {
-    if (sitFallbackBase) restoreSittingFallback()
-    return
-  }
-  if (!sitting || sitAnimationName) {
-    if (sitFallbackBase) restoreSittingFallback()
-    return
-  }
-  const body = poseRig.body
-  if (!sitFallbackBase) {
-    sitFallbackBase = {
-      body, bodyPosition: body.position.clone(),
-      legs: poseRig.legs.map(leg => ({
-        upper: leg.upper, lower: leg.lower, foot: leg.foot,
-        upperRotation: leg.upper.quaternion.clone(),
-        lowerRotation: leg.lower.quaternion.clone(),
-        footPosition: leg.foot.position.clone()
-      }))
-    }
-    if (!poseRig.calibrated) poseRig.calibrate()
-  }
-  const rest = sitFallbackBase
-  const parentScale = body.parent.getWorldScale(new THREE.Vector3())
-  body.position.copy(rest.bodyPosition)
-  body.position.y -= 0.40 / Math.max(Math.abs(parentScale.y), 0.01)
-  const axis = new THREE.Vector3(1, 0, 0)
-  for (const leg of rest.legs) {
-    leg.upper.quaternion.copy(leg.upperRotation)
-      .multiply(new THREE.Quaternion().setFromAxisAngle(axis, -1.10))
-    leg.lower.quaternion.copy(leg.lowerRotation)
-      .multiply(new THREE.Quaternion().setFromAxisAngle(axis, 1.22))
-  }
-  character.updateMatrixWorld(true)
-  // Foot 본이 다리 본의 자식이 아닌 GLTF에서도 정강이 끝과 신발을 맞춥니다.
-  for (let i = 0; i < rest.legs.length; i++) {
-    const item = rest.legs[i]
-    const leg = poseRig.legs[i]
-    if (!leg.shinAxis || leg.length < 0.02) continue
-    const tip = item.lower.getWorldPosition(new THREE.Vector3()).add(
-      leg.shinAxis.clone().applyQuaternion(item.lower.getWorldQuaternion(new THREE.Quaternion())).normalize().multiplyScalar(leg.length)
-    )
-    item.foot.parent.updateWorldMatrix(true, false)
-    item.foot.position.copy(item.foot.parent.worldToLocal(tip))
-  }
-  character.updateMatrixWorld(true)
-}
-
 function setAbsentState(message, posture) {
   isMoving = false
   targetZone = currentZone
@@ -482,23 +398,48 @@ function setAbsentState(message, posture) {
   updatePostureUI(posture)
 }
 
+// P10 is the model's original central seated class; its UI visualization is a
+// floor squat with no chair. Real shoulders/arms stay live; only lower-body
+// coordinates are replaced by a conservative, connected squat demonstration.
+function p10SquatPose(pose) {
+  if (!pose?.valid) return createTestPose('squat')
+  const byId = new Map(pose.joints.map(j => [Number(j.id), j]))
+  const leftHip = byId.get(23), rightHip = byId.get(24)
+  const leftShoulder = byId.get(11), rightShoulder = byId.get(12)
+  if (![leftHip, rightHip, leftShoulder, rightShoulder].every(Boolean))
+    return createTestPose('squat')
+  const torso = (leftHip.y + rightHip.y - leftShoulder.y - rightShoulder.y) / 2
+  if (!Number.isFinite(torso) || torso <= 1e-6) return createTestPose('squat')
+  const jointOverrides = new Map([
+    [25, { x:leftHip.x - torso*0.025, y:leftHip.y + torso*0.38 }],
+    [26, { x:rightHip.x + torso*0.025, y:rightHip.y + torso*0.38 }],
+    [27, { x:leftHip.x - torso*0.075, y:leftHip.y + torso*0.86 }],
+    [28, { x:rightHip.x + torso*0.075, y:rightHip.y + torso*0.86 }]
+  ])
+  return { ...pose, joints:pose.joints.map(j =>
+    jointOverrides.has(Number(j.id)) ? { ...j, ...jointOverrides.get(Number(j.id)) } : j) }
+}
+
 // 하나의 Pose가 오른쪽 스켈레톤과 3D 관절 모두를 움직입니다.
 function updateMotionRig(pose, mirrored) {
-  if (!pose?.valid || isMoving) {
+  if (isMoving || !character?.visible) {
     if (poseRig?.active) poseRig.clear()
     refreshIdleAnimation()
     return
   }
-  const angles = solvePoseAngles(pose, mirrored)
-  // LIVE/TEST 모두 동일 좌표로 관절을 계산합니다. 2D->3D 깊이는 리그가 추정합니다.
-  const arms = viewerSettings.liveArms && Boolean(angles) && hasMeaningfulArmPose(pose)
-  // When P10 uses the procedural seated fallback, leave its leg rotations
-  // untouched unless a real squat pose is being tracked.
-  const fallbackSeated=targetPosture==='sitting' && !sitAnimationName &&
-    (!angles || angles.squat<=0.075)
-  const legs = viewerSettings.liveLegs && !fallbackSeated && Boolean(angles &&
-    (angles.activity > 0.14 || Number.isFinite(angles.footSpacingRatio)))
-  if (arms || legs) poseRig?.setPose(pose, mirrored, {arms, legs})
+  const isP10Squat = targetPosture === 'squat'
+  const drivenPose = isP10Squat ? p10SquatPose(pose) : pose
+  if (!drivenPose?.valid) {
+    if (poseRig?.active) poseRig.clear()
+    refreshIdleAnimation()
+    return
+  }
+  const effectiveMirror = isP10Squat && !pose?.valid ? false : mirrored
+  const angles = solvePoseAngles(drivenPose, effectiveMirror)
+  const arms = Boolean(pose?.valid && viewerSettings.liveArms && angles && hasMeaningfulArmPose(pose))
+  const legs = Boolean(viewerSettings.liveLegs && angles &&
+    (isP10Squat || angles.activity > 0.14 || Number.isFinite(angles.footSpacingRatio)))
+  if (arms || legs) poseRig?.setPose(drivenPose, effectiveMirror, {arms, legs})
   else if (poseRig?.active) poseRig.clear()
   refreshIdleAnimation()
 }
@@ -512,7 +453,7 @@ function handleSnapshot(snapshot, source = 'backend') {
 
   // LIVE 관절은 위치 결과와 관계없이 수신합니다. TEST 관절은 화면에만 생성합니다.
   const validPose = sanitizePose(snapshot.pose)
-  const livePose = validPose ? poseFilter.push(validPose) : null
+  const livePose = validPose ? (csvReplayActive && !csvPostprocess ? validPose : poseFilter.push(validPose)) : null
   if (!livePose) poseFilter.reset()
   const sharedPose = viewerSettings.jointsMode === 'custom'
     ? customPose
@@ -537,7 +478,7 @@ function handleSnapshot(snapshot, source = 'backend') {
     }
     const showPerson = Boolean(motionPose?.valid || displayPose?.valid || (location.valid && !location.empty))
     if (character) character.visible = showPerson
-    if (showPerson) moveCharacterTo(5, location.posture === 'sitting' ? 'sitting' : 'standing')
+    if (showPerson) moveCharacterTo(5, location.posture === 'squat' ? 'squat' : 'standing')
     updateMotionRig(motionPose, motionMirror)
     updateLiveBadge(snapshot)
     return
@@ -576,14 +517,10 @@ function loadCharacter(name) {
   isMoving = false
 
   if (mixer) mixer.stopAllAction()
-  restoreSittingFallback()
-  sitChair.visible = false
   poseRig = null
   mixer = null
   currentAction = null
   characterAnimations = []
-  sitFallbackBase = null
-  sitAnimationName = null
   if (character) scene.remove(character)
   character = null
 
@@ -627,11 +564,7 @@ function loadCharacter(name) {
     } else {
       characterAnimations = gltf.animations
     }
-    sitAnimationName = characterAnimations
-      .filter(a => /sit|seated|chair/i.test(a.name) && !/sit.?down|stand.?up|get.?up|transition/i.test(a.name))
-      .sort((a,b)=>Number(/idle|loop/i.test(b.name))-Number(/idle|loop/i.test(a.name)))[0]?.name ?? null
-    playAnimation('Idle_Neutral')
-    console.log(`${name} loaded; sitting clip: ${sitAnimationName ?? 'procedural fallback'}`)
+    console.log(`${name} loaded; P10 uses squat visualization (no chair)`)
 
     if (replayActive && activeReplaySnapshot) handleSnapshot(activeReplaySnapshot, 'replay')
     else if (latestSnapshot) handleSnapshot(latestSnapshot)
@@ -709,6 +642,52 @@ settingsOpen.addEventListener('click', () => {
 settingsChannel.addEventListener('message', event => {
   const msg = event.data
   if (!msg || typeof msg !== 'object') return
+  if (msg.type === 'csv-replay-start') {
+    try {
+      // Same snapshots, normalization, rig, renderer as LIVE and JSON replay.
+      const incoming = parsePoseRecording(JSON.stringify(msg.frames))
+      replayFrames = incoming
+      replayIndex = 0
+      replayLastTick = performance.now()
+      replayPaused = false
+      csvReplayActive = true
+      csvPostprocess = msg.postprocess !== false
+      replayIntervalMs = 150 / ([0.5,1,2].includes(Number(msg.speed)) ? Number(msg.speed) : 1)
+      replayActive = true
+      backendExpired = false
+      activeReplaySnapshot = null
+      poseFilter.reset()
+      poseRig?.clear()
+      // CSV is a replay of genuine inference, NOT synthetic position predictions.
+      viewerSettings.locationMode = 'live'
+      viewerSettings.jointsMode = 'live'
+      viewerSettings.motionMode = 'live'
+      syncLocationViewSwitch()
+      replayLabel.hidden = false
+      replayLabel.textContent = `CSV CNN REPLAY · ${incoming.length} frames · B: LIVE 복귀`
+      setLiveBadge('CSV CNN TEST')
+      handleSnapshot(incoming[0], 'replay')
+      broadcastSettings()
+    } catch (error) { console.error('CSV Replay failed:', error) }
+    return
+  }
+  if (msg.type === 'csv-replay-stop') { if (csvReplayActive) stopPoseReplay(); return }
+  if (msg.type === 'csv-replay-pause') { if (csvReplayActive) { replayPaused = Boolean(msg.paused); replayLastTick=performance.now() } return }
+  if (msg.type === 'csv-replay-speed') {
+    if (csvReplayActive && [0.5,1,2].includes(Number(msg.speed))) {
+      replayIntervalMs=150/Number(msg.speed);replayLastTick=performance.now()
+    }
+    return
+  }
+  if (msg.type === 'csv-replay-filter') {
+    if (csvReplayActive) {
+      csvPostprocess = msg.postprocess !== false
+      poseFilter.reset()
+      poseRig?.clear()
+      if (activeReplaySnapshot) handleSnapshot(activeReplaySnapshot,'settings')
+    }
+    return
+  }
   if (msg.type === 'hello') { broadcastSettings(); return }
   if (msg.type === 'anatomy-set') {
     anatomyConfig=normalizeAnatomyConfig({...anatomyConfig,...msg.values})
@@ -725,11 +704,13 @@ settingsChannel.addEventListener('message', event => {
   }
   if (msg.type === 'update') { updateViewerSettings(msg.key, msg.value); return }
   if (msg.type === 'all-live') {
+    if (csvReplayActive) stopPoseReplay()
     viewerSettings.locationMode = 'live'
     viewerSettings.jointsMode = 'live'
     viewerSettings.motionMode = 'live'
     syncLocationViewSwitch()
   } else if (msg.type === 'reset') {
+    if (csvReplayActive) stopPoseReplay()
     Object.assign(viewerSettings, DEFAULT_VIEWER_SETTINGS)
     syncLocationViewSwitch()
     cameraView = 'front'
@@ -764,7 +745,12 @@ const replayFileInput = document.querySelector('#pose-replay-file')
 const replayLabel = document.querySelector('#pose-replay-label')
 
 function stopPoseReplay() {
+  if (csvReplayActive) settingsChannel.postMessage({type:'csv-replay-stopped'})
   replayActive = false
+  csvReplayActive = false
+  replayPaused = false
+  csvPostprocess = true
+  replayIntervalMs = 250
   updateLiveBadge(latestSnapshot)
   replayFrames = []
   replayIndex = 0
@@ -860,7 +846,7 @@ function animate(now) {
   if (mixer) mixer.update(delta)
 
   // 파일 재생은 시간 흐름에 따라 원본 snapshot/pose를 그대로 입력 파이프라인으로 보낸다.
-  if (replayActive && replayFrames.length && now - replayLastTick >= 250) {
+  if (replayActive && replayFrames.length && !replayPaused && now - replayLastTick >= replayIntervalMs) {
     replayLastTick = now
     replayIndex = (replayIndex + 1) % replayFrames.length
     handleSnapshot(replayFrames[replayIndex], 'replay')
@@ -914,7 +900,6 @@ function animate(now) {
   // Idle/Walk 이후 한 번만 동일 좌표의 팔·다리 방향을 적용한다.
   // 안전 범위를 벗어난 발 이동은 해당 다리의 IK를 적용하지 않는다.
   const rigWasActive = Boolean(poseRig?.active)
-  applySittingFallback()
   poseRig?.update(delta, Boolean(character?.visible) && !isMoving)
   if (now-anatomyTelemetryAt>400) {
     anatomyTelemetryAt=now

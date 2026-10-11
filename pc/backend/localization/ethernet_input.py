@@ -19,7 +19,7 @@ from typing import Any, Callable
 from protocol import wise_protocol as wp
 
 HERE = Path(__file__).resolve().parent
-DEFAULT_MODEL = HERE / "models" / "ridge_portable.npz"
+DEFAULT_MODEL = HERE / "models" / "localization" / "ridge_portable.npz"
 
 
 class StreamDecoder:
