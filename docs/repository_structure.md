@@ -6,8 +6,8 @@
 
 | 위치 | 내용 / 상태 |
 |---|---|
-| [esp32/dataset_collecter/ESP-TX](../esp32/dataset_collecter/ESP-TX/README.md) | SoftAP, RX slot 관리, trigger, UDP 수집, USB CDC 프레임 |
-| [esp32/dataset_collecter/ESP-RX](../esp32/dataset_collecter/ESP-RX/README.md) | CSI callback, ESP-NOW 제어, UDP 전송 |
+| [esp32/ESP-TX](../esp32/ESP-TX/README.md) | SoftAP, RX slot 관리, trigger, UDP 수집, USB CDC 프레임 |
+| [esp32/ESP-RX](../esp32/ESP-RX/README.md) | CSI callback, ESP-NOW 제어, UDP 전송 |
 | `pl/cnn/rtl/CNN_Encoder/` | Conv MAC, requant, GELU, Pool, 입력/중간 buffer |
 | `pl/cnn/rtl/FC/` | Flatten, FIFO, FC MAC/controller, requant/GELU, hidden/pose RAM |
 | `pl/cnn/rtl/Loader/` | blob decoder/loader, weight/parameter/LUT RAM |
