@@ -1,6 +1,8 @@
 import './style.css'
 import { setupManagedShutdown } from './launcherControl.js'
 import * as THREE from 'three'
+import { createRoomCameraControls } from './roomCameraControls.js'
+import { createLivingRoomScene } from './livingRoomScene.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { connectBackend } from './websocket.js'
 import { PoseRigController } from './poseRig.js'
@@ -105,157 +107,40 @@ setupManagedShutdown()
 // ========================================
 const container = document.querySelector('#scene-container')
 const scene = new THREE.Scene()
-scene.background = new THREE.Color(0x12161b)
-scene.fog = new THREE.Fog(0x12161b, 9, 18)
+scene.background = new THREE.Color(0x0c1923)
+scene.fog = new THREE.Fog(0x0c1923, 12, 22)
 
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100)
 camera.position.set(0, 3.4, 7)
 camera.lookAt(0, 1.05, 0)
+const roomCameraControls = createRoomCameraControls(camera, container)
 
 const renderer = new THREE.WebGLRenderer({ antialias: true })
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true
+renderer.shadowMap.type = THREE.PCFSoftShadowMap
 renderer.outputColorSpace = THREE.SRGBColorSpace
 renderer.toneMapping = THREE.ACESFilmicToneMapping
 renderer.toneMappingExposure = 1.1
 container.appendChild(renderer.domElement)
 
-const hemiLight = new THREE.HemisphereLight(0xffead8, 0x182333, 1.8)
+const hemiLight = new THREE.HemisphereLight(0xffe8d9, 0x16293e, 1.65)
 scene.add(hemiLight)
-const mainLight = new THREE.DirectionalLight(0xffffff, 2.8)
+const mainLight = new THREE.DirectionalLight(0xfff0de, 2.15)
 mainLight.position.set(4, 8, 5)
 mainLight.castShadow = true
 scene.add(mainLight)
-const warmLight = new THREE.PointLight(0xffc58e, 25, 12)
+const warmLight = new THREE.PointLight(0xffc281, 8.0, 11)
 warmLight.position.set(-3, 3.5, 1)
 scene.add(warmLight)
-const cyanLight = new THREE.PointLight(0x00e8ff, 14, 8)
+const cyanLight = new THREE.PointLight(0x4bbdd9, 6.0, 8)
 cyanLight.position.set(0, 1, 0)
 scene.add(cyanLight)
 
-const floor = new THREE.Mesh(
-  new THREE.PlaneGeometry(9, 8),
-  new THREE.MeshStandardMaterial({ color: 0x4f4843, roughness: 0.92 })
-)
-floor.rotation.x = -Math.PI / 2
-floor.receiveShadow = true
-scene.add(floor)
-
-const backWall = new THREE.Mesh(
-  new THREE.PlaneGeometry(9, 4.5),
-  new THREE.MeshStandardMaterial({ color: 0x312f30, roughness: 0.95 })
-)
-backWall.position.set(0, 2.25, -4)
-backWall.receiveShadow = true
-scene.add(backWall)
-
-const sideWall = new THREE.Mesh(
-  new THREE.PlaneGeometry(8, 4.5),
-  new THREE.MeshStandardMaterial({ color: 0x292a2d, roughness: 0.95, side: THREE.DoubleSide })
-)
-sideWall.rotation.y = Math.PI / 2
-sideWall.position.set(-4.5, 2.25, 0)
-scene.add(sideWall)
-
-const sofaMaterial = new THREE.MeshStandardMaterial({ color: 0x514b48, roughness: 0.85 })
-const sofaSeat = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.45, 0.85), sofaMaterial)
-sofaSeat.position.set(-2.4, 0.38, -3.15)
-sofaSeat.castShadow = true
-scene.add(sofaSeat)
-const sofaBack = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.9, 0.3), sofaMaterial)
-sofaBack.position.set(-2.4, 0.9, -3.5)
-sofaBack.castShadow = true
-scene.add(sofaBack)
-
 // ========================================
-// P01 ~ P09 바닥 그리드
-// ========================================
-const GRID_SPACING = 1.45
-const zoneObjects = {}
-const zonePositions = {}
-
-function makeZoneLabel(text) {
-  const canvas = document.createElement('canvas')
-  canvas.width = 256
-  canvas.height = 128
-  const ctx = canvas.getContext('2d')
-  ctx.font = '600 40px Arial'
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-  ctx.fillStyle = '#ffffff'
-  ctx.fillText(text, 128, 64)
-  const texture = new THREE.CanvasTexture(canvas)
-  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
-    map: texture, transparent: true, depthWrite: false
-  }))
-  sprite.scale.set(0.7, 0.35, 1)
-  return sprite
-}
-
-function createZone(x, z, number) {
-  const selected = number === 5
-  const group = new THREE.Group()
-  const zoneSize = 1.3
-  const thickness = 0.035
-  const material = new THREE.MeshStandardMaterial({
-    color: selected ? 0x55f6ff : 0x3a8590,
-    emissive: selected ? 0x00d9e8 : 0x103b43,
-    emissiveIntensity: selected ? 3 : 0.8
-  })
-  const edgeX = new THREE.BoxGeometry(zoneSize, 0.025, thickness)
-  const edgeZ = new THREE.BoxGeometry(thickness, 0.025, zoneSize)
-
-  for (const side of [-1, 1]) {
-    const horizontal = new THREE.Mesh(edgeX, material)
-    horizontal.position.z = side * zoneSize / 2
-    group.add(horizontal)
-    const vertical = new THREE.Mesh(edgeZ, material)
-    vertical.position.x = side * zoneSize / 2
-    group.add(vertical)
-  }
-
-  const fill = new THREE.Mesh(
-    new THREE.PlaneGeometry(1.22, 1.22),
-    new THREE.MeshBasicMaterial({
-      color: 0x00eaf5,
-      transparent: true,
-      opacity: selected ? 0.12 : 0,
-      side: THREE.DoubleSide,
-      depthWrite: false
-    })
-  )
-  fill.rotation.x = -Math.PI / 2
-  fill.position.y = 0.015
-  group.add(fill)
-  group.position.set(x, 0.035, z)
-  scene.add(group)
-
-  const label = makeZoneLabel(`P${String(number).padStart(2, '0')}`)
-  label.position.set(x, 0.18, z)
-  label.material.color.setHex(selected ? 0xffffff : 0x83cbd1)
-  scene.add(label)
-  zoneObjects[number] = { material, fill, label }
-  zonePositions[number] = new THREE.Vector3(x, 0, z)
-}
-
-for (let row = 0; row < 3; row++) {
-  for (let col = 0; col < 3; col++) {
-    const number = row * 3 + col + 1
-    createZone((col - 1) * GRID_SPACING, (row - 1) * GRID_SPACING, number)
-  }
-}
-
-function updateZoneHighlight(zone) {
-  for (let i = 1; i <= 9; i++) {
-    const item = zoneObjects[i]
-    const selected = i === zone
-    item.material.color.setHex(selected ? 0x55f6ff : 0x3a8590)
-    item.material.emissive.setHex(selected ? 0x00d9e8 : 0x103b43)
-    item.material.emissiveIntensity = selected ? 3 : 0.8
-    item.fill.material.opacity = selected ? 0.12 : 0
-    item.label.material.color.setHex(selected ? 0xffffff : 0x83cbd1)
-  }
-}
+// Warm living room and 9 live CSI tracking zones.
+// The location/pose engine continues to use the same zonePositions.
+const { zonePositions, updateZoneHighlight } = createLivingRoomScene(scene)
 
 // ========================================
 // 위치 / 자세 UI
@@ -954,6 +839,11 @@ function resizeRenderer() {
   const height = Math.max(1, container.clientHeight)
   renderer.setSize(width, height, false)
   camera.aspect = width / height
+  // Room orbit camera baseline: preserve 9-zone framing when resizing.
+  const narrow = camera.aspect < 1.35
+  const baseEye = narrow ? new THREE.Vector3(0, 3.70, 8.35) : new THREE.Vector3(0, 3.40, 7.50)
+  const baseTarget = narrow ? new THREE.Vector3(0, 1.08, -0.44) : new THREE.Vector3(0, 1.05, -0.16)
+  roomCameraControls.setBaseView(baseEye, baseTarget)
   camera.updateProjectionMatrix()
 }
 window.addEventListener('resize', resizeRenderer)
@@ -1034,6 +924,7 @@ function animate(now) {
   if (rigWasActive && !poseRig?.active) refreshIdleAnimation()
 
 
+  roomCameraControls.update(delta)
   renderer.render(scene, camera)
 }
 requestAnimationFrame(animate)
