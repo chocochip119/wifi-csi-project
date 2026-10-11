@@ -12,6 +12,7 @@ import { createTestPose } from './poseTests.js'
 import { DEFAULT_VIEWER_SETTINGS, resolveViewerLocation, selectViewerPose } from './viewerSettings.js'
 import { MIRROR_MODES, resolvePoseMirror, toDisplayX } from './poseOrientation.js'
 import { PoseFilter, sanitizePose } from './poseInput.js'
+import { PoseViewportStabilizer } from './poseStabilization.js'
 import { parsePoseRecording } from './poseReplay.js'
 
 // ========================================
@@ -192,7 +193,7 @@ const poseLines = document.querySelector('#pose-lines')
 const poseJoints = document.querySelector('#pose-joints')
 const poseUnavailable = document.querySelector('#pose-unavailable')
 
-function renderPose(pose, mirrored = false) {
+function renderPose(pose, mirrored = false, stabilize = true) {
   poseLines.replaceChildren()
   poseJoints.replaceChildren()
 
@@ -209,6 +210,7 @@ function renderPose(pose, mirrored = false) {
   }
 
   if (POSE_IDS.some((id) => !points.has(id))) {
+    poseViewport.reset()
     poseSvg.style.visibility = 'hidden'
     poseUnavailable.classList.add('show')
     return
@@ -224,15 +226,21 @@ function renderPose(pose, mirrored = false) {
   const spanY = maxY - minY
 
   if (spanX < 1e-8 && spanY < 1e-8) {
+    poseViewport.reset()
     poseSvg.style.visibility = 'hidden'
     poseUnavailable.classList.add('show')
     return
   }
 
-  // model_output, fake_normalized 모두 화면 안에 동일 비율로 맞춘다.
-  const scale = Math.min(208 / Math.max(spanX, 1e-8), 302 / Math.max(spanY, 1e-8))
-  const centerX = (minX + maxX) / 2
-  const centerY = (minY + maxY) / 2
+  // Filter the DISPLAY viewport separately. Leave raw CNN coordinates unchanged.
+  // CSV postprocess OFF deliberately shows the unfixed original bounds for comparison.
+  const displayBounds = stabilize ? poseViewport.update(points, performance.now()) : {
+    scale: Math.min(208 / Math.max(spanX, 1e-8), 302 / Math.max(spanY, 1e-8)),
+    centerX: (minX + maxX) / 2,
+    centerY: (minY + maxY) / 2
+  }
+  if (!stabilize) poseViewport.reset()
+  const { scale, centerX, centerY } = displayBounds
   const mapped = new Map()
   for (const [id, point] of points) {
     mapped.set(id, {
@@ -294,6 +302,7 @@ let replayActive = false
 let backendLastSeenAt = 0
 let backendExpired = false
 const poseFilter = new PoseFilter()
+const poseViewport = new PoseViewportStabilizer()
 // Standalone offline INT8 CNN replay; never mutates incoming hardware packets.
 let csvReplayActive = false
 let csvPostprocess = true
@@ -462,7 +471,7 @@ function handleSnapshot(snapshot, source = 'backend') {
   const motionPose = sharedPose
   const poseMirror = resolvePoseMirror(sharedPose, mirrorMode, lastMirror)
   if (sharedPose?.valid) lastMirror = poseMirror
-  renderPose(sharedPose, poseMirror)
+  renderPose(sharedPose, poseMirror, !(csvReplayActive && !csvPostprocess))
   const motionMirror = poseMirror
 
   const location = resolveViewerLocation(snapshot, viewerSettings)

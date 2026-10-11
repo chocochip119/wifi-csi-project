@@ -82,7 +82,19 @@ export class PoseFilter {
         Math.hypot(j.x-first.x, j.y-first.y) > spikeThreshold
       const x = initialSpike ? p.x : median(this.rawHistory.map(frame => frame[i].x))
       const y = initialSpike ? p.y : median(this.rawHistory.map(frame => frame[i].y))
-      return { ...j, x: p.x + (x-p.x)*alpha, y: p.y + (y-p.y)*alpha }
+      // Per-joint dead zone scaled to torso size: remove small CNN tremble,
+      // keep deliberate large movements. The source prediction is not mutated.
+      const normalizedZone = [11,12,23,24].includes(j.id) ? 0.018 :
+        [13,14,25,26].includes(j.id) ? 0.032 : 0.042
+      const deadZone = Math.max(Math.abs(torso) * normalizedZone, 1e-5)
+      const dx = x - p.x, dy = y - p.y
+      const distance = Math.hypot(dx, dy)
+      if (distance <= deadZone) return { ...j, x:p.x, y:p.y }
+      const gain = 1 - deadZone * 0.55 / distance
+      const adaptiveAlpha = distance > Math.max(Math.abs(torso) * 0.24, 1e-5) ? Math.max(alpha, 0.70) : alpha
+      return { ...j,
+        x: p.x + dx * adaptiveAlpha * gain,
+        y: p.y + dy * adaptiveAlpha * gain }
     })
     this.previous = { ...pose, joints }
     this.previousAt = at

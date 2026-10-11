@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { FOOT_STANCE_MIN, FOOT_STANCE_MAX, LIMB_SEGMENTS, solvePoseAngles } from './poseAngles.js'
 import { liftedShoePitch } from './footRotationMath.js'
+import { RigAngleStabilizer, RigJointStabilizer } from './poseStabilization.js'
 import { projectLiftedLeg } from './legLiftProjection.js'
 import {DEFAULT_ANATOMY_CONFIG, normalizeAnatomyConfig, calculateSeatDrop, 
   twoBoneTriangle, resolveTorsoHandClearance} from './anatomySolver.js'
@@ -64,6 +65,8 @@ export class PoseRigController {
     this.armEnabled=false
     this.legEnabled=false
     this.solution=null
+    this.angleStabilizer=new RigAngleStabilizer()
+    this.jointStabilizer=new RigJointStabilizer()
     this.inputAt=0
     this.warnAt=0
     this.config=normalizeAnatomyConfig(DEFAULT_ANATOMY_CONFIG)
@@ -180,8 +183,11 @@ export class PoseRigController {
     return true
   }
   setPose(pose,mirrored=false,options={}) {
-    const solution=solvePoseAngles(pose,mirrored)
-    if (!this.ready || !solution) { this.clear();return }
+    const rigPose=this.jointStabilizer.push(pose,mirrored)
+    const rawSolution=solvePoseAngles(rigPose,mirrored)
+    if (!this.ready || !rawSolution) { this.clear();return }
+    // 2nd-stage stabilization: ignore tiny limb-angle jumps after CNN 2D filtering.
+    const solution=this.angleStabilizer.push(rawSolution,mirrored,performance.now())
     const arms=options.arms===true
     const legs=options.legs===true &&
       (solution.activity>0.14 || Number.isFinite(solution.footSpacingRatio))
@@ -193,6 +199,8 @@ export class PoseRigController {
     this.inputAt=performance.now()
   }
   clear() {
+    this.angleStabilizer.reset()
+    this.jointStabilizer.reset()
     // The last lift target is intentionally retained while liftAmount eases out.
     this.active=false
     this.solution=null
