@@ -182,3 +182,6 @@ pc/frontend/public/models/
 .env.*
 !.env.example
 recordings/
+
+# Final FPGA CNN weights
+!/pc/backend/localization/models/pose_int8/weights_5rx.bin
