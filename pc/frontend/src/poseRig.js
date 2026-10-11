@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 import { FOOT_STANCE_MIN, FOOT_STANCE_MAX, LIMB_SEGMENTS, solvePoseAngles } from './poseAngles.js'
+import { liftedShoePitch } from './footRotationMath.js'
+import { projectLiftedLeg } from './legLiftProjection.js'
 import {DEFAULT_ANATOMY_CONFIG, normalizeAnatomyConfig, calculateSeatDrop, 
   twoBoneTriangle, resolveTorsoHandClearance} from './anatomySolver.js'
 
@@ -52,7 +54,8 @@ export class PoseRigController {
       side, upper:bone(`UpperLeg.${side}`),lower:bone(`LowerLeg.${side}`),
       foot:bone(`Foot.${side}`),length:0,shinAxis:null, lastFootTarget:null,
       // Post-mixer rotations from the previous frame, for damping the SAME R pose.
-      smoothedUpper:null, smoothedLower:null
+      smoothedUpper:null, smoothedLower:null,
+      shoeNeutralRelative:null, smoothedShoeRelative:null
     }))
     this.ready=Boolean(this.body&&this.hips&&this.segments.every(s=>s.node&&s.child) &&
       this.legs.every(l=>l.foot?.parent && l.upper && l.lower))
@@ -117,6 +120,10 @@ export class PoseRigController {
       leg.length=delta.length()
       if (leg.length<0.02) return false
       leg.shinAxis=delta.normalize().applyQuaternion(leg.lower.getWorldQuaternion(quat()).invert()).normalize()
+      // Character-local neutral foot direction, captured before any IK corrections.
+      // This is not estimated from the previous frame's corrected shoe pose.
+      leg.shoeNeutralRelative=this.character.getWorldQuaternion(quat()).invert()
+        .multiply(leg.foot.getWorldQuaternion(quat())).normalize()
     }
     // Neutral local rotations make repeated direction-only IK deterministic.
     // Wrists have no orientation measurement in the 12-point CSI output.
@@ -232,6 +239,17 @@ export class PoseRigController {
     const step=Math.max(0,Math.min(dt,0.05))*speed
     this.liftAmount+=clamp(desired-this.liftAmount,-step,step)
     if(this.liftAmount<0.0001 && desired===0) {
+      // Restore the default shoe heading, even if the idle clip lacks Foot tracks.
+      for(const leg of this.legs) {
+        if(leg.smoothedShoeRelative && leg.shoeNeutralRelative) {
+          this.character.updateMatrixWorld(true)
+          const worldQ=this.character.getWorldQuaternion(quat())
+            .multiply(leg.shoeNeutralRelative)
+          const invParent=leg.foot.parent.getWorldQuaternion(quat()).invert()
+          leg.foot.quaternion.copy(invParent.multiply(worldQ).normalize())
+          leg.smoothedShoeRelative=null
+        }
+      }
       this.liftAmount=0
       this.liftSource=null
       this.liftSide=null
@@ -253,6 +271,16 @@ export class PoseRigController {
     const squatSmoothing=clamp(1-Math.exp(-Math.max(0,dt)*9),0,0.5)
     this.squatAmount+=(targetSquat-this.squatAmount)*squatSmoothing
     if(plantedSquat && this.liftAmount>0) {
+      for(const leg of this.legs) {
+        if(leg.smoothedShoeRelative && leg.shoeNeutralRelative) {
+          this.character.updateMatrixWorld(true)
+          const worldQ=this.character.getWorldQuaternion(quat())
+            .multiply(leg.shoeNeutralRelative)
+          const invParent=leg.foot.parent.getWorldQuaternion(quat()).invert()
+          leg.foot.quaternion.copy(invParent.multiply(worldQ).normalize())
+          leg.smoothedShoeRelative=null
+        }
+      }
       this.liftAmount=0
       this.liftSource=null
       this.liftSide=null
@@ -447,17 +475,21 @@ export class PoseRigController {
         this.liftAnchorLocal=this.character.worldToLocal(leg.foot.getWorldPosition(vec()))
       }
       const hip=leg.upper.getWorldPosition(vec())
-      const ankle2D=pose.point.get(liftSide==='L'?27:28)
-      const hip2D=pose.point.get(liftSide==='L'?23:24)
-      const observedKnee=liftSide==='L'?pose.kneeL:pose.kneeR
-      const kneeFlex=clamp(observedKnee?.flex??0,0,1)
-      if(!ankle2D || !hip2D) return
-      const lateral=clamp((ankle2D.x-hip2D.x)/pose.torso,-0.6,0.6)
-      const target=this.character.localToWorld(this.liftAnchorLocal.clone())
-        .addScaledVector(yWorld,(0.25+0.10*kneeFlex)*amount)
-        .addScaledVector(zWorld,0.19*amount)
-        .addScaledVector(xWorld,lateral*0.065*amount)
-      // Stay away from exact full extension (near-singular knee flip).
+      // The right-hand 2D pose drives the lifted shoe's X and Y position.
+      // This avoids the old +/-3.9 cm X limit that held the foot near the hip.
+      const projection=projectLiftedLeg(pose,liftSide,upperSeg.length,leg.length)
+      if(!projection) return
+      const neutralFoot=this.character.localToWorld(this.liftAnchorLocal.clone())
+      const observedFoot=hip.clone()
+        .addScaledVector(xWorld,projection.footX)
+        .addScaledVector(yWorld,projection.footY)
+        .addScaledVector(zWorld,projection.footZ)
+      const target=neutralFoot.clone().lerp(observedFoot,amount)
+      // During the initial lift do not force the shoe through the floor.
+      const minUp=neutralFoot.clone().addScaledVector(yWorld,0.06*projection.reach*amount)
+      const upShortfall=minUp.clone().sub(target).dot(yWorld)
+      if(upShortfall>0) target.addScaledVector(yWorld,upShortfall)
+      // Anatomical reach limits avoid stretched legs and IK singularities.
       const delta=target.clone().sub(hip)
       const maxReach=upperSeg.length+leg.length-0.025
       const minReach=Math.abs(upperSeg.length-leg.length)+0.025
@@ -465,11 +497,11 @@ export class PoseRigController {
       if(!Number.isFinite(distance)||distance<0.02||maxReach<=minReach) return
       if(distance>maxReach) target.copy(hip).addScaledVector(delta,maxReach/distance)
       if(distance<minReach) target.copy(hip).addScaledVector(delta,minReach/distance)
-      // Different 2D knee positions must produce visibly different bend
-      // directions even when ankle height (liftAmount) happens to be identical.
-      const bend=zWorld.clone().multiplyScalar(0.7)
-        .addScaledVector(xWorld,(observedKnee?.lateral??0)*2.2)
-        .addScaledVector(yWorld,(observedKnee?.vertical??0)*1.3)
+      // Knee pole follows observed knee (25/26) with a small forward prior.
+      // Projecting the pole perpendicular to hip-to-ankle occurs in plantedKnee().
+      const bend=xWorld.clone().multiplyScalar(projection.kneeX)
+        .addScaledVector(yWorld,projection.kneeY)
+        .addScaledVector(zWorld,projection.kneeZ)
         .normalize()
       const knee=plantedKnee(hip,target,upperSeg.length,leg.length,bend)
       if(!knee) return
@@ -493,6 +525,21 @@ export class PoseRigController {
       )
       leg.foot.parent.updateWorldMatrix(true,false)
       leg.foot.position.copy(leg.foot.parent.worldToLocal(shoeWorld))
+      // Shoe pitch is independent of the shin: the 12-joint input contains no
+      // toe/heel landmarks, so stay near the calibrated neutral shoe direction.
+      if(leg.shoeNeutralRelative) {
+        const observedFlex=liftSide==='L' ? pose.kneeL?.flex : pose.kneeR?.flex
+        const pitch=liftedShoePitch(projection,observedFlex,amount)
+        const desiredRelative=quat()
+          .setFromAxisAngle(new THREE.Vector3(1,0,0),pitch)
+          .multiply(leg.shoeNeutralRelative)
+        if(!leg.smoothedShoeRelative)
+          leg.smoothedShoeRelative=leg.shoeNeutralRelative.clone()
+        leg.smoothedShoeRelative.slerp(desiredRelative,alpha).normalize()
+        const targetWorld=rootQuaternion.clone().multiply(leg.smoothedShoeRelative)
+        const invParent=leg.foot.parent.getWorldQuaternion(quat()).invert()
+        leg.foot.quaternion.copy(invParent.multiply(targetWorld).normalize())
+      }
       leg.lastFootTarget=shoeWorld.clone()
       this.character.updateMatrixWorld(true)
       return
