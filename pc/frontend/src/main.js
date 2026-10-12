@@ -7,6 +7,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { connectBackend } from './websocket.js'
 import { PoseRigController } from './poseRig.js'
 import { armMaxLiftDegForZone } from './armZoneLimit.js'
+import { LiveSitDetector } from './liveSitDetector.js'
 import {normalizeAnatomyConfig,DEFAULT_ANATOMY_CONFIG} from './anatomySolver.js'
 import { solvePoseAngles, hasMeaningfulArmPose } from './poseAngles.js'
 import { createTestPose } from './poseTests.js'
@@ -307,6 +308,8 @@ let backendExpired = false
 const poseFilter = new PoseFilter()
 const fastPose2D = new FastPose2DFilter(80)
 const liveThreeLimiter = new LiveThreeActionLimiter()
+const sitDetector = new LiveSitDetector()
+let currentSitDecision = {sit:false,strength:0,source:'standing'}
 const poseViewport = new PoseViewportStabilizer()
 const fastPoseViewport = new PoseViewportStabilizer({
   centerFastMs: 150, centerSlowMs: 200, scaleShrinkMs: 150, scaleGrowMs: 250
@@ -421,23 +424,47 @@ function setAbsentState(message, posture) {
 
 // 하나의 Pose가 오른쪽 스켈레톤과 3D 관절 모두를 움직입니다.
 function updateMotionRig(pose, mirrored) {
+  const shouldSit = currentSitDecision.sit === true
+  // Sit has priority over Walk: when P05/P10 begins sitting, stop navigation
+  // immediately at zone 5 rather than waiting for the walk animation to finish.
+  if (shouldSit && isMoving && character?.visible && zonePositions[5]) {
+    isMoving = false
+    currentZone = targetZone = 5
+    character.position.x = zonePositions[5].x
+    character.position.z = zonePositions[5].z
+    character.rotation.y = 0
+    playAnimation('Idle_Neutral', 0.12)
+  }
   if (isMoving || !character?.visible) {
     if (poseRig?.active) poseRig.clear()
     refreshIdleAnimation()
     return
   }
-  // No P10 wait/forced squat: a valid live 12-joint pose is the ONLY motion input.
-  if (!pose?.valid) {
+  // P10 always sits, including missing/invalid joint frames. Do NOT synthesize
+  // joints into the 2D panel or into the actual FPGA/CNN output.
+  let rigPose = pose?.valid ? pose :
+    (currentSitDecision.source === 'P10' ? createTestPose('squat') : null)
+  // Even if LIVE 12 joints are marked valid but geometrically impossible,
+  // P10 must still request the built-in planted-squat pose.
+  let angles = rigPose?.valid ? solvePoseAngles(rigPose, mirrored) : null
+  if (!angles && currentSitDecision.source === 'P10') {
+    rigPose = createTestPose('squat')
+    angles = solvePoseAngles(rigPose, false)
+    mirrored = false
+  }
+  if (!rigPose?.valid || !angles) {
     if (poseRig?.active) poseRig.clear()
     refreshIdleAnimation()
     return
   }
-  const angles = solvePoseAngles(pose, mirrored)
-  const arms = Boolean(viewerSettings.liveArms && angles && hasMeaningfulArmPose(pose))
-  const legs = Boolean(viewerSettings.liveLegs && angles &&
-    (angles.activity > 0.14 || Number.isFinite(angles.footSpacingRatio)))
-  if (arms || legs) poseRig?.setPose(pose, mirrored, {
-    arms, legs, armMaxLiftDeg: armMaxLiftDegForZone(armLocationZone)
+  const arms = Boolean(pose?.valid && rigPose === pose && viewerSettings.liveArms && hasMeaningfulArmPose(pose))
+  const legs = Boolean(angles && (shouldSit ||
+    (viewerSettings.liveLegs && (angles.activity > 0.14 || Number.isFinite(angles.footSpacingRatio)))))
+  // squatTarget=0 explicitly forbids sitting in every zone other than P05/P10;
+  // nonzero force is applied to 3D only, AFTER ordinary IK smoothing.
+  if (arms || legs) poseRig?.setPose(rigPose, mirrored, {
+    arms, legs, armMaxLiftDeg: armMaxLiftDegForZone(armLocationZone),
+    squatTarget: shouldSit ? currentSitDecision.strength : 0
   })
   else if (poseRig?.active) poseRig.clear()
   refreshIdleAnimation()
@@ -482,6 +509,15 @@ function handleSnapshot(snapshot, source = 'backend') {
 
   const location = resolveViewerLocation(snapshot, viewerSettings)
   armLocationZone = location.valid && !location.empty ? location.zone : null
+  // Evaluate unfiltered RAW new joints, not the slower 3D EMA/median or the
+  // optional three-action confirmation gate. P10 is authoritative; P05 uses
+  // bilateral hip-to-knee change, short seated hold, then two-frame release.
+  const sitInput = viewerSettings.jointsMode === 'live' ? validPose : sharedPose
+  const sitRawScore = sitInput?.valid ?
+    (solvePoseAngles(sitInput, resolvePoseMirror(sitInput, mirrorMode, lastMirror))?.squat ?? 0) : 0
+  currentSitDecision = sitDetector.observe(
+    location.valid && !location.empty ? location.pointId : null,
+    sitInput, sitRawScore, performance.now())
   // 중앙 고정은 화면의 캐릭터 위치만 바꿉니다. 실제 위치 예측과 Pose는 항상 수신·표시합니다.
   if (viewerSettings.locationMode === 'center') {
     if (location.valid && !location.empty) {
@@ -834,6 +870,8 @@ connectBackend((snapshot) => {
     backendExpired = true
     poseFilter.reset()
     liveThreeLimiter.reset()
+    sitDetector.reset()
+    currentSitDecision = {sit:false,strength:0,source:'standing'}
     poseRig?.clear()
     latestSnapshot = null
     refreshViewer()
@@ -892,6 +930,8 @@ function animate(now) {
     backendExpired = true
     poseFilter.reset()
     liveThreeLimiter.reset()
+    sitDetector.reset()
+    currentSitDecision = {sit:false,strength:0,source:'standing'}
     poseRig?.clear()
     latestSnapshot = null
     refreshViewer()

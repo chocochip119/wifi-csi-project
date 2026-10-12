@@ -190,11 +190,19 @@ export class PoseRigController {
     if (!this.ready || !rawSolution) { this.clear();return }
     // 2nd-stage stabilization: ignore tiny limb-angle jumps after CNN 2D filtering.
     const solution=this.angleStabilizer.push(rawSolution,mirrored,performance.now())
+    // Only the viewer changes: location/instant joint fusion controls squat IK.
+    // 0 suppresses false squats outside P05/P10; P10=1 enforces the full pose.
+    const squatTarget=Number.isFinite(options.squatTarget)
+      ? clamp(options.squatTarget,0,1) : solution.squat
+    const drivenSolution={...solution,squat:squatTarget,
+      activity:Math.max(solution.activity,squatTarget),
+      liftL:squatTarget>0.075?0:solution.liftL,
+      liftR:squatTarget>0.075?0:solution.liftR}
     const arms=options.arms===true
     const legs=options.legs===true &&
-      (solution.activity>0.14 || Number.isFinite(solution.footSpacingRatio))
+      (drivenSolution.activity>0.14 || Number.isFinite(drivenSolution.footSpacingRatio) || squatTarget>0.075)
     if (!arms && !legs) { this.clear();return }
-    this.solution=solution
+    this.solution=drivenSolution
     this.armEnabled=arms
     this.legEnabled=legs
     this.armMaxLiftDeg = Number.isFinite(options.armMaxLiftDeg)
