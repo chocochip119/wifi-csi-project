@@ -6,6 +6,7 @@ import { createLivingRoomScene } from './livingRoomScene.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { connectBackend } from './websocket.js'
 import { PoseRigController } from './poseRig.js'
+import { armMaxLiftDegForZone } from './armZoneLimit.js'
 import {normalizeAnatomyConfig,DEFAULT_ANATOMY_CONFIG} from './anatomySolver.js'
 import { solvePoseAngles, hasMeaningfulArmPose } from './poseAngles.js'
 import { createTestPose } from './poseTests.js'
@@ -345,6 +346,7 @@ let targetZone = 5
 let isMoving = false
 const moveSpeed = 1.1 // GLTF Walk와 더 자연스럽게 맞추기 위한 화면 이동 속도
 let targetPosture = 'standing'
+let armLocationZone = null // Live location zone; unknown != zone 5.
 
 function playAnimation(name, fadeTime = 0.25) {
   if (!mixer) return
@@ -414,27 +416,8 @@ function setAbsentState(message, posture) {
   updatePostureUI(posture)
 }
 
-// P10 is the model's original central seated class; its UI visualization is a
-// floor squat with no chair. Real shoulders/arms stay live; only lower-body
-// coordinates are replaced by a conservative, connected squat demonstration.
-function p10SquatPose(pose) {
-  if (!pose?.valid) return createTestPose('squat')
-  const byId = new Map(pose.joints.map(j => [Number(j.id), j]))
-  const leftHip = byId.get(23), rightHip = byId.get(24)
-  const leftShoulder = byId.get(11), rightShoulder = byId.get(12)
-  if (![leftHip, rightHip, leftShoulder, rightShoulder].every(Boolean))
-    return createTestPose('squat')
-  const torso = (leftHip.y + rightHip.y - leftShoulder.y - rightShoulder.y) / 2
-  if (!Number.isFinite(torso) || torso <= 1e-6) return createTestPose('squat')
-  const jointOverrides = new Map([
-    [25, { x:leftHip.x - torso*0.025, y:leftHip.y + torso*0.38 }],
-    [26, { x:rightHip.x + torso*0.025, y:rightHip.y + torso*0.38 }],
-    [27, { x:leftHip.x - torso*0.075, y:leftHip.y + torso*0.86 }],
-    [28, { x:rightHip.x + torso*0.075, y:rightHip.y + torso*0.86 }]
-  ])
-  return { ...pose, joints:pose.joints.map(j =>
-    jointOverrides.has(Number(j.id)) ? { ...j, ...jointOverrides.get(Number(j.id)) } : j) }
-}
+// 3D sit/stand follows incoming 12-joint pose independently of P10 location.
+// Location P10 is still shown by the location classifier, not used as a pose gate.
 
 // 하나의 Pose가 오른쪽 스켈레톤과 3D 관절 모두를 움직입니다.
 function updateMotionRig(pose, mirrored) {
@@ -443,19 +426,19 @@ function updateMotionRig(pose, mirrored) {
     refreshIdleAnimation()
     return
   }
-  const isP10Squat = targetPosture === 'squat' && !pose?.live_three_visualization
-  const drivenPose = isP10Squat ? p10SquatPose(pose) : pose
-  if (!drivenPose?.valid) {
+  // No P10 wait/forced squat: a valid live 12-joint pose is the ONLY motion input.
+  if (!pose?.valid) {
     if (poseRig?.active) poseRig.clear()
     refreshIdleAnimation()
     return
   }
-  const effectiveMirror = isP10Squat && !pose?.valid ? false : mirrored
-  const angles = solvePoseAngles(drivenPose, effectiveMirror)
-  const arms = Boolean(pose?.valid && viewerSettings.liveArms && angles && hasMeaningfulArmPose(pose))
+  const angles = solvePoseAngles(pose, mirrored)
+  const arms = Boolean(viewerSettings.liveArms && angles && hasMeaningfulArmPose(pose))
   const legs = Boolean(viewerSettings.liveLegs && angles &&
-    (isP10Squat || angles.activity > 0.14 || Number.isFinite(angles.footSpacingRatio)))
-  if (arms || legs) poseRig?.setPose(drivenPose, effectiveMirror, {arms, legs})
+    (angles.activity > 0.14 || Number.isFinite(angles.footSpacingRatio)))
+  if (arms || legs) poseRig?.setPose(pose, mirrored, {
+    arms, legs, armMaxLiftDeg: armMaxLiftDegForZone(armLocationZone)
+  })
   else if (poseRig?.active) poseRig.clear()
   refreshIdleAnimation()
 }
@@ -498,6 +481,7 @@ function handleSnapshot(snapshot, source = 'backend') {
   const motionMirror = poseMirror
 
   const location = resolveViewerLocation(snapshot, viewerSettings)
+  armLocationZone = location.valid && !location.empty ? location.zone : null
   // 중앙 고정은 화면의 캐릭터 위치만 바꿉니다. 실제 위치 예측과 Pose는 항상 수신·표시합니다.
   if (viewerSettings.locationMode === 'center') {
     if (location.valid && !location.empty) {
@@ -516,11 +500,10 @@ function handleSnapshot(snapshot, source = 'backend') {
     return
   }
   if (location.empty) {
-    if (viewerSettings.jointsMode !== 'live' && sharedPose?.valid) {
+    if (sharedPose?.valid) {
       clearLocationUI('No person')
       updatePostureUI('unknown')
       if (character) character.visible = true
-      moveCharacterTo(5)
       updateMotionRig(sharedPose, poseMirror)
     } else setAbsentState('No person', 'empty')
     updateLiveBadge(snapshot)
@@ -880,8 +863,16 @@ resizeRenderer()
 
 // WebGL 루프는 반드시 마지막에 호출해야 화면이 표시된다.
 let lastFrame = performance.now()
+let screenFpsFrameCount = 0
+let screenFpsStart = lastFrame
 function animate(now) {
   requestAnimationFrame(animate)
+  screenFpsFrameCount++
+  if (now - screenFpsStart >= 1000) {
+    settingsChannel.postMessage({type:'screen-fps', fps: screenFpsFrameCount * 1000 / (now-screenFpsStart)})
+    screenFpsFrameCount = 0
+    screenFpsStart = now
+  }
   const delta = Math.min((now - lastFrame) / 1000, 0.05)
   lastFrame = now
   // Restore last frame's additive pelvis IK offset BEFORE advancing animation.

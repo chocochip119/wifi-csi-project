@@ -3,6 +3,7 @@ import { FOOT_STANCE_MIN, FOOT_STANCE_MAX, LIMB_SEGMENTS, solvePoseAngles } from
 import { liftedShoePitch } from './footRotationMath.js'
 import { RigAngleStabilizer, RigJointStabilizer } from './poseStabilization.js'
 import { projectLiftedLeg } from './legLiftProjection.js'
+import { clampArmHeading } from './armZoneLimit.js'
 import {DEFAULT_ANATOMY_CONFIG, normalizeAnatomyConfig, calculateSeatDrop, 
   twoBoneTriangle, resolveTorsoHandClearance} from './anatomySolver.js'
 
@@ -64,6 +65,7 @@ export class PoseRigController {
     this.active=false
     this.armEnabled=false
     this.legEnabled=false
+    this.armMaxLiftDeg=null
     this.solution=null
     this.angleStabilizer=new RigAngleStabilizer()
     this.jointStabilizer=new RigJointStabilizer()
@@ -195,6 +197,10 @@ export class PoseRigController {
     this.solution=solution
     this.armEnabled=arms
     this.legEnabled=legs
+    this.armMaxLiftDeg = Number.isFinite(options.armMaxLiftDeg)
+      ? Math.max(0, Math.min(90, options.armMaxLiftDeg)) : null
+    if (this.armMaxLiftDeg !== null)
+      for(const entry of Object.values(this.armIK)){entry.upper=null;entry.lower=null}
     this.active=true
     this.inputAt=performance.now()
   }
@@ -206,6 +212,7 @@ export class PoseRigController {
     this.solution=null
     this.armEnabled=false
     this.legEnabled=false
+    this.armMaxLiftDeg=null
     this.squatAmount=0
     this.lastSeatedDrop=0
     this.lastSeatedFlex=0
@@ -343,8 +350,10 @@ export class PoseRigController {
     // Apply upper before lower: the child rotates with its parent.
     for(const s of this.segments) {
       if((s.type==='arm'&&!this.armEnabled) || (s.type==='leg'&&(!this.legEnabled||squatTransition||liftedLeg||stanceApplied))) continue
-      const heading=state.directions.get(s.key)?.angle
-      if(!Number.isFinite(heading)) continue
+      const rawHeading=state.directions.get(s.key)?.angle
+      if(!Number.isFinite(rawHeading)) continue
+      // Cap both arm segments in 3D only; the original 2D CNN skeleton stays untouched.
+      const heading=s.type==='arm' ? clampArmHeading(rawHeading,this.armMaxLiftDeg) : rawHeading
       // Preserve frontal direction; add limited inferred knee forward bend only
       // when both feet are shorter on screen (squat).
       const squatDepth=s.type==='leg' ? state.squat*0.20*(s.upper?1:-1) : 0
@@ -352,6 +361,22 @@ export class PoseRigController {
         .addScaledVector(yWorld,-Math.cos(heading)).addScaledVector(zWorld,squatDepth).normalize()
       if(!s.filtered) s.filtered=s.axis.clone().applyQuaternion(s.node.getWorldQuaternion(quat())).normalize()
       s.filtered.lerp(desired,smooth).normalize()
+      if(s.type==='arm' && this.armMaxLiftDeg!==null) {
+        // Also enforce a HARD 3D world-space angle cap while easing down
+        // from a previously unrestricted pose at zone 5.
+        const down=yWorld.clone().negate()
+        const cosine=clamp(s.filtered.dot(down),-1,1)
+        const angle=Math.acos(cosine)
+        const limit=this.armMaxLiftDeg*Math.PI/180
+        if(angle>limit) {
+          const tangent=s.filtered.clone().addScaledVector(down,-cosine)
+          if(tangent.lengthSq()>1e-10) {
+            tangent.normalize()
+            s.filtered.copy(down).multiplyScalar(Math.cos(limit))
+              .addScaledVector(tangent,Math.sin(limit)).normalize()
+          } else s.filtered.copy(down)
+        }
+      }
       aim(s.node,s.axis,s.filtered)
       this.character.updateMatrixWorld(true)
     }
@@ -359,7 +384,7 @@ export class PoseRigController {
     // Apply the chest clearance AFTER the ordinary screen-plane arm headings.
     // End effectors near the torso are pushed forward and solved by a two-bone arm.
     this.lastArmCorrected=0
-    if(liveState && this.armEnabled) {
+    if(liveState && this.armEnabled && this.armMaxLiftDeg===null) {
       const shoulders=this.segments.filter(seg=>seg.key==='upperArmL'||seg.key==='upperArmR')
       const chest=shoulders[0].node.getWorldPosition(vec())
         .add(shoulders[1].node.getWorldPosition(vec())).multiplyScalar(0.5)

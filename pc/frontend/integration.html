@@ -27,6 +27,7 @@
     .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 
     .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:22px 0}
+    .fps-summary{grid-template-columns:repeat(3,minmax(0,1fr))}
 
     .card{background:#16212b;border:1px solid #2b4050;border-radius:14px;padding:18px;min-width:0}
 
@@ -47,6 +48,7 @@
     a{color:#60eaf2} .hint{border-left:3px solid #e6be72;padding-left:12px;margin:14px 0}
 
     @media(max-width:870px){.summary{grid-template-columns:repeat(2,1fr)}.main{grid-template-columns:1fr}}
+    @media(max-width:650px){.fps-summary{grid-template-columns:1fr}}
 
   </style>
 
@@ -89,6 +91,13 @@
   </div>
 
   <p class="note">위치 연산시간은 PC 모델 실행시간, Pose 추론시간은 FPGA에서 보고한 시간입니다. CSI 수집부터 화면까지의 전체 지연시간은 아닙니다.</p>
+
+  <div class="summary fps-summary" aria-label="실시간 FPS 측정">
+    <div class="card"><small>신규 Pose FPS</small><strong id="fps-pose">--</strong><p class="note">실제 신규 12관절 결과/초</p></div>
+    <div class="card"><small>Backend FPS</small><strong id="fps-backend">--</strong><p class="note">WebSocket 스냅샷/초</p></div>
+    <div class="card"><small>화면 FPS</small><strong id="fps-screen">--</strong><p class="note">시연 화면 3D 렌더링/초</p></div>
+  </div>
+  <p class="note">최근 5초 기준 실측 추정값입니다. 화면 FPS가 높아도 실제 신규 Pose FPS가 낮으면 관절 정보는 느리게 바뀝니다.</p>
 
   <div class="admin-workspace">
 
@@ -592,6 +601,7 @@
 
 <script type="module" src="/src/adminController.js"></script>
 
+<script type="module" src="/src/fpsMonitorAdmin.js"></script>
 </body>
 
 </html>
