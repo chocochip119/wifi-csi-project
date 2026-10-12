@@ -1,0 +1,4 @@
+# The repository ignores *.bin; keep this trial's model and the PS test vectors.
+!ps/models/loc_ridge_rx5.bin
+!ps/test_vectors/*.bin
+!pc/backend/localization/models/pose_int8/weights_5rx.bin
