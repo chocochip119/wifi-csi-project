@@ -42,9 +42,9 @@ export function createRoomCameraControls(camera, container) {
     buttons.push(button)
     return button
   }
-  const left = makeButton('◀', '왼쪽으로 12도 회전', () => setAngle(targetAngle - STEP_DEG))
+  const left = makeButton('◀', '화면을 왼쪽으로 12도 회전', () => setAngle(targetAngle + STEP_DEG))
   const home = makeButton('정면', '정면 시점으로 복귀', () => setAngle(0))
-  const right = makeButton('▶', '오른쪽으로 12도 회전', () => setAngle(targetAngle + STEP_DEG))
+  const right = makeButton('▶', '화면을 오른쪽으로 12도 회전', () => setAngle(targetAngle - STEP_DEG))
   const indicator = document.createElement('span')
   Object.assign(indicator.style, {
     padding: '0 4px', minWidth: '33px', color: '#83eaf1',
@@ -57,8 +57,8 @@ export function createRoomCameraControls(camera, container) {
   function setAngle(next) {
     targetAngle = Math.max(-MAX_DEG, Math.min(MAX_DEG, next))
     indicator.textContent = targetAngle === 0 ? '0°' : `${targetAngle > 0 ? '+' : ''}${targetAngle}°`
-    left.disabled = targetAngle <= -MAX_DEG
-    right.disabled = targetAngle >= MAX_DEG
+    left.disabled = targetAngle >= MAX_DEG
+    right.disabled = targetAngle <= -MAX_DEG
     for (const button of [left, right]) {
       button.style.opacity = button.disabled ? '0.35' : '1'
       button.style.cursor = button.disabled ? 'default' : 'pointer'

@@ -1,3 +1,5 @@
+import { estimateSquatStrength } from './squatMotion.js'
+
 // WiSensing — one 2D geometry source for both Pose Result and 3D bone directions.
 // Coordinates are SCREEN coordinates: +x right, +y down. Depth is not observable.
 export const JOINT_IDS_12 = Object.freeze([11,12,13,14,15,16,23,24,25,26,27,28])
@@ -83,7 +85,12 @@ export function solvePoseAngles(pose, mirrored = false) {
 
   const liftL = clamp((spanR-spanL-0.13)/0.37,0,1)
   const liftR = clamp((spanL-spanR-0.13)/0.37,0,1)
-  const squat = clamp((1.10-Math.max(spanL,spanR))/0.27,0,1)*(1-Math.max(liftL,liftR))
+  // Standing vs seated is read from BOTH hip-to-ankle spans normalized by torso.
+  // Extra bilateral knee evidence covers front-facing crouches with modest leg compression.
+  const kneeL=kneePoseMetrics(point,torso,'L')
+  const kneeR=kneePoseMetrics(point,torso,'R')
+  const squat = estimateSquatStrength({spanL,spanR,liftL,liftR,
+    kneeFlexL:kneeL?.flex??0,kneeFlexR:kneeR?.flex??0})
   const pelvisSpan = Math.abs(point.get(24).x - point.get(23).x)
   const ankleSpan = Math.abs(point.get(28).x - point.get(27).x)
   // Reject almost edge-on pelvis coordinates; they cannot define shoe spacing.
@@ -92,9 +99,6 @@ export function solvePoseAngles(pose, mirrored = false) {
   const outL = Math.abs(point.get(25).x - point.get(23).x)/torso
   const outR = Math.abs(point.get(26).x - point.get(24).x)/torso
   const legActivity = Math.max(liftL,liftR,squat,clamp((Math.max(outL,outR)-0.23)/0.48,0,1))
-  const kneeL=kneePoseMetrics(point,torso,'L')
-  const kneeR=kneePoseMetrics(point,torso,'R')
-
   const directions = new Map()
   for (const seg of LIMB_SEGMENTS) {
     const a=point.get(seg.a),b=point.get(seg.b)

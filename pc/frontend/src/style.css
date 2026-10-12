@@ -67,7 +67,7 @@ button { font: inherit; }
   background: linear-gradient(145deg,#303942,#171d23); font-size: 11px; font-weight: 700;
 }
 .result-column {
-  min-height: 0; display: grid; grid-template-rows: minmax(0,1fr) 390px; gap: 18px;
+  min-height: 0; display: grid; grid-template-rows: minmax(200px,1fr) minmax(360px, clamp(380px, 52vh, 500px)); gap: 18px;
 }
 .result-card {
   min-height: 0; padding: 20px; overflow: hidden;
@@ -120,7 +120,7 @@ button { font: inherit; }
 .location-main span { display: block; color: #75858e; font-size: 10px; }
 .location-main strong { display: block; margin-top: 4px; font-size: 15px; }
 .mini-grid {
-  width: 220px; aspect-ratio: 1 / 1; margin: 0 auto; display: grid;
+  width: 100%; min-height: 0; flex: 1 1 auto; margin: 0; display: grid;
   grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr); gap: 7px;
 }
 .mini-grid div {
@@ -134,8 +134,8 @@ button { font: inherit; }
 }
 @media (max-width: 1000px) {
   .dashboard { grid-template-columns: minmax(0,1fr) 300px; }
-  .result-column { grid-template-rows: minmax(0,1fr) 340px; }
-  .mini-grid { width: 190px; }
+  .result-column { grid-template-rows: minmax(185px,1fr) minmax(330px, clamp(345px, 51vh, 460px)); }
+  .mini-grid { width: 100%; }
   .character-button { min-width: auto; }
 }
 
@@ -252,3 +252,10 @@ button { font: inherit; }
 /* Larger joint viewer: use empty card space without cropping wrists/ankles. */
 .pose-svg { width: 100%; height: 100%; max-height: none; }
 .pose-view { overflow: hidden; }
+
+/* Match the location grid's left/right edges to the LOCATION RESULT header. */
+@media (max-height: 720px) {
+  .result-column {grid-template-rows: minmax(155px,1fr) minmax(315px,52vh);}
+  .location-main {margin: 12px 0 10px;}
+  .location-number {width:60px;height:60px;}
+}
