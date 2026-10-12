@@ -259,3 +259,9 @@ button { font: inherit; }
   .location-main {margin: 12px 0 10px;}
   .location-number {width:60px;height:60px;}
 }
+
+/* Viewer-only keyboard 3 presentation mode */
+.location-view-switch[hidden] { display: none !important; }
+.location-view-switch { top: 83px; left: 22px; padding: 9px; gap: 8px; box-shadow: 0 14px 36px rgba(0,0,0,.36); }
+.location-view-switch button { font-size: 13px; padding: 10px 15px; }
+.scene-title.motion-active strong { color: #F5E6C8; }

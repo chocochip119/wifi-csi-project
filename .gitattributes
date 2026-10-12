@@ -25,3 +25,6 @@ CMakeLists.txt text eol=lf
 *.md   text eol=lf
 *.yml  text eol=lf
 *.yaml text eol=lf
+*.js   text eol=lf
+*.mjs  text eol=lf
+*.css  text eol=lf

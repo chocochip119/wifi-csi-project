@@ -8,6 +8,8 @@ import { connectBackend } from './websocket.js'
 import { PoseRigController } from './poseRig.js'
 import { armMaxLiftDegForZone } from './armZoneLimit.js'
 import { LiveSitDetector } from './liveSitDetector.js'
+import {isNoPerson, motionPointId, sitDetectorPoint, motionArmLiftLimit} from './presentationMode.js'
+// WiSensing viewer presentation 2-mode: keyboard 3 / center motion
 import {normalizeAnatomyConfig,DEFAULT_ANATOMY_CONFIG} from './anatomySolver.js'
 import { solvePoseAngles, hasMeaningfulArmPose } from './poseAngles.js'
 import { createTestPose } from './poseTests.js'
@@ -46,9 +48,9 @@ app.innerHTML = `
           <span>SPACE VIEW</span>
           <strong>Zone 5</strong>
         </div>
-        <div class="location-view-switch" role="group" aria-label="3D 캐릭터 위치 표시 방식">
-          <button type="button" id="mode-follow" class="selected" aria-pressed="true">위치 따라가기</button>
-          <button type="button" id="mode-center" aria-pressed="false">중앙 고정 · 모션 보기</button>
+        <div class="location-view-switch" id="presentation-mode-panel" role="group" aria-label="시연 모드 선택" hidden>
+          <button type="button" id="mode-follow" class="selected" aria-pressed="true">위치 모드</button>
+          <button type="button" id="mode-center" aria-pressed="false">모션 모드</button>
         </div>
         <div id="scene-container"></div>
         <input id="pose-replay-file" type="file" accept=".json,.jsonl,.ndjson,application/json,text/plain" hidden>
@@ -159,6 +161,20 @@ function updateLocationUI(zone, pointId = null) {
     cell.classList.toggle('selected', cell.textContent.trim() === (pointId === 'p10' ? 'P05' : pointName))
   })
   updateZoneHighlight(zone)
+}
+
+// In motion mode the room/light remain at P05 while the right-hand
+// RESULT shows P05 (standing), P10 (sitting), or No person.
+function updateMotionLocationUI(noPerson) {
+  const point = motionPointId(currentSitDecision, noPerson)
+  updateLocationUI(5, point ?? 'p05')
+  document.querySelector('.scene-title strong').textContent = 'Zone 5'
+  if (noPerson) {
+    document.querySelector('.location-number').textContent = '--'
+    document.querySelector('.location-main strong').textContent = 'No person'
+    document.querySelectorAll('.mini-grid div').forEach(cell => cell.classList.remove('selected'))
+  }
+  updatePostureUI(noPerson ? 'empty' : currentSitDecision.sit ? 'sitting' : 'standing')
 }
 
 function clearLocationUI(message) {
@@ -350,6 +366,18 @@ let isMoving = false
 const moveSpeed = 1.1 // GLTF Walk와 더 자연스럽게 맞추기 위한 화면 이동 속도
 let targetPosture = 'standing'
 let armLocationZone = null // Live location zone; unknown != zone 5.
+// Fixed P05 presentation position; unrelated to the position model output.
+function pinMotionCharacter() {
+  if (!character || !zonePositions[5]) return
+  const wasMoving = isMoving
+  isMoving = false
+  currentZone = targetZone = 5
+  character.position.x = zonePositions[5].x
+  character.position.z = zonePositions[5].z
+  character.rotation.y = 0
+  targetPosture = 'standing'
+  if (wasMoving) playAnimation('Idle_Neutral', 0.12)
+}
 
 function playAnimation(name, fadeTime = 0.25) {
   if (!mixer) return
@@ -463,7 +491,7 @@ function updateMotionRig(pose, mirrored) {
   // squatTarget=0 explicitly forbids sitting in every zone other than P05/P10;
   // nonzero force is applied to 3D only, AFTER ordinary IK smoothing.
   if (arms || legs) poseRig?.setPose(rigPose, mirrored, {
-    arms, legs, armMaxLiftDeg: armMaxLiftDegForZone(armLocationZone),
+    arms, legs, armMaxLiftDeg: motionArmLiftLimit(viewerSettings.locationMode, armLocationZone, armMaxLiftDegForZone),
     squatTarget: shouldSit ? currentSitDecision.strength : 0
   })
   else if (poseRig?.active) poseRig.clear()
@@ -502,36 +530,39 @@ function handleSnapshot(snapshot, source = 'backend') {
   const poseFor2D = fast2D ? fastPose2D.push(validPose) : raw2D ? validPose : sharedPose
   const mirror2D = isLive2D && (fast2D || raw2D)
     ? resolvePoseMirror(poseFor2D, mirrorMode, lastMirror) : poseMirror
-  renderPose(poseFor2D, mirror2D,
+  // An explicit No Person result suppresses even a still-valid cached pose.
+  const noPerson = isNoPerson(snapshot)
+  poseUnavailable.textContent = noPerson ? 'No person' : 'Unavailable'
+  renderPose(noPerson ? null : poseFor2D, mirror2D,
     !(csvReplayActive && !csvPostprocess) && !raw2D,
     fast2D ? fastPoseViewport : poseViewport)
   const motionMirror = poseMirror
 
   const location = resolveViewerLocation(snapshot, viewerSettings)
   armLocationZone = location.valid && !location.empty ? location.zone : null
-  // Evaluate unfiltered RAW new joints, not the slower 3D EMA/median or the
-  // optional three-action confirmation gate. P10 is authoritative; P05 uses
-  // bilateral hip-to-knee change, short seated hold, then two-frame release.
+  // Position mode retains P05/P10 gating. Motion mode ALWAYS uses P05 as
+  // the logical area, so any real joint motion works regardless of P08/P10.
+  // Both modes honor explicit No Person before interpreting cached joints.
   const sitInput = viewerSettings.jointsMode === 'live' ? validPose : sharedPose
   const sitRawScore = sitInput?.valid ?
     (solvePoseAngles(sitInput, resolvePoseMirror(sitInput, mirrorMode, lastMirror))?.squat ?? 0) : 0
-  currentSitDecision = sitDetector.observe(
-    location.valid && !location.empty ? location.pointId : null,
+  if (noPerson) sitDetector.reset()
+  currentSitDecision = noPerson ? {sit:false,strength:0,source:'standing'} : sitDetector.observe(
+    sitDetectorPoint(viewerSettings.locationMode, location),
     sitInput, sitRawScore, performance.now())
-  // 중앙 고정은 화면의 캐릭터 위치만 바꿉니다. 실제 위치 예측과 Pose는 항상 수신·표시합니다.
   if (viewerSettings.locationMode === 'center') {
-    if (location.valid && !location.empty) {
-      selectedPointId = location.pointId
-      updateLocationUI(location.zone, selectedPointId)
-      updatePostureUI(location.posture)
-    } else {
-      clearLocationUI(location.empty ? 'No person' : 'Unavailable')
-      updatePostureUI(location.empty ? 'empty' : 'unknown')
-    }
-    const showPerson = Boolean(motionPose?.valid || displayPose?.valid || (location.valid && !location.empty))
-    if (character) character.visible = showPerson
-    if (showPerson) moveCharacterTo(5, location.posture === 'squat' ? 'squat' : 'standing')
-    updateMotionRig(motionPose, motionMirror)
+    pinMotionCharacter()
+    updateMotionLocationUI(noPerson)
+    if (character) character.visible = !noPerson
+    if (noPerson) {
+      poseRig?.clear()
+      refreshIdleAnimation()
+    } else updateMotionRig(motionPose, motionMirror)
+    updateLiveBadge(snapshot)
+    return
+  }
+  if (noPerson) {
+    setAbsentState('No person', 'empty')
     updateLiveBadge(snapshot)
     return
   }
@@ -672,6 +703,8 @@ function updateViewerSettings(key, value) {
   poseViewport.reset()
   fastPoseViewport.reset()
   liveThreeLimiter.reset()
+  sitDetector.reset()
+  currentSitDecision = {sit:false,strength:0,source:'standing'}
   poseRig?.clear()
   refreshViewer()
   syncLocationViewSwitch()
@@ -679,14 +712,20 @@ function updateViewerSettings(key, value) {
 }
 function syncLocationViewSwitch() {
   const center = viewerSettings.locationMode === 'center'
+  document.querySelector('.scene-title').classList.toggle('motion-active', center)
   for (const [id, selected] of [['mode-follow', !center], ['mode-center', center]]) {
     const button = document.getElementById(id)
     button.classList.toggle('selected', selected)
     button.setAttribute('aria-pressed', String(selected))
   }
 }
-document.getElementById('mode-follow').addEventListener('click', () => updateViewerSettings('locationMode','live'))
-document.getElementById('mode-center').addEventListener('click', () => updateViewerSettings('locationMode','center'))
+const presentationModePanel = document.getElementById('presentation-mode-panel')
+function selectPresentationMode(mode) {
+  presentationModePanel.hidden = true
+  updateViewerSettings('locationMode', mode)
+}
+document.getElementById('mode-follow').addEventListener('click', () => selectPresentationMode('live'))
+document.getElementById('mode-center').addEventListener('click', () => selectPresentationMode('center'))
 syncLocationViewSwitch()
 settingsOpen.addEventListener('click', () => {
   settingsPopup = window.open('/integration.html', 'wisensing-admin', 'popup=yes,width=1300,height=950,resizable=yes,scrollbars=yes')
@@ -785,10 +824,21 @@ window.addEventListener('beforeunload', () => {
   if (settingsPopup && !settingsPopup.closed) settingsPopup.close()
   settingsChannel.close()
 })
-// O=기록 재생, B=실시간 복귀, M=좌우 모드 순환.
+// 3=시연 모드 선택, O=기록 재생, B=실시간 복귀, M=좌우 모드 순환.
 window.addEventListener('keydown', (event) => {
   if (event.altKey || event.ctrlKey || event.metaKey) return
-  if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(event.target.tagName)) return
+  if (event.key === 'Escape' && !presentationModePanel.hidden) {
+    event.preventDefault()
+    presentationModePanel.hidden = true
+    return
+  }
+  if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return
+  if (event.key === '3') {
+    event.preventDefault()
+    if (!event.repeat) presentationModePanel.hidden = !presentationModePanel.hidden
+    return
+  }
+  if (event.target instanceof HTMLElement && event.target.tagName === 'BUTTON') return
   const key = event.key.toLowerCase()
   if (key === 'o' && !replayActive) document.querySelector('#pose-replay-file').click()
   if (key === 'b' && replayActive) stopPoseReplay()
