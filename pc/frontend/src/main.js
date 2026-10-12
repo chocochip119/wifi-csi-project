@@ -12,6 +12,7 @@ import { createTestPose } from './poseTests.js'
 import { DEFAULT_VIEWER_SETTINGS, resolveViewerLocation, selectViewerPose } from './viewerSettings.js'
 import { MIRROR_MODES, resolvePoseMirror, toDisplayX } from './poseOrientation.js'
 import { PoseFilter, sanitizePose } from './poseInput.js'
+import { LiveThreeActionLimiter } from './liveThreeActions.js'
 import { PoseViewportStabilizer } from './poseStabilization.js'
 import { parsePoseRecording } from './poseReplay.js'
 
@@ -302,6 +303,7 @@ let replayActive = false
 let backendLastSeenAt = 0
 let backendExpired = false
 const poseFilter = new PoseFilter()
+const liveThreeLimiter = new LiveThreeActionLimiter()
 const poseViewport = new PoseViewportStabilizer()
 // Standalone offline INT8 CNN replay; never mutates incoming hardware packets.
 let csvReplayActive = false
@@ -320,7 +322,7 @@ function setLiveBadge(value) {
   if (liveBadge) liveBadge.textContent = value
 }
 function updateLiveBadge(snapshot) {
-  if (replayActive) { setLiveBadge(csvReplayActive ? 'CSV CNN TEST' : 'FILE REPLAY'); return }
+  if (replayActive) { setLiveBadge(csvReplayActive ? (csvPostprocess && viewerSettings.liveActionMode==='three' ? 'CSV · LIVE 3-ACTION' : 'CSV CNN TEST') : 'FILE REPLAY'); return }
   if (viewerSettings.locationMode === 'manual' || viewerSettings.jointsMode !== 'live') {
     setLiveBadge(liveConnection ? 'LIVE + TEST' : 'TEST MODE')
     return
@@ -328,7 +330,7 @@ function updateLiveBadge(snapshot) {
   if (!liveConnection) { setLiveBadge('DISCONNECTED'); return }
   const system = snapshot?.system || {}
   if (String(system.reason || '').includes('FAKE MODE')) { setLiveBadge('DEMO DATA'); return }
-  setLiveBadge(system.ps_connected && system.pose_connected ? 'LIVE' : 'WAITING')
+  setLiveBadge(system.ps_connected && system.pose_connected ? (viewerSettings.liveActionMode==='three'?'LIVE · 3 ACTIONS':'LIVE') : 'WAITING')
 }
 
 // 실제 FPGA 12관절 입력에 대해 팔과 다리 추종 모두 기본 ON.
@@ -436,7 +438,7 @@ function updateMotionRig(pose, mirrored) {
     refreshIdleAnimation()
     return
   }
-  const isP10Squat = targetPosture === 'squat'
+  const isP10Squat = targetPosture === 'squat' && !pose?.live_three_visualization
   const drivenPose = isP10Squat ? p10SquatPose(pose) : pose
   if (!drivenPose?.valid) {
     if (poseRig?.active) poseRig.clear()
@@ -464,9 +466,14 @@ function handleSnapshot(snapshot, source = 'backend') {
   const validPose = sanitizePose(snapshot.pose)
   const livePose = validPose ? (csvReplayActive && !csvPostprocess ? validPose : poseFilter.push(validPose)) : null
   if (!livePose) poseFilter.reset()
+  // Original LIVE/CSV CNN estimates remain available to the backend.
+  // Limit only viewer display to three canonical actions when explicitly enabled.
+  const useThreeActions=viewerSettings.jointsMode==='live' && viewerSettings.liveActionMode==='three' &&
+    (!replayActive || (csvReplayActive && csvPostprocess))
+  const visualLivePose=useThreeActions ? liveThreeLimiter.push(livePose) : livePose
   const sharedPose = viewerSettings.jointsMode === 'custom'
     ? customPose
-    : selectViewerPose(viewerSettings.jointsMode, livePose, viewerSettings.jointsSample, createTestPose)
+    : selectViewerPose(viewerSettings.jointsMode, visualLivePose, viewerSettings.jointsSample, createTestPose)
   const displayPose = sharedPose
   const motionPose = sharedPose
   const poseMirror = resolvePoseMirror(sharedPose, mirrorMode, lastMirror)
@@ -612,7 +619,7 @@ function updateViewerSettings(key, value) {
   const allowed = {
     locationMode: ['live','manual','center'],
     manualPoint: ['p01','p02','p03','p04','p05','p06','p07','p08','p09','p10'],
-    jointsMode: ['live','sample','custom','off'], jointsSample: ['stand','armUp','armsWide','squat','legLift'],
+    jointsMode: ['live','sample','custom','off'], liveActionMode: ['full','three'], jointsSample: ['stand','armUp','armsWide','squat','legLift'],
     motionMode: ['live','sample','off'], motionSample: ['stand','armUp','armsWide','squat','legLift']
   }
   if (Object.hasOwn(allowed,key) && allowed[key].includes(value)) viewerSettings[key] = value
@@ -625,6 +632,7 @@ function updateViewerSettings(key, value) {
   } else if (key === 'mirrorMode' && MIRROR_MODES.includes(value)) mirrorMode = value
   else return
   poseFilter.reset()
+  liveThreeLimiter.reset()
   poseRig?.clear()
   refreshViewer()
   syncLocationViewSwitch()
@@ -666,6 +674,7 @@ settingsChannel.addEventListener('message', event => {
       backendExpired = false
       activeReplaySnapshot = null
       poseFilter.reset()
+      liveThreeLimiter.reset()
       poseRig?.clear()
       // CSV is a replay of genuine inference, NOT synthetic position predictions.
       viewerSettings.locationMode = 'live'
@@ -692,6 +701,7 @@ settingsChannel.addEventListener('message', event => {
     if (csvReplayActive) {
       csvPostprocess = msg.postprocess !== false
       poseFilter.reset()
+      liveThreeLimiter.reset()
       poseRig?.clear()
       if (activeReplaySnapshot) handleSnapshot(activeReplaySnapshot,'settings')
     }
@@ -727,6 +737,7 @@ settingsChannel.addEventListener('message', event => {
     updateCameraView()
   } else return
   poseFilter.reset()
+  liveThreeLimiter.reset()
   poseRig?.clear()
   refreshViewer()
   broadcastSettings()
@@ -767,6 +778,7 @@ function stopPoseReplay() {
   replayLabel.hidden = true
   replayFileInput.value = ''
   poseFilter.reset()
+  liveThreeLimiter.reset()
   poseRig?.clear()
   console.log('[Pose Replay] Backend LIVE mode restored')
   if (latestSnapshot && performance.now() - backendLastSeenAt < 5000) {
@@ -790,6 +802,7 @@ replayFileInput.addEventListener('change', async () => {
     activeReplaySnapshot = null
     backendExpired = false
     poseFilter.reset()
+    liveThreeLimiter.reset()
     poseRig?.clear()
     replayLabel.hidden = false
     replayLabel.textContent = `LOCAL REPLAY · ${frames.length} frame(s) · B: LIVE 복귀`
@@ -817,6 +830,7 @@ connectBackend((snapshot) => {
     backendLastSeenAt = 0
     backendExpired = true
     poseFilter.reset()
+    liveThreeLimiter.reset()
     poseRig?.clear()
     latestSnapshot = null
     refreshViewer()
@@ -866,6 +880,7 @@ function animate(now) {
       now - backendLastSeenAt > 5000 && !backendExpired) {
     backendExpired = true
     poseFilter.reset()
+    liveThreeLimiter.reset()
     poseRig?.clear()
     latestSnapshot = null
     refreshViewer()
