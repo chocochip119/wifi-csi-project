@@ -12,6 +12,7 @@ import { createTestPose } from './poseTests.js'
 import { DEFAULT_VIEWER_SETTINGS, resolveViewerLocation, selectViewerPose } from './viewerSettings.js'
 import { MIRROR_MODES, resolvePoseMirror, toDisplayX } from './poseOrientation.js'
 import { PoseFilter, sanitizePose } from './poseInput.js'
+import { FastPose2DFilter } from './fastPose2D.js'
 import { LiveThreeActionLimiter } from './liveThreeActions.js'
 import { PoseViewportStabilizer } from './poseStabilization.js'
 import { parsePoseRecording } from './poseReplay.js'
@@ -194,7 +195,7 @@ const poseLines = document.querySelector('#pose-lines')
 const poseJoints = document.querySelector('#pose-joints')
 const poseUnavailable = document.querySelector('#pose-unavailable')
 
-function renderPose(pose, mirrored = false, stabilize = true) {
+function renderPose(pose, mirrored = false, stabilize = true, viewport = poseViewport) {
   poseLines.replaceChildren()
   poseJoints.replaceChildren()
 
@@ -211,7 +212,7 @@ function renderPose(pose, mirrored = false, stabilize = true) {
   }
 
   if (POSE_IDS.some((id) => !points.has(id))) {
-    poseViewport.reset()
+    viewport.reset()
     poseSvg.style.visibility = 'hidden'
     poseUnavailable.classList.add('show')
     return
@@ -227,7 +228,7 @@ function renderPose(pose, mirrored = false, stabilize = true) {
   const spanY = maxY - minY
 
   if (spanX < 1e-8 && spanY < 1e-8) {
-    poseViewport.reset()
+    viewport.reset()
     poseSvg.style.visibility = 'hidden'
     poseUnavailable.classList.add('show')
     return
@@ -235,12 +236,12 @@ function renderPose(pose, mirrored = false, stabilize = true) {
 
   // Filter the DISPLAY viewport separately. Leave raw CNN coordinates unchanged.
   // CSV postprocess OFF deliberately shows the unfixed original bounds for comparison.
-  const displayBounds = stabilize ? poseViewport.update(points, performance.now()) : {
+  const displayBounds = stabilize ? viewport.update(points, performance.now()) : {
     scale: Math.min(208 / Math.max(spanX, 1e-8), 302 / Math.max(spanY, 1e-8)),
     centerX: (minX + maxX) / 2,
     centerY: (minY + maxY) / 2
   }
-  if (!stabilize) poseViewport.reset()
+  if (!stabilize) viewport.reset()
   const { scale, centerX, centerY } = displayBounds
   const mapped = new Map()
   for (const [id, point] of points) {
@@ -303,8 +304,12 @@ let replayActive = false
 let backendLastSeenAt = 0
 let backendExpired = false
 const poseFilter = new PoseFilter()
+const fastPose2D = new FastPose2DFilter(80)
 const liveThreeLimiter = new LiveThreeActionLimiter()
 const poseViewport = new PoseViewportStabilizer()
+const fastPoseViewport = new PoseViewportStabilizer({
+  centerFastMs: 150, centerSlowMs: 200, scaleShrinkMs: 150, scaleGrowMs: 250
+})
 // Standalone offline INT8 CNN replay; never mutates incoming hardware packets.
 let csvReplayActive = false
 let csvPostprocess = true
@@ -466,6 +471,7 @@ function handleSnapshot(snapshot, source = 'backend') {
   const validPose = sanitizePose(snapshot.pose)
   const livePose = validPose ? (csvReplayActive && !csvPostprocess ? validPose : poseFilter.push(validPose)) : null
   if (!livePose) poseFilter.reset()
+  if (!validPose) fastPose2D.reset()
   // Original LIVE/CSV CNN estimates remain available to the backend.
   // Limit only viewer display to three canonical actions when explicitly enabled.
   const useThreeActions=viewerSettings.jointsMode==='live' && viewerSettings.liveActionMode==='three' &&
@@ -478,7 +484,17 @@ function handleSnapshot(snapshot, source = 'backend') {
   const motionPose = sharedPose
   const poseMirror = resolvePoseMirror(sharedPose, mirrorMode, lastMirror)
   if (sharedPose?.valid) lastMirror = poseMirror
-  renderPose(sharedPose, poseMirror, !(csvReplayActive && !csvPostprocess))
+  // 2D uses its own low-latency LIVE path. Keep the existing filtered/canonical
+  // sharedPose for the 3D character and three-action demonstration.
+  const isLive2D = viewerSettings.jointsMode === 'live' && (!replayActive || csvReplayActive)
+  const fast2D = isLive2D && viewerSettings.pose2DMode === 'fast'
+  const raw2D = isLive2D && viewerSettings.pose2DMode === 'raw'
+  const poseFor2D = fast2D ? fastPose2D.push(validPose) : raw2D ? validPose : sharedPose
+  const mirror2D = isLive2D && (fast2D || raw2D)
+    ? resolvePoseMirror(poseFor2D, mirrorMode, lastMirror) : poseMirror
+  renderPose(poseFor2D, mirror2D,
+    !(csvReplayActive && !csvPostprocess) && !raw2D,
+    fast2D ? fastPoseViewport : poseViewport)
   const motionMirror = poseMirror
 
   const location = resolveViewerLocation(snapshot, viewerSettings)
@@ -619,6 +635,7 @@ function updateViewerSettings(key, value) {
   const allowed = {
     locationMode: ['live','manual','center'],
     manualPoint: ['p01','p02','p03','p04','p05','p06','p07','p08','p09','p10'],
+    pose2DMode: ['legacy','fast','raw'],
     jointsMode: ['live','sample','custom','off'], liveActionMode: ['full','three'], jointsSample: ['stand','armUp','armsWide','squat','legLift'],
     motionMode: ['live','sample','off'], motionSample: ['stand','armUp','armsWide','squat','legLift']
   }
@@ -632,6 +649,9 @@ function updateViewerSettings(key, value) {
   } else if (key === 'mirrorMode' && MIRROR_MODES.includes(value)) mirrorMode = value
   else return
   poseFilter.reset()
+  fastPose2D.reset()
+  poseViewport.reset()
+  fastPoseViewport.reset()
   liveThreeLimiter.reset()
   poseRig?.clear()
   refreshViewer()

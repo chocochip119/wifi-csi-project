@@ -18,7 +18,7 @@ class Settings:
     web_port: int = 8000
     model_path: Path = DEFAULT_MODEL
     pose_stale_s: float = 2.0
-    monitor_interval_s: float = 0.10
+    monitor_interval_s: float = 0.05
     fake: bool = False
 
     @classmethod
@@ -32,6 +32,6 @@ class Settings:
             web_port=int(os.environ.get("WISE_WEB_PORT", "8000")),
             model_path=model,
             pose_stale_s=float(os.environ.get("WISE_POSE_STALE_S", "2.0")),
-            monitor_interval_s=float(os.environ.get("WISE_MONITOR_INTERVAL_S", "0.10")),
+            monitor_interval_s=float(os.environ.get("WISE_MONITOR_INTERVAL_S", "0.05")),
             fake=os.environ.get("WISE_FAKE", "0").lower() in {"1", "true", "yes", "on"},
         )

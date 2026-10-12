@@ -294,6 +294,8 @@ export class PoseRigController {
       this.liftSide=null
     }
     const liftedLeg=!plantedSquat && (requestedLift || this.liftAmount>0.0001) && Boolean(this.liftSource)
+    const squatTransition = this.legEnabled && !liftedLeg &&
+      (plantedSquat || this.squatAmount > 0.012)
     const restFrame=(this.legEnabled || liftedLeg) ? {
       bodyPosition:this.body.position.clone(), hipsRotation:this.hips.quaternion.clone(),
       legs:this.legs.map(l=>({upper:l.upper.quaternion.clone(),lower:l.lower.quaternion.clone(),foot:l.foot.position.clone()}))
@@ -304,7 +306,7 @@ export class PoseRigController {
     // neutral hip-to-foot spacing. The shallower reachable leg is the limit.
     this.lastSeatedDrop=0
     this.lastSeatedFlex=0
-    if(plantedSquat && this.squatAmount>0.001) {
+    if(squatTransition && this.squatAmount>0.001) {
       const results=[]
       for(const leg of this.legs) {
         const upperSeg=this.segments.find(seg=>seg.key===`thigh${leg.side}`)
@@ -340,7 +342,7 @@ export class PoseRigController {
     // Calibrated bone axes plus the SAME 2D segment headings used by the SVG.
     // Apply upper before lower: the child rotates with its parent.
     for(const s of this.segments) {
-      if((s.type==='arm'&&!this.armEnabled) || (s.type==='leg'&&(!this.legEnabled||plantedSquat||liftedLeg||stanceApplied))) continue
+      if((s.type==='arm'&&!this.armEnabled) || (s.type==='leg'&&(!this.legEnabled||squatTransition||liftedLeg||stanceApplied))) continue
       const heading=state.directions.get(s.key)?.angle
       if(!Number.isFinite(heading)) continue
       // Preserve frontal direction; add limited inferred knee forward bend only
@@ -426,7 +428,7 @@ export class PoseRigController {
 
     // Grounded standing and squat use the same two-bone IK, so shoes never
     // slide away from their shins as the stance width changes.
-    if(plantedSquat || stanceApplied) {
+    if(squatTransition || stanceApplied) {
       const targets=[]
       for(const leg of this.legs) {
         const upperSeg=this.segments.find(s=>s.key===`thigh${leg.side}`)

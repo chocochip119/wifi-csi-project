@@ -5,7 +5,13 @@ const angularDelta = (next, prev) => Math.atan2(Math.sin(next - prev), Math.cos(
 
 // Holds the 2D viewport steady while retaining space for large arm/leg motions.
 export class PoseViewportStabilizer {
-  constructor() { this.reset() }
+  constructor({centerFastMs=200, centerSlowMs=800, scaleShrinkMs=250, scaleGrowMs=850}={}) {
+    this.centerFastMs = centerFastMs
+    this.centerSlowMs = centerSlowMs
+    this.scaleShrinkMs = scaleShrinkMs
+    this.scaleGrowMs = scaleGrowMs
+    this.reset()
+  }
   reset() { this.centerX = null; this.centerY = null; this.scale = null; this.lastAt = null }
   update(points, at = performance.now()) {
     const data = points instanceof Map ? [...points.values()] : [...points]
@@ -30,7 +36,7 @@ export class PoseViewportStabilizer {
     const centerDistance = Math.hypot(targetX-this.centerX, targetY-this.centerY)
     const centerDeadzone = bodySize * 0.035
     if (centerDistance > centerDeadzone) {
-      const alpha = smooth(dt, centerDistance > bodySize * 0.16 ? 200 : 800)
+      const alpha = smooth(dt, centerDistance > bodySize * 0.16 ? this.centerFastMs : this.centerSlowMs)
       const factor = (centerDistance - centerDeadzone * 0.6) / centerDistance * alpha
       this.centerX += (targetX - this.centerX) * factor
       this.centerY += (targetY - this.centerY) * factor
@@ -38,7 +44,7 @@ export class PoseViewportStabilizer {
     const ratio = targetScale / Math.max(this.scale, 1e-8)
     // Small body-width fluctuations cannot make the entire skeleton zoom in/out.
     if (ratio < 0.92 || ratio > 1.09) {
-      const alpha = smooth(dt, ratio < 0.92 ? 250 : 850)
+      const alpha = smooth(dt, ratio < 0.92 ? this.scaleShrinkMs : this.scaleGrowMs)
       this.scale += (targetScale - this.scale) * alpha
     }
     // Avoid prolonged clipping on genuine large movements without following tiny spikes.
