@@ -16,7 +16,7 @@ import {normalizeAnatomyConfig,DEFAULT_ANATOMY_CONFIG} from './anatomySolver.js'
 import { solvePoseAngles, hasMeaningfulArmPose } from './poseAngles.js'
 import { createTestPose } from './poseTests.js'
 import { DEFAULT_VIEWER_SETTINGS, resolveViewerLocation, selectViewerPose } from './viewerSettings.js'
-import { MIRROR_MODES, resolvePoseMirror, toDisplayX } from './poseOrientation.js'
+import { MIRROR_MODES, resolvePoseMirror, toDisplayX, mirrorPoseSides } from './poseOrientation.js'
 import { PoseFilter, sanitizePose } from './poseInput.js'
 import { FastPose2DFilter } from './fastPose2D.js'
 import { LiveThreeActionLimiter } from './liveThreeActions.js'
@@ -73,7 +73,10 @@ app.innerHTML = `
         <section class="result-card pose-card">
           <div class="card-header">
             <div><span class="eyebrow">AI INFERENCE</span><h2>POSE RESULT</h2></div>
-            <span class="joint-badge">12 JOINTS</span>
+            <div class="pose-heading-actions">
+              <span class="joint-badge">12 JOINTS</span>
+              <button type="button" id="pose-mirror-toggle" class="pose-mirror-button" aria-pressed="true" title="스켈레톤과 캐릭터의 좌우 동작을 함께 바꿉니다">↔ 좌우 반전 ON</button>
+            </div>
           </div>
           <div class="pose-view">
             <svg id="pose-svg" viewBox="0 0 240 330" class="pose-svg">
@@ -337,6 +340,7 @@ let replayPaused = false
 let replayIntervalMs = 250
 
 let mirrorMode = 'auto'
+let poseSidesFlipped = true // Viewer only: mirror L/R joints for BOTH SVG and 3D rig.
 let lastMirror = false
 let cameraView = 'front'
 // 본 화면에는 기술 상태를 늘어놓지 않고 LIVE/DEMO/WAITING만 표시한다.
@@ -535,19 +539,20 @@ function handleSnapshot(snapshot, source = 'backend') {
   const sharedPose = viewerSettings.jointsMode === 'custom'
     ? customPose
     : selectViewerPose(viewerSettings.jointsMode, visualLivePose, viewerSettings.jointsSample, createTestPose)
-  const displayPose = sharedPose
-  const motionPose = sharedPose
-  const poseMirror = resolvePoseMirror(sharedPose, mirrorMode, lastMirror)
-  if (sharedPose?.valid) lastMirror = poseMirror
+  // Apply the SAME display-only joint remapping to both the 2D pose and 3D rig.
+  const motionPose = mirrorPoseSides(sharedPose, poseSidesFlipped)
+  const poseMirror = resolvePoseMirror(motionPose, mirrorMode, lastMirror)
+  if (motionPose?.valid) lastMirror = poseMirror
   // 2D uses its own low-latency LIVE path. Keep the existing filtered/canonical
   // sharedPose for the 3D character and three-action demonstration.
   const isLive2D = viewerSettings.jointsMode === 'live' && (!replayActive || csvReplayActive)
   const fast2D = isLive2D && viewerSettings.pose2DMode === 'fast'
   const raw2D = isLive2D && viewerSettings.pose2DMode === 'raw'
   const poseFor2D = fast2D ? fastPose2D.push(validPose) : raw2D ? validPose : sharedPose
-  const mirror2D = isLive2D && (fast2D || raw2D)
-    ? resolvePoseMirror(poseFor2D, mirrorMode, lastMirror) : poseMirror
-  // Only mirror the 2D picture; keep original CNN coordinates and 3D IK inputs.
+  const displayPose2D = mirrorPoseSides(poseFor2D, poseSidesFlipped)
+  // Use one orientation for SVG and avatar. The fast 2D filter may lag the rig,
+  // but it must not independently choose a different L/R direction.
+  // Original CNN coordinates and the backend remain unchanged.
   // In motion mode, hold the last drawn skeleton during the 5 s absence grace.
   const noPerson = isNoPerson(snapshot)
   const inMotionMode = viewerSettings.locationMode === 'center'
@@ -556,7 +561,7 @@ function handleSnapshot(snapshot, source = 'backend') {
     : (motionAbsenceTimer.reset(), false)
   poseUnavailable.textContent = noPerson && (!inMotionMode || hideMotion) ? 'No person' : 'Unavailable'
   if (!(inMotionMode && noPerson && !hideMotion)) {
-    renderPose(noPerson ? null : poseFor2D, !mirror2D,
+    renderPose(noPerson ? null : displayPose2D, poseMirror,
       !(csvReplayActive && !csvPostprocess) && !raw2D,
       fast2D ? fastPoseViewport : poseViewport)
   }
@@ -599,7 +604,7 @@ function handleSnapshot(snapshot, source = 'backend') {
       clearLocationUI('No person')
       updatePostureUI('unknown')
       if (character) character.visible = true
-      updateMotionRig(sharedPose, poseMirror)
+      updateMotionRig(motionPose, poseMirror)
     } else setAbsentState('No person', 'empty')
     updateLiveBadge(snapshot)
     return
@@ -616,7 +621,7 @@ function handleSnapshot(snapshot, source = 'backend') {
     if (character) character.visible = Boolean(sharedPose)
     if (sharedPose?.valid) moveCharacterTo(5)
   }
-  updateMotionRig(sharedPose, poseMirror)
+  updateMotionRig(motionPose, poseMirror)
   updateLiveBadge(snapshot)
 }
 
@@ -646,10 +651,9 @@ function loadCharacter(name) {
       console.error(`Invalid character height: ${name}`)
       return
     }
-    // Reflect only the rendered GLTF model around its own local X axis.
-    // Room placement and incoming CNN joint coordinates are unchanged.
-    const characterScale = 1.9 / size.y
-    character.scale.set(-characterScale, characterScale, characterScale)
+    // Keep a POSITIVE GLTF scale: negative X breaks world-space leg/foot IK.
+    // L/R mirroring is done once on the viewer-only 12-joint data instead.
+    character.scale.setScalar(1.9 / size.y)
     const scaledBox = new THREE.Box3().setFromObject(character)
     character.position.y = -scaledBox.min.y + 0.04
     const startPosition = zonePositions[currentZone]
@@ -750,7 +754,22 @@ function updateViewerSettings(key, value) {
 function syncLocationViewSwitch() {
   document.querySelector('.scene-title').classList.toggle('motion-active', viewerSettings.locationMode === 'center')
 }
+const poseMirrorToggle = document.getElementById('pose-mirror-toggle')
+function syncPoseMirrorToggle() {
+  poseMirrorToggle.setAttribute('aria-pressed', String(poseSidesFlipped))
+  poseMirrorToggle.textContent = poseSidesFlipped ? '↔ 좌우 반전 ON' : '↔ 좌우 반전 OFF'
+}
+poseMirrorToggle.addEventListener('click', () => {
+  poseSidesFlipped = !poseSidesFlipped
+  // Clear 3D smoothing state so no previous left-side target leaks into right.
+  poseRig?.clear()
+  poseViewport.reset()
+  fastPoseViewport.reset()
+  syncPoseMirrorToggle()
+  refreshViewer()
+})
 syncLocationViewSwitch()
+syncPoseMirrorToggle()
 settingsOpen.addEventListener('click', () => {
   settingsPopup = window.open('/integration.html', 'wisensing-admin', 'popup=yes,width=1300,height=950,resizable=yes,scrollbars=yes')
   if (settingsPopup) {
@@ -836,6 +855,8 @@ settingsChannel.addEventListener('message', event => {
     syncLocationViewSwitch()
     cameraView = 'front'
     mirrorMode = 'auto'
+    poseSidesFlipped = true
+    syncPoseMirrorToggle()
     motionAbsenceTimer.reset()
     motionHiddenForAbsence = false
     updateCameraView()
@@ -1015,10 +1036,12 @@ function animate(now) {
 
   // 관리자가 편집한 12관절은 WS 패킷이 없어도 리그에 계속 적용합니다.
   if (!replayActive && viewerSettings.jointsMode === 'custom' && customPose?.valid) {
-    updateMotionRig(customPose, resolvePoseMirror(customPose, mirrorMode, lastMirror))
+    const pose = mirrorPoseSides(customPose, poseSidesFlipped)
+    updateMotionRig(pose, resolvePoseMirror(pose, mirrorMode, lastMirror))
   } else if (!replayActive && viewerSettings.jointsMode === 'sample') {
     const pose = createTestPose(viewerSettings.jointsSample)
-    updateMotionRig(pose, resolvePoseMirror(pose, mirrorMode, lastMirror))
+    const visualPose = mirrorPoseSides(pose, poseSidesFlipped)
+    updateMotionRig(visualPose, resolvePoseMirror(visualPose, mirrorMode, lastMirror))
   }
 
   if (character && isMoving) {
