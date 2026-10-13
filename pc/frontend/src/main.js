@@ -763,6 +763,7 @@ poseMirrorToggle.addEventListener('click', () => {
   poseSidesFlipped = !poseSidesFlipped
   // Clear 3D smoothing state so no previous left-side target leaks into right.
   poseRig?.clear()
+  poseRig?.update(0, false) // Release old foot/leg IK anchors immediately.
   poseViewport.reset()
   fastPoseViewport.reset()
   syncPoseMirrorToggle()
