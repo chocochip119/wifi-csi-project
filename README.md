@@ -1,8 +1,30 @@
-# Wi-Fi CSI Project
+<div align="center">
 
-Wi-Fi CSI로 **위치와 12관절 자세**를 추정하는 Zybo Z7-20 / ESP32 프로젝트입니다. 현재 통합 기준은 **TX 1대 + RX 5대**이며, FPGA CNN이 자세를 계산하고 PC의 Portable Ridge가 위치를 계산합니다.
+![WiSensing 대표 이미지](docs/assets/wisensing-hero.svg)
 
-PS↔PC TCP 통합과 INT8 반올림 통일은 [PR #29](https://github.com/chocochip119/wifi-csi-project/pull/29)에서 main에 병합했습니다. 소스·호스트 테스트·RTL 시뮬레이션까지 확인했으며, 수정된 RTL의 Vivado 재빌드와 실제 보드 비교는 남아 있습니다.
+### Wi-Fi 신호로 사람의 자세와 위치를 추정하는 Camera-less Sensing
+
+**TX 1 · RX 5** &nbsp;|&nbsp; **12관절 Motion** &nbsp;|&nbsp; **9구역 Location** &nbsp;|&nbsp; **Zynq PS + FPGA PL**
+
+[시스템 설명](docs/presentation_20261008.md) · [실행 가이드](docs/bringup.md) · [프로젝트 구조](docs/repository_structure.md) · [통신 규격](docs/ps_pc_protocol.md)
+
+</div>
+
+![시스템 데이터 흐름](docs/assets/wisensing-architecture.svg)
+
+> **구현 구분:** 아래 기본 시스템은 `ps/` + `pc/backend/`의 **PC 위치 추론** 구조입니다. `ps_location/`의 **PS 위치 추론·단일 TCP 포트**는 별도 시험판이며, 발표(2026-10-08) 이후 개발한 기능입니다. 실제 보드 배포·autostart 상태는 소스 머지 여부만으로 확인되지 않습니다.
+
+## 한눈에 보는 프로젝트
+
+| 기능 | 접근 방법 | 결과 |
+|:---|:---|:---|
+| **Motion** | Wi-Fi CSI → PS 전처리 → FPGA CNN | 카메라 입력 없이 12개 관절의 (x, y) 추정 |
+| **Location** | CSI 진폭·RSSI → 2초 특징 → Portable Ridge | 9개 위치 구역 + 추가 상태 클래스 분류 |
+| **Visualization** | PS/PC 데이터 통합 | 자세 관절점과 구역 상태를 실시간 표시 |
+
+발표 자료의 **6.52ms FPGA 추론 / PS 1코어 대비 29.7배 / Location Balanced Accuracy 97.78%**는 **발표 시점의 평가 결과**입니다. 서로 다른 모델·시험 환경/기간의 결과를 같은 보드 실행 결과로 혼합하지 않았습니다. 계산 구조·시험 범위·검증의 한계는 [발표자료 기반 기술 해설](docs/presentation_20261008.md)에 정리했습니다.
+
+---
 
 ## 시스템
 
