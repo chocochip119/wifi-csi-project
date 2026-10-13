@@ -1,100 +1,108 @@
 <div align="center">
 
-![WiSensing 대표 이미지](docs/assets/wisensing-hero.svg)
+![WiSensing 대표 도식](docs/assets/wisensing-hero.svg)
 
-### Wi-Fi 신호로 사람의 자세와 위치를 추정하는 Camera-less Sensing
+### WiSensing — Wi-Fi CSI 기반 실내 위치·동작 추정 시스템
 
-**TX 1 · RX 5** &nbsp;|&nbsp; **12관절 Motion** &nbsp;|&nbsp; **9구역 Location** &nbsp;|&nbsp; **Zynq PS + FPGA PL**
+**TX 1대 · RX 5대 · 9개 위치 구역 · 12관절 자세 추정 · FPGA CNN 가속 · 실시간 2D/3D 시각화**
 
-[시스템 설명](docs/presentation_20261008.md) · [실행 가이드](docs/bringup.md) · [프로젝트 구조](docs/repository_structure.md) · [통신 규격](docs/ps_pc_protocol.md)
+[주요 기능](#주요-구현-기능) · [시스템 흐름](#전체-시스템-동작-흐름) · [화면 구성](#실시간-시각화-화면) · [저장소 구조](#저장소-구조) · [상세 문서](#상세-문서)
 
 </div>
 
-![시스템 데이터 흐름](docs/assets/wisensing-architecture.svg)
+## 주요 구현 기능
 
-> **구현 구분:** 아래 기본 시스템은 `ps/` + `pc/backend/`의 **PC 위치 추론** 구조입니다. `ps_location/`의 **PS 위치 추론·단일 TCP 포트**는 별도 시험판이며, 발표(2026-10-08) 이후 개발한 기능입니다. 실제 보드 배포·autostart 상태는 소스 머지 여부만으로 확인되지 않습니다.
+WiSensing은 여러 ESP32가 관측한 **Wi-Fi 채널 상태 정보(CSI)**를 이용해 사람의 **실내 위치 구역**과 **12개 신체 관절의 움직임**을 추정하는 시스템입니다. 자세 모델을 학습할 때는 영상에서 추출한 관절 좌표를 정답으로 사용하지만, **실시간 추론에는 카메라 영상을 입력하지 않습니다.**
 
-## 한눈에 보는 프로젝트
-
-| 기능 | 접근 방법 | 결과 |
-|:---|:---|:---|
-| **Motion** | Wi-Fi CSI → PS 전처리 → FPGA CNN | 카메라 입력 없이 12개 관절의 (x, y) 추정 |
-| **Location** | CSI 진폭·RSSI → 2초 특징 → Portable Ridge | 9개 위치 구역 + 추가 상태 클래스 분류 |
-| **Visualization** | PS/PC 데이터 통합 | 자세 관절점과 구역 상태를 실시간 표시 |
-
-발표 자료의 **6.52ms FPGA 추론 / PS 1코어 대비 29.7배 / Location Balanced Accuracy 97.78%**는 **발표 시점의 평가 결과**입니다. 서로 다른 모델·시험 환경/기간의 결과를 같은 보드 실행 결과로 혼합하지 않았습니다. 계산 구조·시험 범위·검증의 한계는 [발표자료 기반 기술 해설](docs/presentation_20261008.md)에 정리했습니다.
-
----
-
-## 시스템
-
-TX Coordinator가 RX의 CSI를 모아 USB CDC ACM(`/dev/ttyACM0`)으로 PS에 보냅니다. PS는 같은 CSI cycle을 두 경로로 사용합니다.
-
-| 경로 | 처리 위치 | PC까지 전달 |
+| 기능 | 구현 내용 | 화면/출력 |
 |---|---|---|
-| 자세 | PS 전처리 → DDR → FPGA CNN → PS에서 INT8 좌표와 scale 읽기 | TCP **5001** |
-| 위치 | PS에서 원본 CSI/STATUS/ACK 전달 → PC Portable Ridge | TCP **5000** |
-| 화면 연결 | PC Backend가 위치/Pose 최신 상태 통합 | HTTP/WebSocket **8000** 기본값 |
+| **Wi-Fi CSI 수집** | ESP32 TX가 RX 5대의 CSI 수집 타이밍과 슬롯을 조정하고 수집 주기(cycle)를 취합 | RX 연결·상태·CSI 수신 정보 |
+| **실내 위치 추정** | RX별 CSI 진폭·RSSI를 시간 구간으로 묶어 **Portable Ridge**로 분류 | **P01~P09** 위치, **P10**(중앙 위치 앉기), 사람 없음 |
+| **12관절 자세 추정** | PS에서 전처리한 CSI를 **FPGA INT8 CNN**으로 추론 | 어깨·팔꿈치·손목·골반·무릎·발목의 좌우 12관절, **24개 (x,y) 값** |
+| **2D 관절 시각화** | 추론된 관절을 점·선으로 연결하고 화면 표시를 안정화 | 팔 들기·다리 들기·앉기 등 관절 변화 |
+| **3D 캐릭터 표현** | 12관절 방향을 캐릭터 본과 다리 IK에 연결하고 위치 구역의 이동·앉기 상태 표현 | 캐릭터의 위치 이동과 자세 변화 |
+| **실시간 통합 UI** | PC Backend가 위치·자세·장치 상태를 취합하여 HTTP/WebSocket으로 전달 | 메인 시연 화면과 별도 관리자/테스트 화면 |
+| **시연·검증 도구** | 좌우 동작 전환, 관절 샘플/편집, 녹화 재생, RX 배치 확인, 연결 상태 점검 | 실시간 표시와 독립적인 테스트/진단 |
 
-전체 연결 그림은 [시스템 구조](docs/architecture.md), 바이트 규격은 [PS↔PC 규격](docs/ps_pc_protocol.md)을 참고하세요. 실시간 Three.js 프런트엔드는 구현되어 있으며, Windows에서는 [원클릭 실행기](docs/oneclick_launcher.md)로 PC Backend/Frontend를 함께 실행할 수 있습니다. 호흡 통합은 별도 개발 범위입니다.
+> **위치 추정은 연속 좌표 회귀가 아닌 구역 분류**입니다. P10은 별도의 열 번째 공간이 아니라 P05와 같은 중앙 지점의 앉기 상태입니다. 3D 캐릭터도 2D 관절을 바탕으로 동작을 표현하는 시각화로, 관측되지 않은 신체 깊이를 직접 복원하는 것은 아닙니다.
 
-## 현재 CNN 기준
+## 전체 시스템 동작 흐름
 
-| 항목 | RX5 구성 |
+![WiSensing 전체 데이터 흐름](docs/assets/wisensing-architecture.svg)
+
+1. **Wi-Fi 신호 수집:** TX 1대가 RX 5대를 관리하고 각 RX가 수신한 CSI를 수집 주기별로 취합합니다.
+2. **PS 수신·전처리:** Zynq PS(PetaLinux)가 TX의 **USB CDC ACM** 데이터를 해석하고 CNN 입력을 구성합니다.
+3. **Motion 경로:** PS → DDR/AXI → **FPGA PL의 INT8 CNN** → 12관절 추론 결과 → PS로 전달합니다.
+4. **Location 경로:** 같은 CSI 주기를 PS가 PC에 전송하고, **PC Backend의 위치 모델**이 9구역 및 상태를 분류합니다.
+5. **결과 통합·표시:** PC Backend가 최신 위치·관절 정보를 통합하고, Frontend가 **2D 스켈레톤과 3D 캐릭터**를 보여줍니다.
+
+| 데이터 연결 | 방식 | 역할 |
+|---|---|---|
+| RX → TX | Wi-Fi / UDP 3333 | 수집된 CSI 전달 |
+| TX → PS | USB CDC ACM | 수집 주기·상태·명령 응답 |
+| PS ↔ PL | DDR + AXI4-Lite | CNN 입력/가중치 로드·추론 제어 |
+| PS → PC | TCP 5000 / 5001 | CSI·상태 / 12관절 Pose |
+| PC Backend → Frontend | HTTP / WebSocket (기본 8000) | 위치·관절·연결 상태 실시간 표시 |
+
+위 흐름은 **기본 실행 구성(`ps/` + `pc/backend/`)**입니다. `ps_location/`에는 위치 계산을 PS로 옮긴 시험 구성이, `integration/`에는 CNN 및 Ridge IP 통합 설계 자료가 별도로 있습니다. 각 구현의 실제 실행 경로와 적용 상태는 해당 폴더 문서를 기준으로 확인하세요.
+
+## 실시간 시각화 화면
+
+| 화면 | 확인할 수 있는 기능 |
 |---|---|
-| 입력 | INT8 `[15,128,10]`, **19,200 bytes**; batch 포함 시 `[B,15,128,10]` |
-| 채널 순서 | RX0..4 base → RX0..4 delta → RX0..4 mask |
-| 공유 Encoder | RX별 Conv `3→16, 5×3` → GELU → Conv `16→32, 3×3` → GELU → Pool 출력 `8×4` |
-| Encoder 출력 | RX당 `32×8×4=1024`개 INT8 특징 |
-| FC | Flatten **5120** → FC1 **128** → GELU → FC2 **128** → GELU → FC3 **24** |
-| 출력 | INT8 24 bytes = 12관절 `(x,y)`; 실수 좌표는 `INT8 × output_scale` |
-| 가중치 blob | RX5 v2, **685,136 bytes** |
+| **메인 시연 화면** | 실내 공간의 3D 캐릭터, 2D 관절 스켈레톤, P01~P09 구역 표시, 자세·연결 상태 |
+| **위치/모션 보기** | **3번 키**로 위치를 따라 이동하는 보기와 중앙 P05에 고정한 모션 보기를 전환 |
+| **좌우 관절 대응** | **좌우 반전 ON/OFF** 버튼으로 2D 스켈레톤과 3D 캐릭터 동작을 함께 전환 |
+| **관리자·테스트 화면** | RX 연결/배치, CSI·Pose 수신, 추론 상태, 관절 샘플·편집 및 기록 재생 |
+| **기록 재생** | 저장한 추론 결과를 다시 재생하여 관절·위치 표시를 확인 |
 
-하드웨어는 하나의 Encoder 연산부를 RX별로 재사용합니다. RTL의 RX 파라미터와 별개로 현재 PS·학습·위치 모델·통합 구성은 RX5에 맞춰져 있습니다. 연산 규칙과 golden 생성은 [INT8 계약](ml/pose/INT8.md)을 참고하세요.
+실제 UI는 [`pc/frontend/`](pc/frontend/README.md)에서, PC 데이터 통합 및 API는 [`pc/backend/`](pc/backend/README.md)에서 설명합니다. 보드·모델이 없는 환경에서는 Backend의 테스트 입력으로 **화면 흐름만** 확인할 수 있습니다.
 
-## 저장소 안내
+<!-- 공개 가능한 실제 시연 화면 캡처/GIF가 준비되면 docs/assets/에 추가해 위 화면 표 아래 삽입합니다. 설명용 SVG를 실제 실행 캡처로 표시하지 않습니다. -->
 
-| 폴더 | 역할 | 시작 문서 |
+## 하드웨어 및 소프트웨어 구성
+
+| 구성 | 하드웨어·도구 | 담당 기능 |
 |---|---|---|
-| `esp32/` | TX Coordinator / RX 수집 펌웨어, 이전 PC 확인 스크립트 | [ESP32](esp32/README.md) |
-| `pl/` | CNN Encoder·FC·Loader·AXI·top 원본 RTL과 testbench | [PL](pl/README.md) |
-| `ps/` | USB 파서·전처리·FPGA 제어·TCP 서버, PetaLinux 앱 | [PS](ps/README.md) |
-| `ml/` | 학습·전처리·INT8 reference·golden 생성 | [ML](ml/README.md) |
-| `pc/` | 위치/Pose Backend와 Frontend 추가 위치 | [PC](pc/README.md) |
-| `integration/` | 패키지 IP 소스 및 기존 XSA | [하드웨어 통합](integration/README.md) |
-| `docs/` | 구조·규격·실행 순서·검증 기록·팀 작업 안내 | [문서 목록](docs/README.md) |
+| Wi-Fi 센싱 | ESP32-S3 기반 TX, ESP32 계열 RX 5대, ESP-IDF | 신호 송수신·CSI 수집/정렬 |
+| 임베디드 처리 | **Zybo Z7-20** (Zynq-7000 PS), PetaLinux, C | USB 수신·전처리·FPGA 제어·TCP 서버 |
+| FPGA 가속 | Zynq PL, Verilog, Vivado | INT8 CNN Encoder·FC·가중치 Loader·AXI 인터페이스 |
+| AI 모델 | Python, PyTorch, NumPy | 자세 모델 학습·양자화·기준 벡터 및 위치 모델 학습 |
+| PC 프로그램 | Python/FastAPI, Three.js, Vite | 위치 추론·데이터 통합·웹 기반 2D/3D 시각화 |
 
-세부 파일 위치와 소스 수정 순서는 [저장소 구조](docs/repository_structure.md)에 정리했습니다. `pl/fft`, `pl/localization`은 이전 실험/빈 골격이고, 현재 위치 추론은 `pc/backend/localization/`에서 실행됩니다.
+## 저장소 구조
 
-## Windows 시연 원클릭 실행
+| 폴더 | 구현한 내용 | 상세 안내 |
+|---|---|---|
+| [`esp32/`](esp32/README.md) | **TX/RX 펌웨어:** 연결·트리거·슬롯 제어·CSI 수집·USB 전달 | [TX](esp32/ESP-TX/README.md) · [RX](esp32/ESP-RX/README.md) |
+| [`ps/`](ps/README.md) | **Zynq PS:** USB CSI 파서, INT8 입력 생성, PL 추론 제어, PC TCP 전송 | [PS 설명](ps/README.md) |
+| [`pl/`](pl/README.md) | **FPGA RTL:** CNN Encoder·FC·Loader·AXI 및 Ridge 관련 RTL/테스트 | [CNN RTL](pl/cnn/README.md) |
+| [`ml/`](ml/README.md) | **학습·양자화:** 자세 모델, 위치 모델, INT8 reference·golden 생성 | [Pose](ml/pose/README.md) · [Location](ml/localization/README.md) |
+| [`pc/`](pc/README.md) | **PC 앱:** 위치/관절 Backend와 2D·3D 웹 Frontend | [Backend](pc/backend/README.md) · [Frontend](pc/frontend/README.md) |
+| [`integration/`](integration/README.md) | Vivado용 CNN/Ridge IP 패키지 및 XSA 통합 산출물 | [하드웨어 통합](integration/README.md) |
+| [`ps_location/`](ps_location/README.md) | PS에서 위치 Ridge를 처리하는 **별도 시험 구성** | [PS 위치 버전](ps_location/README.md) |
+| [`ps_onlysw/`](ps_onlysw/README.md) | FPGA와 비교하기 위한 **PS 소프트웨어 CNN** | [PS 전용 CNN](ps_onlysw/README.md) |
+| [`docs/`](docs/README.md) | 시스템 그림, 인터페이스, 실행·운영, 발표 근거, 검증 문서 | [문서 안내](docs/README.md) |
 
-이미 Python `.venv`, Node.js, Frontend 의존성이 설치된 개발 PC에서는 `WiSensing_Start.bat`를 더블클릭하세요. 실제 Zybo의 CNN은 별도로 먼저 실행해야 하며, 설정은 별도 팝업으로 열리고 PC 앱은 화면의 종료 버튼 또는 `WiSensing_Stop.bat`로 종료합니다. 상세 내용은 [원클릭 실행 가이드](docs/oneclick_launcher.md)를 참고하세요. 로컬 GLTF 캐릭터 파일은 Git에서 제외되어 그대로 유지됩니다.
+파일 단위의 위치와 원본 RTL ↔ Vivado IP 복사본 관계는 [저장소 파일 안내](docs/repository_structure.md)에 정리되어 있습니다.
 
-## 먼저 실행하기
+## 현재 모델·인터페이스 기준
 
-저장소 루트에서 Python 3.10 이상을 사용합니다.
+| 구분 | 기본 RX5 규격 |
+|---|---|
+| CSI 입력 | RX 5대 × **base / delta / mask** |
+| CNN 입력 | INT8 `[15, 128, 10]` = **19,200 bytes** |
+| Encoder | RX별 공유 Conv `3→16 (5×3)` → `16→32 (3×3)` → Pool `8×4` |
+| FC | Flatten **5120** → **128** → **128** → **24** |
+| Motion 출력 | INT8 24개, 12관절 `(x,y)`; `output_scale`로 실수 좌표 복원 |
+| Location 출력 | **9개 위치 + 사람 없음 + P10 앉기 = 11클래스** |
+| 위치 특징 | 2초 CSI/RSSI 윈도우에서 955개 특징, Portable Ridge |
 
-```bash
-python -m venv .venv
-# Linux/macOS
-source .venv/bin/activate
-# Windows PowerShell: .\.venv\Scripts\Activate.ps1
-python -m pip install -r pc/backend/requirements.txt
-python pc/backend/run_backend.py --fake
-```
+세부 CNN 연산·정수 반올림은 [CNN RTL](pl/cnn/README.md)과 [INT8 규격](ml/pose/INT8.md), 위치 학습·평가는 [Location](ml/localization/README.md)에서 설명합니다. 발표 자료의 **6.52 ms FPGA 추론**, **29.7배 PS 대비 가속**, **97.78% 위치 Balanced Accuracy**는 발표 당시 **서로 다른 시험 항목의 평가 수치**이며, 측정 조건과 한계는 [발표 기술 해설](docs/presentation_20261008.md)에 분리해 기록했습니다.
 
-`http://127.0.0.1:8000/api/snapshot`에서 가짜 스냅샷을 확인합니다. 실제 PS 연결은 `--fake` 대신 `--ps-host <PS_IP>`를 사용하고 RX 배치를 확인해야 위치 추론을 시작할 수 있습니다. [통합 실행 순서](docs/bringup.md)와 [Backend API](pc/backend/README.md)를 참고하세요.
+## 상세 문서
 
-## 검증과 배포 상태
+- **장치·모델별 설명:** [ESP32](esp32/README.md) · [FPGA](pl/README.md) · [PS](ps/README.md) · [ML](ml/README.md) · [PC](pc/README.md)
+- **전체 연결·규격:** [시스템 구조](docs/architecture.md) · [인터페이스](docs/interface.md) · [PS↔PC 패킷](docs/ps_pc_protocol.md)
+- **설치·실행·검증:** [통합 실행 순서](docs/bringup.md) · [Windows 원클릭 실행](docs/oneclick_launcher.md) · [검증 기록](docs/reviews/2026-10-07-pc-integration.md)
 
-- Python/전처리/Backend/C↔Python 실제 TCP: **102 tests passed**.
-- RX5 Encoder 640 words 일치. 전체 CNN은 합성 회귀 입력으로 LOAD 후 reset 없는 INFER 2회, 각 **24/24 bytes** 일치.
-- FC·Encoder·Pool·패키지 IP 소스와 Python의 정수 반올림 계약 통일.
-- 기존 `integration/design_1_wrapper.xsa`에는 bitstream이 포함되어 있습니다. 해당 XSA와 `ps/test_vectors/`는 과거 통합 자료이며 최신 RTL/최종 학습 모델에 맞춰 재검증해야 합니다.
-- 최신 Vivado synthesis/implementation·IP 재패키징·bitstream/XSA 생성, ARM/PetaLinux 전체 빌드, 실제 보드/최종 모델 검증은 별도입니다.
-
-재현 방법과 남은 ESP32 trigger 정합·Pose 윈도우 정책은 [2026-10-07 점검 기록](docs/reviews/2026-10-07-pc-integration.md)에 있습니다. [Git 작업 가이드](docs/git_guide.md)를 따라 브랜치/PR에서 변경을 검토하고 main에 합칩니다.
-
-## 개발 환경
-
-Zybo Z7-20, Vivado, PetaLinux 2020.2, ESP-IDF, Verilog, C, Python/NumPy/FastAPI를 사용합니다. Colab의 모델 학습에는 PyTorch가 필요합니다. ESP32 TX/RX의 저장된 IDF target은 모두 `esp32s3`이며 실제 RX 보드 target은 [ESP32 안내](esp32/README.md)에서 확인하세요.
