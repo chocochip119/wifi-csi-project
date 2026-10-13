@@ -10,7 +10,7 @@
 | PS | PC Backend | Pose | **TCP 5001** | payload 40 bytes, 24 int8 + float32 scale | ps/src/wise_server.c |
 | PC Backend | Frontend | Snapshot | **HTTP / WebSocket** (기본 8000) | JSON `/api/snapshot`, `/ws` | pc/backend/app/web.py |
 
-PS↔PC 바이트 상세는 [ps_pc_protocol.md](ps_pc_protocol.md)를 참조합니다. FFT/호흡과 실행 프런트엔드는 현재 통합에 포함되지 않습니다. TCP는 호스트 C↔Python 테스트를 완료했으며 실제 Zybo/ARM 실행은 별도 확인 대상입니다.
+PS↔PC 바이트 상세는 [ps_pc_protocol.md](ps_pc_protocol.md)를 참조합니다. **Three.js/Vite 실행 Frontend는 `pc/frontend/`에 구현되어 있으며**, FFT/호흡은 기본 실행 파이프라인에 포함되지 않습니다. 이 표는 `ps/` + `pc/backend/`의 **PC 위치 추론 기본 경로**를 설명합니다. `ps_location/`의 PS 위치 모델 및 `integration/`의 Ridge FPGA IP는 각각 별도 구조·검증 범위를 갖습니다. 호스트 C↔Python TCP 테스트와 실제 Zybo/ARM 실보드 검증도 구분해 해석해야 합니다.
 
 ## CSI와 Pose tensor
 
