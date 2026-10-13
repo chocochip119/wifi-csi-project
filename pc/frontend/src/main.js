@@ -10,6 +10,7 @@ import { armMaxLiftDegForZone } from './armZoneLimit.js'
 import { LiveSitDetector } from './liveSitDetector.js'
 import { shouldHoldSeatedPose } from './singleLegLiftGate.js'
 import {isNoPerson, motionPointId, sitDetectorPoint, motionArmLiftLimit} from './presentationMode.js'
+import {legLiftMaxDegForLocation} from './legLiftPolicy.js'
 import {MotionAbsenceTimer} from './motionAbsenceTimer.js'
 // WiSensing viewer presentation 2-mode: keyboard 3 / center motion
 import {normalizeAnatomyConfig,DEFAULT_ANATOMY_CONFIG} from './anatomySolver.js'
@@ -370,6 +371,7 @@ let isMoving = false
 const moveSpeed = 1.1 // GLTF Walk와 더 자연스럽게 맞추기 위한 화면 이동 속도
 let targetPosture = 'standing'
 let armLocationZone = null // Live location zone; unknown != zone 5.
+let legLiftMaxDeg = 10 // Actual P05/P10 = unlimited; elsewhere ~10° visual limit.
 // Fixed P05 presentation position; unrelated to the position model output.
 function pinMotionCharacter() {
   if (!character || !zonePositions[5]) return
@@ -513,6 +515,7 @@ function updateMotionRig(pose, mirrored) {
   // nonzero force is applied to 3D only, AFTER ordinary IK smoothing.
   if (arms || legs) poseRig?.setPose(rigPose, mirrored, {
     arms, legs, armMaxLiftDeg: motionArmLiftLimit(viewerSettings.locationMode, armLocationZone, armMaxLiftDegForZone),
+    legMaxLiftDeg: legLiftMaxDeg,
     squatTarget: shouldSit ? currentSitDecision.strength : 0
   })
   else if (poseRig?.active) poseRig.clear()
@@ -569,16 +572,22 @@ function handleSnapshot(snapshot, source = 'backend') {
 
   const location = resolveViewerLocation(snapshot, viewerSettings)
   armLocationZone = location.valid && !location.empty ? location.zone : null
+  // Use the ACTUAL classifier location, even when motion mode pins the
+  // avatar to P05. P05/P10 have no lift limit; elsewhere, cap at 10°.
+  const inferredLocation = resolveViewerLocation(snapshot, {...viewerSettings, locationMode:'live'})
+  legLiftMaxDeg = legLiftMaxDegForLocation(inferredLocation)
   // Position mode retains P05/P10 gating. Motion mode ALWAYS uses P05 as
   // the logical area, so any real joint motion works regardless of P08/P10.
   // Both modes honor explicit No Person before interpreting cached joints.
   const sitInput = viewerSettings.jointsMode === 'live' ? validPose : sharedPose
-  const sitRawScore = sitInput?.valid ?
-    (solvePoseAngles(sitInput, resolvePoseMirror(sitInput, mirrorMode, lastMirror))?.squat ?? 0) : 0
+  const sitAngles = sitInput?.valid ?
+    solvePoseAngles(sitInput, resolvePoseMirror(sitInput, mirrorMode, lastMirror)) : null
+  const sitRawScore = sitAngles?.squat ?? 0
   if (noPerson) sitDetector.reset()
   currentSitDecision = noPerson ? {sit:false,strength:0,source:'standing'} : sitDetector.observe(
     sitDetectorPoint(viewerSettings.locationMode, location),
-    sitInput, sitRawScore, performance.now())
+    sitInput, sitRawScore, performance.now(),
+    {liftL:sitAngles?.liftL ?? 0, liftR:sitAngles?.liftR ?? 0})
   if (inMotionMode) {
     pinMotionCharacter()
     if (noPerson) {
@@ -612,7 +621,9 @@ function handleSnapshot(snapshot, source = 'backend') {
   if (location.valid) {
     selectedPointId = location.pointId
     updateLocationUI(location.zone, selectedPointId)
-    updatePostureUI(location.posture)
+    // Keep the model's raw P10 position label while rejecting a false
+    // seated avatar/posture when 12 joints clearly show one lifted leg.
+    updatePostureUI(selectedPointId === 'p10' && !currentSitDecision.sit ? 'standing' : location.posture)
     if (character) character.visible = true
     moveCharacterTo(location.zone, location.posture)
   } else {
