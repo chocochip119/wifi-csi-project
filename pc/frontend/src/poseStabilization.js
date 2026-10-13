@@ -141,8 +141,8 @@ export class RigAngleStabilizer {
     const filtered = {
       ...solution, directions,
       squat: stabilizeScalar('squat', 0.038),
-      liftL: stabilizeScalar('liftL', 0.038),
-      liftR: stabilizeScalar('liftR', 0.038),
+      liftL: stabilizeScalar('liftL', 0.018, 110),
+      liftR: stabilizeScalar('liftR', 0.018, 110),
       footSpacingRatio: stabilizeScalar('footSpacingRatio', 0.022)
     }
     this.previous = filtered
