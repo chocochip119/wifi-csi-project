@@ -10,6 +10,7 @@ import { armMaxLiftDegForZone } from './armZoneLimit.js'
 import { LiveSitDetector } from './liveSitDetector.js'
 import { shouldHoldSeatedPose } from './singleLegLiftGate.js'
 import {isNoPerson, motionPointId, sitDetectorPoint, motionArmLiftLimit} from './presentationMode.js'
+import {MotionAbsenceTimer} from './motionAbsenceTimer.js'
 // WiSensing viewer presentation 2-mode: keyboard 3 / center motion
 import {normalizeAnatomyConfig,DEFAULT_ANATOMY_CONFIG} from './anatomySolver.js'
 import { solvePoseAngles, hasMeaningfulArmPose } from './poseAngles.js'
@@ -48,10 +49,6 @@ app.innerHTML = `
         <div class="scene-title">
           <span>SPACE VIEW</span>
           <strong>Zone 5</strong>
-        </div>
-        <div class="location-view-switch" id="presentation-mode-panel" role="group" aria-label="시연 모드 선택" hidden>
-          <button type="button" id="mode-follow" class="selected" aria-pressed="true">위치 모드</button>
-          <button type="button" id="mode-center" aria-pressed="false">모션 모드</button>
         </div>
         <div id="scene-container"></div>
         <input id="pose-replay-file" type="file" accept=".json,.jsonl,.ndjson,application/json,text/plain" hidden>
@@ -327,6 +324,8 @@ const fastPose2D = new FastPose2DFilter(80)
 const liveThreeLimiter = new LiveThreeActionLimiter()
 const sitDetector = new LiveSitDetector()
 let currentSitDecision = {sit:false,strength:0,source:'standing'}
+const motionAbsenceTimer = new MotionAbsenceTimer()
+let motionHiddenForAbsence = false
 const poseViewport = new PoseViewportStabilizer()
 const fastPoseViewport = new PoseViewportStabilizer({
   centerFastMs: 150, centerSlowMs: 200, scaleShrinkMs: 150, scaleGrowMs: 250
@@ -438,6 +437,17 @@ function moveCharacterTo(zone, posture = 'standing') {
   playAnimation('Walk')
 }
 
+function hideMotionAfterAbsence() {
+  if (motionHiddenForAbsence) return
+  motionHiddenForAbsence = true
+  poseUnavailable.textContent = 'No person'
+  renderPose(null)
+  if (character) character.visible = false
+  poseRig?.clear()
+  refreshIdleAnimation()
+  updateMotionLocationUI(true)
+}
+
 function setAbsentState(message, posture) {
   isMoving = false
   targetZone = currentZone
@@ -537,12 +547,19 @@ function handleSnapshot(snapshot, source = 'backend') {
   const poseFor2D = fast2D ? fastPose2D.push(validPose) : raw2D ? validPose : sharedPose
   const mirror2D = isLive2D && (fast2D || raw2D)
     ? resolvePoseMirror(poseFor2D, mirrorMode, lastMirror) : poseMirror
-  // An explicit No Person result suppresses even a still-valid cached pose.
+  // Only mirror the 2D picture; keep original CNN coordinates and 3D IK inputs.
+  // In motion mode, hold the last drawn skeleton during the 5 s absence grace.
   const noPerson = isNoPerson(snapshot)
-  poseUnavailable.textContent = noPerson ? 'No person' : 'Unavailable'
-  renderPose(noPerson ? null : poseFor2D, mirror2D,
-    !(csvReplayActive && !csvPostprocess) && !raw2D,
-    fast2D ? fastPoseViewport : poseViewport)
+  const inMotionMode = viewerSettings.locationMode === 'center'
+  const hideMotion = inMotionMode
+    ? motionAbsenceTimer.observe(noPerson, performance.now())
+    : (motionAbsenceTimer.reset(), false)
+  poseUnavailable.textContent = noPerson && (!inMotionMode || hideMotion) ? 'No person' : 'Unavailable'
+  if (!(inMotionMode && noPerson && !hideMotion)) {
+    renderPose(noPerson ? null : poseFor2D, !mirror2D,
+      !(csvReplayActive && !csvPostprocess) && !raw2D,
+      fast2D ? fastPoseViewport : poseViewport)
+  }
   const motionMirror = poseMirror
 
   const location = resolveViewerLocation(snapshot, viewerSettings)
@@ -557,14 +574,18 @@ function handleSnapshot(snapshot, source = 'backend') {
   currentSitDecision = noPerson ? {sit:false,strength:0,source:'standing'} : sitDetector.observe(
     sitDetectorPoint(viewerSettings.locationMode, location),
     sitInput, sitRawScore, performance.now())
-  if (viewerSettings.locationMode === 'center') {
+  if (inMotionMode) {
     pinMotionCharacter()
-    updateMotionLocationUI(noPerson)
-    if (character) character.visible = !noPerson
     if (noPerson) {
-      poseRig?.clear()
-      refreshIdleAnimation()
-    } else updateMotionRig(motionPose, motionMirror)
+      if (hideMotion) hideMotionAfterAbsence()
+      // Before 5 s, retain the previous skeleton and character appearance.
+      updateLiveBadge(snapshot)
+      return
+    }
+    motionHiddenForAbsence = false
+    updateMotionLocationUI(false)
+    if (character) character.visible = true
+    updateMotionRig(motionPose, motionMirror)
     updateLiveBadge(snapshot)
     return
   }
@@ -625,7 +646,10 @@ function loadCharacter(name) {
       console.error(`Invalid character height: ${name}`)
       return
     }
-    character.scale.setScalar(1.9 / size.y)
+    // Reflect only the rendered GLTF model around its own local X axis.
+    // Room placement and incoming CNN joint coordinates are unchanged.
+    const characterScale = 1.9 / size.y
+    character.scale.set(-characterScale, characterScale, characterScale)
     const scaledBox = new THREE.Box3().setFromObject(character)
     character.position.y = -scaledBox.min.y + 0.04
     const startPosition = zonePositions[currentZone]
@@ -696,7 +720,13 @@ function updateViewerSettings(key, value) {
     jointsMode: ['live','sample','custom','off'], liveActionMode: ['full','three'], jointsSample: ['stand','armUp','armsWide','squat','legLift'],
     motionMode: ['live','sample','off'], motionSample: ['stand','armUp','armsWide','squat','legLift']
   }
-  if (Object.hasOwn(allowed,key) && allowed[key].includes(value)) viewerSettings[key] = value
+  if (Object.hasOwn(allowed,key) && allowed[key].includes(value)) {
+    viewerSettings[key] = value
+    if (key === 'locationMode') {
+      motionAbsenceTimer.reset()
+      motionHiddenForAbsence = false
+    }
+  }
   else if (key === 'liveArms' || key === 'liveLegs') {
     if (typeof value !== 'boolean') return
     viewerSettings[key] = value
@@ -718,21 +748,8 @@ function updateViewerSettings(key, value) {
   broadcastSettings()
 }
 function syncLocationViewSwitch() {
-  const center = viewerSettings.locationMode === 'center'
-  document.querySelector('.scene-title').classList.toggle('motion-active', center)
-  for (const [id, selected] of [['mode-follow', !center], ['mode-center', center]]) {
-    const button = document.getElementById(id)
-    button.classList.toggle('selected', selected)
-    button.setAttribute('aria-pressed', String(selected))
-  }
+  document.querySelector('.scene-title').classList.toggle('motion-active', viewerSettings.locationMode === 'center')
 }
-const presentationModePanel = document.getElementById('presentation-mode-panel')
-function selectPresentationMode(mode) {
-  presentationModePanel.hidden = true
-  updateViewerSettings('locationMode', mode)
-}
-document.getElementById('mode-follow').addEventListener('click', () => selectPresentationMode('live'))
-document.getElementById('mode-center').addEventListener('click', () => selectPresentationMode('center'))
 syncLocationViewSwitch()
 settingsOpen.addEventListener('click', () => {
   settingsPopup = window.open('/integration.html', 'wisensing-admin', 'popup=yes,width=1300,height=950,resizable=yes,scrollbars=yes')
@@ -819,6 +836,8 @@ settingsChannel.addEventListener('message', event => {
     syncLocationViewSwitch()
     cameraView = 'front'
     mirrorMode = 'auto'
+    motionAbsenceTimer.reset()
+    motionHiddenForAbsence = false
     updateCameraView()
   } else return
   poseFilter.reset()
@@ -831,18 +850,13 @@ window.addEventListener('beforeunload', () => {
   if (settingsPopup && !settingsPopup.closed) settingsPopup.close()
   settingsChannel.close()
 })
-// 3=시연 모드 선택, O=기록 재생, B=실시간 복귀, M=좌우 모드 순환.
+// 3=위치/모션 모드 직접 전환, O=기록 재생, B=실시간 복귀, M=관절 방향 모드 순환.
 window.addEventListener('keydown', (event) => {
   if (event.altKey || event.ctrlKey || event.metaKey) return
-  if (event.key === 'Escape' && !presentationModePanel.hidden) {
-    event.preventDefault()
-    presentationModePanel.hidden = true
-    return
-  }
   if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return
-  if (event.key === '3') {
+  if (event.key === '3' || event.code === 'Digit3') {
     event.preventDefault()
-    if (!event.repeat) presentationModePanel.hidden = !presentationModePanel.hidden
+    if (!event.repeat) updateViewerSettings('locationMode', viewerSettings.locationMode === 'center' ? 'live' : 'center')
     return
   }
   if (event.target instanceof HTMLElement && event.target.tagName === 'BUTTON') return
@@ -980,6 +994,10 @@ function animate(now) {
     replayIndex = (replayIndex + 1) % replayFrames.length
     handleSnapshot(replayFrames[replayIndex], 'replay')
   }
+
+  // Trigger the 5 s absence threshold even without a new incoming snapshot.
+  if (viewerSettings.locationMode === 'center' && !motionHiddenForAbsence &&
+      motionAbsenceTimer.shouldHide(now)) hideMotionAfterAbsence()
 
   // Backend가 끊기면 마지막 Pose가 계속 실시간인 것처럼 보이지 않도록 비활성화.
   if (!replayActive && backendLastSeenAt &&
