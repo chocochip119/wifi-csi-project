@@ -1,4 +1,5 @@
 import { estimateSquatStrength } from './squatMotion.js'
+import { singleLegLiftStrength } from './singleLegLift.js'
 
 // WiSensing — one 2D geometry source for both Pose Result and 3D bone directions.
 // Coordinates are SCREEN coordinates: +x right, +y down. Depth is not observable.
@@ -83,8 +84,16 @@ export function solvePoseAngles(pose, mirrored = false) {
   const spanR = (point.get(28).y-point.get(24).y)/torso
   if (![spanL,spanR].every(Number.isFinite) || Math.max(spanL, spanR) > 8 || Math.min(spanL, spanR) < -0.35) return null
 
-  const liftL = clamp((spanR-spanL-0.13)/0.37,0,1)
-  const liftR = clamp((spanL-spanR-0.13)/0.37,0,1)
+  const kneeSpanL = (point.get(25).y - point.get(23).y) / torso
+  const kneeSpanR = (point.get(26).y - point.get(24).y) / torso
+  const liftL = singleLegLiftStrength({
+    ankleSpan: spanL, oppositeAnkleSpan: spanR,
+    kneeSpan: kneeSpanL, oppositeKneeSpan: kneeSpanR
+  })
+  const liftR = singleLegLiftStrength({
+    ankleSpan: spanR, oppositeAnkleSpan: spanL,
+    kneeSpan: kneeSpanR, oppositeKneeSpan: kneeSpanL
+  })
   // Standing vs seated is read from BOTH hip-to-ankle spans normalized by torso.
   // Extra bilateral knee evidence covers front-facing crouches with modest leg compression.
   const kneeL=kneePoseMetrics(point,torso,'L')

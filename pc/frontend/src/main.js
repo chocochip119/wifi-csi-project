@@ -8,6 +8,7 @@ import { connectBackend } from './websocket.js'
 import { PoseRigController } from './poseRig.js'
 import { armMaxLiftDegForZone } from './armZoneLimit.js'
 import { LiveSitDetector } from './liveSitDetector.js'
+import { shouldHoldSeatedPose } from './singleLegLiftGate.js'
 import {isNoPerson, motionPointId, sitDetectorPoint, motionArmLiftLimit} from './presentationMode.js'
 // WiSensing viewer presentation 2-mode: keyboard 3 / center motion
 import {normalizeAnatomyConfig,DEFAULT_ANATOMY_CONFIG} from './anatomySolver.js'
@@ -481,7 +482,13 @@ function updateMotionRig(pose, mirrored) {
     mirrored = false
   }
   if (!rigPose?.valid || !angles) {
-    if (poseRig?.active) poseRig.clear()
+    // Preserve an already-seated 3D frame through a short missing or
+    // malformed joint snapshot. No Person still clears it immediately.
+    const keepSeat=shouldHoldSeatedPose({
+      seated:shouldSit, active:Boolean(poseRig?.active),
+      ageMs:performance.now()-(poseRig?.inputAt ?? 0)
+    })
+    if (!keepSeat && poseRig?.active) poseRig.clear()
     refreshIdleAnimation()
     return
   }

@@ -3,6 +3,7 @@ import { FOOT_STANCE_MIN, FOOT_STANCE_MAX, LIMB_SEGMENTS, solvePoseAngles } from
 import { liftedShoePitch } from './footRotationMath.js'
 import { RigAngleStabilizer, RigJointStabilizer } from './poseStabilization.js'
 import { projectLiftedLeg } from './legLiftProjection.js'
+import { SingleLegLiftGate } from './singleLegLiftGate.js'
 import { clampArmHeading } from './armZoneLimit.js'
 import {DEFAULT_ANATOMY_CONFIG, normalizeAnatomyConfig, calculateSeatDrop, 
   twoBoneTriangle, resolveTorsoHandClearance} from './anatomySolver.js'
@@ -69,6 +70,7 @@ export class PoseRigController {
     this.solution=null
     this.angleStabilizer=new RigAngleStabilizer()
     this.jointStabilizer=new RigJointStabilizer()
+    this.legLiftGate=new SingleLegLiftGate()
     this.inputAt=0
     this.warnAt=0
     this.config=normalizeAnatomyConfig(DEFAULT_ANATOMY_CONFIG)
@@ -189,15 +191,24 @@ export class PoseRigController {
     const rawSolution=solvePoseAngles(rigPose,mirrored)
     if (!this.ready || !rawSolution) { this.clear();return }
     // 2nd-stage stabilization: ignore tiny limb-angle jumps after CNN 2D filtering.
-    const solution=this.angleStabilizer.push(rawSolution,mirrored,performance.now())
+    const rigNow=performance.now()
+    const solution=this.angleStabilizer.push(rawSolution,mirrored,rigNow)
     // Only the viewer changes: location/instant joint fusion controls squat IK.
     // 0 suppresses false squats outside P05/P10; P10=1 enforces the full pose.
     const squatTarget=Number.isFinite(options.squatTarget)
       ? clamp(options.squatTarget,0,1) : solution.squat
+    // Only 3D leg lifting is gated. Sitting/standing and the 2D skeleton
+    // remain controlled by their existing independent pipelines.
+    const stamp=pose?.source_timestamp_us ?? pose?.end_trigger_seq ?? pose?.window_id
+    const frameKey=stamp == null
+      ? rigPose.joints.map(j=>`${j.id}:${j.x}:${j.y}`).join('|') : String(stamp)
+    const guardedLift=this.legLiftGate.update({
+      liftL:rawSolution.liftL, liftR:rawSolution.liftR,
+      seated:squatTarget>0.075, atMs:rigNow, frameKey
+    })
     const drivenSolution={...solution,squat:squatTarget,
-      activity:Math.max(solution.activity,squatTarget),
-      liftL:squatTarget>0.075?0:solution.liftL,
-      liftR:squatTarget>0.075?0:solution.liftR}
+      activity:Math.max(solution.activity,squatTarget,guardedLift.liftL,guardedLift.liftR),
+      liftL:guardedLift.liftL, liftR:guardedLift.liftR}
     const arms=options.arms===true
     const legs=options.legs===true &&
       (drivenSolution.activity>0.14 || Number.isFinite(drivenSolution.footSpacingRatio) || squatTarget>0.075)
@@ -215,6 +226,7 @@ export class PoseRigController {
   clear() {
     this.angleStabilizer.reset()
     this.jointStabilizer.reset()
+    this.legLiftGate.reset()
     // The last lift target is intentionally retained while liftAmount eases out.
     this.active=false
     this.solution=null
@@ -258,7 +270,7 @@ export class PoseRigController {
     const desired=requestedLift?clamp(Math.max(liveState.liftL,liveState.liftR),0,1):0
     // At 60 fps, the foot changes by at most ~0.005m per frame (before IK).
     // Slower rise than fall; even S/T test-mode exits release smoothly.
-    const speed=desired>this.liftAmount?1.05:1.35
+    const speed=desired>this.liftAmount?2.25:2.6
     const step=Math.max(0,Math.min(dt,0.05))*speed
     this.liftAmount+=clamp(desired-this.liftAmount,-step,step)
     if(this.liftAmount<0.0001 && desired===0) {
