@@ -1,30 +1,30 @@
-# ESP32 CSI 수집
+# ESP32 — Wi-Fi CSI 수집 장치
 
-현재 실행 펌웨어는 `ESP-TX`와 `ESP-RX`입니다.
+ESP32 펌웨어는 **TX 1대와 RX 5대**가 Wi-Fi 신호를 일정한 순서로 관측하고, CSI를 하나의 수집 주기(cycle)로 모아 Zynq PS에 전달하는 부분입니다. TX는 수집을 조정하고, RX는 실제 채널 상태 정보를 측정합니다.
 
-| 위치 | 역할 |
-|---|---|
-| [ESP-TX](ESP-TX/README.md) | SoftAP/ESP-NOW로 RX 관리, trigger 송신, UDP CSI 수집, USB CDC ACM으로 PS 전달 |
-| [ESP-RX](ESP-RX/README.md) | TX 제어 적용, CSI 측정, RX slot에 맞춰 UDP로 TX에 반환 |
+## 구현 기능과 장치 역할
 
-RX→TX의 UDP 3333과 PS→PC의 TCP 5000/5001은 서로 다른 구간입니다. 현재 TX→PS는 네이티브 USB CDC ACM이고, 기존 Python 텍스트 도구는 TX의 binary USB cycle parser를 대신하지 않습니다.
+| 구성 | 하는 일 | 구현 문서 |
+|---|---|---|
+| **TX Coordinator** (`ESP-TX/`) | SoftAP로 RX 연결, ESP-NOW 모드·슬롯 할당, 트리거 송신, RX UDP 수집, cycle 정렬, USB CDC ACM 전송 | [TX 동작·프로토콜·빌드](ESP-TX/README.md) |
+| **RX 센서** (`ESP-RX/`) | TX AP 접속, CSI 콜백으로 수신 상태 측정, 자기 슬롯에서 UDP 전송, 재접속·채널 변경 대응 | [RX 동작·설정·빌드](ESP-RX/README.md) |
 
-## 현재 소스 설정
-
-통합은 RX5를 사용하지만 펌웨어 최대 RX 수는 8입니다. TX의 소스 기본값은 채널 9/above, HT40, timeout 4000µs, UDP slot gap 500µs입니다. NVS 저장값이 있으면 기본값보다 우선하므로 실제 상태는 STATUS로 확인합니다. RX 자체 부팅 기본 채널은 6이며, 실제 접속/할당 시 TX 설정을 확인해야 합니다.
-
-TX와 RX의 `sdkconfig`, `sdkconfig.defaults`는 모두 `CONFIG_IDF_TARGET="esp32s3"`로 저장되어 있습니다. 실제 RX가 ESP32-WROOM-32라면 해당 ESP-IDF 프로젝트의 target과 보드 설정을 확인한 뒤 빌드하세요. 문서에서 하드웨어를 바꾼 것으로 표시하거나 이 작업에서 target을 수정하지 않았습니다.
-
-## 빌드 위치
-
-ESP-IDF 환경에서 각 프로젝트 디렉터리로 이동한 뒤 실행합니다. TX의 `main/idf_component.yml`은 IDF `>=5.5` 및 `espressif/esp_tinyusb` 의존성을 선언합니다.
-
-```bash
-cd esp32/ESP-TX
-idf.py build
-idf.py -p COMx flash monitor
+```text
+TX: Wi-Fi 트리거·ESP-NOW 제어 ──→ RX 0~4
+TX: UDP 3333으로 측정 CSI 수신 ←── RX 0~4
+TX: RX별 CSI를 cycle로 취합 ──────→ PS (USB CDC ACM)
 ```
 
-RX는 `esp32/ESP-RX`에서 동일한 방식으로 빌드합니다. `COMx`는 실제 flash 포트로 바꿉니다. 두 펌웨어의 패킷 구조를 함께 유지하고, PS 파서의 USB 프레임 계약도 확인하세요.
+TX와 RX는 역할이 다릅니다. RX의 측정값이 **UDP 3333**으로 TX에 모이고, TX에서 PS로 보낼 때는 **USB CDC ACM의 별도 바이너리 프레임**을 사용합니다. PS가 다시 PC로 보내는 TCP 5000/5001과도 구분해야 합니다.
 
-UDP CSI header에는 generation/RX index가 있으나 trigger_seq가 없어 늦은 record의 cycle 정합 문제가 남아 있습니다. 자세한 검증 범위는 [점검 기록](../docs/reviews/2026-10-07-pc-integration.md), 이후 연결은 [PS](../ps/README.md)와 [통합 실행](../docs/bringup.md)을 참고하세요.
+## 설정·연동
+
+- 실제 시연 구성은 **TX 1 + RX 5**이며, 펌웨어의 RX 관리 용량은 최대 8대입니다.
+- TX 코드 기본값은 채널 **9/above**, HT40, timeout **4,000 µs**, UDP slot gap **500 µs**입니다. 저장된 NVS 설정이 있으면 실제 값이 달라질 수 있으므로 STATUS로 확인합니다.
+- RX가 학습 시 사용한 **RX index/MAC/배치**와 같은 순서로 수집되는지 확인해야 위치 추론의 입력과 일치합니다.
+- 현재 TX/RX 프로젝트의 저장된 IDF target은 모두 `esp32s3`입니다. 실제 RX 장치가 ESP32-WROOM-32 계열이라면 **빌드 대상과 보드를 먼저 확인**해야 합니다.
+- TX/PS의 USB 패킷 형식은 [TX README](ESP-TX/README.md) 및 [PS CSI 파서](../ps/README.md), 전체 인터페이스는 [통신 규격](../docs/interface.md)을 참고합니다.
+
+## 펌웨어 빌드
+
+ESP-IDF 환경에서 `ESP-TX/`와 `ESP-RX/`를 **서로 다른 프로젝트**로 빌드·플래시합니다. 자세한 업로드 명령, 각 모드와 패킷 구조는 [TX](ESP-TX/README.md) · [RX](ESP-RX/README.md)에 있습니다. TX의 `main/idf_component.yml`에는 IDF `>=5.5` 및 `espressif/esp_tinyusb` 의존성이 선언되어 있습니다.
