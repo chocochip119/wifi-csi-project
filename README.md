@@ -58,8 +58,6 @@ WiSensing은 여러 ESP32가 관측한 **Wi-Fi 채널 상태 정보(CSI)**를 �
 
 실제 UI는 [`pc/frontend/`](pc/frontend/README.md)에서, PC 데이터 통합 및 API는 [`pc/backend/`](pc/backend/README.md)에서 설명합니다. 보드·모델이 없는 환경에서는 Backend의 테스트 입력으로 **화면 흐름만** 확인할 수 있습니다.
 
-<!-- 공개 가능한 실제 시연 화면 캡처/GIF가 준비되면 docs/assets/에 추가해 위 화면 표 아래 삽입합니다. 설명용 SVG를 실제 실행 캡처로 표시하지 않습니다. -->
-
 ## 하드웨어 및 소프트웨어 구성
 
 | 구성 | 하드웨어·도구 | 담당 기능 |
@@ -98,7 +96,7 @@ WiSensing은 여러 ESP32가 관측한 **Wi-Fi 채널 상태 정보(CSI)**를 �
 | Location 출력 | **9개 위치 + 사람 없음 + P10 앉기 = 11클래스** |
 | 위치 특징 | 2초 CSI/RSSI 윈도우에서 955개 특징, Portable Ridge |
 
-세부 CNN 연산·정수 반올림은 [CNN RTL](pl/cnn/README.md)과 [INT8 규격](ml/pose/INT8.md), 위치 학습·평가는 [Location](ml/localization/README.md)에서 설명합니다. 발표 자료의 **6.52 ms FPGA 추론**, **29.7배 PS 대비 가속**, **97.78% 위치 Balanced Accuracy**는 발표 당시 **서로 다른 시험 항목의 평가 수치**이며, 측정 조건과 한계는 [발표 기술 해설](docs/presentation_20261008.md)에 분리해 기록했습니다.
+세부 CNN 연산·정수 반올림은 [CNN RTL](pl/cnn/README.md)과 [INT8 규격](ml/pose/INT8.md), 위치 학습·평가는 [Location](ml/localization/README.md)에서 설명합니다.
 
 ## 상세 문서
 
