@@ -1,21 +1,33 @@
-# PC — 실시간 Backend와 화면 연결
+# PC — 실시간 위치 추론과 2D/3D 시각화
 
-| 위치 | 상태 / 역할 |
-|---|---|
-| [backend](backend/README.md) | 실행 코드. TCP CSI/Pose 입력, 위치 추론, 상태 통합, HTTP/WebSocket |
-| [frontend](frontend/README.md) | README만 있는 구현 예정 위치. Frontend/GLB/텍스처 미포함 |
+PC 프로그램은 **Zynq PS에서 전달된 CSI와 FPGA 관절 결과를 받아 실내 위치·자세를 하나의 화면에 보여주는 부분**입니다. Python Backend와 Three.js Frontend가 모두 구현되어 있습니다.
 
-Backend는 PS TCP 서버의 클라이언트입니다. CSI/STATUS/ACK는 5000, Pose는 5001로 받고 웹 API는 기본 8000에서 제공합니다. 위치는 PC에서 계산하며 Pose는 FPGA 결과를 읽습니다.
+## 구현 구성
 
-## 빠른 확인
+| 폴더 | 담당 기능 | 자세한 문서 |
+|---|---|---|
+| [`backend/`](backend/README.md) | PS TCP 연결, RX 배치 확인, CSI 기반 **Portable Ridge 위치 분류**, FPGA 12관절 수신, HTTP/WebSocket 스냅샷 | [Backend 기능·API·실행](backend/README.md) |
+| [`frontend/`](frontend/README.md) | 실내 공간 **3D 캐릭터**, **2D 스켈레톤**, 위치/모션 보기, 관리자 설정·테스트·관절 편집·재생 | [Frontend 화면·조작·실행](frontend/README.md) |
 
-저장소 루트에서 Python 3.10 이상과 Backend 의존성을 준비합니다.
-
-```bash
-python -m pip install -r pc/backend/requirements.txt
-python pc/backend/run_backend.py --fake
+```text
+PS TCP 5000 (CSI/STATUS) ──→ Backend Location (Ridge) ─┐
+PS TCP 5001 (FPGA Pose) ──→ Backend Pose 입력 ──────────┤
+                                                       ↓
+                                HTTP/WebSocket 8000 스냅샷
+                                                       ↓
+                            Three.js Frontend (기본 5173)
+                            3D 공간 + 2D 관절 + 관리자 창
 ```
 
-`http://127.0.0.1:8000/api/snapshot` 또는 `/docs`를 확인합니다. 실제 PS 연결에는 `python pc/backend/run_backend.py --ps-host <PS_IP>`를 사용합니다. 이 실행 전에 PS 앱과 네트워크를 준비하고 실제 RX index↔MAC/배치 순서를 확인하세요.
+## 화면에서 할 수 있는 일
 
-세부 옵션·API·RX 확인 절차는 [Backend README](backend/README.md), 보드까지의 순서는 [통합 실행](../docs/bringup.md), 패킷 규격은 [PS↔PC](../docs/ps_pc_protocol.md)에 있습니다. 연결 종료/stale는 unavailable이고 데이터 미수신을 사람 없음으로 판단하지 않습니다.
+- **Location:** P01~P09 구역 위치와 P10(중앙 앉기), 사람 없음 상태를 표시합니다.
+- **Motion:** 12관절을 스켈레톤과 캐릭터 본에 전달하여 팔·다리 동작을 표현합니다.
+- **설정/검증:** RX 연결·배치, 추론 상태, 관절 샘플, 저장된 추론 결과의 재생을 확인합니다.
+- **보기 전환:** 시연 화면의 위치 모드와 중앙 모션 모드를 전환하고, 좌우 동작 방향을 직접 바꿀 수 있습니다.
+
+## 실행·연결
+
+Windows 개발 PC에서는 저장소 루트의 `WiSensing_Start.bat`로 Backend와 Frontend를 함께 시작할 수 있습니다. [원클릭 실행 안내](../docs/oneclick_launcher.md)에 초기 설정, 종료 방법, 보드 IP 주의 사항이 있습니다.
+
+개별 실행·테스트는 [Backend README](backend/README.md), [Frontend README](frontend/README.md)를 참고합니다. Backend의 `--fake`는 UI/연결 흐름 확인용이며 실보드나 모델 정확도 검증이 아닙니다. 실제 연동 때는 PS 앱과 RX 물리 배치를 먼저 확인해야 합니다.
