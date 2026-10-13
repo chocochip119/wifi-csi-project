@@ -1,9 +1,9 @@
 {
   "schema": "wise_portable_ridge_v1",
-  "npz_sha256": "7a8088db1d9891352bd5e4322cf268428a4a9b5ab475f22eb3c89e05c5418faf",
-  "source_run": "run_20261012_155827_3b82163c",
-  "source_model": "run_20261012_155827_3b82163c/fit/models/window__amp_rssi__ridge.joblib",
-  "source_model_sha256": "a19178fc10d33c601a692a4b74259bf31999e419f940a6a74544221c7d9cc594",
+  "npz_sha256": "10b72c19a9f44b07a36fef358101451c6a0c15adde7242686dce2d801497654b",
+  "source_run": "run_20261013_122537_33a43334",
+  "source_model": "run_20261013_122537_33a43334/fit/models/window__amp_rssi__ridge.joblib",
+  "source_model_sha256": "75cbb3f7f4b5d132d9a5d5d38a472bf1c1ed9a98ea8d90b3cbeeb40e4c2df24c",
   "source_versions": {
     "python": "3.14.7",
     "numpy": "2.5.3",

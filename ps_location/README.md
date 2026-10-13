@@ -21,7 +21,7 @@
 | `pc/backend/` | Backend 전체. 새 파일: `app/ps_link.py`(단일 포트 수신), 테스트 2개. 수정: `app/service.py`(PS 결과 표시), `protocol/wise_protocol.py`(type 5) 등 |
 | `docs/ps_pc_protocol.md` | 통신 규격 v1.2 |
 
-위치 모델은 `run_20261012_155827_3b82163c`(10/12 학습 Ridge)입니다. 검증 창 267개에서 sklearn 원본과 점수 차이 0, 실제 검증 CSI 40창을 C 엔진에 넣었을 때 라벨 40/40 일치(점수 상대 오차 ≤ 6×10⁻⁸)를 확인했습니다.
+위치 모델은 `run_20261013_122537_33a43334`(10/13 학습 Ridge)입니다. 검증 창 267개에서 sklearn 원본과 점수 차이 0, 실제 검증 CSI 40창을 C 엔진에 넣었을 때 라벨 40/40 일치(점수 상대 오차 ≤ 6×10⁻⁸)를 확인했습니다.
 
 ## 보드 (Ubuntu VM의 PetaLinux)
 

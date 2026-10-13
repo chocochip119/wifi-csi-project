@@ -32,7 +32,7 @@ fake 모드는 모델/PS/FPGA 검증이 아닙니다.
 - `app/`: 설정, 상태 통합, FastAPI 서버, 실행 CLI. `app/ps_link.py`가 PS 단일 포트 클라이언트입니다.
 - `protocol/wise_protocol.py`: v1.2 규격(wire version **2**, Location type 5 포함)의 순수 바이트 인코더/디코더
 - `localization/`: 위치 실시간 엔진의 Python 기준 구현(PS C 엔진과 parity 테스트), 955개 특징의 Portable Ridge, 원본 CSI 수집용 TCP 입력
-- `localization/models/localization/`: 위치 모델 원본 Portable Ridge `ridge_portable.npz`와 SHA-256/특징 계약 `ridge_portable.json`. 두 파일은 항상 함께 유지합니다. 현재 모델은 `run_20261012_155827_3b82163c`(10/12 학습)의 Ridge를 `ml/localization/export_portable_model.py`로 내보낸 것입니다(검증 창 267개에서 sklearn과 점수 차이 0, 검증 정확도 0.9925). PS용 `ps/models/loc_ridge_rx5.bin`은 이 파일에서 만듭니다.
+- `localization/models/localization/`: 위치 모델 원본 Portable Ridge `ridge_portable.npz`와 SHA-256/특징 계약 `ridge_portable.json`. 두 파일은 항상 함께 유지합니다. 현재 모델은 `run_20261013_122537_33a43334`(10/13 학습)의 Ridge를 `ml/localization/export_portable_model.py`로 내보낸 것입니다(검증 창 267개에서 sklearn과 점수 차이 0, 검증 정확도 0.9925). PS용 `ps/models/loc_ridge_rx5.bin`은 이 파일에서 만듭니다.
 - `tests/`: 프로토콜, 모델 수치 회귀, HTTP/WebSocket, 실제 C↔Python TCP 테스트
 - `tools/udp_receiver.py`: 기존 WCSI v1 UDP 경로 확인용. 현재 Backend 입력과 다른 규격입니다.
 - `tools/replay_ps_server.py`: 가짜 PS. 녹화 위치 CSV를 재생하면서 PS와 같은 방식으로 위치(type 5)를 계산해 TCP 5000으로 보냅니다. 보드 없이 Backend/GUI를 시험합니다(STATUS는 합성값, Pose 없음, 모델 정확도 시험 아님). 원본 CSI도 필요하면 `--forward-csi`. 예: `python pc/backend/tools/replay_ps_server.py a.csv b.csv --port 5000`
