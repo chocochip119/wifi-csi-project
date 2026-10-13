@@ -69,6 +69,7 @@ typedef struct {
     phys_mapping_t input_map;
     phys_mapping_t output_map;
     volatile uint32_t *csr;
+    float input_scale;
     float output_scale;
     uint32_t scale_bits;
 } cnn_engine_t;
@@ -749,6 +750,15 @@ static int cnn_engine_open(cnn_engine_t *engine, const char *blob_path)
         free(blob);
         return -1;
     }
+    /* Blob v2: header offset 12 stores encoder.input as IEEE754 float32.
+       Zynq-7000 ARM Linux uses little-endian, matching the blob format. */
+    _Static_assert(sizeof(float) == 4u, "blob input scale requires float32");
+    memcpy(&engine->input_scale, blob + 12u, sizeof(engine->input_scale));
+    if (!isfinite(engine->input_scale) || engine->input_scale <= 0.0f) {
+        fprintf(stderr, "invalid input scale in %s\n", blob_path);
+        free(blob);
+        return -1;
+    }
     engine->mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (engine->mem_fd < 0) {
         fprintf(stderr, "open /dev/mem: %s\n", strerror(errno));
@@ -1098,8 +1108,8 @@ static int parse_window_count(const char *text, uint64_t *value)
 static void usage(const char *program)
 {
     fprintf(stderr,
-        "usage: %s TTY INPUT_SCALE [MAX_WINDOWS] [BLOB] [DUMP_BIN]\n"
-        "example: %s /dev/ttyACM0 0.02 10\n"
+        "usage: %s TTY INPUT_SCALE|auto [MAX_WINDOWS] [BLOB] [DUMP_BIN]\n"
+        "example: %s /dev/ttyACM0 auto 0 /root/weights_5rx.bin\n"
         "UDP: CSI_UDP_TARGET=10.10.20.2:5000 %s /dev/ttyACM0 0.02 0\n"
         "env: WISE_TCP_PORT (5000) WISE_TCP_BIND WISE_FORWARD_CSI=1\n"
         "     WISE_LOC_MODEL (" DEFAULT_LOC_MODEL_PATH ", off disables) WISE_LOC_STRIDE_S (0.5)\n",
@@ -1113,7 +1123,8 @@ int main(int argc, char **argv)
     const char *tty_path;
     const char *blob_path = DEFAULT_BLOB_PATH;
     const char *dump_path = NULL;
-    float input_scale;
+    float input_scale = 0.0f;
+    bool auto_input_scale;
     int descriptor = -1;
     int lock_fd = -1;
     uint8_t buffer[READ_CHUNK];
@@ -1137,7 +1148,8 @@ int main(int argc, char **argv)
         return 2;
     }
     tty_path = argv[1];
-    if (parse_input_scale(argv[2], &input_scale) != 0) {
+    auto_input_scale = strcmp(argv[2], "auto") == 0;
+    if (!auto_input_scale && parse_input_scale(argv[2], &input_scale) != 0) {
         fprintf(stderr, "invalid INPUT_SCALE: %s\n", argv[2]);
         usage(argv[0]);
         return 2;
@@ -1163,7 +1175,7 @@ int main(int argc, char **argv)
         WEIGHT_PHYS,
         INPUT_PHYS,
         OUTPUT_PHYS);
-    printf("blob=%s input_scale=%.9g\n", blob_path, (double)input_scale);
+    printf("blob=%s input_scale_arg=%s\n", blob_path, argv[2]);
     if (strcmp(blob_path, DEFAULT_BLOB_PATH) == 0) {
         printf("NOTE: default blob is for integration testing; binary assets are supplied separately.\n");
     }
@@ -1172,6 +1184,15 @@ int main(int argc, char **argv)
     if (cnn_engine_open(&engine, blob_path) != 0) {
         goto cleanup;
     }
+    if (auto_input_scale) {
+        input_scale = engine.input_scale;
+    } else if (fabsf(input_scale - engine.input_scale) > engine.input_scale * 1e-6f) {
+        fprintf(stderr,
+                "WARNING: specified INPUT_SCALE %.9g differs from blob %.9g\n",
+                (double)input_scale, (double)engine.input_scale);
+    }
+    printf("CNN INPUT_SCALE=%.9g source=%s\n",
+           (double)input_scale, auto_input_scale ? "weights_5rx.bin" : "argument");
 
     if (udp_sender_start(&context.udp, udp_target) != 0) {
         fprintf(stderr, "UDP bypass disabled after setup failure; CNN path continues\n");

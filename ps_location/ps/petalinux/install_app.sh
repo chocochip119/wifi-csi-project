@@ -25,6 +25,8 @@ if [[ -e "$recipe_dir" ]]; then
 fi
 mkdir -p "$recipe_dir/files"
 cp "$package_dir/petalinux/pose-cnn-rx5.bb" "$recipe_dir/"
+cp "$package_dir/petalinux/wisensing-autostart" "$recipe_dir/files/"
+cp "$package_dir/petalinux/wisensing-location.conf" "$recipe_dir/files/"
 cp "$package_dir/src/"*.c "$recipe_dir/files/"
 cp "$package_dir/include/"*.h "$recipe_dir/files/"
 cp "$package_dir/test_vectors/"* "$recipe_dir/files/"
