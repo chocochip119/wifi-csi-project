@@ -1,50 +1,66 @@
-# 저장소 구조와 소스 관리
+# 저장소 구조와 소스 찾기
 
-현재 저장소는 장치/실행 역할에 따라 `esp32`, `pl`, `ps`, `ml`, `pc`, `integration`, `docs`로 나눕니다. 폴더 이름은 실제 checkout 기준이며 파일을 이동하는 작업 없이 안내를 정리했습니다.
+WiSensing 저장소는 **CSI 수집(ESP32) → PS 데이터 처리 → FPGA CNN → PC 위치/시각화**라는 구현 역할에 따라 분리되어 있습니다. 각 폴더의 README는 해당 구성요소가 무엇을 하고 어떻게 동작하는지부터 설명하고, 상세 설정·테스트·규격은 아래에 연결합니다.
 
-## 영역별 파일 찾기
+## 한눈에 보는 폴더
 
-| 위치 | 내용 / 상태 |
-|---|---|
-| [esp32/ESP-TX](../esp32/ESP-TX/README.md) | SoftAP, RX slot 관리, trigger, UDP 수집, USB CDC 프레임 |
-| [esp32/ESP-RX](../esp32/ESP-RX/README.md) | CSI callback, ESP-NOW 제어, UDP 전송 |
-| `pl/cnn/rtl/CNN_Encoder/` | Conv MAC, requant, GELU, Pool, 입력/중간 buffer |
-| `pl/cnn/rtl/FC/` | Flatten, FIFO, FC MAC/controller, requant/GELU, hidden/pose RAM |
-| `pl/cnn/rtl/Loader/` | blob decoder/loader, weight/parameter/LUT RAM |
-| `pl/cnn/rtl/axi/` | AXI4-Lite CSR 및 AXI master wrapper |
-| `pl/cnn/rtl/top/` | pose_cnn core와 LOAD/INFER controller |
-| [pl/cnn/testbench/CNN_Encoder](../pl/cnn/testbench/CNN_Encoder/README.md) | MAC·requant·Encoder 테스트와 벡터 생성기 |
-| [pl/cnn/testbench/rounding](../pl/cnn/testbench/rounding/README.md) | 반올림 회귀 runner, 두 requantizer/Pool, 전체 RX5 golden TB |
-| `ps/src/`, `ps/include/` | USB 파서·전처리·보드 앱·TCP 서버 및 공통 헤더 |
-| `ps/petalinux/` | 앱 설치 스크립트·BitBake recipe·Device Tree 설정 |
-| [ps/test_vectors](../ps/test_vectors/README.md) | 과거 RX5 시험 blob/입력/기대 출력, 최신 반올림 재검증 필요 |
-| `ps/tests/` | 호스트 TCP 테스트용 C 서버 |
-| [ml/pose](../ml/pose/README.md) | 전처리·INT8 reference/golden·v4/v5 notebook·회귀 테스트 |
-| [ml/localization](../ml/localization/README.md) | 위치 모델 학습/분석용 자리; 전체 학습 원본 없음 |
-| `ml/respiration/` | 현재 실행/학습 코드가 없는 자리 |
-| `pc/backend/app/` | 설정, BackendService, HTTP/WebSocket, CLI |
-| `pc/backend/protocol/` | PS↔PC WISE 바이트 규격 |
-| `pc/backend/localization/` | 실시간 위치 입력/특징/Portable Ridge, 모델 NPZ+JSON |
-| `pc/backend/tests/`, `pc/backend/tools/` | 회귀 테스트·fixture, 이전 UDP 디버그 도구 |
-| [pc/frontend](../pc/frontend/README.md) | 현재 README만 있음; Frontend 구현 추가 위치 |
-| [integration/pose_cnn_1.1](../integration/README.md) | component.xml, xgui, 패키지 IP의 RTL 소스 복사본 |
-| `integration/design_1_wrapper.xsa` | 기존 하드웨어 export, 내부 bitstream 포함 |
-| [docs](README.md) | 시스템/규격/실행/검증 및 팀 기록 |
+```text
+wifi-csi-project/
+├── esp32/          CSI 수집: TX / RX 펌웨어
+├── ps/             Zynq PS 기본 수신·전처리·FPGA 제어·TCP
+├── pl/             FPGA Pose CNN 및 Ridge 원본 RTL
+├── ml/             Pose/Location 학습·양자화·테스트
+├── pc/
+│   ├── backend/    CSI 기반 위치 분류·Pose 통합·WebSocket
+│   └── frontend/   Three.js 2D 스켈레톤·3D 캐릭터·관리자 UI
+├── integration/    Vivado IP·XSA 통합 하드웨어 자료
+├── ps_location/    PS C 위치 추론 시험판 (별도)
+├── ps_onlysw/      PS SW CNN 비교판 (별도)
+├── docs/           구조·통신·실행·검증 기록
+└── scripts/        실행 지원 스크립트
+```
 
-AXI/top의 실제 소스는 `pl/cnn/rtl/axi/`, `pl/cnn/rtl/top/`에 있습니다. `pl/fft/rtl/test.v`는 이전 실험이며 `pl/localization/`은 골격입니다. 현재 위치 실행은 `pc/backend/localization/`에서 이뤄집니다. CNN testbench의 구현 디렉터리는 `CNN_Encoder/`와 `rounding/` 두 곳입니다.
+## 기능별 파일 위치
 
-## 수정 위치와 함께 맞춰야 할 것
-
-| 작업 | 수정 시작점 | 함께 확인 |
+| 구분 | 디렉터리·대표 파일 | 주요 구현 기능 |
 |---|---|---|
-| 수집/무선/USB 프레임 변경 | ESP-TX / ESP-RX `main/main.c` | 양쪽 패킷, PS USB 파서, CSV 수집 계약 |
-| CNN 연산/연결 변경 | `pl/cnn/rtl/` | 패키지 IP 소스, Python reference, golden, Vivado 재빌드 |
-| PS 전처리/제어 변경 | `ps/src/`, `ps/include/` | tensor 순서, CSR/DDR, input/output scale, recipe |
-| PS↔PC 패킷 변경 | `ps/src/wise_server.c`, `pc/backend/protocol/wise_protocol.py` | [규격](ps_pc_protocol.md), 실제 C↔Python TCP 테스트 |
-| Pose 학습/양자화 변경 | `ml/pose/` | cache, INT8 artifacts, blob, golden, PS 입력 scale |
-| 위치 실행/모델 변경 | `pc/backend/localization/` | NPZ+JSON, RX index↔MAC/배치, 특징 회귀 |
-| HTTP/WebSocket/화면 변경 | `pc/backend/app/`, `pc/frontend/` | snapshot schema, unavailable/stale, RX 확인 API |
+| **수집 TX** | [`esp32/ESP-TX/`](../esp32/ESP-TX/README.md) | SoftAP·트리거·ESP-NOW·RX 슬롯·UDP CSI 취합·USB CDC ACM |
+| **수집 RX** | [`esp32/ESP-RX/`](../esp32/ESP-RX/README.md) | CSI 측정·TX 제어 처리·슬롯별 UDP 전송 |
+| **Pose CNN Encoder** | `pl/cnn/rtl/CNN_Encoder/` | Conv1/2 MAC, Requant, GELU, Pool, 라인/중간 버퍼 |
+| **Pose CNN FC** | `pl/cnn/rtl/FC/` | Flatten, FIFO, FC1/2/3, 24개 좌표 결과 |
+| **Pose CNN 가중치** | `pl/cnn/rtl/Loader/` | 모델 blob 해석·가중치/파라미터 저장 |
+| **FPGA 제어** | `pl/cnn/rtl/axi/`, `top/` | AXI4-Lite CSR, AXI master, LOAD/INFER FSM |
+| **Pose RTL 검증** | [`pl/cnn/testbench/`](../pl/cnn/README.md) | Conv/FC/정수 연산/golden 일치 테스트 |
+| **Ridge FPGA IP** | [`pl/localization/`](../pl/localization/README.md) | Ridge AXI4-Lite RTL·고정소수점 golden TB |
+| **PS USB 전처리** | `ps/src/csi_pipeline.c` | CSI/STATUS/ACK 파서와 RX5 INT8 시간 윈도우 |
+| **PS FPGA 제어** | `ps/src/pose_cnn_rx5_live.c`, `ps/include/` | DDR·AXI LOAD/INFER, CNN Pose 수신 |
+| **PS ↔ PC 전송** | `ps/src/wise_server.c` | TCP 5000/5001 송신·상태 관리 |
+| **PS 설치** | `ps/petalinux/` | PetaLinux 설치 recipe·Device Tree |
+| **Pose 학습** | [`ml/pose/`](../ml/pose/README.md) | CSV 전처리·Colab 학습·INT8 reference·golden |
+| **Location 학습** | [`ml/localization/`](../ml/localization/README.md) | 955개 특징·11클래스 학습/검증·Portable Ridge export |
+| **PC Backend** | `pc/backend/app/`, `protocol/` | FastAPI·WebSocket·Snapshot·TCP 규격 |
+| **실시간 Location** | `pc/backend/localization/` | CSI 2초 윈도우·Portable Ridge 실행·RX 배치 검사 |
+| **PC Frontend** | [`pc/frontend/`](../pc/frontend/README.md) | 3D 룸/캐릭터, 2D 관절, 좌우 전환, 관리자/테스트 화면 |
+| **Vivado 통합** | [`integration/`](../integration/README.md) | 기존 CNN/병렬 CNN·Ridge IP 패키지, 별도 XSA |
+| **별도 PS/CPU 실험** | [`ps_location/`](../ps_location/README.md), [`ps_onlysw/`](../ps_onlysw/README.md) | PS 위치 추론 시험판·PS CNN 비교 프로그램 |
 
-원본 RTL은 `pl/cnn/rtl/`입니다. `integration/pose_cnn_1.1/src/`는 Vivado 패키지의 복사본이므로 원본 수정 후 필요한 파일을 함께 갱신하고 IP를 다시 패키징합니다. XSA/bitstream은 빌드 산출물이며 소스 수정만으로 업데이트되지 않습니다.
+`pl/fft/`는 이전 FFT 실험 코드입니다. `ml/respiration/`은 기본 12관절/위치 실행에 포함되지 않습니다. 실제 PC 프런트엔드는 **`pc/frontend/src/`에 구현되어 있습니다.**
 
-학습 데이터·실행 로그·새 모델 출력은 실행 환경에서 관리합니다. 저장소의 Portable Ridge 모델과 회귀 fixture, 과거 보드 fixture는 이미 추적 중인 자료이므로 `.gitignore`만 추가해도 사라지거나 새 모델로 바뀌지 않습니다.
+## 수정할 때 함께 확인할 것
+
+| 바꾸는 기능 | 원본 수정 위치 | 함께 점검할 항목 |
+|---|---|---|
+| CSI 수집·무선·USB | `esp32/ESP-TX/main/`, `ESP-RX/main/` | RX 할당·PS 파서·USB 패킷·RX MAC 순서 |
+| Pose CNN 연산 | `pl/cnn/rtl/` | [정수 계약](../ml/pose/INT8.md)·golden·패키지 IP·bitstream |
+| Ridge IP 연산 | `pl/localization/rtl/` | `integration/ridge_axi_1.0/`, 테스트벤치·PS 드라이버 |
+| PS 전처리/제어 | `ps/src/`, `ps/include/` | 채널·tensor 순서·AXI/DDR·output_scale |
+| PS ↔ PC 프로토콜 | `ps/src/wise_server.c`, `pc/backend/protocol/` | [wire format](ps_pc_protocol.md)·TCP 테스트 |
+| Pose 학습/양자화 | `ml/pose/` | 모델/scale/blob, input·output golden, RTL 동작 |
+| Location 학습/추론 | `ml/localization/`, `pc/backend/localization/` | RX 배치·955 특징·Portable Ridge NPZ/JSON |
+| HTTP·WebSocket·UI | `pc/backend/app/`, `pc/frontend/src/` | 스냅샷 유효성·실제 보드 상태·화면 표시 |
+
+**원본 RTL**과 **Vivado 패키지용 RTL 복사본**, **빌드된 XSA/bitstream**은 서로 다른 파일입니다. 소스가 변경되어도 패키지 및 실제 보드 이미지는 자동 변경되지 않습니다. 위치 계산도 기본 PC 경로와 PS/PL 시험 경로를 구분해서 반영하세요.
+
+## 상세 문서
+
+[루트 프로젝트 소개](../README.md) · [전체 시스템 구조](architecture.md) · [PS/PL 인터페이스](interface.md) · [설치·통합 실행](bringup.md) · [문서 목록](README.md)
