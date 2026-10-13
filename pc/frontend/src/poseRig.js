@@ -384,7 +384,8 @@ export class PoseRigController {
     // Calibrated bone axes plus the SAME 2D segment headings used by the SVG.
     // Apply upper before lower: the child rotates with its parent.
     for(const s of this.segments) {
-      if((s.type==='arm'&&!this.armEnabled) || (s.type==='leg'&&(!this.legEnabled||squatTransition||liftedLeg||stanceApplied))) continue
+      if((s.type==='arm'&&!this.armEnabled) || (s.type==='leg'&&
+        (!this.legEnabled || this.legMaxLiftDeg<=0 || squatTransition || liftedLeg || stanceApplied))) continue
       const rawHeading=state.directions.get(s.key)?.angle
       if(!Number.isFinite(rawHeading)) continue
       // Cap both arm segments in 3D only; the original 2D CNN skeleton stays untouched.
