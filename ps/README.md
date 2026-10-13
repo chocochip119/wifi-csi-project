@@ -2,6 +2,28 @@
 
 Zybo Z7-20 / PetaLinux 2020.2의 C 앱입니다. PS는 USB CSI를 파싱·전처리하고 DDR/AXI4-Lite로 FPGA Pose CNN을 제어합니다. 같은 cycle의 원본 CSI는 PC 위치 Backend로 전달합니다. 전체 순서는 [통합 실행](../docs/bringup.md), 바이트 규격은 [PS↔PC TCP](../docs/ps_pc_protocol.md)를 참고하세요.
 
+## 구현 기능과 처리 흐름
+
+PS(Processing System)는 **CSI 수집 장치와 FPGA CNN, PC 프로그램 사이를 연결하는 실행 프로그램**입니다.
+
+| 단계 | 담당 기능 | 주요 코드 |
+|---|---|---|
+| 1. 수신 | TX의 USB CDC ACM binary cycle, RX별 CSI/STATUS/ACK 검사 | `src/csi_pipeline.c` |
+| 2. 전처리 | RX5 CSI를 CNN용 INT8 `[15,128,10]` 윈도우로 변환 | `src/csi_pipeline.c` |
+| 3. FPGA 제어 | DDR 입력·가중치 주소, AXI4-Lite LOAD/INFER, INT8 24개 Pose 결과 수신 | `src/pose_cnn_rx5_live.c`, `include/pose_cnn_regs.h` |
+| 4. PC 전송 | 원본 CSI/STATUS/ACK는 TCP 5000, Pose는 TCP 5001로 송신 | `src/wise_server.c` |
+| 5. 보드 실행 | PetaLinux recipe로 C 앱 설치·실행, DDR 예약·USB Host 설정 | `petalinux/` |
+
+```text
+ESP32 TX → USB CDC ACM → PS 파서·CSI 윈도우
+                                  ├→ DDR/AXI → FPGA CNN → 12관절 Pose
+                                  └→ 원본 CSI/STATUS
+                                             ↓
+                                 TCP 5000 / 5001 → PC
+```
+
+이 폴더는 **기본 PS 앱(위치 추론은 PC)**입니다. 위치 계산을 PS로 이전한 별도 경로는 [`ps_location/`](../ps_location/README.md), Pose CNN을 PS C로 처리하는 비교판은 [`ps_onlysw/`](../ps_onlysw/README.md)에 있습니다.
+
 ## 파일 안내
 
 | 경로 | 역할 |

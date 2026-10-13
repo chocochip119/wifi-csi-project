@@ -1,4 +1,4 @@
-# PL Localization — Ridge AXI Accelerator (Modular v1.1)
+# PL Localization — Ridge AXI Accelerator (Modular  v1.1)
 
 Wi-Fi CSI 기반 위치 분류를 **Zynq PL의 Ridge 선형 분류기**로 실행하기 위한 RTL 원본 및 검증 파일이다. 이 디렉터리의 기준 버전은 **7개 모듈로 분리한 Ridge AXI IP v1.1**이다.
 

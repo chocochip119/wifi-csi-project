@@ -10,12 +10,14 @@ import { armMaxLiftDegForZone } from './armZoneLimit.js'
 import { LiveSitDetector } from './liveSitDetector.js'
 import { shouldHoldSeatedPose } from './singleLegLiftGate.js'
 import {isNoPerson, motionPointId, sitDetectorPoint, motionArmLiftLimit} from './presentationMode.js'
+import {legLiftMaxDegForLocation} from './legLiftPolicy.js'
+import {MotionAbsenceTimer} from './motionAbsenceTimer.js'
 // WiSensing viewer presentation 2-mode: keyboard 3 / center motion
 import {normalizeAnatomyConfig,DEFAULT_ANATOMY_CONFIG} from './anatomySolver.js'
 import { solvePoseAngles, hasMeaningfulArmPose } from './poseAngles.js'
 import { createTestPose } from './poseTests.js'
 import { DEFAULT_VIEWER_SETTINGS, resolveViewerLocation, selectViewerPose } from './viewerSettings.js'
-import { MIRROR_MODES, resolvePoseMirror, toDisplayX } from './poseOrientation.js'
+import { MIRROR_MODES, resolvePoseMirror, toDisplayX, mirrorPoseSides } from './poseOrientation.js'
 import { PoseFilter, sanitizePose } from './poseInput.js'
 import { FastPose2DFilter } from './fastPose2D.js'
 import { LiveThreeActionLimiter } from './liveThreeActions.js'
@@ -49,10 +51,6 @@ app.innerHTML = `
           <span>SPACE VIEW</span>
           <strong>Zone 5</strong>
         </div>
-        <div class="location-view-switch" id="presentation-mode-panel" role="group" aria-label="시연 모드 선택" hidden>
-          <button type="button" id="mode-follow" class="selected" aria-pressed="true">위치 모드</button>
-          <button type="button" id="mode-center" aria-pressed="false">모션 모드</button>
-        </div>
         <div id="scene-container"></div>
         <input id="pose-replay-file" type="file" accept=".json,.jsonl,.ndjson,application/json,text/plain" hidden>
         <div class="pose-replay-label" id="pose-replay-label" hidden>LOCAL REPLAY · B: LIVE 복귀</div>
@@ -76,7 +74,10 @@ app.innerHTML = `
         <section class="result-card pose-card">
           <div class="card-header">
             <div><span class="eyebrow">AI INFERENCE</span><h2>POSE RESULT</h2></div>
-            <span class="joint-badge">12 JOINTS</span>
+            <div class="pose-heading-actions">
+              <span class="joint-badge">12 JOINTS</span>
+              <button type="button" id="pose-mirror-toggle" class="pose-mirror-button" aria-pressed="true" title="스켈레톤과 캐릭터의 좌우 동작을 함께 바꿉니다">↔ 좌우 반전 ON</button>
+            </div>
           </div>
           <div class="pose-view">
             <svg id="pose-svg" viewBox="0 0 240 330" class="pose-svg">
@@ -327,6 +328,8 @@ const fastPose2D = new FastPose2DFilter(80)
 const liveThreeLimiter = new LiveThreeActionLimiter()
 const sitDetector = new LiveSitDetector()
 let currentSitDecision = {sit:false,strength:0,source:'standing'}
+const motionAbsenceTimer = new MotionAbsenceTimer()
+let motionHiddenForAbsence = false
 const poseViewport = new PoseViewportStabilizer()
 const fastPoseViewport = new PoseViewportStabilizer({
   centerFastMs: 150, centerSlowMs: 200, scaleShrinkMs: 150, scaleGrowMs: 250
@@ -338,6 +341,7 @@ let replayPaused = false
 let replayIntervalMs = 250
 
 let mirrorMode = 'auto'
+let poseSidesFlipped = true // Viewer only: mirror L/R joints for BOTH SVG and 3D rig.
 let lastMirror = false
 let cameraView = 'front'
 // 본 화면에는 기술 상태를 늘어놓지 않고 LIVE/DEMO/WAITING만 표시한다.
@@ -367,6 +371,7 @@ let isMoving = false
 const moveSpeed = 1.1 // GLTF Walk와 더 자연스럽게 맞추기 위한 화면 이동 속도
 let targetPosture = 'standing'
 let armLocationZone = null // Live location zone; unknown != zone 5.
+let legLiftMaxDeg = 10 // Actual P05/P10 = unlimited; elsewhere ~10° visual limit.
 // Fixed P05 presentation position; unrelated to the position model output.
 function pinMotionCharacter() {
   if (!character || !zonePositions[5]) return
@@ -438,6 +443,17 @@ function moveCharacterTo(zone, posture = 'standing') {
   playAnimation('Walk')
 }
 
+function hideMotionAfterAbsence() {
+  if (motionHiddenForAbsence) return
+  motionHiddenForAbsence = true
+  poseUnavailable.textContent = 'No person'
+  renderPose(null)
+  if (character) character.visible = false
+  poseRig?.clear()
+  refreshIdleAnimation()
+  updateMotionLocationUI(true)
+}
+
 function setAbsentState(message, posture) {
   isMoving = false
   targetZone = currentZone
@@ -499,6 +515,7 @@ function updateMotionRig(pose, mirrored) {
   // nonzero force is applied to 3D only, AFTER ordinary IK smoothing.
   if (arms || legs) poseRig?.setPose(rigPose, mirrored, {
     arms, legs, armMaxLiftDeg: motionArmLiftLimit(viewerSettings.locationMode, armLocationZone, armMaxLiftDegForZone),
+    legMaxLiftDeg: legLiftMaxDeg,
     squatTarget: shouldSit ? currentSitDecision.strength : 0
   })
   else if (poseRig?.active) poseRig.clear()
@@ -525,46 +542,64 @@ function handleSnapshot(snapshot, source = 'backend') {
   const sharedPose = viewerSettings.jointsMode === 'custom'
     ? customPose
     : selectViewerPose(viewerSettings.jointsMode, visualLivePose, viewerSettings.jointsSample, createTestPose)
-  const displayPose = sharedPose
-  const motionPose = sharedPose
-  const poseMirror = resolvePoseMirror(sharedPose, mirrorMode, lastMirror)
-  if (sharedPose?.valid) lastMirror = poseMirror
+  // Apply the SAME display-only joint remapping to both the 2D pose and 3D rig.
+  const motionPose = mirrorPoseSides(sharedPose, poseSidesFlipped)
+  const poseMirror = resolvePoseMirror(motionPose, mirrorMode, lastMirror)
+  if (motionPose?.valid) lastMirror = poseMirror
   // 2D uses its own low-latency LIVE path. Keep the existing filtered/canonical
   // sharedPose for the 3D character and three-action demonstration.
   const isLive2D = viewerSettings.jointsMode === 'live' && (!replayActive || csvReplayActive)
   const fast2D = isLive2D && viewerSettings.pose2DMode === 'fast'
   const raw2D = isLive2D && viewerSettings.pose2DMode === 'raw'
   const poseFor2D = fast2D ? fastPose2D.push(validPose) : raw2D ? validPose : sharedPose
-  const mirror2D = isLive2D && (fast2D || raw2D)
-    ? resolvePoseMirror(poseFor2D, mirrorMode, lastMirror) : poseMirror
-  // An explicit No Person result suppresses even a still-valid cached pose.
+  const displayPose2D = mirrorPoseSides(poseFor2D, poseSidesFlipped)
+  // Use one orientation for SVG and avatar. The fast 2D filter may lag the rig,
+  // but it must not independently choose a different L/R direction.
+  // Original CNN coordinates and the backend remain unchanged.
+  // In motion mode, hold the last drawn skeleton during the 5 s absence grace.
   const noPerson = isNoPerson(snapshot)
-  poseUnavailable.textContent = noPerson ? 'No person' : 'Unavailable'
-  renderPose(noPerson ? null : poseFor2D, mirror2D,
-    !(csvReplayActive && !csvPostprocess) && !raw2D,
-    fast2D ? fastPoseViewport : poseViewport)
+  const inMotionMode = viewerSettings.locationMode === 'center'
+  const hideMotion = inMotionMode
+    ? motionAbsenceTimer.observe(noPerson, performance.now())
+    : (motionAbsenceTimer.reset(), false)
+  poseUnavailable.textContent = noPerson && (!inMotionMode || hideMotion) ? 'No person' : 'Unavailable'
+  if (!(inMotionMode && noPerson && !hideMotion)) {
+    renderPose(noPerson ? null : displayPose2D, poseMirror,
+      !(csvReplayActive && !csvPostprocess) && !raw2D,
+      fast2D ? fastPoseViewport : poseViewport)
+  }
   const motionMirror = poseMirror
 
   const location = resolveViewerLocation(snapshot, viewerSettings)
   armLocationZone = location.valid && !location.empty ? location.zone : null
+  // Use the ACTUAL classifier location, even when motion mode pins the
+  // avatar to P05. P05/P10 have no lift limit; elsewhere, cap at 10°.
+  const inferredLocation = resolveViewerLocation(snapshot, {...viewerSettings, locationMode:'live'})
+  legLiftMaxDeg = legLiftMaxDegForLocation(inferredLocation)
   // Position mode retains P05/P10 gating. Motion mode ALWAYS uses P05 as
   // the logical area, so any real joint motion works regardless of P08/P10.
   // Both modes honor explicit No Person before interpreting cached joints.
   const sitInput = viewerSettings.jointsMode === 'live' ? validPose : sharedPose
-  const sitRawScore = sitInput?.valid ?
-    (solvePoseAngles(sitInput, resolvePoseMirror(sitInput, mirrorMode, lastMirror))?.squat ?? 0) : 0
+  const sitAngles = sitInput?.valid ?
+    solvePoseAngles(sitInput, resolvePoseMirror(sitInput, mirrorMode, lastMirror)) : null
+  const sitRawScore = sitAngles?.squat ?? 0
   if (noPerson) sitDetector.reset()
   currentSitDecision = noPerson ? {sit:false,strength:0,source:'standing'} : sitDetector.observe(
     sitDetectorPoint(viewerSettings.locationMode, location),
-    sitInput, sitRawScore, performance.now())
-  if (viewerSettings.locationMode === 'center') {
+    sitInput, sitRawScore, performance.now(),
+    {liftL:sitAngles?.liftL ?? 0, liftR:sitAngles?.liftR ?? 0})
+  if (inMotionMode) {
     pinMotionCharacter()
-    updateMotionLocationUI(noPerson)
-    if (character) character.visible = !noPerson
     if (noPerson) {
-      poseRig?.clear()
-      refreshIdleAnimation()
-    } else updateMotionRig(motionPose, motionMirror)
+      if (hideMotion) hideMotionAfterAbsence()
+      // Before 5 s, retain the previous skeleton and character appearance.
+      updateLiveBadge(snapshot)
+      return
+    }
+    motionHiddenForAbsence = false
+    updateMotionLocationUI(false)
+    if (character) character.visible = true
+    updateMotionRig(motionPose, motionMirror)
     updateLiveBadge(snapshot)
     return
   }
@@ -578,7 +613,7 @@ function handleSnapshot(snapshot, source = 'backend') {
       clearLocationUI('No person')
       updatePostureUI('unknown')
       if (character) character.visible = true
-      updateMotionRig(sharedPose, poseMirror)
+      updateMotionRig(motionPose, poseMirror)
     } else setAbsentState('No person', 'empty')
     updateLiveBadge(snapshot)
     return
@@ -586,7 +621,9 @@ function handleSnapshot(snapshot, source = 'backend') {
   if (location.valid) {
     selectedPointId = location.pointId
     updateLocationUI(location.zone, selectedPointId)
-    updatePostureUI(location.posture)
+    // Keep the model's raw P10 position label while rejecting a false
+    // seated avatar/posture when 12 joints clearly show one lifted leg.
+    updatePostureUI(selectedPointId === 'p10' && !currentSitDecision.sit ? 'standing' : location.posture)
     if (character) character.visible = true
     moveCharacterTo(location.zone, location.posture)
   } else {
@@ -595,7 +632,7 @@ function handleSnapshot(snapshot, source = 'backend') {
     if (character) character.visible = Boolean(sharedPose)
     if (sharedPose?.valid) moveCharacterTo(5)
   }
-  updateMotionRig(sharedPose, poseMirror)
+  updateMotionRig(motionPose, poseMirror)
   updateLiveBadge(snapshot)
 }
 
@@ -625,6 +662,8 @@ function loadCharacter(name) {
       console.error(`Invalid character height: ${name}`)
       return
     }
+    // Keep a POSITIVE GLTF scale: negative X breaks world-space leg/foot IK.
+    // L/R mirroring is done once on the viewer-only 12-joint data instead.
     character.scale.setScalar(1.9 / size.y)
     const scaledBox = new THREE.Box3().setFromObject(character)
     character.position.y = -scaledBox.min.y + 0.04
@@ -696,7 +735,13 @@ function updateViewerSettings(key, value) {
     jointsMode: ['live','sample','custom','off'], liveActionMode: ['full','three'], jointsSample: ['stand','armUp','armsWide','squat','legLift'],
     motionMode: ['live','sample','off'], motionSample: ['stand','armUp','armsWide','squat','legLift']
   }
-  if (Object.hasOwn(allowed,key) && allowed[key].includes(value)) viewerSettings[key] = value
+  if (Object.hasOwn(allowed,key) && allowed[key].includes(value)) {
+    viewerSettings[key] = value
+    if (key === 'locationMode') {
+      motionAbsenceTimer.reset()
+      motionHiddenForAbsence = false
+    }
+  }
   else if (key === 'liveArms' || key === 'liveLegs') {
     if (typeof value !== 'boolean') return
     viewerSettings[key] = value
@@ -718,22 +763,25 @@ function updateViewerSettings(key, value) {
   broadcastSettings()
 }
 function syncLocationViewSwitch() {
-  const center = viewerSettings.locationMode === 'center'
-  document.querySelector('.scene-title').classList.toggle('motion-active', center)
-  for (const [id, selected] of [['mode-follow', !center], ['mode-center', center]]) {
-    const button = document.getElementById(id)
-    button.classList.toggle('selected', selected)
-    button.setAttribute('aria-pressed', String(selected))
-  }
+  document.querySelector('.scene-title').classList.toggle('motion-active', viewerSettings.locationMode === 'center')
 }
-const presentationModePanel = document.getElementById('presentation-mode-panel')
-function selectPresentationMode(mode) {
-  presentationModePanel.hidden = true
-  updateViewerSettings('locationMode', mode)
+const poseMirrorToggle = document.getElementById('pose-mirror-toggle')
+function syncPoseMirrorToggle() {
+  poseMirrorToggle.setAttribute('aria-pressed', String(poseSidesFlipped))
+  poseMirrorToggle.textContent = poseSidesFlipped ? '↔ 좌우 반전 ON' : '↔ 좌우 반전 OFF'
 }
-document.getElementById('mode-follow').addEventListener('click', () => selectPresentationMode('live'))
-document.getElementById('mode-center').addEventListener('click', () => selectPresentationMode('center'))
+poseMirrorToggle.addEventListener('click', () => {
+  poseSidesFlipped = !poseSidesFlipped
+  // Clear 3D smoothing state so no previous left-side target leaks into right.
+  poseRig?.clear()
+  poseRig?.update(0, false) // Release old foot/leg IK anchors immediately.
+  poseViewport.reset()
+  fastPoseViewport.reset()
+  syncPoseMirrorToggle()
+  refreshViewer()
+})
 syncLocationViewSwitch()
+syncPoseMirrorToggle()
 settingsOpen.addEventListener('click', () => {
   settingsPopup = window.open('/integration.html', 'wisensing-admin', 'popup=yes,width=1300,height=950,resizable=yes,scrollbars=yes')
   if (settingsPopup) {
@@ -819,6 +867,10 @@ settingsChannel.addEventListener('message', event => {
     syncLocationViewSwitch()
     cameraView = 'front'
     mirrorMode = 'auto'
+    poseSidesFlipped = true
+    syncPoseMirrorToggle()
+    motionAbsenceTimer.reset()
+    motionHiddenForAbsence = false
     updateCameraView()
   } else return
   poseFilter.reset()
@@ -831,18 +883,13 @@ window.addEventListener('beforeunload', () => {
   if (settingsPopup && !settingsPopup.closed) settingsPopup.close()
   settingsChannel.close()
 })
-// 3=시연 모드 선택, O=기록 재생, B=실시간 복귀, M=좌우 모드 순환.
+// 3=위치/모션 모드 직접 전환, O=기록 재생, B=실시간 복귀, M=관절 방향 모드 순환.
 window.addEventListener('keydown', (event) => {
   if (event.altKey || event.ctrlKey || event.metaKey) return
-  if (event.key === 'Escape' && !presentationModePanel.hidden) {
-    event.preventDefault()
-    presentationModePanel.hidden = true
-    return
-  }
   if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return
-  if (event.key === '3') {
+  if (event.key === '3' || event.code === 'Digit3') {
     event.preventDefault()
-    if (!event.repeat) presentationModePanel.hidden = !presentationModePanel.hidden
+    if (!event.repeat) updateViewerSettings('locationMode', viewerSettings.locationMode === 'center' ? 'live' : 'center')
     return
   }
   if (event.target instanceof HTMLElement && event.target.tagName === 'BUTTON') return
@@ -981,6 +1028,10 @@ function animate(now) {
     handleSnapshot(replayFrames[replayIndex], 'replay')
   }
 
+  // Trigger the 5 s absence threshold even without a new incoming snapshot.
+  if (viewerSettings.locationMode === 'center' && !motionHiddenForAbsence &&
+      motionAbsenceTimer.shouldHide(now)) hideMotionAfterAbsence()
+
   // Backend가 끊기면 마지막 Pose가 계속 실시간인 것처럼 보이지 않도록 비활성화.
   if (!replayActive && backendLastSeenAt &&
       now - backendLastSeenAt > 5000 && !backendExpired) {
@@ -997,10 +1048,12 @@ function animate(now) {
 
   // 관리자가 편집한 12관절은 WS 패킷이 없어도 리그에 계속 적용합니다.
   if (!replayActive && viewerSettings.jointsMode === 'custom' && customPose?.valid) {
-    updateMotionRig(customPose, resolvePoseMirror(customPose, mirrorMode, lastMirror))
+    const pose = mirrorPoseSides(customPose, poseSidesFlipped)
+    updateMotionRig(pose, resolvePoseMirror(pose, mirrorMode, lastMirror))
   } else if (!replayActive && viewerSettings.jointsMode === 'sample') {
     const pose = createTestPose(viewerSettings.jointsSample)
-    updateMotionRig(pose, resolvePoseMirror(pose, mirrorMode, lastMirror))
+    const visualPose = mirrorPoseSides(pose, poseSidesFlipped)
+    updateMotionRig(visualPose, resolvePoseMirror(visualPose, mirrorMode, lastMirror))
   }
 
   if (character && isMoving) {

@@ -3,6 +3,14 @@
 const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x))
 const idle = () => ({ sit: false, strength: 0, source: 'standing', hipKnee: null })
 
+// When only ONE leg is clearly lifted, do not let an accidental P10 class
+// or an asymmetric knee frame turn the avatar into a seated pose.
+export function isClearlySingleLegLift({liftL = 0, liftR = 0} = {}) {
+  const left = Number(liftL), right = Number(liftR)
+  return Number.isFinite(left) && Number.isFinite(right) &&
+    Math.max(left,right) >= 0.48 && Math.abs(left-right) >= 0.30
+}
+
 export function normalizedHipKneeGap(pose) {
   if (!pose?.valid || !Array.isArray(pose.joints)) return null
   const pts = new Map(pose.joints.map(j => [Number(j.id), j]))
@@ -38,8 +46,15 @@ export class LiveSitDetector {
     this.lastFrameAt = 0
     this.lastResult = idle()
   }
-  observe(pointId, pose, existingSquat = 0, atMs = 0) {
+  observe(pointId, pose, existingSquat = 0, atMs = 0, legEvidence = null) {
     const point = String(pointId ?? '').toLowerCase()
+    const unilateralLift = isClearlySingleLegLift(legEvidence ?? {})
+    if (point === 'p10' && unilateralLift) {
+      this.seated = false
+      this.releaseVotes = 0
+      this.lastResult = idle()
+      return this.lastResult
+    }
     if (point === 'p10') {
       this.seated = true
       this.releaseVotes = 0
@@ -80,6 +95,13 @@ export class LiveSitDetector {
     const formerMax = this.recent.length ? Math.max(...this.recent) : gap.mean
     const movingDown = (formerMax - gap.mean) / Math.max(.12, formerMax)
     const kneeSignal = clamp(Number(existingSquat) || 0, 0, 1)
+    if (unilateralLift) {
+      this.seated = false
+      this.releaseVotes = 0
+      this.recent = []
+      this.lastResult = idle()
+      return this.lastResult
+    }
 
     // Detect the early transition or the seated geometry on the very next
     // unique Pose frame; both sides must participate to reject single-leg lifts.
