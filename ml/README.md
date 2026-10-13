@@ -18,7 +18,7 @@ CSI 데이터셋 → base/delta/mask [15,128,10] → CNN 학습
            → pl/cnn + ps 앱에서 FPGA Pose 추론
 ```
 
-학습은 [Colab v5 notebook](pose/README.md)을 기준으로 하고, INT8 반올림·포화·Pool 규칙은 [INT8 계약](pose/INT8.md)을 사용합니다. 실제 모델과 FPGA 출력의 비교를 위해 **동일한 체크포인트에서 가중치·scale·golden을 함께** 생성합니다.
+학습은 [Colab v5 notebook](pose/training/wifi_csi_6people_5rx_colab_zip_v5_finer_training.ipynb)을 기준으로 하고, INT8 반올림·포화·Pool 규칙은 [INT8 계약](pose/INT8.md)을 사용합니다. 실제 모델과 FPGA 출력의 비교를 위해 **동일한 체크포인트에서 가중치·scale·golden을 함께** 생성합니다.
 
 ### Location — 구역 분류 모델 만들기
 
