@@ -13,7 +13,6 @@
 | 학습 모델 준비 → FPGA 빌드 → PS → PC 실행 | [통합 실행 순서](bringup.md) |
 | Windows에서 Backend·Frontend 함께 실행하기 | [원클릭 실행기](oneclick_launcher.md) |
 | 처음 설치한 PC의 구동·RX 배치·관리자 확인 | [운영 가이드](wisensing_live_v18_operator.md) |
-| **2026-10-08 발표 성능 수치의 의미와 시험 범위** | [발표 기술 해설](presentation_20261008.md) |
 | 수행한 시험과 추가 확인 항목 | [통합 점검 기록](reviews/2026-10-07-pc-integration.md) |
 | 팀 협업 및 Git 브랜치/PR 사용 방법 | [Git 작업 가이드](git_guide.md) · [팀 기록](members/README.md) |
 
