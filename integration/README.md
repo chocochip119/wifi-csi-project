@@ -1,7 +1,17 @@
 # Vivado 하드웨어 통합 자료
 
-Zybo Z7-20 (`xc7z020clg400-1`) / Vivado 2020.2 기반 PS–PL 통합 산출물을 관리한다.
-기존 CNN 단독 설계는 보존하고, **RX5 Pose CNN + Location Ridge** 통합 설계를 별도 버전으로 추가한다.
+Zybo Z7-20 (`xc7z020clg400-1`) / Vivado 2020.2 환경에서 **PS와 PL의 실제 연결 구조 및 FPGA IP 통합 산출물**을 관리합니다. 기존 Pose CNN 하드웨어와 **CNN + Location Ridge** 통합 하드웨어를 별도 버전으로 보존합니다.
+
+## 이 폴더의 구현 내용
+
+| 구성 | 기능 |
+|---|---|
+| **Pose CNN IP** | RX5 INT8 관절 추론: DDR/AXI 연산, 12관절 24개 결과 |
+| **병렬 Pose CNN IP** | RX별 Encoder 병렬화를 반영한 CNN 패키지 |
+| **Location Ridge IP** | 955개 위치 특징의 고정소수점 선형 분류 연산용 AXI4-Lite IP |
+| **XSA 산출물** | 기존 CNN과 CNN+Ridge 버전의 Vivado 하드웨어 Export 파일 |
+
+CNN 원본 RTL은 [`pl/cnn/`](../pl/cnn/README.md), Ridge 원본 RTL과 테스트는 [`pl/localization/`](../pl/localization/README.md)에 있고, 이 폴더는 **Vivado IP 패키징과 하드웨어 통합 경로**입니다. 특히 Ridge IP가 빌드되어 있어도 **기본 `ps/` + `pc/backend/`의 실시간 위치 추론은 PC에서 수행**합니다. Ridge FPGA 실보드 적용 여부는 아래 검증 현황과 [별도 PS 위치 시험판](../ps_location/README.md)을 구분해 확인하세요.
 
 ## 1. 파일 구성
 
@@ -14,7 +24,7 @@ Zybo Z7-20 (`xc7z020clg400-1`) / Vivado 2020.2 기반 PS–PL 통합 산출물�
 | `design_1_wrapper_parallel.xsa` | 기존 병렬 CNN 하드웨어 내보내기 | Ridge 통합 이전 버전 보존 |
 | `cnn_ridge_design_1_wrapper.xsa` | **CNN + Ridge 최종 통합 XSA** | **신규 추가:** FPGA Bitstream 포함 (`-include_bit`) |
 
-> `ridge_axi_1.0/`과 `cnn_ridge_design_1_wrapper.xsa`는 이번 통합 변경에서 **같은 PR로 추가할 파일**이다. 해당 파일을 업로드하기 전에 README만 병합하지 않는다. 기존 XSA는 덮어쓰지 않는다.
+> `ridge_axi_1.0/` IP 패키지와 `cnn_ridge_design_1_wrapper.xsa`는 현재 저장소에 포함되어 있습니다. **XSA 생성/합성 통과와 실제 보드 적용·동작 검증은 별개**이며, 기존 CNN XSA는 보존합니다.
 
 원본 CNN RTL은 [`../pl/cnn/rtl/`](../pl/cnn/rtl/)에서 관리하며, Ridge 원본 RTL과 테스트벤치는 각각 `../pl/localization/rtl/`, `../pl/localization/testbench/`에 별도로 관리한다. Vivado IP 패키지의 `src/`는 해당 원본 RTL의 패키징용 복사본이다. 원본 수정 시 IP 패키지 소스도 함께 갱신한다. 기존 CNN v1.1 패키지의 `requant_core.v`, `requant_stage.v`, `Pool.v`는 원본과 바이트 일치를 확인했던 파일이며, 다른 복사본까지 동일함을 뜻하지는 않는다. 기존 XSA의 최신 CNN 수정 반영 여부도 별도로 확인해야 한다.
 
