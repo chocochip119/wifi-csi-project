@@ -6,6 +6,7 @@
 
 | 확인할 내용 | 문서 |
 |---|---|
+| **발표 자료(2026-10-08) 기술 해설·성능 수치·구현 차이** | [발표 기반 설명](presentation_20261008.md) |
 | 실제 폴더/파일 위치, 원본 RTL과 패키지 IP 관계 | [저장소 구조](repository_structure.md) |
 | 수집 → PS/PL → 위치/Pose → PC 흐름 | [시스템 구조](architecture.md) |
 | 구간별 인터페이스, tensor/채널 순서, CSR | [인터페이스](interface.md) |
