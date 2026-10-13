@@ -15,6 +15,23 @@ LOGFILE=/tmp/wisensing-autostart.log
 CONFIG=/etc/default/wisensing-location
 DAEMON=/usr/bin/pose_cnn_rx5_live
 
+# Mount the boot FAT partition read-only. With INITRD rootfs, /root is RAM.
+ensure_sd_boot_mounted() {
+    if grep -q " $WISE_SD_MOUNT " /proc/mounts 2>/dev/null; then
+        return 0
+    fi
+    mkdir -p "$WISE_SD_MOUNT" || return 1
+    for device in /dev/mmcblk0p1 /dev/mmcblk1p1; do
+        [ -b "$device" ] || continue
+        if mount -t vfat -o ro "$device" "$WISE_SD_MOUNT"; then
+            echo "Mounted SD boot: $device -> $WISE_SD_MOUNT (read-only)"
+            return 0
+        fi
+    done
+    echo "Waiting: unable to mount SD FAT boot partition (mmcblk0p1/mmcblk1p1)"
+    return 1
+}
+
 is_running() {
     [ -r "$PIDFILE" ] || return 1
     pid=$(cat "$PIDFILE" 2>/dev/null) || return 1
@@ -64,15 +81,20 @@ run_service() {
         # Re-read config on retries so a corrected configuration is picked up.
         if [ -r "$CONFIG" ]; then . "$CONFIG"; fi
         : "${WISE_TTY:=/dev/ttyACM0}"
-        : "${WISE_WEIGHTS:=/root/weights_5rx.bin}"
+        : "${WISE_SD_MOUNT:=/mnt/wise-boot}"
+        : "${WISE_WEIGHTS:=/mnt/wise-boot/weights_5rx.bin}"
         : "${WISE_LOC_MODEL:=/usr/share/pose-cnn-rx5/loc_ridge_rx5.bin}"
         : "${WISE_LOC_STRIDE_S:=0.5}"
         : "${WISE_TCP_PORT:=5000}"
         : "${WISE_FORWARD_CSI:=0}"
         : "${WISE_MAX_WINDOWS:=0}"
 
-        if [ -z "${WISE_INPUT_SCALE:-}" ]; then
-            echo "Waiting: set WISE_INPUT_SCALE in $CONFIG to the trained encoder.input scale"
+        sd_needed=0
+        case "$WISE_WEIGHTS" in "$WISE_SD_MOUNT"/*) sd_needed=1 ;; esac
+        if [ "$sd_needed" -eq 1 ] && ! ensure_sd_boot_mounted; then
+            : # Retry when SD/MMC or vfat driver is available.
+        elif [ -z "${WISE_INPUT_SCALE:-}" ]; then
+            echo "Waiting: configure WISE_INPUT_SCALE=auto (or validated numeric value)"
         elif [ ! -r "$WISE_WEIGHTS" ]; then
             echo "Waiting: Pose weights not readable: $WISE_WEIGHTS"
         elif [ ! -r "$WISE_LOC_MODEL" ]; then
