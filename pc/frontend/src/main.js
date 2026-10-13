@@ -580,12 +580,14 @@ function handleSnapshot(snapshot, source = 'backend') {
   // the logical area, so any real joint motion works regardless of P08/P10.
   // Both modes honor explicit No Person before interpreting cached joints.
   const sitInput = viewerSettings.jointsMode === 'live' ? validPose : sharedPose
-  const sitRawScore = sitInput?.valid ?
-    (solvePoseAngles(sitInput, resolvePoseMirror(sitInput, mirrorMode, lastMirror))?.squat ?? 0) : 0
+  const sitAngles = sitInput?.valid ?
+    solvePoseAngles(sitInput, resolvePoseMirror(sitInput, mirrorMode, lastMirror)) : null
+  const sitRawScore = sitAngles?.squat ?? 0
   if (noPerson) sitDetector.reset()
   currentSitDecision = noPerson ? {sit:false,strength:0,source:'standing'} : sitDetector.observe(
     sitDetectorPoint(viewerSettings.locationMode, location),
-    sitInput, sitRawScore, performance.now())
+    sitInput, sitRawScore, performance.now(),
+    {liftL:sitAngles?.liftL ?? 0, liftR:sitAngles?.liftR ?? 0})
   if (inMotionMode) {
     pinMotionCharacter()
     if (noPerson) {
@@ -619,7 +621,9 @@ function handleSnapshot(snapshot, source = 'backend') {
   if (location.valid) {
     selectedPointId = location.pointId
     updateLocationUI(location.zone, selectedPointId)
-    updatePostureUI(location.posture)
+    // Keep the model's raw P10 position label while rejecting a false
+    // seated avatar/posture when 12 joints clearly show one lifted leg.
+    updatePostureUI(selectedPointId === 'p10' && !currentSitDecision.sit ? 'standing' : location.posture)
     if (character) character.visible = true
     moveCharacterTo(location.zone, location.posture)
   } else {
