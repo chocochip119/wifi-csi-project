@@ -6,7 +6,7 @@ ESP32 펌웨어는 **TX 1대와 RX 5대**가 Wi-Fi 신호를 일정한 순서로
 
 | 구성 | 하는 일 | 구현 문서 |
 |---|---|---|
-| **TX Coordinator** (`ESP-TX/`) | SoftAP로 RX 연결, ESP-NOW 모드·슬롯 할당, 트리거 송신, RX UDP 수집, cycle 정렬, USB CDC ACM 전송 | [TX 동작·프로토콜·빌드](ESP-TX/README.md) |
+| **TX Coordinator** (`ESP-TX/`) | SoftAP로 RX 연결, ESP-NOW 모드·슬롯 할당, 트리거 송신, RX UDP 수집, CSI cycle 취합, USB CDC ACM 전송 | [TX 동작·프로토콜·빌드](ESP-TX/README.md) |
 | **RX 센서** (`ESP-RX/`) | TX AP 접속, CSI 콜백으로 수신 상태 측정, 자기 슬롯에서 UDP 전송, 재접속·채널 변경 대응 | [RX 동작·설정·빌드](ESP-RX/README.md) |
 
 ```text
@@ -16,6 +16,8 @@ TX: RX별 CSI를 cycle로 취합 ──────→ PS (USB CDC ACM)
 ```
 
 TX와 RX는 역할이 다릅니다. RX의 측정값이 **UDP 3333**으로 TX에 모이고, TX에서 PS로 보낼 때는 **USB CDC ACM의 별도 바이너리 프레임**을 사용합니다. PS가 다시 PC로 보내는 TCP 5000/5001과도 구분해야 합니다.
+
+UDP CSI record에는 `trigger_seq`가 없으므로 늦게 수신된 기록이 어느 트리거에 속하는지 항상 구분할 수는 없습니다.
 
 ## 설정·연동
 
