@@ -12,8 +12,8 @@ Zynq의 PL(Programmable Logic)은 **PS에서 준비한 INT8 CSI 특징을 병렬
 | `cnn/rtl/axi/` | AXI4-Lite 제어 레지스터 및 AXI master 인터페이스 | [인터페이스](../docs/interface.md) |
 | `cnn/rtl/top/` | Pose CNN LOAD/INFER controller와 Top 연결 | [CNN 모듈](cnn/README.md) |
 | `cnn/testbench/` | 개별 연산/전체 경로에 대한 Verilog 테스트 및 정수 벡터 | [검증 문서](cnn/README.md) |
-| `localization/rtl/` | Ridge 구역 분류용 **AXI4-Lite IP 원본 RTL** | [Vivado 통합](../integration/README.md) |
-| `localization/testbench/` | Ridge 가중치·특징 입력 및 분류 결과 테스트벤치 | [Vivado 통합](../integration/README.md) |
+| [`localization/rtl/`](localization/README.md) | Ridge 구역 분류용 **AXI4-Lite IP 원본 RTL** | [Ridge RTL](localization/README.md) |
+| [`localization/testbench/`](localization/README.md) | Ridge 가중치·특징 입력 및 분류 결과 테스트벤치 | [Ridge RTL](localization/README.md) |
 | `fft/` | 이전 CSI FFT 실험 코드 | 기본 Motion/Location 실행 경로 외 |
 
 ## CNN이 처리하는 데이터
