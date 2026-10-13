@@ -371,7 +371,7 @@ let isMoving = false
 const moveSpeed = 1.1 // GLTF Walk와 더 자연스럽게 맞추기 위한 화면 이동 속도
 let targetPosture = 'standing'
 let armLocationZone = null // Live location zone; unknown != zone 5.
-let legLiftMaxDeg = 0 // Only inferred P05/P10 permit small leg lifts.
+let legLiftMaxDeg = 10 // Actual P05/P10 = unlimited; elsewhere ~10° visual limit.
 // Fixed P05 presentation position; unrelated to the position model output.
 function pinMotionCharacter() {
   if (!character || !zonePositions[5]) return
@@ -573,7 +573,7 @@ function handleSnapshot(snapshot, source = 'backend') {
   const location = resolveViewerLocation(snapshot, viewerSettings)
   armLocationZone = location.valid && !location.empty ? location.zone : null
   // Use the ACTUAL classifier location, even when motion mode pins the
-  // avatar to P05. A different detected position must never enable leg lift.
+  // avatar to P05. P05/P10 have no lift limit; elsewhere, cap at 10°.
   const inferredLocation = resolveViewerLocation(snapshot, {...viewerSettings, locationMode:'live'})
   legLiftMaxDeg = legLiftMaxDegForLocation(inferredLocation)
   // Position mode retains P05/P10 gating. Motion mode ALWAYS uses P05 as
