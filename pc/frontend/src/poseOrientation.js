@@ -21,3 +21,24 @@ export function resolvePoseMirror(pose, mode = 'auto', previous = false) {
 export function toDisplayX(x, mirrored) {
   return mirrored ? -x : x
 }
+
+// Reflect the VIEWER pose for both SVG and GLTF IK without modifying CNN output.
+// Mirror the X coordinate AND exchange anatomical L/R joint pairs. Exchanging
+// only X would make the visible skeleton and the avatar use opposite limbs.
+const OPPOSITE_JOINT_ID = new Map([
+  [11,12],[12,11],[13,14],[14,13],[15,16],[16,15],
+  [23,24],[24,23],[25,26],[26,25],[27,28],[28,27]
+])
+
+export function mirrorPoseSides(pose, enabled = true) {
+  if (!enabled || !pose?.valid || !Array.isArray(pose.joints)) return pose
+  const jointsById = new Map(pose.joints.map(joint => [Number(joint.id), joint]))
+  if (jointsById.size !== OPPOSITE_JOINT_ID.size ||
+      [...OPPOSITE_JOINT_ID.keys()].some(id => !jointsById.has(id))) return pose
+
+  const joints = pose.joints.map(joint => {
+    const source = jointsById.get(OPPOSITE_JOINT_ID.get(Number(joint.id)))
+    return {...joint, x: -Number(source.x), y: Number(source.y)}
+  })
+  return {...pose, joints}
+}
