@@ -1,6 +1,6 @@
 # WiSensing PC Backend
 
-PS가 TCP 5000으로 보내는 원본 CSI/STATUS/ACK를 받아 위치를 추론하고, TCP 5001의 FPGA Pose를 최신 상태로 합쳐 HTTP/WebSocket으로 제공합니다. ZIP의 `handoff/`와 `backend/`를 역할별 Python 패키지로 정리한 실행 코드입니다.
+PS가 TCP 5000으로 보내는 원본 CSI/STATUS/ACK를 받아 위치를 추론하고, TCP 5001의 FPGA Pose를 최신 상태로 합쳐 HTTP/WebSocket으로 제공합니다. 수집 장치나 FPGA를 직접 제어하는 화면 프로그램이 아니라, **두 추론 결과를 통합하고 브라우저에 전달하는 서버**입니다.
 
 전체 실행은 [통합 실행 순서](../../docs/bringup.md), PS 설정은 [PS README](../../ps/README.md), wire format은 [PS↔PC 규격](../../docs/ps_pc_protocol.md)을 참고하세요.
 
