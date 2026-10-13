@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { FOOT_STANCE_MIN, FOOT_STANCE_MAX, LIMB_SEGMENTS, solvePoseAngles } from './poseAngles.js'
 import { liftedShoePitch, liftedShoeYaw } from './footRotationMath.js'
-import { limitRaisedFootOffset } from './legLiftPolicy.js'
+import { limitRaisedFootOffset, UNRESTRICTED_LEG_LIFT_DEG } from './legLiftPolicy.js'
 import { RigAngleStabilizer, RigJointStabilizer } from './poseStabilization.js'
 import { projectLiftedLeg } from './legLiftProjection.js'
 import { SingleLegLiftGate } from './singleLegLiftGate.js'
@@ -68,7 +68,7 @@ export class PoseRigController {
     this.armEnabled=false
     this.legEnabled=false
     this.armMaxLiftDeg=null
-    this.legMaxLiftDeg=25
+    this.legMaxLiftDeg=UNRESTRICTED_LEG_LIFT_DEG
     this.solution=null
     this.angleStabilizer=new RigAngleStabilizer()
     this.jointStabilizer=new RigJointStabilizer()
@@ -205,7 +205,7 @@ export class PoseRigController {
     const frameKey=stamp == null
       ? rigPose.joints.map(j=>`${j.id}:${j.x}:${j.y}`).join('|') : String(stamp)
     this.legMaxLiftDeg=Number.isFinite(options.legMaxLiftDeg)
-      ? clamp(options.legMaxLiftDeg,0,60) : 25
+      ? clamp(options.legMaxLiftDeg,0,UNRESTRICTED_LEG_LIFT_DEG) : UNRESTRICTED_LEG_LIFT_DEG
     const guardedLift=this.legLiftGate.update({
       liftL:this.legMaxLiftDeg>0 ? rawSolution.liftL : 0,
       liftR:this.legMaxLiftDeg>0 ? rawSolution.liftR : 0,
@@ -389,7 +389,12 @@ export class PoseRigController {
       const rawHeading=state.directions.get(s.key)?.angle
       if(!Number.isFinite(rawHeading)) continue
       // Cap both arm segments in 3D only; the original 2D CNN skeleton stays untouched.
-      const heading=s.type==='arm' ? clampArmHeading(rawHeading,this.armMaxLiftDeg) : rawHeading
+      // Outside P05/P10, prevent a raw thigh-angle update from bypassing
+      // the 10° single-leg raise limit when no lifted-foot IK is active.
+      const heading=s.type==='arm' ? clampArmHeading(rawHeading,this.armMaxLiftDeg) :
+        (s.type==='leg' && s.upper && this.legMaxLiftDeg<UNRESTRICTED_LEG_LIFT_DEG
+          ? clamp(rawHeading,-this.legMaxLiftDeg*Math.PI/180,this.legMaxLiftDeg*Math.PI/180)
+          : rawHeading)
       // Preserve frontal direction; add limited inferred knee forward bend only
       // when both feet are shorter on screen (squat).
       const squatDepth=s.type==='leg' ? state.squat*0.20*(s.upper?1:-1) : 0
@@ -583,9 +588,14 @@ export class PoseRigController {
       if(distance<minReach) target.copy(hip).addScaledVector(delta,minReach/distance)
       // Knee pole follows observed knee (25/26) with a small forward prior.
       // Projecting the pole perpendicular to hip-to-ankle occurs in plantedKnee().
-      const bend=xWorld.clone().multiplyScalar(clamp(projection.kneeX,-projection.reach*0.18,projection.reach*0.18))
+      const isRestricted=this.legMaxLiftDeg<UNRESTRICTED_LEG_LIFT_DEG
+      const bend=xWorld.clone().multiplyScalar(isRestricted
+          ? clamp(projection.kneeX,-projection.reach*0.18,projection.reach*0.18)
+          : projection.kneeX)
         .addScaledVector(yWorld,projection.kneeY)
-        .addScaledVector(zWorld,Math.max(projection.kneeZ,0.12*projection.reach))
+        .addScaledVector(zWorld,isRestricted
+          ? Math.max(projection.kneeZ,0.12*projection.reach)
+          : projection.kneeZ)
         .normalize()
       const knee=plantedKnee(hip,target,upperSeg.length,leg.length,bend)
       if(!knee) return
