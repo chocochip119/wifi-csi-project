@@ -90,6 +90,8 @@ Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/api/confirm-rx-layout 
 python pc\backend\tools\verify_wise_live.py --seconds 30 --require-pose --require-location --record recordings\live.jsonl
 ```
 
+## LIVE/TEST 화면 설정
+
 시연 페이지 오른쪽 상단의 **⚙ 설정 · 테스트** 버튼을 누르면 **별도 브라우저 설정 창**이 열립니다. 위치·12관절 그림·3D 모션을 각각 독립적으로 제어하고, 변경을 메인 3D 화면에 즉시 반영합니다. 팝업이 차단된다면 해당 사이트의 팝업을 허용하세요.
 
 | 설정 | LIVE | TEST / OFF |
@@ -105,13 +107,12 @@ python pc\backend\tools\verify_wise_live.py --seconds 30 --require-pose --requir
 - 모든 항목을 실제 추론으로 되돌릴 때는 **전체 LIVE** 버튼을 누릅니다.
 - 저장한 JSON/JSONL 재생은 키보드 **O**, 실시간 복귀는 **B**, 관절 좌우 보정 모드는 **M**으로 유지됩니다.
 실제 CNN 좌표는 INT8 × output_scale 결과인 model_output 좌표이므로 정규화된 0..1 좌표로 가정하지 않습니다.
-p10은 중앙 앉기 위치 클래스로, 전용 앉기 3D 애니메이션은 아직 구현되지 않았습니다.
 
 추가 자료: [통합 실행 순서](../../docs/bringup.md), [PS README](../../ps/README.md), [Backend README](../backend/README.md).
 
 
 
-### 3D 다리 동작과 앉기 판정
+## 3D 다리 동작과 앉기 판정
 
 - 실제 위치 추론 결과가 **P05 또는 P10이면 다리 들기 각도 제한을 두지 않습니다.** 모션 모드에서 캐릭터가 P05에 고정되어 있어도, 판정 기준은 실제 추정 위치입니다.
 - **그 외 위치(P01~P04, P06~P09, 위치 불명)는 다리 들기를 약 10° 이하의 낮은 시각화 범위로 제한**합니다. 입력은 12관절 2D이므로 10°는 정밀하게 측정된 고관절 3D 각도가 아니라 발목 상승·옆 이동과 허벅지 표시 방향을 제한하는 근사값입니다.
