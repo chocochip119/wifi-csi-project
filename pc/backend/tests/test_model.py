@@ -6,7 +6,7 @@ from localization.location_live import LiveInferenceEngine
 BASE = Path(__file__).resolve().parents[1]
 
 def test_all_40_fixture_windows_features_scores_and_labels():
-    model = PortableRidge(BASE/'localization/models/ridge_portable.npz')
+    model = PortableRidge(BASE/'localization/models/localization/ridge_portable.npz')
     with np.load(BASE/'tests/fixtures/selfcheck_fixture.npz', allow_pickle=False) as data:
         features = []
         for i, count in enumerate(data['cycle_counts']):

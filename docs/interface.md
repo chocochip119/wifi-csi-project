@@ -6,11 +6,10 @@
 | TX Coordinator | PS | CSI cycle / STATUS / ACK | USB CDC (`/dev/ttyACM0`) | 16-byte header, checksum32, cycle header 32, RX header 6 | ps/src/csi_pipeline.c |
 | PS | PL | CSI tensor / control | DDR + AXI4-Lite, PL AXI master | INT8 `[15,128,10]`, 19,200 bytes | ps/src/pose_cnn_rx5_live.c |
 | PL CNN | PS | Pose | DDR output | signed INT8 24 coords + CSR output_scale | 12관절 x/y |
-| PS | PC Backend | raw CSI / STATUS / ACK | **TCP 5000** | WISE v2, 24-byte header | ps/src/wise_server.c |
-| PS | PC Backend | Pose | **TCP 5001** | payload 40 bytes, 24 int8 + float32 scale | ps/src/wise_server.c |
+| PS | PC Backend | PS Ridge Location / FPGA Pose / STATUS / ACK | **TCP 5000 단일 포트** | WISE v2 header, Location type 5, Pose type 2 | ps/src/wise_server.c |
 | PC Backend | Frontend | Snapshot | **HTTP / WebSocket** (기본 8000) | JSON `/api/snapshot`, `/ws` | pc/backend/app/web.py |
 
-PS↔PC 바이트 상세는 [ps_pc_protocol.md](ps_pc_protocol.md)를 참조합니다. **Three.js/Vite 실행 Frontend는 `pc/frontend/`에 구현되어 있으며**, FFT/호흡은 기본 실행 파이프라인에 포함되지 않습니다. 이 표는 `ps/` + `pc/backend/`의 **PC 위치 추론 기본 경로**를 설명합니다. `ps_location/`의 PS 위치 모델 및 `integration/`의 Ridge FPGA IP는 각각 별도 구조·검증 범위를 갖습니다. 호스트 C↔Python TCP 테스트와 실제 Zybo/ARM 실보드 검증도 구분해 해석해야 합니다.
+PS↔PC 바이트 상세는 [ps_pc_protocol.md](ps_pc_protocol.md)를 참조합니다. **Three.js/Vite 실행 Frontend는 `pc/frontend/`에 구현되어 있으며**, FFT/호흡은 기본 실행 파이프라인에 포함되지 않습니다. 이 표는 `ps/` + `pc/backend/`의 **PS C Ridge 위치 추론 기본 경로**를 설명합니다. `ps_location/`에는 이전 개발 버전이, `integration/`에는 별도 FPGA Ridge IP가 있습니다. 호스트 C↔Python TCP 테스트와 실제 Zybo/ARM 실보드 검증도 구분해 해석해야 합니다.
 
 ## CSI와 Pose tensor
 
@@ -24,7 +23,7 @@ PS↔PC 바이트 상세는 [ps_pc_protocol.md](ps_pc_protocol.md)를 참조합�
 | PL 출력 | signed INT8 24개, 12관절 x/y, scale은 LOAD 뒤 CSR에서 읽음 |
 | 실수 Pose | `coordinate=int8*output_scale`, coordinate_space=model_output |
 
-USB type 번호(STATUS=1, CYCLE=2, ACK=3)와 TCP type 번호(CSI=1, Pose=2, STATUS=3, ACK=4)는 다릅니다. PS가 프레임을 검증하고 TCP 규격으로 다시 인코딩합니다. USB recv/TCP recv의 한 번 읽기 길이를 프레임 경계로 사용하지 않습니다.
+USB type 번호(STATUS=1, CYCLE=2, ACK=3)와 TCP type 번호(CSI=1, Pose=2, STATUS=3, ACK=4, Location=5)는 다릅니다. PS가 프레임을 검증하고 TCP 규격으로 다시 인코딩합니다. USB recv/TCP recv의 한 번 읽기 길이를 프레임 경계로 사용하지 않습니다.
 
 ## PS↔PL CSR / DDR
 

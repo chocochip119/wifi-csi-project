@@ -1,17 +1,19 @@
-# PC — 실시간 위치 추론과 2D/3D 시각화
+# PC — PS 위치·Pose 결과 통합과 2D/3D 시각화
 
-PC 프로그램은 **Zynq PS에서 전달된 CSI와 FPGA 관절 결과를 받아 실내 위치·자세를 하나의 화면에 보여주는 부분**입니다. Python Backend와 Three.js Frontend가 모두 구현되어 있습니다.
+PC 프로그램은 **Zynq PS에서 계산된 위치와 FPGA 관절 결과를 받아 하나의 화면에 보여주는 부분**입니다. Python Backend와 Three.js Frontend가 모두 구현되어 있습니다.
 
 ## 구현 구성
 
 | 폴더 | 담당 기능 | 자세한 문서 |
 |---|---|---|
-| [`backend/`](backend/README.md) | PS TCP 연결, RX 배치 확인, CSI 기반 **Portable Ridge 위치 분류**, FPGA 12관절 수신, HTTP/WebSocket 스냅샷 | [Backend 기능·API·실행](backend/README.md) |
+| [`backend/`](backend/README.md) | PS 단일 TCP 연결, RX 배치 확인, **PS Ridge 위치 분류 결과 수신**, FPGA 12관절 수신, HTTP/WebSocket 스냅샷 | [Backend 기능·API·실행](backend/README.md) |
 | [`frontend/`](frontend/README.md) | 실내 공간 **3D 캐릭터**, **2D 스켈레톤**, 위치/모션 보기, 관리자 설정·테스트·관절 편집·재생 | [Frontend 화면·조작·실행](frontend/README.md) |
 
 ```text
-PS TCP 5000 (CSI/STATUS) ──→ Backend Location (Ridge) ─┐
-PS TCP 5001 (FPGA Pose) ──→ Backend Pose 입력 ──────────┤
+PS (C Ridge Location + FPGA Pose)
+              │ TCP 5000 (Location/Pose/STATUS/ACK)
+              ▼
+    Backend 결과 검증·스냅샷 통합
                                                        ↓
                                 HTTP/WebSocket 8000 스냅샷
                                                        ↓

@@ -1,6 +1,9 @@
-"""PC-side TCP receiver for the PS bypass (protocol v1.1, wire version 2).
+"""PC-side raw CSI receiver (protocol v1.2, wire version 2).
 
-Feeds the packaged 11-class CSI live engine using rows with the same
+The Backend no longer uses this: location runs on the PS (ps/src/loc_ridge.c)
+and app/ps_link.py receives the results. This input remains for collecting
+raw CSI when the PS runs with WISE_FORWARD_CSI=1 (ml/localization tools).
+It feeds the packaged 11-class CSI live engine using rows with the same
 dict shape as the original serial input.
 
 Time: the PS ``timestamp_us`` (TX cycle parse time) builds windows; it is put
@@ -238,80 +241,6 @@ class EthernetInput:
         else:
             with self._lock:
                 self._counts["pose_packets_ignored"] += 1
-
-
-class PoseInput:
-    """TCP client for port 5001; keeps latest_pose only (UI must not wait on location)."""
-
-    def __init__(self, host: str, port: int = 5001, *, retry_s: float = 1.0) -> None:
-        self.host, self.port, self.retry_s = host, int(port), retry_s
-        self.latest: dict[str, Any] | None = None
-        self._sock: socket.socket | None = None
-        self.connected = False
-        self._stop = threading.Event()
-        self._lock = threading.Lock()
-        self._thread = threading.Thread(target=self._run, name="wise-pose-5001", daemon=True)
-
-    def start(self) -> "PoseInput":
-        self._thread.start()
-        return self
-
-    def stop(self) -> None:
-        self._stop.set()
-        sock = self._sock
-        if sock is not None:
-            try:
-                sock.shutdown(socket.SHUT_RDWR)
-            except OSError:
-                pass
-            sock.close()
-        if threading.current_thread() is not self._thread:
-            self._thread.join(timeout=2.5)
-
-    def latest_pose(self) -> dict[str, Any] | None:
-        with self._lock:
-            return copy.deepcopy(self.latest)
-
-    def _run(self) -> None:
-        while not self._stop.is_set():
-            try:
-                sock = socket.create_connection((self.host, self.port), timeout=2.0)
-            except OSError:
-                self._stop.wait(self.retry_s)
-                continue
-            self._sock = sock
-            if self._stop.is_set():
-                sock.close()
-                break
-            self.connected = True
-            sock.settimeout(0.5)
-            decoder = StreamDecoder()
-            try:
-                while not self._stop.is_set():
-                    try:
-                        data = sock.recv(4096)
-                    except socket.timeout:
-                        continue
-                    if not data:
-                        break
-                    for header, payload in decoder.feed(data):
-                        if header.type != wp.TYPE_POSE:
-                            continue
-                        pose = wp.decode_pose(payload)
-                        with self._lock:
-                            self.latest = {"window_id": pose.window_id, "end_trigger_seq": pose.end_trigger_seq,
-                                           "infer_us": pose.infer_us, "timestamp_us": header.timestamp_us,
-                                           "received_ns": time.perf_counter_ns(),
-                                           "pose": dict(zip(wp.POSE_NAMES, pose.pose_float()))}
-            except (OSError, wp.ProtocolError):
-                pass
-            finally:
-                self.connected = False
-                sock.close()
-                self._sock = None
-                with self._lock:
-                    self.latest = None
-            self._stop.wait(self.retry_s)
 
 
 def make_live_session_class():

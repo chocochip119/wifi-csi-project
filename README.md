@@ -33,7 +33,7 @@ WiSensing은 여러 ESP32가 관측한 **Wi-Fi 채널 상태 정보(CSI)**를 �
 1. **Wi-Fi 신호 수집:** TX 1대가 RX 5대를 관리하고 각 RX가 수신한 CSI를 수집 주기별로 취합합니다.
 2. **PS 수신·전처리:** Zynq PS(PetaLinux)가 TX의 **USB CDC ACM** 데이터를 해석하고 CNN 입력을 구성합니다.
 3. **Motion 경로:** PS → DDR/AXI → **FPGA PL의 INT8 CNN** → 12관절 추론 결과 → PS로 전달합니다.
-4. **Location 경로:** 같은 CSI 주기를 PS가 PC에 전송하고, **PC Backend의 위치 모델**이 9구역 및 상태를 분류합니다.
+4. **Location 경로:** PS의 C Ridge 엔진이 같은 CSI 주기의 진폭·RSSI를 2초 윈도우로 분석하여 9구역·앉기·사람 없음을 분류합니다.
 5. **결과 통합·표시:** PC Backend가 최신 위치·관절 정보를 통합하고, Frontend가 **2D 스켈레톤과 3D 캐릭터**를 보여줍니다.
 
 | 데이터 연결 | 방식 | 역할 |
@@ -41,10 +41,10 @@ WiSensing은 여러 ESP32가 관측한 **Wi-Fi 채널 상태 정보(CSI)**를 �
 | RX → TX | Wi-Fi / UDP 3333 | 수집된 CSI 전달 |
 | TX → PS | USB CDC ACM | 수집 주기·상태·명령 응답 |
 | PS ↔ PL | DDR + AXI4-Lite | CNN 입력/가중치 로드·추론 제어 |
-| PS → PC | TCP 5000 / 5001 | CSI·상태 / 12관절 Pose |
+| PS → PC | TCP 5000 (단일 포트) | PS Location·FPGA Pose·STATUS·ACK 결과 |
 | PC Backend → Frontend | HTTP / WebSocket (기본 8000) | 위치·관절·연결 상태 실시간 표시 |
 
-위 흐름은 **기본 실행 구성(`ps/` + `pc/backend/`)**입니다. `ps_location/`에는 위치 계산을 PS로 옮긴 시험 구성이, `integration/`에는 CNN 및 Ridge IP 통합 설계 자료가 별도로 있습니다. 각 구현의 실제 실행 경로와 적용 상태는 해당 폴더 문서를 기준으로 확인하세요.
+위 흐름은 **기본 실행 구성(`ps/` + `pc/backend/`)**입니다. PS에서 위치를 계산하는 C Ridge 구성을 기본으로 사용하며, `ps_location/`은 해당 기능의 기존 실험 버전을 보관합니다. `integration/`에는 별도의 FPGA Ridge IP 통합 설계 자료가 있습니다.
 
 ## 실시간 시각화 화면
 
@@ -63,22 +63,22 @@ WiSensing은 여러 ESP32가 관측한 **Wi-Fi 채널 상태 정보(CSI)**를 �
 | 구성 | 하드웨어·도구 | 담당 기능 |
 |---|---|---|
 | Wi-Fi 센싱 | ESP32-S3 기반 TX, ESP32 계열 RX 5대, ESP-IDF | 신호 송수신·CSI 수집/정렬 |
-| 임베디드 처리 | **Zybo Z7-20** (Zynq-7000 PS), PetaLinux, C | USB 수신·전처리·FPGA 제어·TCP 서버 |
+| 임베디드 처리 | **Zybo Z7-20** (Zynq-7000 PS), PetaLinux, C | USB 수신·전처리·C Ridge 위치 추론·FPGA 제어·TCP 서버 |
 | FPGA 가속 | Zynq PL, Verilog, Vivado | INT8 CNN Encoder·FC·가중치 Loader·AXI 인터페이스 |
 | AI 모델 | Python, PyTorch, NumPy | 자세 모델 학습·양자화·기준 벡터 및 위치 모델 학습 |
-| PC 프로그램 | Python/FastAPI, Three.js, Vite | 위치 추론·데이터 통합·웹 기반 2D/3D 시각화 |
+| PC 프로그램 | Python/FastAPI, Three.js, Vite | PS Location·Pose 결과 통합·웹 기반 2D/3D 시각화 |
 
 ## 저장소 구조
 
 | 폴더 | 구현한 내용 | 상세 안내 |
 |---|---|---|
 | [`esp32/`](esp32/README.md) | **TX/RX 펌웨어:** 연결·트리거·슬롯 제어·CSI 수집·USB 전달 | [TX](esp32/ESP-TX/README.md) · [RX](esp32/ESP-RX/README.md) |
-| [`ps/`](ps/README.md) | **Zynq PS:** USB CSI 파서, INT8 입력 생성, PL 추론 제어, PC TCP 전송 | [PS 설명](ps/README.md) |
+| [`ps/`](ps/README.md) | **Zynq PS:** USB CSI 파서, INT8 입력 생성, C Ridge 위치 추론, PL Pose 제어, TCP 전송 | [PS 설명](ps/README.md) |
 | [`pl/`](pl/README.md) | **FPGA RTL:** CNN Encoder·FC·Loader·AXI 및 Ridge 관련 RTL/테스트 | [CNN RTL](pl/cnn/README.md) |
 | [`ml/`](ml/README.md) | **학습·양자화:** 자세 모델, 위치 모델, INT8 reference·golden 생성 | [Pose](ml/pose/README.md) · [Location](ml/localization/README.md) |
 | [`pc/`](pc/README.md) | **PC 앱:** 위치/관절 Backend와 2D·3D 웹 Frontend | [Backend](pc/backend/README.md) · [Frontend](pc/frontend/README.md) |
 | [`integration/`](integration/README.md) | Vivado용 CNN/Ridge IP 패키지 및 XSA 통합 산출물 | [하드웨어 통합](integration/README.md) |
-| [`ps_location/`](ps_location/README.md) | PS에서 위치 Ridge를 처리하는 **별도 시험 구성** | [PS 위치 버전](ps_location/README.md) |
+| [`ps_location/`](ps_location/README.md) | PS 위치 추론 기능의 이전 개발/검증 버전 보관 | [이전 PS 위치 버전](ps_location/README.md) |
 | [`ps_onlysw/`](ps_onlysw/README.md) | FPGA와 비교하기 위한 **PS 소프트웨어 CNN** | [PS 전용 CNN](ps_onlysw/README.md) |
 | [`docs/`](docs/README.md) | 시스템 그림, 인터페이스, 실행·운영, 발표 근거, 검증 문서 | [문서 안내](docs/README.md) |
 

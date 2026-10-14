@@ -1,21 +1,41 @@
-/* Host-only transport harness: no /dev/mem, serial device, or FPGA. */
+/* Host-only transport harness: no /dev/mem, serial device, or FPGA.
+ * usage: wise_test_server PORT FORWARD_CSI [LOC_MODEL] */
 #define _POSIX_C_SOURCE 200809L
 #include "csi_pipeline.h"
+#include "loc_ridge.h"
 #include "wise_server.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 static wise_server_t *server;
+static loc_engine_t *loc;
 static int result;
+static uint64_t now_ns(void)
+{
+    struct timespec t;
+    clock_gettime(CLOCK_MONOTONIC, &t);
+    return (uint64_t)t.tv_sec * 1000000000u + (uint64_t)t.tv_nsec;
+}
+static void location(const loc_result_t *r, void *user)
+{ (void)user; (void)wise_server_location(server, r); }
 static void frame(uint8_t type, uint32_t seq, const uint8_t *data, size_t length, void *user)
-{ (void)user; result = wise_server_usb(server, type, seq, data, length); }
+{
+    (void)user;
+    result = wise_server_usb(server, type, seq, data, length);
+    loc_engine_usb(loc, type, data, length, now_ns());
+}
 int main(int argc, char **argv)
 {
-    if (argc != 3) return 2;
-    server = wise_server_start("127.0.0.1", (uint16_t)atoi(argv[1]), (uint16_t)atoi(argv[2]));
+    char err[256] = "";
+    if (argc != 3 && argc != 4) return 2;
+    server = wise_server_start("127.0.0.1", (uint16_t)atoi(argv[1]), atoi(argv[2]));
     if (!server) return 3;
+    if (argc == 4 && !(loc = loc_engine_open(argv[3], 0.0, location, NULL, err, sizeof(err)))) {
+        fprintf(stderr, "%s\n", err); wise_server_stop(server); return 5;
+    }
     csi_pipeline_t *pipe = csi_pipeline_create(0.02f);
-    if (!pipe) { wise_server_stop(server); return 4; }
+    if (!pipe) { wise_server_stop(server); loc_engine_close(loc); return 4; }
     csi_pipeline_set_frame_callback(pipe, frame, NULL);
     puts("READY"); fflush(stdout);
     char *line = NULL; size_t capacity = 0;
@@ -43,5 +63,5 @@ int main(int argc, char **argv)
         }
         printf("RESULT %d\n", result); fflush(stdout);
     }
-    free(line); csi_pipeline_destroy(pipe); wise_server_stop(server); return 0;
+    free(line); csi_pipeline_destroy(pipe); wise_server_stop(server); loc_engine_close(loc); return 0;
 }

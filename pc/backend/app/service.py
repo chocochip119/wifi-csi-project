@@ -78,9 +78,11 @@ def _now_ms() -> int:
 
 
 class BackendService:
-    """PS input + location inference + latest pose -> frontend snapshot.
+    """PS location + PS/FPGA pose + TX STATUS -> frontend snapshot.
 
-    Wraps the localization live engine and exposes a frontend snapshot.
+    Location is computed on the PS (ps/src/loc_ridge.c). The PC only shows it
+    after the operator confirms the current RX layout, and while that layout's
+    STATUS signature stays the same.
     """
 
     def __init__(self, settings: Settings) -> None:
@@ -88,10 +90,10 @@ class BackendService:
         self._lock = threading.RLock()
         self._stop = threading.Event()
         self._monitor_thread: threading.Thread | None = None
-        self._live = None
-        self._pose = None
+        self._link = None
+        self._confirmed_signature: str | None = None
+        self._inference_running = False
         self._seq = 0
-        self._last_prediction: dict[str, Any] | None = None
         self._location_stabilizer = LocationStabilizer(confirmations=3)
         self._last_error: str | None = None
         self._started = False
@@ -159,17 +161,9 @@ class BackendService:
             return
 
         try:
-            from localization.ethernet_input import PoseInput, make_live_session_class
+            from .ps_link import PsLink
 
-            Live = make_live_session_class()
-            self._live = Live(
-                model_path=str(self.settings.model_path),
-                host=self.settings.ps_host,
-                csi_port=self.settings.csi_port,
-                on_prediction=self._on_prediction,
-            )
-            self._pose = PoseInput(self.settings.ps_host, self.settings.pose_port).start()
-            self._live.start()
+            self._link = PsLink(self.settings.ps_host, self.settings.ps_port).start()
             self._monitor_thread = threading.Thread(target=self._monitor_loop, name="wise-backend-monitor", daemon=True)
             self._monitor_thread.start()
         except Exception as exc:
@@ -184,25 +178,18 @@ class BackendService:
 
     def stop(self) -> None:
         self._stop.set()
-        live, pose = self._live, self._pose
-        if live is not None:
+        link = self._link
+        if link is not None:
             try:
-                live.stop()
-            except Exception:
-                pass
-        if pose is not None:
-            try:
-                pose.stop()
+                link.stop()
             except Exception:
                 pass
         if self._monitor_thread is not None and self._monitor_thread is not threading.current_thread():
             self._monitor_thread.join(timeout=2.0)
         self._started = False
-        self._live = self._pose = self._monitor_thread = None
-
-    def _on_prediction(self, prediction: dict[str, Any]) -> None:
-        with self._lock:
-            self._last_prediction = copy.deepcopy(prediction)
+        self._link = self._monitor_thread = None
+        self._confirmed_signature = None
+        self._inference_running = False
 
     @staticmethod
     def _rx_signature(status: dict[str, Any] | None) -> str | None:
@@ -239,12 +226,11 @@ class BackendService:
         """Require a matching operator-inspected RX identity before enabling inference."""
         if self.settings.fake:
             return {"ok": True, "message": "fake mode: RX 배치 확인 완료"}
-        if self._live is None:
+        if self._link is None:
             return {"ok": False, "message": "Backend가 시작되지 않았습니다."}
-        live_snap = self._live.snapshot()
-        serial = live_snap.get("serial") or {}
+        serial = self._link.snapshot()
         if not serial.get("connected"):
-            return {"ok": False, "message": "CSI TCP 연결이 끊겨 RX 배치를 확인할 수 없습니다."}
+            return {"ok": False, "message": "PS TCP 연결이 끊겨 RX 배치를 확인할 수 없습니다."}
         if serial.get("status") is None:
             return {"ok": False, "message": "STATUS를 아직 받지 못했습니다."}
         signature = self._current_rx_signature(serial)
@@ -252,40 +238,20 @@ class BackendService:
             return {"ok": False, "message": "최신 STATUS에서 RX0~RX4 connected/live/saved 및 RUN 상태를 확인할 수 없습니다."}
         if not isinstance(rx_signature, str) or rx_signature != signature:
             return {"ok": False, "message": "RX 배치가 바뀌었거나 확인 토큰이 없습니다. 화면에서 다시 대조해 주세요."}
-        try:
-            from localization.location_live import status_identity
-            mapping, radio = status_identity(serial["status"])
-            config = self._live.bundle["config"]
-            if config.get("layout_id") != "layout_02":
-                raise ValueError("위치 모델의 layout_02 설정이 필요합니다.")
-            expected_mapping = config.get("rx_mac_by_index")
-            if expected_mapping:
-                expected = {int(k): str(v).upper() for k, v in expected_mapping.items()}
-                if mapping != expected:
-                    raise ValueError("학습 모델과 실제 RX index↔MAC이 다릅니다.")
-            expected_radio = config.get("radio")
-            if expected_radio:
-                expected_radio = dict(expected_radio)
-                if "tx_mac" in expected_radio:
-                    expected_radio["tx_mac"] = str(expected_radio["tx_mac"]).upper()
-                if any(radio.get(k) != v for k, v in expected_radio.items()):
-                    raise ValueError("학습 모델과 TX/무선 설정이 다릅니다.")
-            # The worker revalidates the next STATUS before producing predictions.
-            self._live.start_inference(identity_confirmed=True)
-            return {"ok": True, "message": "현재 RX 배치를 확인했습니다. 다음 STATUS 검증 뒤 위치 추론을 시작합니다."}
-        except (KeyError, TypeError, ValueError, RuntimeError) as exc:
-            return {"ok": False, "message": str(exc)}
+        # Model RX MAC mapping (if trained with one) is enforced by the PS engine.
+        with self._lock:
+            self._confirmed_signature = signature
+            self._inference_running = True
+        return {"ok": True, "message": "현재 RX 배치를 확인했습니다. PS 위치 추론 결과를 표시합니다."}
 
     def stop_inference(self) -> dict[str, Any]:
         if self.settings.fake:
             return {"ok": True, "message": "fake mode"}
-        if self._live is None:
+        if self._link is None:
             return {"ok": False, "message": "Backend가 시작되지 않았습니다."}
-        try:
-            self._live.stop_inference()
-            return {"ok": True, "message": "위치 추론을 정지했습니다."}
-        except Exception as exc:
-            return {"ok": False, "message": str(exc)}
+        with self._lock:
+            self._inference_running = False
+        return {"ok": True, "message": "위치 결과 표시를 정지했습니다. (PS 추론은 계속 실행)"}
 
     def snapshot(self) -> dict[str, Any]:
         with self._lock:
@@ -399,15 +365,39 @@ class BackendService:
             "joints": joints,
         }
 
+    def _location_from_link(self, link, serial: dict[str, Any], signature: str | None,
+                            confirmed: bool, running: bool) -> tuple[dict[str, Any] | None, str]:
+        """Show a PS result only for the confirmed layout and only while it is fresh."""
+        if link is None or not serial.get("connected"):
+            return None, "PS 연결 대기"
+        if signature is None:
+            return None, "TX STATUS 확인 대기 (RX 5대 RUN/saved 필요)"
+        if not confirmed:
+            return None, "RX 배치 확인 필요"
+        if not running:
+            return None, "위치 결과 표시 정지됨"
+        prediction = link.latest_location()
+        if prediction is None:
+            return None, "PS 위치 추론 대기 (2초 창 수집 중)"
+        age_ms = (time.perf_counter_ns() - int(prediction["monotonic_ns"])) / 1_000_000.0
+        if not 0 <= age_ms <= self.settings.location_stale_s * 1000.0:
+            return None, "PS 위치 결과가 오래되었습니다 (CSI 끊김 또는 창 재수집)"
+        if prediction["point_id"] == "empty":
+            return prediction, "사람 없음(empty) 분류 결과 · 좌표 없음"
+        return prediction, "사람 있음 · PS 위치 추론 결과 (좌표는 해당 지점의 대표값)"
+
     def _monitor_loop(self) -> None:
         while not self._stop.wait(self.settings.monitor_interval_s):
             try:
-                live_snap = self._live.snapshot() if self._live is not None else {}
-                serial = live_snap.get("serial") or {}
+                link = self._link
+                serial = link.snapshot() if link is not None else {}
                 status = serial.get("status")
-                prediction = live_snap.get("prediction")
-                reason = str(live_snap.get("reason") or "")
-                latest_pose = self._pose.latest_pose() if self._pose is not None else None
+                signature = self._current_rx_signature(serial)
+                with self._lock:
+                    confirmed = signature is not None and signature == self._confirmed_signature
+                    running = self._inference_running
+                prediction, reason = self._location_from_link(link, serial, signature, confirmed, running)
+                latest_pose = link.latest_pose() if link is not None else None
 
                 # Do not re-vote the same inference window during 100 ms UI polls.
                 stable_prediction = self._location_stabilizer.update(prediction)
@@ -416,14 +406,14 @@ class BackendService:
                 system = {
                     "ps_connected": bool(serial.get("connected")),
                     "csi_connected": bool(serial.get("connected")),
-                    "pose_connected": bool(self._pose and self._pose.connected),
-                    "status_ready": bool(live_snap.get("status_ready")),
-                    "identity_confirmed": bool(live_snap.get("identity_confirmed")),
-                    "inference_running": bool(live_snap.get("inference_running")),
+                    "pose_connected": bool(serial.get("connected")),
+                    "status_ready": signature is not None,
+                    "identity_confirmed": confirmed,
+                    "inference_running": running,
                     "rx_active": int(status.get("active_count", 0)) if status else 0,
                     "rx_total": 5,
                     "rx_nodes": self._rx_nodes(status),
-                    "rx_signature": self._current_rx_signature(serial),
+                    "rx_signature": signature,
                     "wifi_channel": status.get("wifi_channel") if status else None,
                     "second_channel": status.get("second_channel") if status else None,
                     "tx_mac": status.get("tx_mac") if status else None,

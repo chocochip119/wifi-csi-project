@@ -7,9 +7,10 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { connectBackend } from './websocket.js'
 import { PoseRigController } from './poseRig.js'
 import { armMaxLiftDegForZone } from './armZoneLimit.js'
-import { LiveSitDetector } from './liveSitDetector.js'
+import { StableLegPosture } from './stableLegPosture.js'
+import { isCenterLocation, walkingSkeletonPose } from './viewerMotionPolicy.js'
 import { shouldHoldSeatedPose } from './singleLegLiftGate.js'
-import {isNoPerson, motionPointId, sitDetectorPoint, motionArmLiftLimit} from './presentationMode.js'
+import {isNoPerson, motionPointId, motionArmLiftLimit} from './presentationMode.js'
 import {legLiftMaxDegForLocation} from './legLiftPolicy.js'
 import {MotionAbsenceTimer} from './motionAbsenceTimer.js'
 // WiSensing viewer presentation 2-mode: keyboard 3 / center motion
@@ -326,7 +327,7 @@ let backendExpired = false
 const poseFilter = new PoseFilter()
 const fastPose2D = new FastPose2DFilter(80)
 const liveThreeLimiter = new LiveThreeActionLimiter()
-const sitDetector = new LiveSitDetector()
+const stableLegPosture = new StableLegPosture()
 let currentSitDecision = {sit:false,strength:0,source:'standing'}
 const motionAbsenceTimer = new MotionAbsenceTimer()
 let motionHiddenForAbsence = false
@@ -334,6 +335,8 @@ const poseViewport = new PoseViewportStabilizer()
 const fastPoseViewport = new PoseViewportStabilizer({
   centerFastMs: 150, centerSlowMs: 200, scaleShrinkMs: 150, scaleGrowMs: 250
 })
+// Last frame from the active 2D pipeline, kept while the walk animation draws.
+let lastPose2DFrame = null
 // Standalone offline INT8 CNN replay; never mutates incoming hardware packets.
 let csvReplayActive = false
 let csvPostprocess = true
@@ -371,7 +374,12 @@ let isMoving = false
 const moveSpeed = 1.1 // GLTF Walk와 더 자연스럽게 맞추기 위한 화면 이동 속도
 let targetPosture = 'standing'
 let armLocationZone = null // Live location zone; unknown != zone 5.
-let legLiftMaxDeg = 10 // Actual P05/P10 = unlimited; elsewhere ~10° visual limit.
+let legLiftMaxDeg = 0
+let poseTrackingEnabled = false
+let activeLegAction = 'stand'
+let activeLegStrength = 0
+let activeLiftSide = null
+let lastMeaningfulArmAt = -Infinity
 // Fixed P05 presentation position; unrelated to the position model output.
 function pinMotionCharacter() {
   if (!character || !zonePositions[5]) return
@@ -406,12 +414,15 @@ function playAnimation(name, fadeTime = 0.25) {
 // 12관절 추종은 유효한 좌표가 있을 때만 mixer 뒤에 회전을 덮어쓴다.
 function refreshIdleAnimation() {
   if (!character || isMoving) return
-  playAnimation(poseRig?.ready && poseRig.armEnabled ? 'ArmPoseIdle' : 'Idle_Neutral')
+  playAnimation(poseTrackingEnabled && poseRig?.ready && poseRig.armEnabled ? 'ArmPoseIdle' : 'Idle_Neutral')
 }
 
 function disableRig() {
-  if (poseRig?.active) poseRig.clear()
-  refreshIdleAnimation()
+  if (poseRig?.active || poseRig?.liftAmount > 0 || poseRig?.squatAmount > 0) {
+    poseRig.clear()
+    poseRig.update(0, false)
+  }
+  if (!isMoving) playAnimation('Idle_Neutral', 0.22)
 }
 
 function moveCharacterTo(zone, posture = 'standing') {
@@ -469,34 +480,20 @@ function setAbsentState(message, posture) {
 
 // 하나의 Pose가 오른쪽 스켈레톤과 3D 관절 모두를 움직입니다.
 function updateMotionRig(pose, mirrored) {
-  const shouldSit = currentSitDecision.sit === true
-  // Sit has priority over Walk: when P05/P10 begins sitting, stop navigation
-  // immediately at zone 5 rather than waiting for the walk animation to finish.
-  if (shouldSit && isMoving && character?.visible && zonePositions[5]) {
-    isMoving = false
-    currentZone = targetZone = 5
-    character.position.x = zonePositions[5].x
-    character.position.z = zonePositions[5].z
-    character.rotation.y = 0
-    playAnimation('Idle_Neutral', 0.12)
+  if (!poseTrackingEnabled) {
+    disableRig()
+    return
   }
+  const shouldSit = currentSitDecision.sit === true
+  // Finish walking to the actual destination before applying seated IK.
+  // A transient P10 label must never teleport the avatar.
   if (isMoving || !character?.visible) {
     if (poseRig?.active) poseRig.clear()
     refreshIdleAnimation()
     return
   }
-  // P10 always sits, including missing/invalid joint frames. Do NOT synthesize
-  // joints into the 2D panel or into the actual FPGA/CNN output.
-  let rigPose = pose?.valid ? pose :
-    (currentSitDecision.source === 'P10' ? createTestPose('squat') : null)
-  // Even if LIVE 12 joints are marked valid but geometrically impossible,
-  // P10 must still request the built-in planted-squat pose.
-  let angles = rigPose?.valid ? solvePoseAngles(rigPose, mirrored) : null
-  if (!angles && currentSitDecision.source === 'P10') {
-    rigPose = createTestPose('squat')
-    angles = solvePoseAngles(rigPose, false)
-    mirrored = false
-  }
+  const rigPose = pose?.valid ? pose : null
+  const angles = rigPose ? solvePoseAngles(rigPose, mirrored) : null
   if (!rigPose?.valid || !angles) {
     // Preserve an already-seated 3D frame through a short missing or
     // malformed joint snapshot. No Person still clears it immediately.
@@ -508,15 +505,20 @@ function updateMotionRig(pose, mirrored) {
     refreshIdleAnimation()
     return
   }
-  const arms = Boolean(pose?.valid && rigPose === pose && viewerSettings.liveArms && hasMeaningfulArmPose(pose))
-  const legs = Boolean(angles && (shouldSit ||
-    (viewerSettings.liveLegs && (angles.activity > 0.14 || Number.isFinite(angles.footSpacingRatio)))))
+  if (pose?.valid && hasMeaningfulArmPose(pose)) lastMeaningfulArmAt = performance.now()
+  const arms = Boolean(pose?.valid && viewerSettings.liveArms &&
+    performance.now() - lastMeaningfulArmAt < 650)
+  // Stable bilateral squat or unilateral lift only; ignore transient noisy knees.
+  const legs = Boolean(angles && viewerSettings.liveLegs && (shouldSit || activeLegAction === 'lift' ||
+    (poseRig?.liftAmount ?? 0)>0.01 || (poseRig?.squatAmount ?? 0)>0.01))
   // squatTarget=0 explicitly forbids sitting in every zone other than P05/P10;
   // nonzero force is applied to 3D only, AFTER ordinary IK smoothing.
   if (arms || legs) poseRig?.setPose(rigPose, mirrored, {
     arms, legs, armMaxLiftDeg: motionArmLiftLimit(viewerSettings.locationMode, armLocationZone, armMaxLiftDegForZone),
     legMaxLiftDeg: legLiftMaxDeg,
-    squatTarget: shouldSit ? currentSitDecision.strength : 0
+    squatTarget: shouldSit ? currentSitDecision.strength : 0,
+    stableLiftSide: activeLiftSide,
+    stableLiftStrength: activeLegAction === 'lift' ? activeLegStrength : 0
   })
   else if (poseRig?.active) poseRig.clear()
   refreshIdleAnimation()
@@ -552,42 +554,53 @@ function handleSnapshot(snapshot, source = 'backend') {
   const fast2D = isLive2D && viewerSettings.pose2DMode === 'fast'
   const raw2D = isLive2D && viewerSettings.pose2DMode === 'raw'
   const poseFor2D = fast2D ? fastPose2D.push(validPose) : raw2D ? validPose : sharedPose
-  const displayPose2D = mirrorPoseSides(poseFor2D, poseSidesFlipped)
-  // Use one orientation for SVG and avatar. The fast 2D filter may lag the rig,
-  // but it must not independently choose a different L/R direction.
-  // Original CNN coordinates and the backend remain unchanged.
-  // In motion mode, hold the last drawn skeleton during the 5 s absence grace.
+  // Original CNN coordinates remain untouched; synthesize visual poses only.
   const noPerson = isNoPerson(snapshot)
   const inMotionMode = viewerSettings.locationMode === 'center'
   const hideMotion = inMotionMode
     ? motionAbsenceTimer.observe(noPerson, performance.now())
     : (motionAbsenceTimer.reset(), false)
-  poseUnavailable.textContent = noPerson && (!inMotionMode || hideMotion) ? 'No person' : 'Unavailable'
-  if (!(inMotionMode && noPerson && !hideMotion)) {
-    renderPose(noPerson ? null : displayPose2D, poseMirror,
-      !(csvReplayActive && !csvPostprocess) && !raw2D,
-      fast2D ? fastPoseViewport : poseViewport)
-  }
   const motionMirror = poseMirror
-
   const location = resolveViewerLocation(snapshot, viewerSettings)
-  armLocationZone = location.valid && !location.empty ? location.zone : null
-  // Use the ACTUAL classifier location, even when motion mode pins the
-  // avatar to P05. P05/P10 have no lift limit; elsewhere, cap at 10°.
-  const inferredLocation = resolveViewerLocation(snapshot, {...viewerSettings, locationMode:'live'})
-  legLiftMaxDeg = legLiftMaxDegForLocation(inferredLocation)
-  // Position mode retains P05/P10 gating. Motion mode ALWAYS uses P05 as
-  // the logical area, so any real joint motion works regardless of P08/P10.
-  // Both modes honor explicit No Person before interpreting cached joints.
+  const inferredLocation = resolveViewerLocation(snapshot, {...viewerSettings,locationMode:'live'})
+  // Manual location selection is an explicit test override.
+  const effectiveLocation = viewerSettings.locationMode === 'manual' ? location : inferredLocation
+  poseTrackingEnabled = !noPerson && isCenterLocation(effectiveLocation)
+  armLocationZone = poseTrackingEnabled ? 5 : null
+  legLiftMaxDeg = poseTrackingEnabled ? legLiftMaxDegForLocation(effectiveLocation) : 0
   const sitInput = viewerSettings.jointsMode === 'live' ? validPose : sharedPose
-  const sitAngles = sitInput?.valid ?
+  const sitAngles = poseTrackingEnabled && sitInput?.valid ?
     solvePoseAngles(sitInput, resolvePoseMirror(sitInput, mirrorMode, lastMirror)) : null
-  const sitRawScore = sitAngles?.squat ?? 0
-  if (noPerson) sitDetector.reset()
-  currentSitDecision = noPerson ? {sit:false,strength:0,source:'standing'} : sitDetector.observe(
-    sitDetectorPoint(viewerSettings.locationMode, location),
-    sitInput, sitRawScore, performance.now(),
-    {liftL:sitAngles?.liftL ?? 0, liftR:sitAngles?.liftR ?? 0})
+  if (!poseTrackingEnabled) stableLegPosture.reset()
+  let actionState = poseTrackingEnabled
+    ? stableLegPosture.update(sitInput,sitAngles,effectiveLocation.pointId,performance.now())
+    : {action:'stand',strength:0}
+  if (poseTrackingEnabled && viewerSettings.jointsMode === 'sample') {
+    const sample=viewerSettings.jointsSample
+    actionState={action:sample==='squat'?'squat':sample==='legLift'?'lift':'stand',
+      strength:sample==='squat'?1:sample==='legLift'?0.9:0,
+      side:sample==='legLift'?'L':null}
+  }
+  activeLegAction=actionState.action
+  activeLegStrength=actionState.strength
+  activeLiftSide=actionState.side || null
+  currentSitDecision={sit:activeLegAction==='squat',
+    strength:activeLegAction==='squat'?actionState.strength:0,
+    source:activeLegAction==='squat'?'bilateral-joints':'standing'}
+  poseUnavailable.textContent = noPerson && (!inMotionMode || hideMotion) ? 'No person' : 'Unavailable'
+  const displayPose2D = poseTrackingEnabled ? poseFor2D : createTestPose('stand')
+  if (!(inMotionMode && noPerson && !hideMotion)) {
+    // Cache exactly what this source mode renders. Do not reconstruct raw
+    // backend coordinates on arrival (custom/replay/fast filters may differ).
+    lastPose2DFrame = {
+      pose: noPerson ? null : mirrorPoseSides(displayPose2D,poseSidesFlipped),
+      mirror: poseMirror,
+      stabilize: !(csvReplayActive && !csvPostprocess) && !raw2D,
+      viewport: poseTrackingEnabled && fast2D ? fastPoseViewport : poseViewport
+    }
+    renderPose(lastPose2DFrame.pose,lastPose2DFrame.mirror,
+      lastPose2DFrame.stabilize,lastPose2DFrame.viewport)
+  }
   if (inMotionMode) {
     pinMotionCharacter()
     if (noPerson) {
@@ -609,12 +622,11 @@ function handleSnapshot(snapshot, source = 'backend') {
     return
   }
   if (location.empty) {
-    if (sharedPose?.valid) {
-      clearLocationUI('No person')
-      updatePostureUI('unknown')
-      if (character) character.visible = true
-      updateMotionRig(motionPose, poseMirror)
-    } else setAbsentState('No person', 'empty')
+    clearLocationUI('No person')
+    updatePostureUI('unknown')
+    if (character) character.visible = true
+    poseTrackingEnabled = false
+    disableRig()
     updateLiveBadge(snapshot)
     return
   }
@@ -629,8 +641,11 @@ function handleSnapshot(snapshot, source = 'backend') {
   } else {
     clearLocationUI('Unavailable')
     updatePostureUI('unknown')
-    if (character) character.visible = Boolean(sharedPose)
-    if (sharedPose?.valid) moveCharacterTo(5)
+    if (character) character.visible = true
+    isMoving = false
+    if (character) character.rotation.y=0
+    poseTrackingEnabled = false
+    disableRig()
   }
   updateMotionRig(motionPose, poseMirror)
   updateLiveBadge(snapshot)
@@ -755,7 +770,7 @@ function updateViewerSettings(key, value) {
   poseViewport.reset()
   fastPoseViewport.reset()
   liveThreeLimiter.reset()
-  sitDetector.reset()
+  stableLegPosture.reset()
   currentSitDecision = {sit:false,strength:0,source:'standing'}
   poseRig?.clear()
   refreshViewer()
@@ -974,7 +989,7 @@ connectBackend((snapshot) => {
     backendExpired = true
     poseFilter.reset()
     liveThreeLimiter.reset()
-    sitDetector.reset()
+    stableLegPosture.reset()
     currentSitDecision = {sit:false,strength:0,source:'standing'}
     poseRig?.clear()
     latestSnapshot = null
@@ -1038,7 +1053,7 @@ function animate(now) {
     backendExpired = true
     poseFilter.reset()
     liveThreeLimiter.reset()
-    sitDetector.reset()
+    stableLegPosture.reset()
     currentSitDecision = {sit:false,strength:0,source:'standing'}
     poseRig?.clear()
     latestSnapshot = null
@@ -1069,10 +1084,16 @@ function animate(now) {
       currentZone = targetZone
       isMoving = false
       character.rotation.y = 0
-      // Sit 애니메이션은 아직 없으므로 기본 서기 애니메이션을 유지.
       refreshIdleAnimation()
       updateLocationUI(currentZone, selectedPointId)
-      updatePostureUI(targetPosture)
+      updatePostureUI(currentSitDecision.sit && currentZone===5 ? 'sitting' : 'standing')
+      // Restore the last frame from the active 2D source (live/filter,
+      // custom edit, or replay), never an unfiltered backend snapshot.
+      if (poseTrackingEnabled && currentZone===5 && lastPose2DFrame?.pose?.valid)
+        renderPose(lastPose2DFrame.pose,lastPose2DFrame.mirror,
+          lastPose2DFrame.stabilize,lastPose2DFrame.viewport)
+      else renderPose(mirrorPoseSides(createTestPose('stand'),poseSidesFlipped),
+        lastMirror,true,poseViewport)
     } else {
       const vx = dx / distance
       const vz = dz / distance
@@ -1081,6 +1102,15 @@ function animate(now) {
       // 모델의 정면(+Z) 기준으로 이동 방향 바라보기.
       character.rotation.y = Math.atan2(vx, vz)
     }
+  }
+  // Only synthesize walking for the 2D panel while the 3D Walk clip
+  // is playing. The real 12 CNN joints/Backend remain unchanged.
+  if (isMoving && character?.visible && viewerSettings.locationMode !== 'center' &&
+      currentAction?.getClip()?.name === 'Walk') {
+    const clip=currentAction.getClip()
+    const phase=2*Math.PI*currentAction.time/Math.max(0.1,clip.duration)
+    const walkPose=mirrorPoseSides(walkingSkeletonPose(phase),poseSidesFlipped)
+    renderPose(walkPose,lastMirror,true,poseViewport)
   }
   // Idle/Walk 이후 한 번만 동일 좌표의 팔·다리 방향을 적용한다.
   // 안전 범위를 벗어난 발 이동은 해당 다리의 IK를 적용하지 않는다.

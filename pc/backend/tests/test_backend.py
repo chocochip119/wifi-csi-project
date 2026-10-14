@@ -31,72 +31,101 @@ def test_pose_stale_and_nan_are_invalid():
     assert not pose['valid'] and len(pose['joints']) == 11
 
 
-def test_real_start_loads_model_and_stop_releases_threads():
-    service = BackendService(Settings(ps_host='127.0.0.1',csi_port=1,pose_port=2))
+def test_real_start_connects_link_and_stop_releases_threads():
+    service = BackendService(Settings(ps_host='127.0.0.1',ps_port=1,monitor_interval_s=0.01))
     service.start()
-    assert service._live.bundle['feature_count'] == 955
+    link = service._link
+    assert link is not None
+    time.sleep(0.05)
+    assert not service.snapshot()['location']['valid']
     service.stop()
-    assert not service._started
+    assert not service._started and service._link is None
+    assert not link._thread.is_alive()
 
 
-def test_start_failure_is_retryable_and_cleans_up(tmp_path):
-    service = BackendService(Settings(model_path=tmp_path/'absent.npz'))
-    with pytest.raises(FileNotFoundError): service.start()
-    assert not service._started and service._live is None and service._pose is None
-
-
-def test_real_rx_confirmation_requires_fresh_verified_layout():
-    """Require a fresh 5-RX STATUS and the same operator-confirmed identity."""
-    from localization.location_live import status_identity
-
-    service = BackendService(Settings())
+def _status():
     nodes = [{
         'slot_index': i, 'saved_order': i, 'connected': True,
         'live': True, 'saved': True, 'mac': f'02:00:00:00:00:{i:02X}',
     } for i in range(5)]
-    status = {
+    return {
         'mode': 'running', 'active_count': 5, 'connected_count': 5, 'saved_count': 5,
         'generation': 1, 'nodes': nodes, 'tx_mac': 'AA:BB:CC:DD:EE:FF',
         'wifi_channel': 11, 'second_channel': 'above', 'protocol_bitmap': 7,
         'timeout_us': 50000, 'udp_slot_gap_us': 1000,
     }
-    mapping, radio = status_identity(status)
-    config = {'layout_id': 'layout_02', 'rx_mac_by_index': mapping, 'radio': radio}
-    calls = []
-    serial = {'connected': True, 'status': status, 'status_received_ns': time.perf_counter_ns()}
 
-    class DummyLive:
-        bundle = {'config': config}
 
-        def snapshot(self):
-            return {'serial': serial}
+class DummyLink:
+    def __init__(self, status):
+        self.serial = {'connected': True, 'status': status, 'status_received_ns': time.perf_counter_ns()}
+        self.location = None
 
-        def start_inference(self, *, identity_confirmed):
-            calls.append(identity_confirmed)
+    def snapshot(self):
+        return self.serial
 
-    service._live = DummyLive()
+    def latest_location(self):
+        return None if self.location is None else dict(self.location)
+
+    def latest_pose(self):
+        return None
+
+
+def test_real_rx_confirmation_requires_fresh_verified_layout():
+    """Require a fresh 5-RX STATUS and the same operator-confirmed identity."""
+    service = BackendService(Settings())
+    status = _status()
+    link = DummyLink(status)
+    serial = link.serial
+    service._link = link
     token = service._current_rx_signature(serial)
     assert token and len(token) == 64
     assert not service.confirm_rx_layout()['ok']
     assert not service.confirm_rx_layout('wrong-token')['ok']
-    assert not calls
+    assert service._confirmed_signature is None
     assert service.confirm_rx_layout(token)['ok']
-    assert calls == [True]
+    assert service._confirmed_signature == token and service._inference_running
 
-    calls.clear()
+    service._confirmed_signature = None
     serial['status_received_ns'] -= 20_000_000_000
     assert not service.confirm_rx_layout(token)['ok']
-    assert not calls
     serial['status_received_ns'] = time.perf_counter_ns()
     status['nodes'][4]['saved'] = False
     assert not service.confirm_rx_layout(token)['ok']
-    assert not calls
     status['nodes'][4]['saved'] = True
     status['generation'] += 1
     assert not service.confirm_rx_layout(token)['ok']
-    assert not calls
     status['nodes'][0]['mac'] = '04:00:00:00:00:00'
     new_token = service._current_rx_signature(serial)
-    assert new_token
-    assert not service.confirm_rx_layout(new_token)['ok']
-    assert not calls
+    assert new_token and new_token != token
+    assert not service.confirm_rx_layout(token)['ok']
+    assert service._confirmed_signature is None
+
+
+def test_ps_location_shown_only_when_confirmed_running_and_fresh():
+    service = BackendService(Settings())
+    link = DummyLink(_status())
+    service._link = link
+    signature = service._current_rx_signature(link.serial)
+
+    def shown():
+        confirmed = signature == service._confirmed_signature
+        prediction, _ = service._location_from_link(link, link.serial, signature, confirmed,
+                                                    service._inference_running)
+        return prediction
+
+    link.location = {'point_id': 'p10', 'occupied': True, 'representative_x_cm': 90,
+                     'representative_y_cm': 90, 'window_cycles': 20, 'infer_ms': 0.2,
+                     'monotonic_ns': time.perf_counter_ns()}
+    assert shown() is None                       # layout not confirmed yet
+    assert service.confirm_rx_layout(signature)['ok']
+    location, person = service._location_state(shown(), 'ok')
+    assert location['valid'] and location['zone'] == 5 and person['posture'] == 'sitting'
+    link.location['monotonic_ns'] -= 3_000_000_000
+    assert shown() is None                       # stale PS result
+    link.location['monotonic_ns'] = time.perf_counter_ns()
+    assert service.stop_inference()['ok'] and shown() is None
+    service._inference_running = True
+    link.serial['status']['generation'] += 1     # new STATUS identity needs a new confirmation
+    signature = service._current_rx_signature(link.serial)
+    assert shown() is None

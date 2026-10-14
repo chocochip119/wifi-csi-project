@@ -25,9 +25,12 @@ if [[ -e "$recipe_dir" ]]; then
 fi
 mkdir -p "$recipe_dir/files"
 cp "$package_dir/petalinux/pose-cnn-rx5.bb" "$recipe_dir/"
+cp "$package_dir/petalinux/wisensing-autostart" "$recipe_dir/files/"
+cp "$package_dir/petalinux/wisensing-location.conf" "$recipe_dir/files/"
 cp "$package_dir/src/"*.c "$recipe_dir/files/"
 cp "$package_dir/include/"*.h "$recipe_dir/files/"
 cp "$package_dir/test_vectors/"* "$recipe_dir/files/"
+cp "$package_dir/models/loc_ridge_rx5.bin" "$recipe_dir/files/"
 printf '# Optional locally supplied, verified board vectors.\n' > "$recipe_dir/pose-cnn-rx5-vectors.inc"
 if [[ -n "$vector_dir" ]]; then
     for asset in blob_rx5_test.bin input_rx5_test.bin pose_expected.bin; do

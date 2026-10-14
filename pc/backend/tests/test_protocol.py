@@ -55,3 +55,19 @@ def test_clock_spacing_floor_and_reconnect():
     assert clock.map(300,1300000) > 1200000
     clock.reset()
     assert clock.map(1,5000000) == 5000000
+
+
+def test_location_roundtrip_and_consistency_checks():
+    result = wp.LocationResult(9, 321, 180, 'p10', True, 20, 90, 90, 1_000_000, 3_000_000,
+                               tuple(float(i) for i in range(11)))
+    payload = wp.encode_location(result)
+    assert len(payload) == 80 == wp.LOCATION.size
+    assert wp.decode_location(payload) == result
+    empty = wp.LocationResult(1, 2, 3, 'empty', False, 12, None, None, 0, 2_000_000, (0.0,) * 11)
+    assert wp.decode_location(wp.encode_location(empty)).x_cm is None
+    bad = bytearray(payload); bad[13] = 0          # occupied=0 for a person class
+    with pytest.raises(wp.ProtocolError): wp.decode_location(bytes(bad))
+    bad = bytearray(payload); bad[12] = 11         # unknown class code
+    with pytest.raises(wp.ProtocolError): wp.decode_location(bytes(bad))
+    header = wp.unpack_header(wp.frame(wp.TYPE_LOCATION, payload, 1, 2)[:wp.HEADER_SIZE])
+    assert header.type == wp.TYPE_LOCATION and header.payload_size == 80

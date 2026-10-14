@@ -1,0 +1,131 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          wisensing-autostart
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
+# Default-Start:     5
+# Default-Stop:      0 1 6
+# Short-Description: WiSensing FPGA Pose + PS Ridge Location
+### END INIT INFO
+
+# One integrated application owns USB, FPGA and TCP 5000.
+# Never run a second pose_cnn_rx5_live while this service is active.
+PIDFILE=/var/run/wisensing-autostart.pid
+LOGFILE=/tmp/wisensing-autostart.log
+CONFIG=/etc/default/wisensing-location
+DAEMON=/usr/bin/pose_cnn_rx5_live
+
+# Mount the boot FAT partition read-only. With INITRD rootfs, /root is RAM.
+ensure_sd_boot_mounted() {
+    if grep -q " $WISE_SD_MOUNT " /proc/mounts 2>/dev/null; then
+        return 0
+    fi
+    mkdir -p "$WISE_SD_MOUNT" || return 1
+    for device in /dev/mmcblk0p1 /dev/mmcblk1p1; do
+        [ -b "$device" ] || continue
+        if mount -t vfat -o ro "$device" "$WISE_SD_MOUNT"; then
+            echo "Mounted SD boot: $device -> $WISE_SD_MOUNT (read-only)"
+            return 0
+        fi
+    done
+    echo "Waiting: unable to mount SD FAT boot partition (mmcblk0p1/mmcblk1p1)"
+    return 1
+}
+
+is_running() {
+    [ -r "$PIDFILE" ] || return 1
+    pid=$(cat "$PIDFILE" 2>/dev/null) || return 1
+    case "$pid" in ''|*[!0-9]*) return 1 ;; esac
+    kill -0 "$pid" 2>/dev/null
+}
+
+start_service() {
+    if is_running; then
+        echo "WiSensing already running (pid $(cat "$PIDFILE"))"
+        return 0
+    fi
+    [ -x "$DAEMON" ] || { echo "Missing executable: $DAEMON" >&2; return 1; }
+    mkdir -p /var/run || return 1
+    rm -f "$PIDFILE"
+    "$0" run >> "$LOGFILE" 2>&1 &
+    echo $! > "$PIDFILE"
+    echo "WiSensing started (supervisor pid $(cat "$PIDFILE"), log $LOGFILE)"
+}
+
+stop_service() {
+    if ! is_running; then
+        rm -f "$PIDFILE"
+        echo "WiSensing not running"
+        return 0
+    fi
+    pid=$(cat "$PIDFILE")
+    kill -TERM "$pid" 2>/dev/null || true
+    i=0
+    while kill -0 "$pid" 2>/dev/null && [ "$i" -lt 10 ]; do
+        sleep 1
+        i=$((i + 1))
+    done
+    if kill -0 "$pid" 2>/dev/null; then
+        echo "WiSensing did not stop; inspect pid $pid" >&2
+        return 1
+    fi
+    rm -f "$PIDFILE"
+    echo "WiSensing stopped"
+}
+
+run_service() {
+    child=''
+    trap 'trap - TERM INT; if [ -n "$child" ]; then kill -TERM "$child" 2>/dev/null; wait "$child" 2>/dev/null; fi; exit 0' TERM INT
+    echo "WiSensing autostart supervisor ready"
+    while :; do
+        # Re-read config on retries so a corrected configuration is picked up.
+        if [ -r "$CONFIG" ]; then . "$CONFIG"; fi
+        : "${WISE_TTY:=/dev/ttyACM0}"
+        : "${WISE_SD_MOUNT:=/mnt/wise-boot}"
+        : "${WISE_WEIGHTS:=/mnt/wise-boot/weights_5rx.bin}"
+        : "${WISE_LOC_MODEL:=/usr/share/pose-cnn-rx5/loc_ridge_rx5.bin}"
+        : "${WISE_LOC_STRIDE_S:=0.5}"
+        : "${WISE_TCP_PORT:=5000}"
+        : "${WISE_FORWARD_CSI:=0}"
+        : "${WISE_MAX_WINDOWS:=0}"
+
+        sd_needed=0
+        case "$WISE_WEIGHTS" in "$WISE_SD_MOUNT"/*) sd_needed=1 ;; esac
+        if [ "$sd_needed" -eq 1 ] && ! ensure_sd_boot_mounted; then
+            : # Retry when SD/MMC or vfat driver is available.
+        elif [ -z "${WISE_INPUT_SCALE:-}" ]; then
+            echo "Waiting: configure WISE_INPUT_SCALE=auto (or validated numeric value)"
+        elif [ ! -r "$WISE_WEIGHTS" ]; then
+            echo "Waiting: Pose weights not readable: $WISE_WEIGHTS"
+        elif [ "$WISE_LOC_MODEL" != "off" ] && [ ! -r "$WISE_LOC_MODEL" ]; then
+            echo "Waiting: location Ridge model not readable: $WISE_LOC_MODEL"
+        elif [ ! -c "$WISE_TTY" ]; then
+            echo "Waiting: USB coordinator not connected: $WISE_TTY"
+        else
+            export WISE_LOC_MODEL WISE_LOC_STRIDE_S WISE_TCP_PORT WISE_FORWARD_CSI
+            [ -z "${WISE_TCP_BIND:-}" ] || export WISE_TCP_BIND
+            echo "Launching $DAEMON on $WISE_TTY, port $WISE_TCP_PORT"
+            "$DAEMON" "$WISE_TTY" "$WISE_INPUT_SCALE" "$WISE_MAX_WINDOWS" "$WISE_WEIGHTS" &
+            child=$!
+            wait "$child"
+            code=$?
+            child=''
+            echo "WiSensing application exited (status $code); retrying in 5s"
+        fi
+        sleep 5 &
+        child=$!
+        wait "$child" 2>/dev/null
+        child=''
+    done
+}
+
+case "${1:-}" in
+    start) start_service ;;
+    stop) stop_service ;;
+    restart) stop_service && start_service ;;
+    status)
+        if is_running; then echo "WiSensing running (pid $(cat "$PIDFILE"))";
+        else echo "WiSensing stopped"; exit 1; fi ;;
+    run) run_service ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" >&2; exit 2 ;;
+esac
