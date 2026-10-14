@@ -1,20 +1,20 @@
 # 저장소 구조와 소스 찾기
 
-WiSensing 저장소는 **CSI 수집(ESP32) → PS 데이터 처리 → FPGA CNN → PC 위치/시각화**라는 구현 역할에 따라 분리되어 있습니다. 각 폴더의 README는 해당 구성요소가 무엇을 하고 어떻게 동작하는지부터 설명하고, 상세 설정·테스트·규격은 아래에 연결합니다.
+WiSensing 저장소는 **CSI 수집(ESP32) → PS 위치 계산·FPGA CNN → PC 결과 통합/시각화**라는 구현 역할에 따라 분리되어 있습니다. 각 폴더의 README는 해당 구성요소가 무엇을 하고 어떻게 동작하는지부터 설명하고, 상세 설정·테스트·규격은 아래에 연결합니다.
 
 ## 한눈에 보는 폴더
 
 ```text
 wifi-csi-project/
 ├── esp32/          CSI 수집: TX / RX 펌웨어
-├── ps/             Zynq PS 기본 수신·전처리·FPGA 제어·TCP
+├── ps/             Zynq PS 수신·전처리·C Ridge 위치·FPGA 제어·TCP
 ├── pl/             FPGA Pose CNN 및 Ridge 원본 RTL
 ├── ml/             Pose/Location 학습·양자화·테스트
 ├── pc/
-│   ├── backend/    CSI 기반 위치 분류·Pose 통합·WebSocket
+│   ├── backend/    PS 위치/Pose 결과 수신·통합·WebSocket
 │   └── frontend/   Three.js 2D 스켈레톤·3D 캐릭터·관리자 UI
 ├── integration/    Vivado IP·XSA 통합 하드웨어 자료
-├── ps_location/    PS C 위치 추론 시험판 (별도)
+├── ps_location/    PS 위치 추론 이전 시험판 보관
 ├── ps_onlysw/      PS SW CNN 비교판 (별도)
 ├── docs/           구조·통신·실행·검증 기록
 └── scripts/        실행 지원 스크립트
@@ -34,12 +34,12 @@ wifi-csi-project/
 | **Ridge FPGA IP** | [`pl/localization/`](../pl/localization/README.md) | Ridge AXI4-Lite RTL·고정소수점 golden TB |
 | **PS USB 전처리** | `ps/src/csi_pipeline.c` | CSI/STATUS/ACK 파서와 RX5 INT8 시간 윈도우 |
 | **PS FPGA 제어** | `ps/src/pose_cnn_rx5_live.c`, `ps/include/` | DDR·AXI LOAD/INFER, CNN Pose 수신 |
-| **PS ↔ PC 전송** | `ps/src/wise_server.c` | TCP 5000/5001 송신·상태 관리 |
+| **PS ↔ PC 전송** | `ps/src/wise_server.c` | TCP 5000 Location/Pose/상태 송신 |
 | **PS 설치** | `ps/petalinux/` | PetaLinux 설치 recipe·Device Tree |
 | **Pose 학습** | [`ml/pose/`](../ml/pose/README.md) | CSV 전처리·Colab 학습·INT8 reference·golden |
 | **Location 학습** | [`ml/localization/`](../ml/localization/README.md) | 955개 특징·11클래스 학습/검증·Portable Ridge export |
 | **PC Backend** | `pc/backend/app/`, `protocol/` | FastAPI·WebSocket·Snapshot·TCP 규격 |
-| **실시간 Location** | `pc/backend/localization/` | CSI 2초 윈도우·Portable Ridge 실행·RX 배치 검사 |
+| **실시간 Location** | `pc/backend/localization/` | PS Ridge와의 parity 테스트·Portable Ridge 모델·RX 배치 검사 |
 | **PC Frontend** | [`pc/frontend/`](../pc/frontend/README.md) | 3D 룸/캐릭터, 2D 관절, 좌우 전환, 관리자/테스트 화면 |
 | **Vivado 통합** | [`integration/`](../integration/README.md) | 기존 CNN/병렬 CNN·Ridge IP 패키지, 별도 XSA |
 | **별도 PS/CPU 실험** | [`ps_location/`](../ps_location/README.md), [`ps_onlysw/`](../ps_onlysw/README.md) | PS 위치 추론 시험판·PS CNN 비교 프로그램 |
