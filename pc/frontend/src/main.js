@@ -1073,10 +1073,15 @@ function animate(now) {
       currentZone = targetZone
       isMoving = false
       character.rotation.y = 0
-      // Sit 애니메이션은 아직 없으므로 기본 서기 애니메이션을 유지.
       refreshIdleAnimation()
       updateLocationUI(currentZone, selectedPointId)
-      updatePostureUI(targetPosture)
+      updatePostureUI(currentSitDecision.sit && currentZone===5 ? 'sitting' : 'standing')
+      // The walk-only SVG must return to an actual neutral frame on arrival.
+      const displayPose=poseTrackingEnabled && currentZone===5 && latestSnapshot
+        ? mirrorPoseSides(selectViewerPose(viewerSettings.jointsMode,
+            sanitizePose(latestSnapshot.pose),viewerSettings.jointsSample,createTestPose),poseSidesFlipped)
+        : mirrorPoseSides(createTestPose('stand'),poseSidesFlipped)
+      renderPose(displayPose,lastMirror,true,poseViewport)
     } else {
       const vx = dx / distance
       const vz = dz / distance
@@ -1085,6 +1090,15 @@ function animate(now) {
       // 모델의 정면(+Z) 기준으로 이동 방향 바라보기.
       character.rotation.y = Math.atan2(vx, vz)
     }
+  }
+  // Only synthesize walking for the 2D panel while the 3D Walk clip
+  // is playing. The real 12 CNN joints/Backend remain unchanged.
+  if (isMoving && character?.visible && viewerSettings.locationMode !== 'center' &&
+      currentAction?.getClip()?.name === 'Walk') {
+    const clip=currentAction.getClip()
+    const phase=2*Math.PI*currentAction.time/Math.max(0.1,clip.duration)
+    const walkPose=mirrorPoseSides(walkingSkeletonPose(phase),poseSidesFlipped)
+    renderPose(walkPose,lastMirror,true,poseViewport)
   }
   // Idle/Walk 이후 한 번만 동일 좌표의 팔·다리 방향을 적용한다.
   // 안전 범위를 벗어난 발 이동은 해당 다리의 IK를 적용하지 않는다.
