@@ -102,6 +102,38 @@ def test_real_rx_confirmation_requires_fresh_verified_layout():
     assert service._confirmed_signature is None
 
 
+
+def test_all_five_live_but_run_snapshot_four_is_not_ready():
+    """TX RUN freezes the active count; five LIVE rows can coexist with 4/5 cycles."""
+    service = BackendService(Settings())
+    status = _status()
+    status['active_count'] = 4
+    link = DummyLink(status)
+    service._link = link
+
+    # Keep the actual CSI contract strict instead of spoofing the fifth RX.
+    assert service._current_rx_signature(link.serial) is None
+    reason = service._rx_readiness_reason(status)
+    assert '4/5' in reason and 'WAIT→RUN' in reason
+    result = service.confirm_rx_layout('test-token')
+    assert not result['ok'] and '4/5' in result['message']
+
+    # Once TX re-enters RUN with all five slots, normal layout confirmation works.
+    status['active_count'] = 5
+    status['generation'] += 1
+    signature = service._current_rx_signature(link.serial)
+    assert signature and len(signature) == 64
+    assert service.confirm_rx_layout(signature)['ok']
+
+
+def test_readiness_reason_distinguishes_disconnected_fifth_rx():
+    status = _status()
+    status['active_count'] = 4
+    status['nodes'][4]['live'] = False
+    reason = BackendService._rx_readiness_reason(status)
+    assert '연결/LIVE/SAVED' not in reason or '5/5' not in reason
+    assert '4/5' in reason
+
 def test_ps_location_shown_only_when_confirmed_running_and_fresh():
     service = BackendService(Settings())
     link = DummyLink(_status())
