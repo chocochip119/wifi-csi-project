@@ -192,6 +192,30 @@ class BackendService:
         self._inference_running = False
 
     @staticmethod
+    def _rx_readiness_reason(status: dict[str, Any] | None) -> str:
+        """Explain why a five-row LIVE table is not a five-slot RUN cycle."""
+        if not status:
+            return "TX STATUS 수신 대기"
+        nodes = status.get("nodes", [])
+        live_saved = sum(bool(n.get("connected") and n.get("live") and n.get("saved"))
+                         for n in nodes)
+        active = int(status.get("active_count") or 0)
+        mode = str(status.get("mode") or "").lower()
+        if mode == "running" and active != 5 and live_saved == 5 and len(nodes) == 5:
+            return (f"TX RUN은 {active}/5 RX로 시작해 수집 슬롯이 고정됐지만 "
+                    "현재 연결/LIVE/SAVED는 5/5입니다. "
+                    "TX를 WAIT→RUN으로 다시 시작해야 합니다. "
+                    "PS 자동 복구를 사용 중이라면 잠시 기다려 주세요.")
+        if mode != "running":
+            return "TX가 WAIT 상태입니다. RX0~RX4 연결/LIVE/SAVED 확인 후 RUN을 시작하세요."
+        if active != 5:
+            return f"TX RUN 수집 슬롯 {active}/5입니다. RX 5대 준비 후 WAIT→RUN 재시작이 필요합니다."
+        if live_saved != 5 or len(nodes) != 5:
+            return (f"현재 연결/LIVE/SAVED RX {live_saved}/5입니다. "
+                    "물리 RX 연결과 STATUS를 확인하세요.")
+        return "RX/무선 설정, 고정 저장 순서 또는 STATUS 수신 시각을 확인하세요."
+
+    @staticmethod
     def _rx_signature(status: dict[str, Any] | None) -> str | None:
         """Stable proof of the complete five-RX identity; ignores changing counters."""
         if not status:
@@ -235,7 +259,7 @@ class BackendService:
             return {"ok": False, "message": "STATUS를 아직 받지 못했습니다."}
         signature = self._current_rx_signature(serial)
         if signature is None:
-            return {"ok": False, "message": "최신 STATUS에서 RX0~RX4 connected/live/saved 및 RUN 상태를 확인할 수 없습니다."}
+            return {"ok": False, "message": self._rx_readiness_reason(serial.get("status"))}
         if not isinstance(rx_signature, str) or rx_signature != signature:
             return {"ok": False, "message": "RX 배치가 바뀌었거나 확인 토큰이 없습니다. 화면에서 다시 대조해 주세요."}
         # Model RX MAC mapping (if trained with one) is enforced by the PS engine.
@@ -371,7 +395,7 @@ class BackendService:
         if link is None or not serial.get("connected"):
             return None, "PS 연결 대기"
         if signature is None:
-            return None, "TX STATUS 확인 대기 (RX 5대 RUN/saved 필요)"
+            return None, self._rx_readiness_reason(serial.get("status"))
         if not confirmed:
             return None, "RX 배치 확인 필요"
         if not running:
@@ -411,6 +435,9 @@ class BackendService:
                     "identity_confirmed": confirmed,
                     "inference_running": running,
                     "rx_active": int(status.get("active_count", 0)) if status else 0,
+                    "rx_live_saved": sum(bool(n.get("connected") and n.get("live") and n.get("saved"))
+                                         for n in (status.get("nodes", []) if status else [])),
+                    "rx_ready_reason": None if signature is not None else self._rx_readiness_reason(status),
                     "rx_total": 5,
                     "rx_nodes": self._rx_nodes(status),
                     "rx_signature": signature,
