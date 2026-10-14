@@ -1,28 +1,16 @@
-# WiSensing PS — RX5 CSI·FPGA 제어·TCP
+# WiSensing PS — RX5 CSI·FPGA 제어·위치 추론·TCP
 
-Zybo Z7-20 / PetaLinux 2020.2의 C 앱입니다. PS는 USB CSI를 파싱·전처리하고 DDR/AXI4-Lite로 FPGA Pose CNN을 제어합니다. 같은 cycle의 원본 CSI는 PC 위치 Backend로 전달합니다. 전체 순서는 [통합 실행](../docs/bringup.md), 바이트 규격은 [PS↔PC TCP](../docs/ps_pc_protocol.md)를 참고하세요.
+PS는 **USB CSI 수집 → CNN용 전처리 → FPGA Pose 추론 + PS C Ridge 위치 추론 → TCP 5000 전송**을 수행하는 기본 실행 프로그램입니다.
 
-## 구현 기능과 처리 흐름
+| 기능 | 주요 모듈 |
+|---|---|
+| CSI 수신·데이터 검증 | `src/csi_pipeline.c` |
+| FPGA 12관절 Pose 제어 | `src/pose_cnn_rx5_live.c` |
+| PS Location 구역 분류 | `src/loc_ridge.c` + `models/loc_ridge_rx5.bin` |
+| 단일 TCP 5000 송신 | `src/wise_server.c` |
+| PetaLinux 서비스 배포 | `petalinux/install_app.sh`, `petalinux/AUTOSTART.md` |
 
-PS(Processing System)는 **CSI 수집 장치와 FPGA CNN, PC 프로그램 사이를 연결하는 실행 프로그램**입니다.
-
-| 단계 | 담당 기능 | 주요 코드 |
-|---|---|---|
-| 1. 수신 | TX의 USB CDC ACM binary cycle, RX별 CSI/STATUS/ACK 검사 | `src/csi_pipeline.c` |
-| 2. 전처리 | RX5 CSI를 CNN용 INT8 `[15,128,10]` 윈도우로 변환 | `src/csi_pipeline.c` |
-| 3. FPGA 제어 | DDR 입력·가중치 주소, AXI4-Lite LOAD/INFER, INT8 24개 Pose 결과 수신 | `src/pose_cnn_rx5_live.c`, `include/pose_cnn_regs.h` |
-| 4. PC 전송 | 원본 CSI/STATUS/ACK는 TCP 5000, Pose는 TCP 5001로 송신 | `src/wise_server.c` |
-| 5. 보드 실행 | PetaLinux recipe로 C 앱 설치·실행, DDR 예약·USB Host 설정 | `petalinux/` |
-
-```text
-ESP32 TX → USB CDC ACM → PS 파서·CSI 윈도우
-                                  ├→ DDR/AXI → FPGA CNN → 12관절 Pose
-                                  └→ 원본 CSI/STATUS
-                                             ↓
-                                 TCP 5000 / 5001 → PC
-```
-
-이 폴더는 **기본 PS 앱(위치 추론은 PC)**입니다. 위치 계산을 PS로 이전한 별도 경로는 [`ps_location/`](../ps_location/README.md), Pose CNN을 PS C로 처리하는 비교판은 [`ps_onlysw/`](../ps_onlysw/README.md)에 있습니다.
+Zybo Z7-20 / PetaLinux 2020.2의 C 앱입니다. PS는 USB CSI를 파싱·전처리하고 DDR/AXI4-Lite로 FPGA Pose CNN을 제어합니다. 같은 cycle로 위치(Ridge)도 PS에서 계산하고, 위치·Pose·STATUS를 TCP 5000 하나로 PC에 보냅니다. 전체 순서는 [통합 실행](../docs/bringup.md), 바이트 규격은 [PS↔PC TCP](../docs/ps_pc_protocol.md)를 참고하세요.
 
 ## 파일 안내
 
@@ -30,7 +18,10 @@ ESP32 TX → USB CDC ACM → PS 파서·CSI 윈도우
 |---|---|
 | [src/pose_cnn_rx5_live.c](src/pose_cnn_rx5_live.c) | USB 수신, TX 명령·watchdog, LOAD/INFER, Pose 출력 |
 | [src/csi_pipeline.c](src/csi_pipeline.c) / [include/csi_pipeline.h](include/csi_pipeline.h) | CSI 파서, INT8 입력 윈도우 |
-| [src/wise_server.c](src/wise_server.c) / [include/wise_server.h](include/wise_server.h) | TCP 5000/5001, 포트별 송신 스레드·유한 큐 |
+| [src/wise_server.c](src/wise_server.c) / [include/wise_server.h](include/wise_server.h) | TCP 5000 단일 포트, 송신 스레드·유한 큐 |
+| [src/loc_ridge.c](src/loc_ridge.c) / [include/loc_ridge.h](include/loc_ridge.h) | 위치 엔진: cycle 검증·I/Q 진폭·2초 창·평균·표준화·Ridge (PC `location_live.py`와 동일 규칙) |
+| [models/loc_ridge_rx5.bin](models/loc_ridge_rx5.bin) | 위치 모델 (WLOC v1, CRC32). [tools/export_loc_model.py](tools/export_loc_model.py)로 PC Portable Ridge에서 생성 |
+| [tests/loc_ridge_replay.c](tests/loc_ridge_replay.c) | 위치 엔진 호스트 replay (parity 테스트용) |
 | [include/pose_cnn_regs.h](include/pose_cnn_regs.h) | CSR·DDR 주소 |
 | [include/pose_cnn_lock.h](include/pose_cnn_lock.h) | 두 앱의 FPGA/DDR 동시 접근 방지 |
 | [src/pose_cnn_rx5_board_test.c](src/pose_cnn_rx5_board_test.c) | 기존 시험 scale을 사용하는 고정 입력 검증 앱 |
@@ -50,7 +41,8 @@ ESP32 TX → USB CDC ACM → PS 파서·CSI 윈도우
 | CSR | `0x43C00000` |
 | 가중치 / 입력 / 출력 DDR | `0x3F000000` / `0x3F100000` / `0x3F200000` |
 | 예약 메모리 | `0x3F000000`부터 16MiB, `no-map` |
-| TCP | 5000: CSI/STATUS/ACK, 5001: Pose; PS 서버·PC 클라이언트 |
+| TCP | 5000: Location/Pose/STATUS/ACK (+ `WISE_FORWARD_CSI=1`이면 원본 CSI); PS 서버·PC 클라이언트 |
+| 위치 모델 | `/usr/share/pose-cnn-rx5/loc_ridge_rx5.bin` (recipe가 설치) |
 
 주소·Device Tree·레지스터를 실제 하드웨어와 맞춰야 합니다. 저장소의 [기존 XSA](../integration/README.md)는 내부 bitstream을 포함하지만 최신 RTL로 재생성한 배포 결과가 아닙니다. BOOT.BIN/Linux 이미지는 별도로 빌드합니다. CSR 상세와 CLEAR 제한은 [인터페이스](../docs/interface.md)에 있습니다.
 
@@ -92,7 +84,30 @@ pose_cnn_rx5_live TTY INPUT_SCALE [MAX_WINDOWS] [BLOB] [DUMP_BIN]
 pose_cnn_rx5_live /dev/ttyACM0 <encoder.input_scale> 0 <최종_weights_5rx.bin>
 ```
 
-`MAX_WINDOWS=0`은 연속 실행입니다. `DUMP_BIN`은 입력 윈도우이며 출력 Pose가 아닙니다. 10윈도우는 192,000 bytes, 100윈도우는 1,920,000 bytes입니다. 좌표는 로그의 `POSE_INT8`, `POSE_FLOAT`와 TCP 5001로 전달합니다. 예전 시험의 입력 scale `0.02`를 최종 학습 모델에 그대로 적용하지 마세요.
+`MAX_WINDOWS=0`은 연속 실행입니다. `DUMP_BIN`은 입력 윈도우이며 출력 Pose가 아닙니다. 10윈도우는 192,000 bytes, 100윈도우는 1,920,000 bytes입니다. 좌표는 로그의 `POSE_INT8`, `POSE_FLOAT`와 TCP 5000으로 전달합니다. 위치는 로그의 `LOC window=... class=...`와 TCP 5000(type 5)으로 전달합니다. 예전 시험의 입력 scale `0.02`를 최종 학습 모델에 그대로 적용하지 마세요.
+
+환경 변수:
+
+| 변수 | 기본값 | 내용 |
+|---|---|---|
+| `WISE_TCP_PORT` | 5000 | PC가 접속할 단일 포트 |
+| `WISE_TCP_BIND` | 0.0.0.0 | 바인딩 IPv4 |
+| `WISE_LOC_MODEL` | `/usr/share/pose-cnn-rx5/loc_ridge_rx5.bin` | 위치 모델. `off`면 위치 추론 없이 Pose만 실행 |
+| `WISE_LOC_STRIDE_S` | 0.5 | 위치 결과 간격(초) |
+| `WISE_FORWARD_CSI` | 꺼짐 | `1`이면 원본 CSI(type 1)도 전송. 재학습 데이터 수집용이며 대역폭이 커집니다 |
+
+위치 모델 파일을 읽지 못하면 앱이 시작되지 않습니다(`WISE_LOC_MODEL=off`로 Pose만 실행 가능). 종료 시 `LOC STATS`에 예측 수·유효/무효 cycle·짧은 창·끊김 횟수가 출력됩니다.
+
+### 위치 모델 갱신
+
+PC에서 새 Portable Ridge(`.npz`+`.json`)를 만든 뒤 저장소 루트에서 변환하고, recipe를 다시 설치하거나 파일만 보드에 복사합니다.
+
+```bash
+python ps/tools/export_loc_model.py pc/backend/localization/models/localization/ridge_portable.npz ps/models/loc_ridge_rx5.bin
+scp ps/models/loc_ridge_rx5.bin root@<ZYBO_IP>:/usr/share/pose-cnn-rx5/
+```
+
+C 엔진과 PC Python 엔진의 일치는 `python -m pytest pc/backend/tests/test_ps_location_parity.py`로 확인합니다(호스트 GCC 필요).
 
 고정 입력 검사는 동일 blob·입력·기대 출력과 해당 하드웨어를 준비한 뒤 사용합니다.
 
