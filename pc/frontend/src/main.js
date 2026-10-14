@@ -10,7 +10,7 @@ import { armMaxLiftDegForZone } from './armZoneLimit.js'
 import { StableLegPosture } from './stableLegPosture.js'
 import { isCenterLocation, walkingSkeletonPose } from './viewerMotionPolicy.js'
 import { shouldHoldSeatedPose } from './singleLegLiftGate.js'
-import {isNoPerson, motionPointId, sitDetectorPoint, motionArmLiftLimit} from './presentationMode.js'
+import {isNoPerson, motionPointId, motionArmLiftLimit} from './presentationMode.js'
 import {legLiftMaxDegForLocation} from './legLiftPolicy.js'
 import {MotionAbsenceTimer} from './motionAbsenceTimer.js'
 // WiSensing viewer presentation 2-mode: keyboard 3 / center motion
@@ -576,7 +576,8 @@ function handleSnapshot(snapshot, source = 'backend') {
   if (poseTrackingEnabled && viewerSettings.jointsMode === 'sample') {
     const sample=viewerSettings.jointsSample
     actionState={action:sample==='squat'?'squat':sample==='legLift'?'lift':'stand',
-      strength:sample==='squat'?1:sample==='legLift'?0.9:0}
+      strength:sample==='squat'?1:sample==='legLift'?0.9:0,
+      side:sample==='legLift'?'L':null}
   }
   activeLegAction=actionState.action
   activeLegStrength=actionState.strength
@@ -633,6 +634,7 @@ function handleSnapshot(snapshot, source = 'backend') {
     updatePostureUI('unknown')
     if (character) character.visible = true
     isMoving = false
+    if (character) character.rotation.y=0
     poseTrackingEnabled = false
     disableRig()
   }
@@ -1081,7 +1083,7 @@ function animate(now) {
         ? mirrorPoseSides(selectViewerPose(viewerSettings.jointsMode,
             sanitizePose(latestSnapshot.pose),viewerSettings.jointsSample,createTestPose),poseSidesFlipped)
         : mirrorPoseSides(createTestPose('stand'),poseSidesFlipped)
-      renderPose(displayPose,lastMirror,true,poseViewport)
+      renderPose(displayPose?.valid?displayPose:mirrorPoseSides(createTestPose('stand'),poseSidesFlipped),lastMirror,true,poseViewport)
     } else {
       const vx = dx / distance
       const vz = dz / distance
