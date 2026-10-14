@@ -12,6 +12,14 @@ PS는 **USB CSI 수집 → CNN용 전처리 → FPGA Pose 추론 + PS C Ridge �
 
 Zybo Z7-20 / PetaLinux 2020.2의 C 앱입니다. PS는 USB CSI를 파싱·전처리하고 DDR/AXI4-Lite로 FPGA Pose CNN을 제어합니다. 같은 cycle로 위치(Ridge)도 PS에서 계산하고, 위치·Pose·STATUS를 TCP 5000 하나로 PC에 보냅니다. 전체 순서는 [통합 실행](../docs/bringup.md), 바이트 규격은 [PS↔PC TCP](../docs/ps_pc_protocol.md)를 참고하세요.
 
+## 늦게 연결된 RX 복구
+
+ESP32 TX는 RUN을 시작한 순간의 수집 RX 목록을 고정합니다. 따라서 4대만 연결된 상태에서 RUN을 시작하고 나중에 다섯 번째 RX가 살아나면 **STATUS의 연결/LIVE/SAVED 5/5와 실제 RUN 수집 4/5가 동시에 보일 수 있습니다.**
+
+PS 통합 앱은 STATUS의 각 RX 슬롯·저장 순서·CONNECTED/LIVE/SAVED 플래그를 검사합니다. 실제 5대 모두 준비됐는데 RUN이 4대 이하로 고정된 경우, **WAIT → RUN을 자동 재시작**하여 TX의 수집 대상 RX를 5대로 갱신합니다. 복구는 최소 10초 간격으로 제한되며, 로그에는 `RX5 RECOVERY`가 출력됩니다. 5대 전체가 준비되기 전에는 5대인 것처럼 데이터나 수집 개수를 임의 보정하지 않습니다.
+
+호스트 단위 검증: `cc -std=c11 -Wall -Wextra -Werror ps/tests/test_tx_rx_status.c -o /tmp/test_rx_status && /tmp/test_rx_status`.
+
 ## 파일 안내
 
 | 경로 | 역할 |
