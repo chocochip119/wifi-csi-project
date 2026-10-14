@@ -7,6 +7,7 @@ SRC_URI = "file://pose_cnn_rx5_board_test.c \
            file://pose_cnn_lock.h \
            file://csi_pipeline.c \
            file://csi_pipeline.h \
+           file://tx_rx_status.h \
            file://wise_server.c \
            file://wise_server.h \
            file://loc_ridge.c \
