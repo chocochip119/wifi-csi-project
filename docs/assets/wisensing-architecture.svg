@@ -1,1 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380"><rect width="1200" height="380" rx="16" fill="#f3f8fb"/><g font-family="Arial,sans-serif" font-size="23" font-weight="bold" text-anchor="middle"><rect x="35" y="120" width="205" height="112" rx="15" fill="#205275"/><text x="137" y="170" fill="white">Wi-Fi TX/RX</text><text x="137" y="201" fill="#c9e8f7" font-size="16">CSI acquisition</text><rect x="300" y="120" width="208" height="112" rx="15" fill="#246c82"/><text x="404" y="170" fill="white">Zynq PS</text><text x="404" y="201" fill="#d2eef3" font-size="16">USB / preprocessing</text><rect x="570" y="30" width="245" height="112" rx="15" fill="#41559b"/><text x="692" y="77" fill="white">FPGA PL</text><text x="692" y="107" fill="#dce4ff" font-size="16">CNN → 12 joints</text><rect x="570" y="222" width="245" height="112" rx="15" fill="#32816c"/><text x="692" y="267" fill="white">PC Backend</text><text x="692" y="300" fill="#e0fff2" font-size="16">Ridge → 9 zones</text><rect x="903" y="120" width="260" height="112" rx="15" fill="#26395d"/><text x="1033" y="169" fill="white">Visualization</text><text x="1033" y="200" fill="#c6e1f1" font-size="16">Motion + Location</text></g><g fill="none" stroke="#7894a8" stroke-width="5" stroke-linecap="round"><path d="M240 176H300"/><path d="M508 176H540V86H570"/><path d="M508 176H540V278H570"/><path d="M815 86H855V155H903"/><path d="M815 278H855V196H903"/></g><g fill="#7894a8"><path d="M294 168l13 8-13 8M564 78l13 8-13 8M564 270l13 8-13 8M897 147l13 8-13 8M897 188l13 8-13 8"/></g><text x="34" y="32" font-family="Arial,sans-serif" font-size="16" fill="#466174">Mainline architecture · location on PC (PS location is a separate trial)</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380" role="img" aria-label="WiSensing: Wi-Fi TX/RX에서 Zynq PS로 CSI를 수집하고, PS C Ridge 위치 추론과 FPGA CNN 자세 추론을 실행한 뒤 TCP 5000으로 PC Backend 및 Frontend에 전송">
+<rect width="1200" height="380" rx="16" fill="#f3f8fb"/>
+<g font-family="Arial,sans-serif" text-anchor="middle" font-weight="bold">
+<rect x="30" y="118" width="194" height="115" rx="14" fill="#205275"/>
+<text x="127" y="166" font-size="22" fill="white">Wi-Fi TX/RX</text>
+<text x="127" y="195" font-size="16" fill="#c9e8f7">CSI acquisition</text>
+<rect x="276" y="118" width="256" height="115" rx="14" fill="#246c82"/>
+<text x="404" y="157" font-size="22" fill="white">Zynq PS</text>
+<text x="404" y="183" font-size="15" fill="#d2eef3">CSI preprocessing</text>
+<text x="404" y="207" font-size="15" fill="#d2eef3">C Ridge: 9 zones + state</text>
+<rect x="582" y="25" width="242" height="109" rx="14" fill="#41559b"/>
+<text x="703" y="70" font-size="22" fill="white">FPGA PL</text>
+<text x="703" y="102" font-size="16" fill="#dce4ff">CNN: 12 joints</text>
+<rect x="582" y="209" width="242" height="116" rx="14" fill="#32816c"/>
+<text x="703" y="257" font-size="22" fill="white">PC Backend</text>
+<text x="703" y="286" font-size="15" fill="#e0fff2">Location + Pose state</text>
+<rect x="913" y="118" width="245" height="115" rx="14" fill="#26395d"/>
+<text x="1035" y="164" font-size="22" fill="white">Visualization</text>
+<text x="1035" y="194" font-size="16" fill="#c6e1f1">2D skeleton + 3D</text>
+</g>
+<g fill="none" stroke="#7894a8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+<path d="M224 175 H276"/>
+<path d="M532 151 H552 V80 H582"/>
+<path d="M582 102 H558 V133 H532"/>
+<path d="M532 195 H558 V267 H582"/>
+<path d="M824 267 H875 V175 H913"/>
+</g>
+<g fill="#7894a8">
+<path d="M270 167 l13 8 -13 8"/>
+<path d="M576 72 l13 8 -13 8"/>
+<path d="M538 125 l-13 8 13 8"/>
+<path d="M576 259 l13 8 -13 8"/>
+<path d="M907 167 l13 8 -13 8"/>
+</g>
+<g font-family="Arial,sans-serif" font-size="14" fill="#466174">
+<text x="33" y="31">Main execution: PS C Ridge location + FPGA Pose CNN</text>
+<text x="545" y="342">TCP 5000: Location / Pose / STATUS / ACK</text>
+</g>
+</svg>
