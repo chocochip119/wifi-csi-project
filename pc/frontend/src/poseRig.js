@@ -209,12 +209,13 @@ export class PoseRigController {
     const savedSide=options.stableLiftSide
     const savedStrength=Number.isFinite(options.stableLiftStrength)
       ? clamp(options.stableLiftStrength,0,1) : 0
+    const stableOverride=Number.isFinite(options.stableLiftStrength)
     const stableLift=savedStrength>0.01 && (savedSide==='L' || savedSide==='R')
     const guardedLift=this.legLiftGate.update({
       liftL:this.legMaxLiftDeg>0
-        ? stableLift ? (savedSide==='L'?savedStrength:0) : rawSolution.liftL : 0,
+        ? stableOverride ? (stableLift && savedSide==='L'?savedStrength:0) : rawSolution.liftL : 0,
       liftR:this.legMaxLiftDeg>0
-        ? stableLift ? (savedSide==='R'?savedStrength:0) : rawSolution.liftR : 0,
+        ? stableOverride ? (stableLift && savedSide==='R'?savedStrength:0) : rawSolution.liftR : 0,
       seated:squatTarget>0.075, atMs:rigNow, frameKey
     })
     const drivenSolution={...solution,squat:squatTarget,
