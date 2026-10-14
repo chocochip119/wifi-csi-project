@@ -97,7 +97,7 @@ run_service() {
             echo "Waiting: configure WISE_INPUT_SCALE=auto (or validated numeric value)"
         elif [ ! -r "$WISE_WEIGHTS" ]; then
             echo "Waiting: Pose weights not readable: $WISE_WEIGHTS"
-        elif [ ! -r "$WISE_LOC_MODEL" ]; then
+        elif [ "$WISE_LOC_MODEL" != "off" ] && [ ! -r "$WISE_LOC_MODEL" ]; then
             echo "Waiting: location Ridge model not readable: $WISE_LOC_MODEL"
         elif [ ! -c "$WISE_TTY" ]; then
             echo "Waiting: USB coordinator not connected: $WISE_TTY"
