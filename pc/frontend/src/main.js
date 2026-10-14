@@ -375,6 +375,8 @@ let armLocationZone = null // Live location zone; unknown != zone 5.
 let legLiftMaxDeg = 0
 let poseTrackingEnabled = false
 let activeLegAction = 'stand'
+let activeLegStrength = 0
+let activeLiftSide = null
 let lastMeaningfulArmAt = -Infinity
 // Fixed P05 presentation position; unrelated to the position model output.
 function pinMotionCharacter() {
@@ -481,16 +483,8 @@ function updateMotionRig(pose, mirrored) {
     return
   }
   const shouldSit = currentSitDecision.sit === true
-  // Sit has priority over Walk: when P05/P10 begins sitting, stop navigation
-  // immediately at zone 5 rather than waiting for the walk animation to finish.
-  if (shouldSit && isMoving && character?.visible && zonePositions[5]) {
-    isMoving = false
-    currentZone = targetZone = 5
-    character.position.x = zonePositions[5].x
-    character.position.z = zonePositions[5].z
-    character.rotation.y = 0
-    playAnimation('Idle_Neutral', 0.12)
-  }
+  // Finish walking to the actual destination before applying seated IK.
+  // A transient P10 label must never teleport the avatar.
   if (isMoving || !character?.visible) {
     if (poseRig?.active) poseRig.clear()
     refreshIdleAnimation()
@@ -513,13 +507,16 @@ function updateMotionRig(pose, mirrored) {
   const arms = Boolean(pose?.valid && viewerSettings.liveArms &&
     performance.now() - lastMeaningfulArmAt < 650)
   // Stable bilateral squat or unilateral lift only; ignore transient noisy knees.
-  const legs = Boolean(angles && viewerSettings.liveLegs && (shouldSit || activeLegAction === 'lift'))
+  const legs = Boolean(angles && viewerSettings.liveLegs && (shouldSit || activeLegAction === 'lift' ||
+    (poseRig?.liftAmount ?? 0)>0.01 || (poseRig?.squatAmount ?? 0)>0.01))
   // squatTarget=0 explicitly forbids sitting in every zone other than P05/P10;
   // nonzero force is applied to 3D only, AFTER ordinary IK smoothing.
   if (arms || legs) poseRig?.setPose(rigPose, mirrored, {
     arms, legs, armMaxLiftDeg: motionArmLiftLimit(viewerSettings.locationMode, armLocationZone, armMaxLiftDegForZone),
     legMaxLiftDeg: legLiftMaxDeg,
-    squatTarget: shouldSit ? currentSitDecision.strength : 0
+    squatTarget: shouldSit ? currentSitDecision.strength : 0,
+    stableLiftSide: activeLiftSide,
+    stableLiftStrength: activeLegAction === 'lift' ? activeLegStrength : 0
   })
   else if (poseRig?.active) poseRig.clear()
   refreshIdleAnimation()
@@ -582,6 +579,8 @@ function handleSnapshot(snapshot, source = 'backend') {
       strength:sample==='squat'?1:sample==='legLift'?0.9:0}
   }
   activeLegAction=actionState.action
+  activeLegStrength=actionState.strength
+  activeLiftSide=actionState.side || null
   currentSitDecision={sit:activeLegAction==='squat',
     strength:activeLegAction==='squat'?actionState.strength:0,
     source:activeLegAction==='squat'?'bilateral-joints':'standing'}
