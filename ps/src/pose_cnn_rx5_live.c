@@ -6,6 +6,7 @@
 #include "wise_server.h"
 #include "pose_cnn_regs.h"
 #include "pose_cnn_lock.h"
+#include "tx_rx_status.h"
 
 #include <arpa/inet.h>
 #include <errno.h>
@@ -131,14 +132,23 @@ typedef struct {
     loc_engine_t *loc;
     uint64_t loc_last_ns;
     uint64_t locations;
+    bool rx5_restart_ready;
+    uint8_t rx5_previous_active;
+    uint64_t rx5_status_ms;
 } live_context_t;
 
 static uint64_t monotonic_ns(void);
+static uint64_t monotonic_ms(void);
 
 static void on_usb_frame(uint8_t type, uint32_t seq,
     const uint8_t *payload, size_t length, void *user)
 {
     live_context_t *context = user;
+    if (type == 1u) { /* TX STATUS: RX flags can change after RUN starts. */
+        context->rx5_restart_ready = tx_rx5_needs_run_restart(payload, length);
+        context->rx5_previous_active = length >= 6u ? payload[5] : 0u;
+        context->rx5_status_ms = monotonic_ms();
+    }
     if (wise_server_usb(context->tcp, type, seq, payload, length) < 0)
         fprintf(stderr, "TCP rejected malformed USB payload type=%u length=%zu\n", type, length);
     if (context->loc != NULL) {
@@ -1136,6 +1146,7 @@ int main(int argc, char **argv)
     uint64_t last_cycles = 0u;
     uint64_t last_status_frames = 0u;
     uint64_t last_ack_frames = 0u;
+    uint64_t last_rx5_recovery_ms = 0u;
     unsigned watchdog_restarts = 0u;
     int exit_code = EXIT_FAILURE;
     const char *udp_target = getenv("CSI_UDP_TARGET");
@@ -1358,6 +1369,30 @@ int main(int argc, char **argv)
             &stats,
             &last_status_frames,
             &last_ack_frames);
+        /* TX freezes running_node_count at RUN start. If the fifth RX
+         * connected later, its STATUS row can say LIVE but the actual CSI
+         * cycles still contain only four. Restart RUN only after the last
+         * fresh STATUS proves all five connected/live/saved and uniquely
+         * mapped. Do not bypass the five-RX model's input requirement. */
+        now_ms = monotonic_ms();
+        if (context.rx5_restart_ready &&
+            now_ms >= context.rx5_status_ms &&
+            now_ms - context.rx5_status_ms <= 3000u &&
+            (last_rx5_recovery_ms == 0u ||
+             now_ms - last_rx5_recovery_ms >= 10000u)) {
+            const unsigned old_count = context.rx5_previous_active;
+            context.rx5_restart_ready = false;
+            last_rx5_recovery_ms = now_ms;
+            fprintf(stderr, "RX5 RECOVERY: TX RUN has %u/5 frozen active slots "
+                "but 5/5 connected/live/saved; restarting WAIT -> RUN\n", old_count);
+            csi_pipeline_resync(pipeline);
+            if (start_coordinator(descriptor) != 0) {
+                fprintf(stderr, "RX5 recovery command failed: %s\n", strerror(errno));
+                goto cleanup;
+            }
+            last_progress_ms = monotonic_ms();
+            continue;
+        }
         if (stats.cycles_emitted != last_cycles) {
             last_cycles = stats.cycles_emitted;
             last_progress_ms = monotonic_ms();
