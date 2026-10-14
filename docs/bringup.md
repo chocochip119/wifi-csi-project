@@ -1,6 +1,6 @@
 # RX5 통합 실행 순서
 
-실제 데이터 경로는 **ESP32 수집 → USB → PS → FPGA Pose / PC 위치 → Backend API**입니다. PC만으로 API 연결을 확인하는 fake 모드와 실제 보드 실행을 구분합니다.
+실제 데이터 경로는 **ESP32 수집 → USB → PS C Ridge 위치 + FPGA Pose → Backend API**입니다. PC만으로 API 연결을 확인하는 fake 모드와 실제 보드 실행을 구분합니다.
 
 ## 1. 모델과 하드웨어 준비
 
@@ -12,7 +12,7 @@
 
 ## 2. PS 앱 배치와 실행
 
-[PS README](../ps/README.md)를 따라 앱을 PetaLinux에 설치·빌드합니다. 기본 설치는 source-only이며 모델 파일은 실행 전에 별도로 배치합니다. 보드에서 TX 네이티브 USB/OTG를 연결하고 `/dev/ttyACM0` 등 실제 장치 번호를 확인합니다. 다른 USB 수집 앱과 PS live가 같은 장치를 동시에 사용하지 않도록 합니다.
+[PS README](../ps/README.md)를 따라 앱을 PetaLinux에 설치·빌드합니다. PS용 위치 모델 `loc_ridge_rx5.bin`은 PetaLinux recipe에 포함되며, FPGA Pose 가중치 `weights_5rx.bin`은 별도로 배치합니다. 보드에서 TX 네이티브 USB/OTG를 연결하고 `/dev/ttyACM0` 등 실제 장치 번호를 확인합니다. 다른 USB 수집 앱과 PS live가 같은 장치를 동시에 사용하지 않도록 합니다.
 
 최종 가중치의 metadata JSON에서 `activation_scales["encoder.input"]`을 확인하고 그 값을 PS 인자로 사용합니다. 실행 형식은 다음과 같습니다.
 
@@ -21,11 +21,11 @@ pose_cnn_rx5_live TTY INPUT_SCALE [MAX_WINDOWS] [BLOB] [DUMP_BIN]
 pose_cnn_rx5_live /dev/ttyACM0 <encoder.input_scale> 0 <최종_weights_5rx.bin>
 ```
 
-`MAX_WINDOWS=0`은 연속 실행입니다. PS는 FPGA에 LOAD 뒤 INFER하고, TCP 5000(CSI/STATUS/ACK) 및 5001(Pose)의 서버를 엽니다. 3초마다 TX STATUS를 요청합니다. 로그의 RX 수·LOAD/CFG_OK·POSE_INT8/POSE_FLOAT와 PC 네트워크 연결을 확인하세요. 현재 PS가 TX를 제어하며 PC의 5000/5001 연결로 TX 명령을 보내는 기능은 없습니다.
+`MAX_WINDOWS=0`은 연속 실행입니다. PS는 FPGA에 LOAD 뒤 INFER하고, TCP 5000에서 PS Location(type 5)·FPGA Pose(type 2)·STATUS·ACK를 함께 제공합니다. 3초마다 TX STATUS를 요청합니다. 로그의 RX 수·LOAD/CFG_OK·POSE_INT8/POSE_FLOAT와 PC 네트워크 연결을 확인하세요. 현재 PS가 TX를 제어하며 PC의 5000 연결로 TX 명령을 보내는 기능은 없습니다.
 
 ## 3. PC Backend
 
-PC와 PS가 통신 가능한 IPv4 주소를 사용하고 TCP 5000/5001 방화벽 설정을 확인합니다. 아래 `192.168.10.2`는 기본 예시이므로 실제 PS IP로 바꿉니다. 저장소 루트에서:
+PC와 PS가 통신 가능한 IPv4 주소를 사용하고 TCP 5000 방화벽 설정을 확인합니다. 아래 `192.168.10.2`는 기본 예시이므로 실제 PS IP로 바꿉니다. 저장소 루트에서:
 
 ```bash
 python -m venv .venv
@@ -36,7 +36,7 @@ python -m pip install -r pc/backend/requirements.txt
 python pc/backend/run_backend.py --ps-host 192.168.10.2
 ```
 
-위치 모델 NPZ/JSON은 Backend의 기본 경로에 포함됩니다. 학습 RX MAC은 저장되어 있지 않으므로 STATUS의 RX index↔MAC을 실제 배치/학습 순서와 직접 비교해야 합니다.
+위치 추론은 PS의 `loc_ridge_rx5.bin`을 사용하며, Backend의 NPZ/JSON은 기준 모델 및 테스트용으로 보관됩니다. 학습 RX MAC은 저장되어 있지 않으므로 STATUS의 RX index↔MAC을 실제 배치/학습 순서와 직접 비교해야 합니다.
 
 ## 4. RX 확인과 위치 추론 시작
 
@@ -75,9 +75,9 @@ python pc/backend/run_backend.py --fake
 |---|---|
 | PS USB 수신 없음 | TTY 번호, TX USB 연결/전원, 다른 장치 점유, RX live 상태 |
 | LOAD/CFG_OK 실패 | blob v2/RX5 크기, 새 bitstream, DDR/CSR/Device Tree |
-| PC 연결 불가 | PS IP, live 앱 실행, 5000/5001 서버·방화벽 |
+| PC 연결 불가 | PS IP, live 앱 실행, TCP 5000 서버·방화벽 |
 | 위치 준비 안 됨 | STATUS, RX0..4/384 bytes, index↔MAC 확인, 다음 STATUS |
-| Pose만 unavailable | LOAD/INFER·scale·5001 연결, 최근 Pose 시각 |
+| Pose만 unavailable | LOAD/INFER·scale·TCP 5000 연결, 최근 Pose 시각 |
 | BIT-EXACT 불일치 | 같은 모델/입력/scale·새 반올림 golden·재빌드한 하드웨어 |
 
 테스트/장비 검증 상태와 남은 ESP32 trigger 정합·Pose 윈도우 연속성은 [점검 기록](reviews/2026-10-07-pc-integration.md)을 참고하세요.
