@@ -37,7 +37,7 @@
 | Python 환경 없음 | 저장소 루트 `.venv` 생성 및 `pc/backend/requirements.txt` 설치 |
 | `npm` 없음 | Node.js LTS 설치, Windows 환경변수 적용 |
 | 캐릭터 미표시 | Git으로 관리되지 않는 `pc/frontend/public/models/` 및 연관 텍스처 유지 |
-| Zybo 연결 없음 | PS 앱, PC↔Zybo Ethernet, TCP 5000/5001 확인 |
+| Zybo 연결 없음 | PS 앱, PC↔Zybo Ethernet, TCP 5000 단일 포트 확인 |
 | 팝업 안 뜸 | 해당 사이트 팝업 허용 |
 | 종료 버튼 없음 | 직접 웹 개발 서버로 접속한 상태. `WiSensing_Start.bat`에서 시작해야 사용 가능 |
 | 자동 시작 실패 | `.wisensing_runtime/backend.log`, `frontend.log`, `npm-install.log` 확인 |
