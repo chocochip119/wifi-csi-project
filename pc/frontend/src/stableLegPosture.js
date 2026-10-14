@@ -34,6 +34,7 @@ export class StableLegPosture {
   reset() {
     this.action='stand'
     this.strength=0
+    this.side=null
     this.candidate=null
     this.votes=0
     this.switchedAt=-Infinity
@@ -41,7 +42,7 @@ export class StableLegPosture {
     this.lastKey=null
   }
   get state() {
-    return {action:this.action,strength:this.action==='stand'?0:this.strength}
+    return {action:this.action,strength:this.action==='stand'?0:this.strength,side:this.side}
   }
   update(pose,angles,pointId='',atMs=0) {
     const key=poseKey(pose)
@@ -74,6 +75,7 @@ export class StableLegPosture {
     if (this.votes>=required && age>=this.minHoldMs) {
       this.action=observed.action
       this.strength=observed.strength
+      this.side=observed.action==='lift'?observed.geometry?.raisedSide:null
       this.switchedAt=atMs
       this.candidate=null
       this.votes=0
