@@ -2,6 +2,7 @@
 #define _POSIX_C_SOURCE 200809L
 
 #include "csi_pipeline.h"
+#include "loc_ridge.h"
 #include "wise_server.h"
 #include "pose_cnn_regs.h"
 #include "pose_cnn_lock.h"
@@ -34,6 +35,8 @@
 #define OUTPUT_PHYS                0x3F200000u
 
 #define DEFAULT_BLOB_PATH          "/usr/share/pose-cnn-rx5/blob_rx5_test.bin"
+#define DEFAULT_LOC_MODEL_PATH     "/usr/share/pose-cnn-rx5/loc_ridge_rx5.bin"
+#define DEFAULT_TCP_PORT           5000u
 #define READ_CHUNK                 16384u
 #define POLL_INTERVAL_MS           250
 #define STREAM_STALL_MS            5000u
@@ -66,6 +69,7 @@ typedef struct {
     phys_mapping_t input_map;
     phys_mapping_t output_map;
     volatile uint32_t *csr;
+    float input_scale;
     float output_scale;
     uint32_t scale_bits;
 } cnn_engine_t;
@@ -124,7 +128,12 @@ typedef struct {
     cnn_engine_t *engine;
     udp_sender_t udp;
     wise_server_t *tcp;
+    loc_engine_t *loc;
+    uint64_t loc_last_ns;
+    uint64_t locations;
 } live_context_t;
+
+static uint64_t monotonic_ns(void);
 
 static void on_usb_frame(uint8_t type, uint32_t seq,
     const uint8_t *payload, size_t length, void *user)
@@ -132,6 +141,29 @@ static void on_usb_frame(uint8_t type, uint32_t seq,
     live_context_t *context = user;
     if (wise_server_usb(context->tcp, type, seq, payload, length) < 0)
         fprintf(stderr, "TCP rejected malformed USB payload type=%u length=%zu\n", type, length);
+    if (context->loc != NULL) {
+        /* The engine requires strictly increasing frame times. */
+        uint64_t now_ns = monotonic_ns();
+        if (now_ns <= context->loc_last_ns) now_ns = context->loc_last_ns + 1u;
+        context->loc_last_ns = now_ns;
+        loc_engine_usb(context->loc, type, payload, length, now_ns);
+    }
+}
+
+static const char *const LOC_CLASS_NAMES[] = {
+    "p01", "p02", "p03", "p04", "p05", "p06", "p07", "p08", "p09", "p10", "empty"
+};
+
+static void on_location(const loc_result_t *result, void *user)
+{
+    live_context_t *context = user;
+    context->locations++;
+    (void)wise_server_location(context->tcp, result);
+    printf("LOC window=%u trigger=%u class=%s cycles=%u infer_us=%u\n",
+           result->window_id, result->end_trigger_seq,
+           result->class_code <= LOC_CODE_EMPTY ? LOC_CLASS_NAMES[result->class_code] : "?",
+           (unsigned)result->window_cycles, result->infer_us);
+    fflush(stdout);
 }
 
 static volatile sig_atomic_t stop_requested = 0;
@@ -718,6 +750,15 @@ static int cnn_engine_open(cnn_engine_t *engine, const char *blob_path)
         free(blob);
         return -1;
     }
+    /* Blob v2: header offset 12 stores encoder.input as IEEE754 float32.
+       Zynq-7000 ARM Linux uses little-endian, matching the blob format. */
+    _Static_assert(sizeof(float) == 4u, "blob input scale requires float32");
+    memcpy(&engine->input_scale, blob + 12u, sizeof(engine->input_scale));
+    if (!isfinite(engine->input_scale) || engine->input_scale <= 0.0f) {
+        fprintf(stderr, "invalid input scale in %s\n", blob_path);
+        free(blob);
+        return -1;
+    }
     engine->mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (engine->mem_fd < 0) {
         fprintf(stderr, "open /dev/mem: %s\n", strerror(errno));
@@ -1067,9 +1108,11 @@ static int parse_window_count(const char *text, uint64_t *value)
 static void usage(const char *program)
 {
     fprintf(stderr,
-        "usage: %s TTY INPUT_SCALE [MAX_WINDOWS] [BLOB] [DUMP_BIN]\n"
-        "example: %s /dev/ttyACM0 0.02 10\n"
-        "UDP: CSI_UDP_TARGET=10.10.20.2:5000 %s /dev/ttyACM0 0.02 0\n",
+        "usage: %s TTY INPUT_SCALE|auto [MAX_WINDOWS] [BLOB] [DUMP_BIN]\n"
+        "example: %s /dev/ttyACM0 auto 0 /root/weights_5rx.bin\n"
+        "UDP: CSI_UDP_TARGET=10.10.20.2:5000 %s /dev/ttyACM0 0.02 0\n"
+        "env: WISE_TCP_PORT (5000) WISE_TCP_BIND WISE_FORWARD_CSI=1\n"
+        "     WISE_LOC_MODEL (" DEFAULT_LOC_MODEL_PATH ", off disables) WISE_LOC_STRIDE_S (0.5)\n",
         program,
         program,
         program);
@@ -1080,7 +1123,8 @@ int main(int argc, char **argv)
     const char *tty_path;
     const char *blob_path = DEFAULT_BLOB_PATH;
     const char *dump_path = NULL;
-    float input_scale;
+    float input_scale = 0.0f;
+    bool auto_input_scale;
     int descriptor = -1;
     int lock_fd = -1;
     uint8_t buffer[READ_CHUNK];
@@ -1104,7 +1148,8 @@ int main(int argc, char **argv)
         return 2;
     }
     tty_path = argv[1];
-    if (parse_input_scale(argv[2], &input_scale) != 0) {
+    auto_input_scale = strcmp(argv[2], "auto") == 0;
+    if (!auto_input_scale && parse_input_scale(argv[2], &input_scale) != 0) {
         fprintf(stderr, "invalid INPUT_SCALE: %s\n", argv[2]);
         usage(argv[0]);
         return 2;
@@ -1130,7 +1175,7 @@ int main(int argc, char **argv)
         WEIGHT_PHYS,
         INPUT_PHYS,
         OUTPUT_PHYS);
-    printf("blob=%s input_scale=%.9g\n", blob_path, (double)input_scale);
+    printf("blob=%s input_scale_arg=%s\n", blob_path, argv[2]);
     if (strcmp(blob_path, DEFAULT_BLOB_PATH) == 0) {
         printf("NOTE: default blob is for integration testing; binary assets are supplied separately.\n");
     }
@@ -1139,6 +1184,15 @@ int main(int argc, char **argv)
     if (cnn_engine_open(&engine, blob_path) != 0) {
         goto cleanup;
     }
+    if (auto_input_scale) {
+        input_scale = engine.input_scale;
+    } else if (fabsf(input_scale - engine.input_scale) > engine.input_scale * 1e-6f) {
+        fprintf(stderr,
+                "WARNING: specified INPUT_SCALE %.9g differs from blob %.9g\n",
+                (double)input_scale, (double)engine.input_scale);
+    }
+    printf("CNN INPUT_SCALE=%.9g source=%s\n",
+           (double)input_scale, auto_input_scale ? "weights_5rx.bin" : "argument");
 
     if (udp_sender_start(&context.udp, udp_target) != 0) {
         fprintf(stderr, "UDP bypass disabled after setup failure; CNN path continues\n");
@@ -1171,10 +1225,33 @@ int main(int argc, char **argv)
     context.pipeline = pipeline;
     context.engine = &engine;
     const char *bind_ip = getenv("WISE_TCP_BIND");
-    context.tcp = wise_server_start(bind_ip ? bind_ip : "0.0.0.0", 5000, 5001);
-    if (!context.tcp) { fprintf(stderr, "Cannot start TCP ports 5000/5001\n"); goto cleanup; }
+    const char *port_text = getenv("WISE_TCP_PORT");
+    const char *forward_text = getenv("WISE_FORWARD_CSI");
+    const char *loc_model = getenv("WISE_LOC_MODEL");
+    const char *loc_stride = getenv("WISE_LOC_STRIDE_S");
+    unsigned long tcp_port = port_text ? strtoul(port_text, NULL, 10) : DEFAULT_TCP_PORT;
+    int forward_csi = forward_text != NULL && strcmp(forward_text, "1") == 0;
+    if (tcp_port == 0u || tcp_port > 65535u) { fprintf(stderr, "invalid WISE_TCP_PORT\n"); goto cleanup; }
+    if (loc_model == NULL) loc_model = DEFAULT_LOC_MODEL_PATH;
+    if (strcmp(loc_model, "off") != 0) {
+        char loc_err[256] = "";
+        context.loc = loc_engine_open(loc_model, loc_stride ? strtod(loc_stride, NULL) : 0.0,
+                                      on_location, &context, loc_err, sizeof(loc_err));
+        if (context.loc == NULL) {
+            fprintf(stderr, "Location model %s not loaded: %s (WISE_LOC_MODEL=off to run pose only)\n",
+                    loc_model, loc_err);
+            goto cleanup;
+        }
+        loc_engine_set_clock(context.loc, monotonic_ns);
+        printf("Location Ridge model=%s\n", loc_model);
+    } else {
+        printf("Location inference OFF (WISE_LOC_MODEL=off)\n");
+    }
+    context.tcp = wise_server_start(bind_ip ? bind_ip : "0.0.0.0", (uint16_t)tcp_port, forward_csi);
+    if (!context.tcp) { fprintf(stderr, "Cannot start TCP port %lu\n", tcp_port); goto cleanup; }
     csi_pipeline_set_frame_callback(pipeline, on_usb_frame, &context);
-    printf("WISE TCP listening CSI/STATUS :5000 and Pose :5001\n");
+    printf("WISE TCP listening :%lu (STATUS/ACK/Pose/Location%s)\n",
+           tcp_port, forward_csi ? "/raw CSI" : "");
     signal(SIGINT, on_signal);
     signal(SIGTERM, on_signal);
     printf(
@@ -1214,6 +1291,7 @@ int main(int argc, char **argv)
             last_status_request_ms = monotonic_ms();
         }
         if (poll_result == 0) {
+            loc_engine_tick(context.loc, monotonic_ns());
             csi_pipeline_get_stats(pipeline, &stats);
             now_ms = monotonic_ms();
             if (stats.cycles_emitted != last_cycles) {
@@ -1341,7 +1419,24 @@ cleanup:
         }
     }
 
+    if (context.loc != NULL) {
+        loc_stats_t loc_stats;
+        loc_engine_get_stats(context.loc, &loc_stats);
+        fprintf(stderr,
+            "LOC STATS predictions=%llu valid_cycles=%llu invalid=%llu short_windows=%llu "
+            "gaps=%llu chronology=%llu not_ready=%llu invalid_status=%llu reason=%s\n",
+            (unsigned long long)loc_stats.predictions,
+            (unsigned long long)loc_stats.valid_cycles,
+            (unsigned long long)loc_stats.invalid_cycles,
+            (unsigned long long)loc_stats.short_windows,
+            (unsigned long long)loc_stats.gaps,
+            (unsigned long long)loc_stats.chronology_rejects,
+            (unsigned long long)loc_stats.not_ready_frames,
+            (unsigned long long)loc_stats.invalid_status,
+            loc_engine_reason(context.loc));
+    }
     wise_server_stop(context.tcp);
+    loc_engine_close(context.loc);
     udp_sender_stop(&context.udp);
     fprintf(stderr,
         "UDP STATS enqueued=%llu queue_dropped=%llu sent=%llu "

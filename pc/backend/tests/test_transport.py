@@ -7,7 +7,7 @@ import threading
 import time
 import pytest
 from protocol import wise_protocol as wp
-from localization.ethernet_input import StreamDecoder, EthernetInput, PoseInput
+from localization.ethernet_input import StreamDecoder, EthernetInput
 from app.config import Settings
 from app.service import BackendService
 
@@ -23,13 +23,13 @@ def until(check, timeout=4):
     pytest.fail('condition timed out')
 
 
-def free_ports():
-    sockets = [socket.socket(),socket.socket()]
+def free_port():
+    sock = socket.socket()
     try:
-        for s in sockets: s.bind(('127.0.0.1',0))
-        return [s.getsockname()[1] for s in sockets]
+        sock.bind(('127.0.0.1',0))
+        return sock.getsockname()[1]
     finally:
-        for s in sockets: s.close()
+        sock.close()
 
 
 @pytest.fixture(scope='session')
@@ -37,30 +37,42 @@ def bridge_binary(tmp_path_factory):
     binary = tmp_path_factory.mktemp('cbridge')/'server'
     subprocess.run(['gcc','-std=c11','-Wall','-Wextra','-Werror','-pthread',
         '-I'+str(ROOT/'ps/include'),str(ROOT/'ps/tests/wise_test_server.c'),
-        str(ROOT/'ps/src/wise_server.c'),str(ROOT/'ps/src/csi_pipeline.c'),'-lm','-o',str(binary)],check=True)
+        str(ROOT/'ps/src/wise_server.c'),str(ROOT/'ps/src/csi_pipeline.c'),
+        str(ROOT/'ps/src/loc_ridge.c'),'-lm','-o',str(binary)],check=True)
     return binary
 
 
 @pytest.fixture
-def bridge(bridge_binary):
-    ports = free_ports()
-    proc = subprocess.Popen([str(bridge_binary),*map(str,ports)],stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,bufsize=1)
-    replies = queue.Queue()
-    def reader():
-        for line in proc.stdout: replies.put(line.strip())
-    threading.Thread(target=reader,daemon=True).start()
-    assert replies.get(timeout=3) == 'READY'
-    def send(command):
-        proc.stdin.write(command+'\n'); proc.stdin.flush()
-        return replies.get(timeout=3)
-    yield ports, send
-    proc.stdin.write('Q\n'); proc.stdin.flush()
-    try:
-        proc.wait(timeout=3)
-        assert proc.returncode == 0, proc.stderr.read()
-    finally:
-        if proc.poll() is None: proc.kill(); proc.wait()
+def start_bridge(bridge_binary):
+    """start_bridge(forward_csi, location) -> (port, send). One PS port carries every type."""
+    procs = []
+
+    def start(forward_csi=True, location=False):
+        port = free_port()
+        args = [str(bridge_binary),str(port),str(int(forward_csi))]
+        if location:
+            args.append(str(ROOT/'ps/models/loc_ridge_rx5.bin'))
+        proc = subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,text=True,bufsize=1)
+        procs.append(proc)
+        replies = queue.Queue()
+        def reader():
+            for line in proc.stdout: replies.put(line.strip())
+        threading.Thread(target=reader,daemon=True).start()
+        assert replies.get(timeout=3) == 'READY'
+        def send(command):
+            proc.stdin.write(command+'\n'); proc.stdin.flush()
+            return replies.get(timeout=3)
+        return port, send
+
+    yield start
+    for proc in procs:
+        proc.stdin.write('Q\n'); proc.stdin.flush()
+        try:
+            proc.wait(timeout=3)
+            assert proc.returncode == 0, proc.stderr.read()
+        finally:
+            if proc.poll() is None: proc.kill(); proc.wait()
 
 
 def usb(kind,payload,seq=45,corrupt=False):
@@ -99,35 +111,42 @@ def read_packets(sock,count):
     return packets
 
 
-def test_c_usb_parser_tcp_framing_status_ack_csi_and_pose(bridge):
-    ports,send = bridge
+def test_c_usb_parser_tcp_framing_status_ack_csi_and_pose(start_bridge):
+    port,send = start_bridge(forward_csi=True)
     # Cache validated STATUS even before the PC attaches.
     assert send('F '+usb(1,status_payload()).hex()) == 'RESULT 0'
-    with socket.create_connection(('127.0.0.1',ports[0])) as csi, socket.create_connection(('127.0.0.1',ports[1])) as pose:
-        first = read_packets(csi,1)[0]
+    with socket.create_connection(('127.0.0.1',port)) as sock:
+        first = read_packets(sock,1)[0]
         assert first[0].type == wp.TYPE_STATUS
         assert len(wp.decode_status(first[1])['nodes']) == 5
         assert send('F '+usb(2,cycle_payload(missing=2)).hex()) == 'RESULT 0'
-        header,payload = read_packets(csi,1)[0]
+        header,payload = read_packets(sock,1)[0]
         cycle = wp.decode_csi(payload)
         assert cycle.trigger_seq == 123 and cycle.uart_seq == 45 and not cycle.records[2].valid
         assert cycle.records[0].csi == bytes([0,3])*192
         ack = wp.ACK.pack(1,1,11,1,50000,1000,b'ok')
         send('F '+usb(3,ack).hex())
-        assert wp.decode_ack(read_packets(csi,1)[0][1])['message'] == 'ok'
-        # Wait until PoseInput/worker has accepted before publishing a transient pose.
-        time.sleep(0.03)
+        assert wp.decode_ack(read_packets(sock,1)[0][1])['message'] == 'ok'
         send('P')
-        ph,pp = read_packets(pose,1)[0]
+        ph,pp = read_packets(sock,1)[0]
         assert ph.type == wp.TYPE_POSE
         decoded = wp.decode_pose(pp)
         assert decoded.window_id == 7 and decoded.infer_us == 23000
         assert decoded.pose_float()[0] == pytest.approx(-0.12)
 
 
-def test_checksum_and_malformed_cycle_are_not_forwarded(bridge):
-    ports,send = bridge
-    with socket.create_connection(('127.0.0.1',ports[0])) as sock:
+def test_raw_csi_is_not_sent_unless_forwarding_is_enabled(start_bridge):
+    port,send = start_bridge(forward_csi=False)
+    with socket.create_connection(('127.0.0.1',port)) as sock:
+        time.sleep(0.03)
+        assert send('F '+usb(2,cycle_payload()).hex()) == 'RESULT 0'
+        send('P')
+        assert read_packets(sock,1)[0][0].type == wp.TYPE_POSE
+
+
+def test_checksum_and_malformed_cycle_are_not_forwarded(start_bridge):
+    port,send = start_bridge(forward_csi=True)
+    with socket.create_connection(('127.0.0.1',port)) as sock:
         time.sleep(0.03)
         assert send('F '+usb(2,cycle_payload(),corrupt=True).hex()) == 'RESULT 99'
         bad = bytearray(cycle_payload()); bad[29] = 1
@@ -138,58 +157,56 @@ def test_checksum_and_malformed_cycle_are_not_forwarded(bridge):
         assert wp.decode_csi(read_packets(sock,1)[0][1]).received_nodes == 5
 
 
-def test_real_backend_status_confirmation_and_pose_disconnect(bridge):
-    ports,send = bridge
-    service = BackendService(Settings(ps_host='127.0.0.1',csi_port=ports[0],pose_port=ports[1],monitor_interval_s=0.01))
+def test_real_backend_ps_location_confirmation_and_pose(start_bridge):
+    port,send = start_bridge(forward_csi=False, location=True)
+    service = BackendService(Settings(ps_host='127.0.0.1',ps_port=port,monitor_interval_s=0.01))
     service.start()
     try:
-        until(lambda: service._live.serial.snapshot()['connected'] and service._pose.connected)
+        until(lambda: service._link.connected)
         send('F '+usb(1,status_payload()).hex())
-        until(lambda: service._live.serial.snapshot()['status'])
-        assert service.confirm_rx_layout()['ok']
+        snap = until(lambda: service.snapshot() if service.snapshot()['system']['status_ready'] else None)
+        assert service.confirm_rx_layout(snap['system']['rx_signature'])['ok']
         until(lambda: service.snapshot()['system']['identity_confirmed'])
-        send('F '+usb(1,status_payload()).hex())
-        until(lambda: service.snapshot()['system']['status_ready'])
         send('P')
         snap = until(lambda: service.snapshot() if service.snapshot()['pose']['valid'] else None)
         assert len(snap['pose']['joints']) == 12 and snap['pose']['infer_ms'] == 23
-        for seq in range(200,228):
+        # Location is computed by the C engine inside the bridge (PS side).
+        for seq in range(200,236):   # >= 3 PS windows for LocationStabilizer
             send('F '+usb(2,cycle_payload(seq=seq),seq=seq).hex())
             time.sleep(0.10)
         live_snap = until(lambda: service.snapshot() if service.snapshot()['location']['valid'] else None)
         assert live_snap['location']['point_id'] in {f'p{i:02d}' for i in range(1,11)} | {'empty'}
         assert live_snap['person']['valid']
+        assert service._link.snapshot()['counts']['location_packets'] >= 1
         until(lambda: not service.snapshot()['location']['valid'],timeout=4)
     finally:
-        pose_input = service._pose
+        link = service._link
         service.stop()
-        assert not pose_input._thread.is_alive()
-        assert pose_input.latest_pose() is None
+        assert not link._thread.is_alive()
+        assert link.latest_pose() is None and link.latest_location() is None
 
 
-def test_slow_csi_client_resets_without_blocking_pose_and_reconnects(bridge):
-    ports,send = bridge
+def test_slow_client_resets_and_reconnects_with_cached_status(start_bridge):
+    port,send = start_bridge(forward_csi=True)
     send('F '+usb(1,status_payload()).hex())
-    with socket.create_connection(('127.0.0.1',ports[0])) as slow, socket.create_connection(('127.0.0.1',ports[1])) as pose:
+    with socket.create_connection(('127.0.0.1',port)) as slow:
         read_packets(slow,1)
         time.sleep(0.03)
         started = time.monotonic()
         send('B '+cycle_payload(large=True).hex())
         assert time.monotonic()-started < 1
-        send('P')
-        assert wp.decode_pose(read_packets(pose,1)[0][1]).window_id == 7
         slow.settimeout(3)
         while slow.recv(65536): pass
-    with socket.create_connection(('127.0.0.1',ports[0])) as new:
+    with socket.create_connection(('127.0.0.1',port)) as new:
         assert read_packets(new,1)[0][0].type == wp.TYPE_STATUS
         send('F '+usb(2,cycle_payload(seq=200)).hex())
         assert wp.decode_csi(read_packets(new,1)[0][1]).trigger_seq == 200
 
 
-def test_python_receivers_reconnect_and_drop_cached_state(bridge):
-    ports,send = bridge
+def test_python_receivers_reconnect_and_drop_cached_state(start_bridge):
+    port,send = start_bridge(forward_csi=True)
     events = []
-    inp = EthernetInput('127.0.0.1',ports[0],lambda row:None,lambda kind,payload:events.append(kind),retry_s=0.01)
+    inp = EthernetInput('127.0.0.1',port,lambda row:None,lambda kind,payload:events.append(kind),retry_s=0.01)
     inp.start()
     try:
         until(lambda:inp.snapshot()['connected'])

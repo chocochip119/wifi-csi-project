@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "wise_server.h"
+#include "loc_ridge.h"
 #include <arpa/inet.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -36,7 +37,8 @@ typedef struct {
     packet_t queue[QUEUE_DEPTH], status;
     uint64_t sent, dropped, reconnects;
 } channel_t;
-struct wise_server { channel_t csi, pose; };
+/* One PC connection carries every type; raw CSI only when forward_csi is set. */
+struct wise_server { channel_t link; bool forward_csi; };
 
 static uint64_t now_us(void)
 {
@@ -198,17 +200,17 @@ static void stop_channel(channel_t *c)
             (unsigned long long)c->dropped);
     pthread_mutex_destroy(&c->lock);
 }
-wise_server_t *wise_server_start(const char *ip, uint16_t csi_port, uint16_t pose_port)
+wise_server_t *wise_server_start(const char *ip, uint16_t port, int forward_csi)
 {
-    if (!ip || !csi_port || !pose_port || csi_port == pose_port) return NULL;
+    if (!ip || !port) return NULL;
     wise_server_t *s = calloc(1, sizeof(*s));
     if (!s) return NULL;
-    if (start_channel(&s->csi, ip, csi_port)) { free(s); return NULL; }
-    if (start_channel(&s->pose, ip, pose_port)) { stop_channel(&s->csi); free(s); return NULL; }
+    s->forward_csi = forward_csi != 0;
+    if (start_channel(&s->link, ip, port)) { free(s); return NULL; }
     return s;
 }
 void wise_server_stop(wise_server_t *s)
-{ if (s) { stop_channel(&s->csi); stop_channel(&s->pose); free(s); } }
+{ if (s) { stop_channel(&s->link); free(s); } }
 int wise_server_usb(wise_server_t *s, uint8_t type, uint32_t uart_seq,
                     const uint8_t *payload, size_t length)
 {
@@ -216,13 +218,14 @@ int wise_server_usb(wise_server_t *s, uint8_t type, uint32_t uart_seq,
     if (!payload || length > MAX_PAYLOAD) return -1;
     if (type == 1u) {
         if (length < 44u || payload[7] > 8u || length != 44u + 22u * payload[7]) return -1;
-        return publish(&s->csi, 3, payload, length);
+        return publish(&s->link, 3, payload, length);
     }
     if (type == 3u) {
         if (length != 76u) return -1;
-        return publish(&s->csi, 4, payload, length);
+        return publish(&s->link, 4, payload, length);
     }
     if (type != 2u || length < 32u || payload[28] > 8u || payload[30] > 1u) return -1;
+    if (!s->forward_csi) return 0;
     uint8_t out[MAX_PAYLOAD] = {0}, seen = 0, mask = 0, received = 0;
     size_t cursor = 32, dest = 16;
     for (unsigned i = 0; i < payload[28]; ++i) {
@@ -241,7 +244,7 @@ int wise_server_usb(wise_server_t *s, uint8_t type, uint32_t uart_seq,
     memcpy(out, payload + 4, 4); wr32(out + 4, uart_seq);
     out[8] = payload[28]; out[9] = received; out[10] = payload[28];
     out[11] = mask; out[12] = payload[30];
-    return publish(&s->csi, 1, out, dest);
+    return publish(&s->link, 1, out, dest);
 }
 int wise_server_pose(wise_server_t *s, uint32_t window, uint32_t end_seq,
                      uint32_t infer_us, float scale, const int8_t pose[24])
@@ -253,5 +256,21 @@ int wise_server_pose(wise_server_t *s, uint32_t window, uint32_t end_seq,
     memcpy(&bits, &scale, 4);
     wr32(out, window); wr32(out + 4, end_seq); wr32(out + 8, infer_us); wr32(out + 12, bits);
     memcpy(out + 16, pose, 24);
-    return publish(&s->pose, 2, out, sizeof(out));
+    return publish(&s->link, 2, out, sizeof(out));
+}
+int wise_server_location(wise_server_t *s, const loc_result_t *r)
+{
+    uint8_t out[WISE_LOCATION_BYTES] = {0};
+    if (!s) return 0;
+    if (!r || r->n_scores != 11u) return -1;
+    wr32(out, r->window_id); wr32(out + 4, r->end_trigger_seq); wr32(out + 8, r->infer_us);
+    out[12] = r->class_code; out[13] = r->occupied; out[14] = r->window_cycles; out[15] = r->n_scores;
+    wr16(out + 16, (uint16_t)r->x_cm); wr16(out + 18, (uint16_t)r->y_cm);
+    wr64(out + 20, r->window_start_us); wr64(out + 28, r->window_end_us);
+    for (unsigned i = 0; i < 11u; ++i) {
+        uint32_t bits;
+        memcpy(&bits, &r->scores[i], 4);
+        wr32(out + 36 + 4u * i, bits);
+    }
+    return publish(&s->link, 5, out, sizeof(out));
 }

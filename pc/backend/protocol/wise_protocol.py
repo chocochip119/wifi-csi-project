@@ -11,13 +11,18 @@ import math
 MAGIC = b"WISE"
 VERSION = 2
 HEADER_SIZE = 24
-TYPE_CSI, TYPE_POSE, TYPE_STATUS, TYPE_ACK = 1, 2, 3, 4
-TYPES = (TYPE_CSI, TYPE_POSE, TYPE_STATUS, TYPE_ACK)
+TYPE_CSI, TYPE_POSE, TYPE_STATUS, TYPE_ACK, TYPE_LOCATION = 1, 2, 3, 4, 5
+TYPES = (TYPE_CSI, TYPE_POSE, TYPE_STATUS, TYPE_ACK, TYPE_LOCATION)
 
 HEADER = struct.Struct("<4sBBHIIQ")          # magic version type header_size payload_size sequence timestamp_us
 CSI_HEAD = struct.Struct("<IIBBBBB3x")        # trigger_seq uart_seq active received rx_count valid_mask timeout_fired
 RX_HEAD = struct.Struct("<BBbBHH")            # rx_id valid rssi reserved csi_len reserved2
 POSE = struct.Struct("<IIIf24b")              # window_id end_trigger_seq infer_us output_scale pose[24]
+# window_id end_trigger_seq infer_us class_code occupied window_cycles n_scores x_cm y_cm
+# window_start_us window_end_us scores[11] (by class code)
+LOCATION = struct.Struct("<IIIBBBBhhQQ11f")
+LOCATION_CLASSES = ("p01", "p02", "p03", "p04", "p05", "p06", "p07", "p08", "p09", "p10", "empty")
+NO_COORD = -32768
 
 # TX USB STATUS/ACK payloads, forwarded unchanged by the PS (types 3/4).
 # Same layout as the Studio reference parser vendor/sync_csi_input.py.
@@ -80,6 +85,21 @@ class PoseResult:
 
     def pose_float(self) -> list[float]:
         return [value * self.output_scale for value in self.pose_int8]
+
+
+@dataclass
+class LocationResult:
+    window_id: int
+    end_trigger_seq: int
+    infer_us: int
+    point_id: str
+    occupied: bool
+    window_cycles: int
+    x_cm: int | None
+    y_cm: int | None
+    window_start_us: int
+    window_end_us: int
+    scores: tuple[float, ...]
 
 
 def pack_header(kind: int, payload_size: int, sequence: int, timestamp_us: int) -> bytes:
@@ -155,6 +175,30 @@ def decode_pose(payload: bytes) -> PoseResult:
     window_id, end_seq, infer_us, scale, *pose = POSE.unpack(payload)
     _require(math.isfinite(scale) and scale > 0, "pose scale must be finite and positive")
     return PoseResult(window_id, end_seq, infer_us, scale, tuple(pose))
+
+
+def encode_location(result: LocationResult) -> bytes:
+    _require(result.point_id in LOCATION_CLASSES, "unknown location class")
+    _require(len(result.scores) == len(LOCATION_CLASSES), "location needs 11 scores")
+    code = LOCATION_CLASSES.index(result.point_id)
+    xy = (NO_COORD, NO_COORD) if result.x_cm is None else (result.x_cm, result.y_cm)
+    return LOCATION.pack(result.window_id, result.end_trigger_seq, result.infer_us, code,
+                         int(result.occupied), result.window_cycles, len(result.scores), *xy,
+                         result.window_start_us, result.window_end_us, *result.scores)
+
+
+def decode_location(payload: bytes) -> LocationResult:
+    _require(len(payload) == LOCATION.size, f"location payload must be {LOCATION.size} bytes")
+    (window_id, end_seq, infer_us, code, occupied, cycles, n_scores, x, y,
+     start_us, end_us, *scores) = LOCATION.unpack(payload)
+    _require(code < len(LOCATION_CLASSES) and n_scores == len(LOCATION_CLASSES), "bad location class/scores")
+    point = LOCATION_CLASSES[code]
+    _require(bool(occupied) == (point != "empty") and occupied in (0, 1), "occupied disagrees with class")
+    _require((x == NO_COORD) == (y == NO_COORD) == (point == "empty"), "coordinate disagrees with class")
+    _require(cycles > 0 and end_us >= start_us, "bad location window")
+    return LocationResult(window_id, end_seq, infer_us, point, bool(occupied), cycles,
+                          None if x == NO_COORD else x, None if y == NO_COORD else y,
+                          start_us, end_us, tuple(scores))
 
 
 def _mac_text(raw: bytes) -> str:

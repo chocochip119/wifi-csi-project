@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """실제 Backend /health + /api/snapshot 검증/JSONL 녹화.
-표준 라이브러리만 사용. PS 서버 5000/5001에 직접 연결하지 않아
+표준 라이브러리만 사용. PS 서버 5000에 직접 연결하지 않아
 Backend 단일 TCP 클라이언트 연결을 방해하지 않는다.
 """
 import argparse
@@ -126,7 +126,7 @@ def main():
     if args.record: print('[RECORD DONE]', args.record)
     failures = []
     if not connected_csi: failures.append('CSI 5000 연결 확인 실패')
-    if not connected_pose: failures.append('Pose 5001 연결 확인 실패')
+    if not connected_pose: failures.append('Pose(TCP 5000) 연결 확인 실패')
     if args.require_pose and valid_pose_frames == 0: failures.append('실제 12관절 Pose 미수신')
     if args.require_location and valid_location_frames == 0: failures.append('위치 추론 결과 미수신 (RX 배치/STATUS/CSI 확인)')
     if failures:
