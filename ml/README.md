@@ -25,10 +25,10 @@ CSI 데이터셋 → base/delta/mask [15,128,10] → CNN 학습
 ```text
 RX5 CSI/RSSI 데이터셋 → 2초 통계 특징(955개)
                    → 모델 학습·평가 → Portable Ridge NPZ/JSON
-                   → pc/backend/localization 에서 실시간 구역 분류
+                   → ps/src/loc_ridge.c 에서 실시간 구역 분류
 ```
 
-위치는 연속적인 X/Y 추정이 아니라 **P01~P09 + P10(중앙 앉기) + empty** 분류입니다. 학습·평가/데이터 형식은 [Location README](localization/README.md), 실제 실행·RX 확인은 [PC Backend](../pc/backend/README.md)에 있습니다.
+위치는 연속적인 X/Y 추정이 아니라 **P01~P09 + P10(중앙 앉기) + empty** 분류입니다. 학습·평가/데이터 형식은 [Location README](localization/README.md), 실제 실행·RX 확인은 [PS](../ps/README.md) 및 [PC Backend](../pc/backend/README.md)에 있습니다.
 
 ## 모델 적용·검증 문서
 
