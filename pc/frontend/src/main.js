@@ -7,7 +7,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { connectBackend } from './websocket.js'
 import { PoseRigController } from './poseRig.js'
 import { armMaxLiftDegForZone } from './armZoneLimit.js'
-import { LiveSitDetector } from './liveSitDetector.js'
+import { StableLegPosture } from './stableLegPosture.js'
+import { isCenterLocation, walkingSkeletonPose } from './viewerMotionPolicy.js'
 import { shouldHoldSeatedPose } from './singleLegLiftGate.js'
 import {isNoPerson, motionPointId, sitDetectorPoint, motionArmLiftLimit} from './presentationMode.js'
 import {legLiftMaxDegForLocation} from './legLiftPolicy.js'
@@ -326,7 +327,7 @@ let backendExpired = false
 const poseFilter = new PoseFilter()
 const fastPose2D = new FastPose2DFilter(80)
 const liveThreeLimiter = new LiveThreeActionLimiter()
-const sitDetector = new LiveSitDetector()
+const stableLegPosture = new StableLegPosture()
 let currentSitDecision = {sit:false,strength:0,source:'standing'}
 const motionAbsenceTimer = new MotionAbsenceTimer()
 let motionHiddenForAbsence = false
@@ -371,7 +372,10 @@ let isMoving = false
 const moveSpeed = 1.1 // GLTF Walk와 더 자연스럽게 맞추기 위한 화면 이동 속도
 let targetPosture = 'standing'
 let armLocationZone = null // Live location zone; unknown != zone 5.
-let legLiftMaxDeg = 10 // Actual P05/P10 = unlimited; elsewhere ~10° visual limit.
+let legLiftMaxDeg = 0
+let poseTrackingEnabled = false
+let activeLegAction = 'stand'
+let lastMeaningfulArmAt = -Infinity
 // Fixed P05 presentation position; unrelated to the position model output.
 function pinMotionCharacter() {
   if (!character || !zonePositions[5]) return
@@ -406,12 +410,15 @@ function playAnimation(name, fadeTime = 0.25) {
 // 12관절 추종은 유효한 좌표가 있을 때만 mixer 뒤에 회전을 덮어쓴다.
 function refreshIdleAnimation() {
   if (!character || isMoving) return
-  playAnimation(poseRig?.ready && poseRig.armEnabled ? 'ArmPoseIdle' : 'Idle_Neutral')
+  playAnimation(poseTrackingEnabled && poseRig?.ready && poseRig.armEnabled ? 'ArmPoseIdle' : 'Idle_Neutral')
 }
 
 function disableRig() {
-  if (poseRig?.active) poseRig.clear()
-  refreshIdleAnimation()
+  if (poseRig?.active || poseRig?.liftAmount > 0 || poseRig?.squatAmount > 0) {
+    poseRig.clear()
+    poseRig.update(0, false)
+  }
+  if (!isMoving) playAnimation('Idle_Neutral', 0.22)
 }
 
 function moveCharacterTo(zone, posture = 'standing') {
@@ -469,6 +476,10 @@ function setAbsentState(message, posture) {
 
 // 하나의 Pose가 오른쪽 스켈레톤과 3D 관절 모두를 움직입니다.
 function updateMotionRig(pose, mirrored) {
+  if (!poseTrackingEnabled) {
+    disableRig()
+    return
+  }
   const shouldSit = currentSitDecision.sit === true
   // Sit has priority over Walk: when P05/P10 begins sitting, stop navigation
   // immediately at zone 5 rather than waiting for the walk animation to finish.
@@ -485,18 +496,8 @@ function updateMotionRig(pose, mirrored) {
     refreshIdleAnimation()
     return
   }
-  // P10 always sits, including missing/invalid joint frames. Do NOT synthesize
-  // joints into the 2D panel or into the actual FPGA/CNN output.
-  let rigPose = pose?.valid ? pose :
-    (currentSitDecision.source === 'P10' ? createTestPose('squat') : null)
-  // Even if LIVE 12 joints are marked valid but geometrically impossible,
-  // P10 must still request the built-in planted-squat pose.
-  let angles = rigPose?.valid ? solvePoseAngles(rigPose, mirrored) : null
-  if (!angles && currentSitDecision.source === 'P10') {
-    rigPose = createTestPose('squat')
-    angles = solvePoseAngles(rigPose, false)
-    mirrored = false
-  }
+  const rigPose = pose?.valid ? pose : null
+  const angles = rigPose ? solvePoseAngles(rigPose, mirrored) : null
   if (!rigPose?.valid || !angles) {
     // Preserve an already-seated 3D frame through a short missing or
     // malformed joint snapshot. No Person still clears it immediately.
@@ -508,9 +509,11 @@ function updateMotionRig(pose, mirrored) {
     refreshIdleAnimation()
     return
   }
-  const arms = Boolean(pose?.valid && rigPose === pose && viewerSettings.liveArms && hasMeaningfulArmPose(pose))
-  const legs = Boolean(angles && (shouldSit ||
-    (viewerSettings.liveLegs && (angles.activity > 0.14 || Number.isFinite(angles.footSpacingRatio)))))
+  if (pose?.valid && hasMeaningfulArmPose(pose)) lastMeaningfulArmAt = performance.now()
+  const arms = Boolean(pose?.valid && viewerSettings.liveArms &&
+    performance.now() - lastMeaningfulArmAt < 650)
+  // Stable bilateral squat or unilateral lift only; ignore transient noisy knees.
+  const legs = Boolean(angles && viewerSettings.liveLegs && (shouldSit || activeLegAction === 'lift'))
   // squatTarget=0 explicitly forbids sitting in every zone other than P05/P10;
   // nonzero force is applied to 3D only, AFTER ordinary IK smoothing.
   if (arms || legs) poseRig?.setPose(rigPose, mirrored, {
