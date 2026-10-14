@@ -555,42 +555,43 @@ function handleSnapshot(snapshot, source = 'backend') {
   const fast2D = isLive2D && viewerSettings.pose2DMode === 'fast'
   const raw2D = isLive2D && viewerSettings.pose2DMode === 'raw'
   const poseFor2D = fast2D ? fastPose2D.push(validPose) : raw2D ? validPose : sharedPose
-  const displayPose2D = mirrorPoseSides(poseFor2D, poseSidesFlipped)
-  // Use one orientation for SVG and avatar. The fast 2D filter may lag the rig,
-  // but it must not independently choose a different L/R direction.
-  // Original CNN coordinates and the backend remain unchanged.
-  // In motion mode, hold the last drawn skeleton during the 5 s absence grace.
+  // Original CNN coordinates remain untouched; synthesize visual poses only.
   const noPerson = isNoPerson(snapshot)
   const inMotionMode = viewerSettings.locationMode === 'center'
   const hideMotion = inMotionMode
     ? motionAbsenceTimer.observe(noPerson, performance.now())
     : (motionAbsenceTimer.reset(), false)
-  poseUnavailable.textContent = noPerson && (!inMotionMode || hideMotion) ? 'No person' : 'Unavailable'
-  if (!(inMotionMode && noPerson && !hideMotion)) {
-    renderPose(noPerson ? null : displayPose2D, poseMirror,
-      !(csvReplayActive && !csvPostprocess) && !raw2D,
-      fast2D ? fastPoseViewport : poseViewport)
-  }
   const motionMirror = poseMirror
-
   const location = resolveViewerLocation(snapshot, viewerSettings)
-  armLocationZone = location.valid && !location.empty ? location.zone : null
-  // Use the ACTUAL classifier location, even when motion mode pins the
-  // avatar to P05. P05/P10 have no lift limit; elsewhere, cap at 10°.
-  const inferredLocation = resolveViewerLocation(snapshot, {...viewerSettings, locationMode:'live'})
-  legLiftMaxDeg = legLiftMaxDegForLocation(inferredLocation)
-  // Position mode retains P05/P10 gating. Motion mode ALWAYS uses P05 as
-  // the logical area, so any real joint motion works regardless of P08/P10.
-  // Both modes honor explicit No Person before interpreting cached joints.
+  const inferredLocation = resolveViewerLocation(snapshot, {...viewerSettings,locationMode:'live'})
+  // Manual location selection is an explicit test override.
+  const effectiveLocation = viewerSettings.locationMode === 'manual' ? location : inferredLocation
+  poseTrackingEnabled = !noPerson && isCenterLocation(effectiveLocation)
+  armLocationZone = poseTrackingEnabled ? 5 : null
+  legLiftMaxDeg = poseTrackingEnabled ? legLiftMaxDegForLocation(effectiveLocation) : 0
   const sitInput = viewerSettings.jointsMode === 'live' ? validPose : sharedPose
-  const sitAngles = sitInput?.valid ?
+  const sitAngles = poseTrackingEnabled && sitInput?.valid ?
     solvePoseAngles(sitInput, resolvePoseMirror(sitInput, mirrorMode, lastMirror)) : null
-  const sitRawScore = sitAngles?.squat ?? 0
-  if (noPerson) sitDetector.reset()
-  currentSitDecision = noPerson ? {sit:false,strength:0,source:'standing'} : sitDetector.observe(
-    sitDetectorPoint(viewerSettings.locationMode, location),
-    sitInput, sitRawScore, performance.now(),
-    {liftL:sitAngles?.liftL ?? 0, liftR:sitAngles?.liftR ?? 0})
+  if (!poseTrackingEnabled) stableLegPosture.reset()
+  let actionState = poseTrackingEnabled
+    ? stableLegPosture.update(sitInput,sitAngles,effectiveLocation.pointId,performance.now())
+    : {action:'stand',strength:0}
+  if (poseTrackingEnabled && viewerSettings.jointsMode === 'sample') {
+    const sample=viewerSettings.jointsSample
+    actionState={action:sample==='squat'?'squat':sample==='legLift'?'lift':'stand',
+      strength:sample==='squat'?1:sample==='legLift'?0.9:0}
+  }
+  activeLegAction=actionState.action
+  currentSitDecision={sit:activeLegAction==='squat',
+    strength:activeLegAction==='squat'?actionState.strength:0,
+    source:activeLegAction==='squat'?'bilateral-joints':'standing'}
+  poseUnavailable.textContent = noPerson && (!inMotionMode || hideMotion) ? 'No person' : 'Unavailable'
+  const displayPose2D = poseTrackingEnabled ? poseFor2D : createTestPose('stand')
+  if (!(inMotionMode && noPerson && !hideMotion)) {
+    renderPose(noPerson ? null : mirrorPoseSides(displayPose2D,poseSidesFlipped),
+      poseMirror, !(csvReplayActive && !csvPostprocess) && !raw2D,
+      poseTrackingEnabled && fast2D ? fastPoseViewport : poseViewport)
+  }
   if (inMotionMode) {
     pinMotionCharacter()
     if (noPerson) {
@@ -612,12 +613,11 @@ function handleSnapshot(snapshot, source = 'backend') {
     return
   }
   if (location.empty) {
-    if (sharedPose?.valid) {
-      clearLocationUI('No person')
-      updatePostureUI('unknown')
-      if (character) character.visible = true
-      updateMotionRig(motionPose, poseMirror)
-    } else setAbsentState('No person', 'empty')
+    clearLocationUI('No person')
+    updatePostureUI('unknown')
+    if (character) character.visible = true
+    poseTrackingEnabled = false
+    disableRig()
     updateLiveBadge(snapshot)
     return
   }
@@ -632,8 +632,10 @@ function handleSnapshot(snapshot, source = 'backend') {
   } else {
     clearLocationUI('Unavailable')
     updatePostureUI('unknown')
-    if (character) character.visible = Boolean(sharedPose)
-    if (sharedPose?.valid) moveCharacterTo(5)
+    if (character) character.visible = true
+    isMoving = false
+    poseTrackingEnabled = false
+    disableRig()
   }
   updateMotionRig(motionPose, poseMirror)
   updateLiveBadge(snapshot)
@@ -758,7 +760,7 @@ function updateViewerSettings(key, value) {
   poseViewport.reset()
   fastPoseViewport.reset()
   liveThreeLimiter.reset()
-  sitDetector.reset()
+  stableLegPosture.reset()
   currentSitDecision = {sit:false,strength:0,source:'standing'}
   poseRig?.clear()
   refreshViewer()
@@ -977,7 +979,7 @@ connectBackend((snapshot) => {
     backendExpired = true
     poseFilter.reset()
     liveThreeLimiter.reset()
-    sitDetector.reset()
+    stableLegPosture.reset()
     currentSitDecision = {sit:false,strength:0,source:'standing'}
     poseRig?.clear()
     latestSnapshot = null
@@ -1041,7 +1043,7 @@ function animate(now) {
     backendExpired = true
     poseFilter.reset()
     liveThreeLimiter.reset()
-    sitDetector.reset()
+    stableLegPosture.reset()
     currentSitDecision = {sit:false,strength:0,source:'standing'}
     poseRig?.clear()
     latestSnapshot = null
