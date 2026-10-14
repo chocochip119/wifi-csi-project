@@ -335,6 +335,8 @@ const poseViewport = new PoseViewportStabilizer()
 const fastPoseViewport = new PoseViewportStabilizer({
   centerFastMs: 150, centerSlowMs: 200, scaleShrinkMs: 150, scaleGrowMs: 250
 })
+// Last frame from the active 2D pipeline, kept while the walk animation draws.
+let lastPose2DFrame = null
 // Standalone offline INT8 CNN replay; never mutates incoming hardware packets.
 let csvReplayActive = false
 let csvPostprocess = true
@@ -588,9 +590,16 @@ function handleSnapshot(snapshot, source = 'backend') {
   poseUnavailable.textContent = noPerson && (!inMotionMode || hideMotion) ? 'No person' : 'Unavailable'
   const displayPose2D = poseTrackingEnabled ? poseFor2D : createTestPose('stand')
   if (!(inMotionMode && noPerson && !hideMotion)) {
-    renderPose(noPerson ? null : mirrorPoseSides(displayPose2D,poseSidesFlipped),
-      poseMirror, !(csvReplayActive && !csvPostprocess) && !raw2D,
-      poseTrackingEnabled && fast2D ? fastPoseViewport : poseViewport)
+    // Cache exactly what this source mode renders. Do not reconstruct raw
+    // backend coordinates on arrival (custom/replay/fast filters may differ).
+    lastPose2DFrame = {
+      pose: noPerson ? null : mirrorPoseSides(displayPose2D,poseSidesFlipped),
+      mirror: poseMirror,
+      stabilize: !(csvReplayActive && !csvPostprocess) && !raw2D,
+      viewport: poseTrackingEnabled && fast2D ? fastPoseViewport : poseViewport
+    }
+    renderPose(lastPose2DFrame.pose,lastPose2DFrame.mirror,
+      lastPose2DFrame.stabilize,lastPose2DFrame.viewport)
   }
   if (inMotionMode) {
     pinMotionCharacter()
@@ -1078,12 +1087,13 @@ function animate(now) {
       refreshIdleAnimation()
       updateLocationUI(currentZone, selectedPointId)
       updatePostureUI(currentSitDecision.sit && currentZone===5 ? 'sitting' : 'standing')
-      // The walk-only SVG must return to an actual neutral frame on arrival.
-      const displayPose=poseTrackingEnabled && currentZone===5 && latestSnapshot
-        ? mirrorPoseSides(selectViewerPose(viewerSettings.jointsMode,
-            sanitizePose(latestSnapshot.pose),viewerSettings.jointsSample,createTestPose),poseSidesFlipped)
-        : mirrorPoseSides(createTestPose('stand'),poseSidesFlipped)
-      renderPose(displayPose?.valid?displayPose:mirrorPoseSides(createTestPose('stand'),poseSidesFlipped),lastMirror,true,poseViewport)
+      // Restore the last frame from the active 2D source (live/filter,
+      // custom edit, or replay), never an unfiltered backend snapshot.
+      if (poseTrackingEnabled && currentZone===5 && lastPose2DFrame?.pose?.valid)
+        renderPose(lastPose2DFrame.pose,lastPose2DFrame.mirror,
+          lastPose2DFrame.stabilize,lastPose2DFrame.viewport)
+      else renderPose(mirrorPoseSides(createTestPose('stand'),poseSidesFlipped),
+        lastMirror,true,poseViewport)
     } else {
       const vx = dx / distance
       const vz = dz / distance
