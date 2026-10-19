@@ -94,7 +94,7 @@ class BackendService:
         self._confirmed_signature: str | None = None
         self._inference_running = False
         self._seq = 0
-        self._location_stabilizer = LocationStabilizer(confirmations=3)
+        self._location_stabilizer = LocationStabilizer(confirmations=2)
         self._last_error: str | None = None
         self._started = False
         self._snapshot: dict[str, Any] = self._empty_snapshot("Backend 시작 전")
