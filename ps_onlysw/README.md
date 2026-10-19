@@ -1,5 +1,7 @@
 # PS_SW_RX5 — Pose CNN을 PS(ARM)에서 전부 처리 + PS/PL 속도 비교
 
+이 디렉터리는 **당시 `ps/`의 분리 TCP 5000/5001 프로토콜을 보존한 CPU CNN 비교판**입니다. 현재 기본 `ps/` + `pc/backend/`는 PS C Ridge 위치와 FPGA Pose를 **TCP 5000 하나**로 내보내므로, 이 소프트웨어 비교판을 최신 Backend에 바로 연결할 수 없습니다. 실시간 서비스/부팅 자동실행을 대체하지 마세요.
+
 `ps/`(origin/main `7dfe2d0`) 구조를 그대로 따르되, CNN 추론을 FPGA 대신 **Cortex-A9 소프트웨어**로 수행합니다.
 같은 `weights_5rx.bin`, 같은 INT8 입력 `[15,128,10]`을 받아 **PL IP와 바이트 단위로 동일한 24B Pose**를 냅니다
 (반올림 규약 `nearest_half_away_from_zero_v1`, `ml/pose/INT8.md`).
@@ -11,7 +13,7 @@
 | 경로 | 역할 |
 |---|---|
 | `include/pose_cnn_sw.h`, `src/pose_cnn_sw.c` | SW CNN 엔진 (blob 검증·해석, Conv1/2+GELU, Pool, FC1~3). RX 단위 멀티스레드 옵션 |
-| `src/pose_cnn_rx5_live_sw.c` | `pose_cnn_rx5_live`의 PS 전용판. USB 수신·전처리·TCP 5000/5001 동일, 추론만 SW. `/dev/mem`·bitstream 불필요 |
+| `src/pose_cnn_rx5_live_sw.c` | **당시 분리 TCP 5000/5001 규격**의 PS 전용판. USB 수신·전처리·추론 SW, `/dev/mem`·bitstream 불필요 |
 | `src/pose_cnn_rx5_bench.c` | 같은 입력으로 PS SW와 PL IP(`--pl`)를 돌려 지연시간 통계 + bit-exact 비교 |
 | `src/csi_pipeline.c`, `src/wise_server.c`, `include/*.h` | upstream `ps/` 그대로 복사 (수정 없음) |
 | `petalinux/pose-cnn-rx5-sw.bb` | PetaLinux recipe (`-O3`) |

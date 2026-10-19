@@ -1,5 +1,7 @@
 # 2026-10-07 PS↔PC TCP 통합 점검
 
+> **2026-10-07 시점의 검증 기록:** 아래 TCP 5000/5001, 과거 RX/모델/테스트 결과는 당시 사실을 보존합니다. **현재 기본 경로는 PS C Ridge + FPGA Pose의 TCP 5000 단일 포트**이며, #80 RX5 자동 복구·#81 자동실행·#82 위치 확정 2회/Frontend 후속 변경이 적용되었습니다. 현행 실행 방법은 [통합 실행](../bringup.md)을 우선 참조하세요.
+
 ## main 반영 및 문서 보완
 
 이 작업은 [PR #29](https://github.com/chocochip119/wifi-csi-project/pull/29)로 2026-10-07 main에 병합되었습니다(merge commit `b630ac94ce918e0381cc204e5c38154f1c213dc9`). 아래는 당시 코드 검증 기록입니다. 현재 구조와 실행 순서는 [문서 목록](../README.md) 및 [통합 실행](../bringup.md)에 연결했습니다.

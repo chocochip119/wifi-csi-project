@@ -4,6 +4,8 @@
 PS Ridge Location, TCP 5000을 처리합니다. 부팅 서비스 이름은 기존과 같은
 `wisensing-autostart`이므로 **같은 서비스를 두 개 실행하지 않습니다.**
 
+**중요:** #81에서 수정한 자동실행 스크립트/recipe가 저장소에 들어 있어도, 기존 SD의 부팅 `image.ub`/rootfs에 이전 서비스가 들어 있다면 부팅 동작은 그대로입니다. **현재 장비의 설치 이미지 상태를 먼저 점검**하고, 필요한 경우에만 같은 PetaLinux 프로젝트에서 앱을 재빌드·배포하세요. 새 SD 카드를 처음부터 만들 필요는 없습니다.
+
 ## 1. Windows PC (Git 저장소)
 
 기본 보드 프로그램 소스는 저장소 `ps/`, PC 결과 표시는 `pc/backend/`에서 관리합니다.
@@ -43,11 +45,9 @@ petalinux-build
 
 먼저 기존 SD 카드/`image.ub`를 백업합니다. 현재 하드웨어·Device Tree가
 동일하다면 새 `image.ub`로 앱 포함 rootfs를 갱신합니다. 필요한 `BOOT.BIN`이나
-실제 가중치 파일은 별도로 유지해야 합니다. 보드 Linux는 INITRD(rootfs in RAM)
-방식이므로, 자동 시작 스크립트가 `/dev/mmcblk0p1` 또는 `/dev/mmcblk1p1`의
-FAT32 부팅 파티션을 **읽기 전용**으로 `/mnt/wise-boot`에 마운트합니다.
+실제 가중치 파일은 별도로 유지해야 합니다. 보드 Linux는 INITRD(rootfs in RAM) 방식입니다. 자동 시작 스크립트는 `/dev/mmcblk0p1` 또는 `/dev/mmcblk1p1`의 FAT32 부팅 파티션이 **이미 `/media/...` 등에 마운트되어 있으면 기존 경로를 재사용**하며, 아직 마운트되지 않았으면 `/mnt/wise-boot`에 읽기 전용으로 마운트합니다. 이 경로는 서비스 내부에서 실제 마운트 위치에 맞게 조정됩니다.
 가중치는 SD카드 FAT32 최상위 경로 `/weights_5rx.bin`에 배치합니다.
-Linux 앱은 `/mnt/wise-boot/weights_5rx.bin`을 읽습니다.
+Linux 앱은 현재 마운트 위치의 `weights_5rx.bin`을 읽습니다(직접 마운트한 경우 `/mnt/wise-boot/weights_5rx.bin`).
 `vfat` 커널 지원이 없거나 경로를 찾지 못하면 재시도 로그를 남기며 대기합니다.
 
 보드 재부팅 후 root로:
@@ -65,10 +65,9 @@ ps | grep pose_cnn_rx5_live
 - USB가 늦게 인식되거나 가중치가 없으면 supervisor가 5초 간격으로 재시도합니다.
 - SD카드 파일 교체는 전원 종료 후 PC에서 수행하세요. 보드가 켜진 상태에서
   가중치를 교체하려면 서비스를 중지하고 안전하게 언마운트한 뒤 진행합니다.
-- 수동 확인: `cat /proc/filesystems | grep vfat`, `mount | grep wise-boot`,
-  `ls -lh /mnt/wise-boot/weights_5rx.bin`.
+- 수동 확인: `cat /proc/filesystems | grep vfat`, `mount | grep -E 'mmcblk|wise-boot'`, `ls -lh /mnt/wise-boot/weights_5rx.bin` 또는 실제 `/media/.../weights_5rx.bin`. 로그에 `Reusing mounted SD boot`가 있으면 재마운트가 아닌 재사용입니다.
 - 자동실행을 중지: `/etc/init.d/wisensing-autostart stop`
 - 수동 시험 전 반드시 자동실행을 중지해 **USB/FPGA 중복 점유**를 피합니다.
 - PC에서는 새 프로토콜에 맞춰 `pc/backend/run_backend.py --ps-host <ZYBO_IP>` 실행.
 
-보드 실제 실행과 최종 이미지 빌드는 별도로 검증해야 합니다.
+**검증 구분:** 서비스 스크립트의 기존 마운트 재사용 및 5초 재시도 코드는 확인됐지만, 이 저장소 점검에서 새 `image.ub` 빌드/SD 배포/부팅 로그를 직접 확인한 것은 아닙니다. 보드 실제 실행과 최종 이미지 빌드는 별도로 검증해야 합니다.

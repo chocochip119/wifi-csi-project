@@ -1,6 +1,6 @@
 # PL — FPGA 연산 RTL
 
-Zynq의 PL(Programmable Logic)은 **PS에서 준비한 INT8 CSI 특징을 병렬 처리하여 사람의 12관절 Pose를 추론**하는 하드웨어 연산부입니다. 현재 저장소에는 Pose CNN 원본 RTL뿐 아니라 **Location Ridge IP 관련 RTL과 테스트벤치**도 있습니다. 실제 기본 PC 위치 모델과 하드웨어 Ridge 통합 버전은 별개의 실행 구성이므로 구분합니다.
+Zynq의 PL(Programmable Logic)은 **PS에서 준비한 INT8 CSI 특징을 병렬 처리하여 사람의 12관절 Pose를 추론**하는 하드웨어 연산부입니다. 현재 저장소에는 Pose CNN 원본 RTL뿐 아니라 **Location Ridge IP 관련 RTL과 테스트벤치**도 있습니다. 기본 위치 추론은 **PS에서 구동하는 C Ridge**이며, 하드웨어 Ridge IP는 별도의 개발·검증 구성으로 구분합니다.
 
 ## 구현된 연산 블록
 

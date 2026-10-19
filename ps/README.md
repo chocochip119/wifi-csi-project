@@ -1,6 +1,6 @@
 # WiSensing PS — RX5 CSI·FPGA 제어·위치 추론·TCP
 
-PS는 **USB CSI 수집 → CNN용 전처리 → FPGA Pose 추론 + PS C Ridge 위치 추론 → TCP 5000 전송**을 수행하는 기본 실행 프로그램입니다.
+PS는 **USB CSI 수집 → CNN용 전처리 → FPGA Pose 추론 + PS C Ridge 위치 추론 → TCP 5000 전송**을 수행하는 기본 실행 프로그램입니다. 현재 `main`에는 **RUN 4/5 자동 복구(#80)**와 **PetaLinux 부팅 자동실행의 SD 기존 마운트 재사용(#81)**이 반영되어 있습니다. 실제 보드에 이 버전이 설치되어 있는지는 별도로 확인해야 합니다.
 
 | 기능 | 주요 모듈 |
 |---|---|

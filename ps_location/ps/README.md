@@ -1,5 +1,7 @@
 # WiSensing PS — RX5 CSI·FPGA 제어·위치 추론·TCP
 
+> **이전 검증본 안내 (2026-10-19):** 현재 기본 실행·배포는 [`ps/`](../../ps/README.md)와 [`pc/backend/`](../../pc/backend/README.md)입니다. 이 복제 문서와 소스는 과거 시험 재현용이므로 새 부팅 자동실행·RX5 복구·위치 확정 2회가 반드시 동일하다고 가정하지 마세요.
+
 Zybo Z7-20 / PetaLinux 2020.2의 C 앱입니다. PS는 USB CSI를 파싱·전처리하고 DDR/AXI4-Lite로 FPGA Pose CNN을 제어합니다. 같은 cycle로 위치(Ridge)도 PS에서 계산하고, 위치·Pose·STATUS를 TCP 5000 하나로 PC에 보냅니다. 전체 순서는 [통합 실행](../../docs/bringup.md), 바이트 규격은 [PS↔PC TCP](../docs/ps_pc_protocol.md)를 참고하세요.
 
 ## 파일 안내

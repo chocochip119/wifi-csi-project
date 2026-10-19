@@ -64,10 +64,17 @@ git pull --ff-only
 
 ## 변경이 함께 필요한 경우
 
-- 원본 CNN RTL을 고치면 `integration/pose_cnn_1.1/src/`의 같은 모듈과 Python INT8/golden 계약도 확인합니다.
-- PS↔PC 바이트를 바꾸면 C 서버·Python protocol·[통신규격](ps_pc_protocol.md)·회귀 테스트를 함께 맞춥니다.
+- 원본 CNN RTL을 고치면 현재 사용 중인 `integration/pose_cnn_par_1.2/src/` 패키지와 Python INT8/golden 계약을 확인하고, 비교용 `pose_cnn_1.1/`에 무엇을 동기화할지도 기록합니다.
+- Ridge RTL을 고치면 `pl/localization/rtl/`의 7개 모듈과 `integration/ridge_axi_1.1/src/`의 대응 모듈, XSim/골든 결과를 함께 확인합니다.
+- PS↔PC 바이트를 바꾸면 C 서버·Python protocol·[통신규격](ps_pc_protocol.md)·회귀 테스트를 함께 맞춥니다. 현재 기본 연결은 TCP 5000 하나이며, Backend 위치 확정은 2회입니다.
 - 모델을 바꾸면 가중치·metadata·scale·golden·manifest를 같은 export run으로 유지합니다.
 - 실행 방법·폴더 위치를 바꾸면 해당 README와 [루트 README](../README.md)의 링크를 확인합니다.
+
+## PR 검토 포인트
+
+- #80(PS RX 5대 자동 복구), #81(PS 부팅 자동실행), #82(최종 Frontend/위치 확정 2회)은 2026-10-19 기준 모두 main에 병합되어 있습니다. 새 작업은 **최신 main 기준 별도 PR**로 제출합니다.
+- 변경된 소스만으로 실제 SD `image.ub`·PL bitstream이 갱신되었다고 주장하지 말고 보드에서 확인한 로그를 PR에 첨부합니다.
+- Frontend 마지막 동작 정리는 그대로 보존하고, 위치 보기/모션 보기 분리와 2회 위치 확정을 회귀 테스트 항목으로 확인합니다.
 
 ## 충돌 줄이기
 

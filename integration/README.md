@@ -11,7 +11,7 @@ Zybo Z7-20 (`xc7z020clg400-1`) / Vivado 2020.2 환경에서 **PS와 PL의 실제
 | **Location Ridge IP** | 955개 위치 특징의 고정소수점 선형 분류 연산용 AXI4-Lite IP |
 | **XSA 산출물** | 기존 CNN과 CNN+Ridge 버전의 Vivado 하드웨어 Export 파일 |
 
-CNN 원본 RTL은 [`pl/cnn/`](../pl/cnn/README.md), Ridge 원본 RTL과 테스트는 [`pl/localization/`](../pl/localization/README.md)에 있고, 이 폴더는 **Vivado IP 패키징과 하드웨어 통합 경로**입니다. 특히 Ridge IP가 빌드되어 있어도 **기본 `ps/` + `pc/backend/`의 실시간 위치 추론은 PC에서 수행**합니다. Ridge FPGA 실보드 적용 여부는 아래 검증 현황과 [별도 PS 위치 시험판](../ps_location/README.md)을 구분해 확인하세요.
+CNN 원본 RTL은 [`pl/cnn/`](../pl/cnn/README.md), Ridge 원본 RTL과 테스트는 [`pl/localization/`](../pl/localization/README.md)에 있고, 이 폴더는 **Vivado IP 패키징과 하드웨어 통합 경로**입니다. Ridge IP가 빌드되어 있어도 **현재 기본 `ps/` + `pc/backend/`의 위치 추론은 Zynq PS의 C Ridge**가 수행합니다. FPGA Ridge 가속은 별도 하드웨어 실험이며, 실보드에서 PS 드라이버로 적용되었다는 뜻이 아닙니다. [PS 기본 경로](../ps/README.md)와 [이전 개발판](../ps_location/README.md)을 구분하세요.
 
 ## 1. 파일 구성
 
@@ -19,14 +19,18 @@ CNN 원본 RTL은 [`pl/cnn/`](../pl/cnn/README.md), Ridge 원본 RTL과 테스�
 |---|---|---|
 | `pose_cnn_1.1/` | 기존 CNN IP 패키지 | 이전 버전 보존 |
 | `pose_cnn_par_1.2/` | 병렬 CNN IP 패키지 | 통합 설계에서 사용하는 CNN (`user.org:user:pose_cnn_par:1.2`) |
-| `ridge_axi_1.0/` | Ridge AXI4-Lite IP 패키지 | **신규 추가:** `component.xml`, `src/ridge_axi_v1.v`, `xgui/ridge_axi_v1_0.tcl` |
+| `ridge_axi_1.0/` | 단일 RTL Ridge AXI4-Lite IP 패키지 | 이전 v1.0 보존 (`component.xml`, `src/`, `xgui/`) |
+| `ridge_axi_1.1/` | **7개 모듈 Ridge AXI IP 패키지** | 현재 RTL 원본 [`pl/localization/`](../pl/localization/README.md)와 동기화 대상 |
 | `design_1_wrapper.xsa` | 기존 CNN 하드웨어 내보내기 | 이전 산출물 보존 |
 | `design_1_wrapper_parallel.xsa` | 기존 병렬 CNN 하드웨어 내보내기 | Ridge 통합 이전 버전 보존 |
-| `cnn_ridge_design_1_wrapper.xsa` | **CNN + Ridge 최종 통합 XSA** | **신규 추가:** FPGA Bitstream 포함 (`-include_bit`) |
+| `cnn_ridge_design_1_wrapper.xsa` | CNN + Ridge 통합 XSA | 기존 10/13 구현·해시 기록 기준; `-include_bit` 확인 기록 |
+| `design_1_wrapper_ridge_sep.xsa` | 별도 Ridge 통합 관련 XSA | **파일 존재만 확인**; 담긴 RTL 버전/bitstream/보드 실행 여부는 검증 필요 |
 
-> `ridge_axi_1.0/` IP 패키지와 `cnn_ridge_design_1_wrapper.xsa`는 현재 저장소에 포함되어 있습니다. **XSA 생성/합성 통과와 실제 보드 적용·동작 검증은 별개**이며, 기존 CNN XSA는 보존합니다.
+> `ridge_axi_1.0/`과 `ridge_axi_1.1/` IP 패키지, 관련 XSA는 현재 저장소에 포함되어 있습니다. **XSA 생성/합성 통과와 실제 보드 적용·동작 검증은 별개**이며, 기존 CNN XSA는 보존합니다.
 
 원본 CNN RTL은 [`../pl/cnn/rtl/`](../pl/cnn/rtl/)에서 관리하며, Ridge 원본 RTL과 테스트벤치는 각각 `../pl/localization/rtl/`, `../pl/localization/testbench/`에 별도로 관리한다. Vivado IP 패키지의 `src/`는 해당 원본 RTL의 패키징용 복사본이다. 원본 수정 시 IP 패키지 소스도 함께 갱신한다. 기존 CNN v1.1 패키지의 `requant_core.v`, `requant_stage.v`, `Pool.v`는 원본과 바이트 일치를 확인했던 파일이며, 다른 복사본까지 동일함을 뜻하지는 않는다. 기존 XSA의 최신 CNN 수정 반영 여부도 별도로 확인해야 한다.
+
+아래 2~4절의 구조·CSR·성능 표는 **2026-10-13 당시 `ridge_axi_1.0`/`cnn_ridge_design_1_wrapper.xsa` 기록**입니다. 최신 `ridge_axi_1.1`의 7모듈 RTL/별도 타이밍 결과는 [PL Ridge README](../pl/localization/README.md)를 우선 참조합니다. 기존 보고서의 수치를 v1.1/XSA 전부에 그대로 적용하지 마세요.
 
 ## 2. CNN + Ridge 통합 구조
 
@@ -114,16 +118,16 @@ Ridge RTL 기준 한 번의 추론 계산은 **31,526클록**, 100 MHz에서 **3
 2. **단기 PL 시험:** 기존 Linux에서 FPGA 재설정 인터페이스(`/dev/xdevcfg` 또는 FPGA Manager) 지원 여부를 확인하고, CNN 앱을 정지한 뒤 새 Bitstream을 로드한다. 지원되는 입력 형식·절차는 실제 커널 설정에 맞춰 확인한다.
 3. 새 IP 로딩 후 `devmem 0x43C10038 32`가 `0x52444731`을 반환하는지 확인한다. 이는 **Ridge IP 존재 및 AXI 읽기 확인**이지 MAC 추론 성공 판정은 아니다.
 4. 별도 Ridge 보드 테스트로 가중치·특징 로딩, `MODEL_COMMIT`, `START`, `DONE`, 11개 Score와 Class Code를 Golden과 비교한다.
-5. 최신 [`../ps_location/ps/`](../ps_location/ps/)의 `loc_ridge.c`는 현재 **CPU 기반 Ridge 추론**이므로, 기존 955-feature/윈도우/TCP 경로를 유지하면서 FPGA 드라이버로 연산 부분을 교체한다. CNN 기존 동작도 재시험한다.
+5. 기본 [`../ps/`](../ps/README.md)의 `loc_ridge.c`는 현재 **CPU 기반 Ridge 추론**이므로, 기존 955-feature/윈도우/TCP 경로를 유지하면서 FPGA 드라이버로 연산 부분을 교체한다. CNN 기존 동작도 재시험한다.
 6. **최종 배포:** 새 Bitstream을 포함한 부팅 이미지(`BOOT.BIN`)를 준비하고, 필요한 PS 애플리케이션·Device Tree 변경을 PetaLinux 빌드 결과에 반영한다. **XSA를 SD카드에 복사하는 것만으로 PL이 갱신되지는 않는다.**
 
-기존 PetaLinux 통합·자동 실행 절차는 [`../ps_location/ps/petalinux/AUTOSTART.md`](../ps_location/ps/petalinux/AUTOSTART.md) 참고. 기존 예약 DDR·USB Host 설정, 자동 실행 서비스, `/mnt/wise-boot/weights_5rx.bin` 가중치 경로를 유지할 것.
+현재 PetaLinux 통합·자동 실행 절차는 [`../ps/petalinux/AUTOSTART.md`](../ps/petalinux/AUTOSTART.md) 참고. 기존 예약 DDR·USB Host 설정, 자동 실행 서비스, `/mnt/wise-boot/weights_5rx.bin` 가중치 경로를 유지할 것.
 
 ## 6. 업로드·버전 관리 원칙
 
 - 기존 `design_1_wrapper.xsa`, `design_1_wrapper_parallel.xsa`, `pose_cnn_1.1/`, `pose_cnn_par_1.2/`는 **삭제하거나 덮어쓰지 않는다.**
 - 통합 하드웨어 XSA는 `cnn_ridge_design_1_wrapper.xsa` 이름으로 **별도 등록**한다. 대화에서 다운로드한 `cnn_ridge_design_1_wrapper(1).xsa` 같은 중복 다운로드 이름은 GitHub 업로드 시 원래 이름으로 바꾼다.
-- 신규 Ridge IP 패키지는 `component.xml`만이 아니라 **`src/ridge_axi_v1.v`와 `xgui/ridge_axi_v1_0.tcl`을 함께** 올린다.
+- Ridge v1.1 패키지는 `component.xml`만이 아니라 **7개 `src/*.v` 모듈과 `xgui/*.tcl`을 함께** 관리한다. v1.0 단일 파일은 이전 비교용으로 보존한다.
 - 최종 Ridge RTL·테스트벤치는 `pl/localization/`에 관리하고, 패키지의 RTL 복사본과 정합성을 확인한다.
 - `.gitignore`에 `*.bit`가 있으므로 별도 `.bit`는 기본적으로 추적하지 않는다. **최종 XSA에는 `.bit`가 포함**되어 있다.
 - 합성/구현 로그·보고서는 변경의 근거로 보존할 수 있지만, **Vivado 빌드 성공을 실보드 검증 완료로 표기하지 않는다.**

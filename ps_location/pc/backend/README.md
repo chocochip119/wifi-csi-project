@@ -1,5 +1,7 @@
 # WiSensing PC Backend
 
+> **과거 시험판 문서:** 이 폴더는 [`../../../pc/backend/`](../../../pc/backend/README.md)에 통합되기 전의 사본입니다. 최신 위치 확정 2회·RX5 상태 진단·PS 자동 복구와 일치한다는 보장은 없으므로 실시간 실행 지침은 현재 [Backend 문서](../../../pc/backend/README.md)를 사용하세요.
+
 PS가 TCP 5000 하나로 보내는 위치(PS 계산)·Pose(FPGA)·STATUS/ACK를 받아 최신 상태로 합쳐 HTTP/WebSocket으로 제공합니다. 위치 추론은 PS의 `ps/src/loc_ridge.c`가 하며, PC는 RX 배치를 확인한 뒤 결과를 표시합니다. ZIP의 `handoff/`와 `backend/`를 역할별 Python 패키지로 정리한 실행 코드입니다.
 
 전체 실행은 [통합 실행 순서](../../../docs/bringup.md), PS 설정은 [PS README](../../ps/README.md), wire format은 [PS↔PC 규격](../../docs/ps_pc_protocol.md)을 참고하세요.

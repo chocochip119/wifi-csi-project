@@ -1,5 +1,7 @@
 # PS ↔ PC 통신규격 v1.2
 
+> **이전 시험판의 프로토콜 사본:** 현행 실행의 원본 규격은 [`../../docs/ps_pc_protocol.md`](../../docs/ps_pc_protocol.md)입니다. 새 프로토콜 변경은 기본 문서와 `ps/`·`pc/backend/` 코드 기준으로 검토하세요.
+
 이 문서의 규격 번호는 v1.2이며 **바이트 헤더 version은 2**입니다. v1.1과 헤더는 같고, 포트를 하나로 합치고 Location(type 5)을 추가했습니다. `ps/src/wise_server.c`와 `pc/backend/protocol/wise_protocol.py`가 같은 규격을 구현합니다. 기존 UDP WCSI v1 패킷과 호환되지 않습니다.
 
 실행 순서는 [통합 실행](../../docs/bringup.md), USB·tensor·CSR 경계는 [인터페이스](../../docs/interface.md), 구현 안내는 [PS](../ps/README.md) / [Backend](../pc/backend/README.md)를 참고하세요.

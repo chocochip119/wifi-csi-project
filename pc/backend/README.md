@@ -10,6 +10,8 @@ PS가 TCP 5000 하나로 보내는 위치(PS 계산)·Pose(FPGA)·STATUS/ACK를 
 
 복구 방법은 **TX WAIT → RX0~RX4 연결/LIVE/SAVED 확인 → TX RUN 재시작**입니다. 최신 PS 통합 앱은 다섯 RX가 모두 준비되었음을 STATUS로 확인하면 이 상황을 자동 복구하며, PS 로그에 `RX5 RECOVERY`를 기록합니다. PC Backend는 `/api/snapshot`의 `system.rx_active`, `system.rx_live_saved`, `system.rx_ready_reason`을 제공하여 위 차이를 표시합니다. RX 검증·배치 확인을 생략하거나 임의로 다섯 번째 CSI를 채우지 않습니다.
 
+**표시 안정화:** `app/service.py`가 `LocationStabilizer(confirmations=2)`로 **서로 다른 PS 위치 윈도우의 같은 예측을 2회 연속 확인**하면 위치를 게시합니다. 같은 윈도우의 WebSocket/HTTP 반복 수신은 추가 표가 아니며, 이 설정은 모델의 2초 입력 창 또는 Frontend 자세 인식 프레임 수와 다릅니다. #82에서 3회→2회로 줄여 시각화 반응성을 높였습니다.
+
 ## 실행
 
 Python 3.10 이상(검증 환경: 3.12). `pc/backend`에서:
