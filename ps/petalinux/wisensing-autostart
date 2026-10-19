@@ -20,8 +20,31 @@ ensure_sd_boot_mounted() {
     if grep -q " $WISE_SD_MOUNT " /proc/mounts 2>/dev/null; then
         return 0
     fi
+    # PetaLinux may already mount the SD FAT partition under /media.
+    # Reuse an existing mount rather than mounting the same device twice.
+    mounted_boot_devices=''
+    for device in /dev/mmcblk0p1 /dev/mmcblk1p1; do
+        while read -r mounted_device mounted_path mounted_fs mounted_opts rest; do
+            [ "$mounted_device" = "$device" ] || continue
+            mounted_boot_devices="$mounted_boot_devices $device"
+            case "$WISE_WEIGHTS" in
+                "$WISE_SD_MOUNT"/*)
+                    relative_weights=${WISE_WEIGHTS#"$WISE_SD_MOUNT"}
+                    existing_weights="$mounted_path$relative_weights"
+                    if [ -r "$existing_weights" ]; then
+                        WISE_SD_MOUNT="$mounted_path"
+                        WISE_WEIGHTS="$existing_weights"
+                        echo "Reusing mounted SD boot: $device -> $WISE_SD_MOUNT"
+                        return 0
+                    fi
+                    echo "Waiting: SD boot already mounted at $mounted_path, missing $existing_weights"
+                    ;;
+            esac
+        done < /proc/mounts
+    done
     mkdir -p "$WISE_SD_MOUNT" || return 1
     for device in /dev/mmcblk0p1 /dev/mmcblk1p1; do
+        case " $mounted_boot_devices " in *" $device "*) continue ;; esac
         [ -b "$device" ] || continue
         if mount -t vfat -o ro "$device" "$WISE_SD_MOUNT"; then
             echo "Mounted SD boot: $device -> $WISE_SD_MOUNT (read-only)"
