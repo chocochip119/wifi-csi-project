@@ -4,6 +4,12 @@ PS가 TCP 5000 하나로 보내는 위치(PS 계산)·Pose(FPGA)·STATUS/ACK를 
 
 전체 실행은 [통합 실행 순서](../../docs/bringup.md), PS 설정은 [PS README](../../ps/README.md), wire format은 [PS↔PC 규격](../../docs/ps_pc_protocol.md)을 참고하세요.
 
+## RX 5대 상태와 위치 추론 시작 조건
+
+관리자 화면의 **RUN 수집 RX 수**와 **연결/LIVE/SAVED RX 수**는 서로 다른 값입니다. TX는 RUN 시작 시 참여 RX 슬롯을 고정하므로, RUN이 4대에서 시작한 후 다섯 번째 RX가 접속하면 **RUN 4/5 · LIVE 5/5** 상태가 가능합니다. 이때 PS의 위치 모델은 RX5 전체 CSI를 받을 수 없으므로, PC Backend는 배치 확인/위치 결과 표시를 시작하지 않습니다.
+
+복구 방법은 **TX WAIT → RX0~RX4 연결/LIVE/SAVED 확인 → TX RUN 재시작**입니다. 최신 PS 통합 앱은 다섯 RX가 모두 준비되었음을 STATUS로 확인하면 이 상황을 자동 복구하며, PS 로그에 `RX5 RECOVERY`를 기록합니다. PC Backend는 `/api/snapshot`의 `system.rx_active`, `system.rx_live_saved`, `system.rx_ready_reason`을 제공하여 위 차이를 표시합니다. RX 검증·배치 확인을 생략하거나 임의로 다섯 번째 CSI를 채우지 않습니다.
+
 ## 실행
 
 Python 3.10 이상(검증 환경: 3.12). `pc/backend`에서:
