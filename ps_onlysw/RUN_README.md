@@ -1,5 +1,7 @@
 # PS vs PL 추론 시간 비교 — 실행 방법
 
+> **비교·벤치마크 전용 (과거 분리 프로토콜):** 아래 두 포트/바이너리 경로는 `ps_onlysw/` 스냅샷의 실험 조건입니다. 현재 `ps/` 기본 서비스(TCP 5000 단일 포트, C Ridge 위치)나 PetaLinux 부팅 자동실행 절차로 사용하지 마세요. [현재 PS 실행](../ps/README.md) · [자동실행](../ps/petalinux/AUTOSTART.md)
+
 Zybo Z7-20(PetaLinux 2020.2) 보드에서 같은 입력으로 **PS(ARM 소프트웨어)** 추론과 **PL(FPGA IP)** 추론 시간을 비교하는 절차입니다.
 코드와 파일 설명은 [README.md](README.md)를 참고하세요.
 

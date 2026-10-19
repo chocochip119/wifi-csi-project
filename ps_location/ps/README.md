@@ -1,5 +1,7 @@
 # WiSensing PS — RX5 CSI·FPGA 제어·위치 추론·TCP
 
+> **이전 검증본 안내 (2026-10-19):** 현재 기본 실행·배포는 [`ps/`](../../ps/README.md)와 [`pc/backend/`](../../pc/backend/README.md)입니다. 이 복제 문서와 소스는 과거 시험 재현용이므로 새 부팅 자동실행·RX5 복구·위치 확정 2회가 반드시 동일하다고 가정하지 마세요.
+
 Zybo Z7-20 / PetaLinux 2020.2의 C 앱입니다. PS는 USB CSI를 파싱·전처리하고 DDR/AXI4-Lite로 FPGA Pose CNN을 제어합니다. 같은 cycle로 위치(Ridge)도 PS에서 계산하고, 위치·Pose·STATUS를 TCP 5000 하나로 PC에 보냅니다. 전체 순서는 [통합 실행](../../docs/bringup.md), 바이트 규격은 [PS↔PC TCP](../docs/ps_pc_protocol.md)를 참고하세요.
 
 ## 파일 안내
@@ -126,7 +128,7 @@ PC에서 실제 RX 배치/학습 순서를 확인한 뒤 API로 위치 추론을
 | 전체 전원 재부팅 | 이후 10윈도우·추론 10회 |
 | FPGA 추론 시간 | 관찰값 약 23~24ms/윈도우 |
 
-현재 소스의 호스트 컴파일·TCP 회귀 결과는 [2026-10-07 점검](../../docs/reviews/2026-10-07-pc-integration.md)에 있습니다. ARM/PetaLinux 전체 빌드·새 RTL bitstream·보드 비교는 남아 있습니다. `infer_ms`는 CSI 수집을 포함한 전체 지연시간과 다릅니다.
+이전 버전의 호스트 C/Backend TCP 테스트는 해당 테스트 소스로 재현할 수 있습니다. ARM/PetaLinux 전체 빌드·새 RTL bitstream·실보드 비교는 별도로 확인해야 합니다. `infer_ms`는 CSI 수집을 포함한 전체 지연시간과 다릅니다.
 
 입력 scale은 유한 양수·범위와 전체 문자열을 검사하고, 윈도우 수는 부호 없는 십진수로 검사합니다. 두 앱은 `/run/pose-cnn-rx5.lock`을 공유하지만 다른 직접 접근 프로그램에는 적용되지 않습니다. BUSY/timeout 강제 복구는 구현하지 않았고 CLEAR는 DMA 중단이 아닙니다. timeout 후 하드웨어 reset 절차를 확인해야 합니다.
 

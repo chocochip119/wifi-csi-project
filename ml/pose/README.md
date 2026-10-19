@@ -22,7 +22,7 @@
 
 v5는 모델/학습/calibration 코드를 외부 `ziziccc/wifi-csi-pose` commit `4ee1a900bbd8c22fc9d3dc4c2c01845d82ab7fee`에서, 팀 prepare/INT8/golden을 commit `c0dedf23f785c0346b6e6ec4edd2c5b94880a22d`에서 고정 로드합니다. main의 파일을 바꿨다고 notebook이 자동으로 새 commit을 쓰지는 않습니다.
 
-Standalone `prepare.py` 기본 RX는 3입니다. RX5 직접 전처리에는 `--node-count 5`를 지정합니다. 기본 HT-LTF 출력은 프레임별 `[N,15,128]`이며 window를 묶으면 `[B,15,128,10]`입니다. v5 Dataset은 forward_fill/max_gap=3을 사용합니다. PS의 윈도우 연속성 정책과 최종 데이터 분할은 [점검 기록](../../docs/reviews/2026-10-07-pc-integration.md)을 참고하세요.
+Standalone `prepare.py` 기본 RX는 3입니다. RX5 직접 전처리에는 `--node-count 5`를 지정합니다. 기본 HT-LTF 출력은 프레임별 `[N,15,128]`이며 window를 묶으면 `[B,15,128,10]`입니다. v5 Dataset은 forward_fill/max_gap=3을 사용합니다. PS의 실시간 입력 윈도우 처리와 모델의 데이터 분할은 [PS 실행](../../ps/README.md) 및 이 폴더의 학습·전처리 설정을 각각 확인하세요.
 
 ## 검증 실행
 

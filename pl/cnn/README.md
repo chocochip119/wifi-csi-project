@@ -31,4 +31,4 @@
 - [FC 전용 단위/통합 TB](testbench/FC/README.md): FIFO·MAC·Requant·GELU·RAM·Controller와 RX3/RX5 FC1→FC2→FC3를 자동 비교합니다.
 - FC/controller/loader를 포함한 전체 CNN 경로 검증은 `rounding/`의 golden TB를 사용합니다.
 
-소스와 golden의 일치는 실제 Vivado 타이밍/자원·보드 정확도 확인과 구분합니다. 기존 XSA/시험 벡터의 상태는 [통합 자료](../../integration/README.md), 실제로 수행한 검사는 [점검 기록](../../docs/reviews/2026-10-07-pc-integration.md)에 기록합니다.
+소스와 golden의 일치는 실제 Vivado 타이밍/자원·보드 정확도 확인과 구분합니다. 기존 XSA/시험 벡터와 패키징 버전은 [통합 자료](../../integration/README.md)를 확인하고, RTL 테스트·실보드 실행 결과를 서로 구분해서 해석하세요.

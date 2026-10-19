@@ -10,6 +10,8 @@ PS가 TCP 5000 하나로 보내는 위치(PS 계산)·Pose(FPGA)·STATUS/ACK를 
 
 복구 방법은 **TX WAIT → RX0~RX4 연결/LIVE/SAVED 확인 → TX RUN 재시작**입니다. 최신 PS 통합 앱은 다섯 RX가 모두 준비되었음을 STATUS로 확인하면 이 상황을 자동 복구하며, PS 로그에 `RX5 RECOVERY`를 기록합니다. PC Backend는 `/api/snapshot`의 `system.rx_active`, `system.rx_live_saved`, `system.rx_ready_reason`을 제공하여 위 차이를 표시합니다. RX 검증·배치 확인을 생략하거나 임의로 다섯 번째 CSI를 채우지 않습니다.
 
+**표시 안정화:** `app/service.py`가 `LocationStabilizer(confirmations=2)`로 **서로 다른 PS 위치 윈도우의 같은 예측을 2회 연속 확인**하면 위치를 게시합니다. 같은 윈도우의 WebSocket/HTTP 반복 수신은 추가 표가 아니며, 이 설정은 모델의 2초 입력 창 또는 Frontend 자세 인식 프레임 수와 다릅니다. #82에서 3회→2회로 줄여 시각화 반응성을 높였습니다.
+
 ## 실행
 
 Python 3.10 이상(검증 환경: 3.12). `pc/backend`에서:
@@ -73,4 +75,4 @@ python -m pip install -r pc/backend/requirements-dev.txt
 python -m pytest pc/backend/tests ml/pose/tests -q
 ```
 
-`tests/test_ps_location_parity.py`는 PS C 위치 엔진을 호스트 GCC로 빌드해 같은 USB 스트림에서 Python 엔진과 창·라벨·점수를 비교합니다(Windows MSYS2 GCC도 가능). `tests/test_transport.py`의 C 통합 테스트는 Linux/POSIX와 GCC가 필요합니다. `/dev/mem`이나 보드 없이 checksum-valid USB 프레임을 PS 파서에 넣고 TCP/실제 Backend까지 검증합니다. 현재 모델의 회귀 fixture 40개는 **합성 CSI 입력**으로, 특징/점수/라벨 계산 일치만 확인합니다. 현장 데이터 정확도나 원본 validation 점수는 재검증하지 못했습니다. 보드/ARM/PetaLinux 전체 빌드와 실제 모델 정확도 검증은 [점검 기록](../../docs/reviews/2026-10-07-pc-integration.md)을 참고하세요.
+`tests/test_ps_location_parity.py`는 PS C 위치 엔진을 호스트 GCC로 빌드해 같은 USB 스트림에서 Python 엔진과 창·라벨·점수를 비교합니다(Windows MSYS2 GCC도 가능). `tests/test_transport.py`의 C 통합 테스트는 Linux/POSIX와 GCC가 필요합니다. `/dev/mem`이나 보드 없이 checksum-valid USB 프레임을 PS 파서에 넣고 TCP/실제 Backend까지 검증합니다. 현재 모델의 회귀 fixture 40개는 **합성 CSI 입력**으로, 특징/점수/라벨 계산 일치만 확인합니다. 현장 데이터 정확도나 원본 validation 점수는 재검증하지 못했습니다. 보드/ARM/PetaLinux 전체 빌드와 실제 모델 정확도는 이 호스트 테스트만으로 검증된 것이 아닙니다.

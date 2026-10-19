@@ -10,6 +10,8 @@
 
 </div>
 
+> 현재 기본 구현은 **PS C Ridge 위치 분류 + FPGA Pose + TCP 5000 단일 연결**입니다. Backend는 서로 다른 위치 예측 윈도우 **2회 연속 확인** 후 구역을 표시합니다. PS 부팅 자동실행 복구와 RX 5대 자동 회복 로직은 소스에 반영되어 있지만, **배포한 PetaLinux 이미지/실제 보드에서의 동작은 별도 확인**이 필요합니다. [실행·부팅 점검](docs/bringup.md) · [PS 자동실행](ps/petalinux/AUTOSTART.md)
+
 ## 주요 구현 기능
 
 WiSensing은 여러 ESP32가 관측한 **Wi-Fi 채널 상태 정보(CSI)**를 이용해 사람의 **실내 위치 구역**과 **12개 신체 관절의 움직임**을 추정하는 시스템입니다. 자세 모델을 학습할 때는 영상에서 추출한 관절 좌표를 정답으로 사용하지만, **실시간 추론에는 카메라 영상을 입력하지 않습니다.**
@@ -51,10 +53,12 @@ WiSensing은 여러 ESP32가 관측한 **Wi-Fi 채널 상태 정보(CSI)**를 �
 | 화면 | 확인할 수 있는 기능 |
 |---|---|
 | **메인 시연 화면** | 실내 공간의 3D 캐릭터, 2D 관절 스켈레톤, P01~P09 구역 표시, 자세·연결 상태 |
-| **위치/모션 보기** | **3번 키**로 위치를 따라 이동하는 보기와 중앙 P05에 고정한 모션 보기를 전환 |
+| **위치/모션 보기** | **3번 키**로 구역 이동·서기/앉기 중심의 위치 보기와 중앙 P05 고정·실제 관절 추종의 모션 보기를 전환 |
 | **좌우 관절 대응** | **좌우 반전 ON/OFF** 버튼으로 2D 스켈레톤과 3D 캐릭터 동작을 함께 전환 |
 | **관리자·테스트 화면** | RX 연결/배치, CSI·Pose 수신, 추론 상태, 관절 샘플·편집 및 기록 재생 |
 | **기록 재생** | 저장한 추론 결과를 다시 재생하여 관절·위치 표시를 확인 |
+
+위치 모드에서는 관절이 입력으로 계속 들어와도 3D 캐릭터의 팔·다리 움직임을 그대로 따라가지 않으며, **모션 모드는 위치 분류 결과와 독립적으로** 관절 추종을 유지합니다. 자세 전환의 프레임 기준은 Backend 위치 확정 2회와 별개입니다.
 
 실제 UI는 [`pc/frontend/`](pc/frontend/README.md)에서, PC 데이터 통합 및 API는 [`pc/backend/`](pc/backend/README.md)에서 설명합니다. 보드·모델이 없는 환경에서는 Backend의 테스트 입력으로 **화면 흐름만** 확인할 수 있습니다.
 
@@ -102,5 +106,5 @@ WiSensing은 여러 ESP32가 관측한 **Wi-Fi 채널 상태 정보(CSI)**를 �
 
 - **장치·모델별 설명:** [ESP32](esp32/README.md) · [FPGA](pl/README.md) · [PS](ps/README.md) · [ML](ml/README.md) · [PC](pc/README.md)
 - **전체 연결·규격:** [시스템 구조](docs/architecture.md) · [인터페이스](docs/interface.md) · [PS↔PC 패킷](docs/ps_pc_protocol.md)
-- **설치·실행·검증:** [통합 실행 순서](docs/bringup.md) · [Windows 원클릭 실행](docs/oneclick_launcher.md) · [검증 기록](docs/reviews/2026-10-07-pc-integration.md)
+- **설치·실행·검증:** [통합 실행 순서](docs/bringup.md) · [PS 부팅 자동실행](ps/petalinux/AUTOSTART.md) · [Windows 원클릭 실행](docs/oneclick_launcher.md)
 

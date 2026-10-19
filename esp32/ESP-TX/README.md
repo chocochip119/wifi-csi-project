@@ -124,7 +124,7 @@ RX는 CSI를 캡처한 뒤 TX의 UDP port `3333`으로 `udp_csi_packet_header_t 
 | `checksum` | 4 | header 일부와 raw CSI를 이어 계산한 checksum32 |
 | `raw CSI` | 가변 | CSI byte 배열 |
 
-TX는 `magic`, `version`, `csi_len`, 전체 길이, checksum을 검증하고 현재 running `generation`과 할당된 `rx_index`에 맞는 record를 cycle buffer에 반영한다. UDP header에는 `trigger_seq`가 없으므로 이전 trigger의 지연 CSI를 현재 cycle과 구별하는 보장은 없다. 남은 동기화 항목은 [점검 기록](../../../docs/reviews/2026-10-07-pc-integration.md)을 참고한다.
+TX는 `magic`, `version`, `csi_len`, 전체 길이, checksum을 검증하고 현재 running `generation`과 할당된 `rx_index`에 맞는 record를 cycle buffer에 반영한다. UDP header에는 `trigger_seq`가 없으므로 이전 trigger의 지연 CSI를 현재 cycle과 구별하는 보장은 없다. 따라서 무선 수집 타이밍을 변경할 때에는 RX별 지연·유효 cycle 정합을 실제 장치에서 다시 시험해야 한다.
 
 ## TX-USB Host 통신 프로토콜
 

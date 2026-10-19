@@ -1,39 +1,65 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380" role="img" aria-label="WiSensing: Wi-Fi TX/RX에서 Zynq PS로 CSI를 수집하고, PS C Ridge 위치 추론과 FPGA CNN 자세 추론을 실행한 뒤 TCP 5000으로 PC Backend 및 Frontend에 전송">
-<rect width="1200" height="380" rx="16" fill="#f3f8fb"/>
-<g font-family="Arial,sans-serif" text-anchor="middle" font-weight="bold">
-<rect x="30" y="118" width="194" height="115" rx="14" fill="#205275"/>
-<text x="127" y="166" font-size="22" fill="white">Wi-Fi TX/RX</text>
-<text x="127" y="195" font-size="16" fill="#c9e8f7">CSI acquisition</text>
-<rect x="276" y="118" width="256" height="115" rx="14" fill="#246c82"/>
-<text x="404" y="157" font-size="22" fill="white">Zynq PS</text>
-<text x="404" y="183" font-size="15" fill="#d2eef3">CSI preprocessing</text>
-<text x="404" y="207" font-size="15" fill="#d2eef3">C Ridge: 9 zones + state</text>
-<rect x="582" y="25" width="242" height="109" rx="14" fill="#41559b"/>
-<text x="703" y="70" font-size="22" fill="white">FPGA PL</text>
-<text x="703" y="102" font-size="16" fill="#dce4ff">CNN: 12 joints</text>
-<rect x="582" y="209" width="242" height="116" rx="14" fill="#32816c"/>
-<text x="703" y="257" font-size="22" fill="white">PC Backend</text>
-<text x="703" y="286" font-size="15" fill="#e0fff2">Location + Pose state</text>
-<rect x="913" y="118" width="245" height="115" rx="14" fill="#26395d"/>
-<text x="1035" y="164" font-size="22" fill="white">Visualization</text>
-<text x="1035" y="194" font-size="16" fill="#c6e1f1">2D skeleton + 3D</text>
-</g>
-<g fill="none" stroke="#7894a8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-<path d="M224 175 H276"/>
-<path d="M532 151 H552 V80 H582"/>
-<path d="M582 102 H558 V133 H532"/>
-<path d="M532 195 H558 V267 H582"/>
-<path d="M824 267 H875 V175 H913"/>
-</g>
-<g fill="#7894a8">
-<path d="M270 167 l13 8 -13 8"/>
-<path d="M576 72 l13 8 -13 8"/>
-<path d="M538 125 l-13 8 13 8"/>
-<path d="M576 259 l13 8 -13 8"/>
-<path d="M907 167 l13 8 -13 8"/>
-</g>
-<g font-family="Arial,sans-serif" font-size="14" fill="#466174">
-<text x="33" y="31">Main execution: PS C Ridge location + FPGA Pose CNN</text>
-<text x="545" y="342">TCP 5000: Location / Pose / STATUS / ACK</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="460" viewBox="0 0 1260 460" role="img" aria-labelledby="title desc">
+  <title id="title">WiSensing 실시간 데이터 처리 구조</title>
+  <desc id="desc">ESP32 TX 1대와 RX 5대가 CSI를 USB로 Zynq PS에 보낸다. PS는 C Ridge 위치 분류를 실행하고 FPGA PL에 INT8 Tensor를 보내 Pose CNN의 12관절 결과를 돌려받는다. PS는 위치와 자세를 한 TCP 5000 연결로 PC Backend에 전송하고 Frontend가 2D와 3D로 표시한다.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1 1 L9 5 L1 9 Z" fill="#527e95"/>
+    </marker>
+    <marker id="tcp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1 1 L9 5 L1 9 Z" fill="#0b827d"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1260" height="460" rx="18" fill="#f4f8fb"/>
+  <g font-family="'Noto Sans KR','Malgun Gothic',Arial,sans-serif">
+    <text x="36" y="40" font-size="24" font-weight="700" fill="#17364c">WiSensing | 실시간 위치·자세 추론</text>
+    <text x="36" y="67" font-size="15" fill="#557083">기본 실행: PS에서 위치 계산 · FPGA에서 관절 추론 · PC에서 결과 통합 및 표시</text>
+    <rect x="271" y="95" width="529" height="301" rx="19" fill="#e9f2f8" stroke="#a4bbca" stroke-width="2" stroke-dasharray="7 7"/>
+    <text x="297" y="124" font-size="18" font-weight="700" fill="#274d68">Zybo Z7-20 · Zynq SoC</text>
+    <text x="297" y="146" font-size="13" fill="#537387">PS와 PL은 같은 보드 안에서 연결됩니다</text>
+
+    <rect x="32" y="176" width="204" height="135" rx="15" fill="#235a7b"/>
+    <text x="134" y="214" font-size="20" font-weight="700" fill="white" text-anchor="middle">ESP32 TX / RX</text>
+    <text x="134" y="242" font-size="15" fill="#e3f4ff" text-anchor="middle">TX 1대 · RX 5대</text>
+    <text x="134" y="269" font-size="15" fill="#e3f4ff" text-anchor="middle">Wi-Fi CSI 수집</text>
+
+    <rect x="299" y="176" width="226" height="135" rx="15" fill="#176b80"/>
+    <text x="412" y="209" font-size="22" font-weight="700" fill="white" text-anchor="middle">Zynq PS</text>
+    <text x="412" y="238" font-size="14" fill="#e3f8fb" text-anchor="middle">CSI 수신·INT8 전처리</text>
+    <text x="412" y="266" font-size="17" font-weight="700" fill="white" text-anchor="middle">C Ridge 위치 분류</text>
+    <text x="412" y="290" font-size="13" fill="#e3f8fb" text-anchor="middle">P01~P10 / 사람 없음</text>
+
+    <rect x="584" y="176" width="191" height="135" rx="15" fill="#445ca4"/>
+    <text x="679" y="209" font-size="22" font-weight="700" fill="white" text-anchor="middle">FPGA PL</text>
+    <text x="679" y="242" font-size="18" font-weight="700" fill="#eff3ff" text-anchor="middle">INT8 Pose CNN</text>
+    <text x="679" y="275" font-size="15" fill="#eff3ff" text-anchor="middle">12관절 (x, y)</text>
+
+    <rect x="850" y="176" width="170" height="135" rx="15" fill="#257a68"/>
+    <text x="935" y="211" font-size="20" font-weight="700" fill="white" text-anchor="middle">PC Backend</text>
+    <text x="935" y="242" font-size="14" fill="#e3fff7" text-anchor="middle">위치·Pose 수신</text>
+    <text x="935" y="269" font-size="14" fill="#e3fff7" text-anchor="middle">RX 확인 / API</text>
+
+    <rect x="1059" y="176" width="171" height="135" rx="15" fill="#293d62"/>
+    <text x="1145" y="211" font-size="20" font-weight="700" fill="white" text-anchor="middle">Frontend</text>
+    <text x="1145" y="242" font-size="14" fill="#e6effe" text-anchor="middle">2D 스켈레톤</text>
+    <text x="1145" y="269" font-size="14" fill="#e6effe" text-anchor="middle">3D 캐릭터</text>
+
+    <g fill="none" stroke="#527e95" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)">
+      <path d="M236 236 H299"/>
+      <path d="M525 214 H584"/>
+      <path d="M584 273 H525"/>
+      <path d="M1020 236 H1059"/>
+    </g>
+    <g fill="none" stroke="#0b827d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#tcp-arrow)">
+      <path d="M412 311 V356 H935 V311"/>
+    </g>
+    <g font-size="13" font-weight="700" text-anchor="middle" fill="#284e66">
+      <text x="267" y="225">USB</text>
+      <text x="555" y="197">입력</text>
+      <text x="555" y="294">결과</text>
+      <text x="1040" y="223" font-size="11">WS</text>
+    </g>
+    <text x="700" y="341" font-size="15" font-weight="700" fill="#0a766e" text-anchor="middle">TCP 5000 · Location + Pose + STATUS + ACK</text>
+    <text x="1145" y="335" font-size="13" fill="#557083" text-anchor="middle">HTTP / WebSocket 8000</text>
+    <text x="36" y="432" font-size="14" fill="#607a8d">위치는 PS C Ridge, 자세는 FPGA CNN이 추론합니다. 화면 표시용 보정은 Frontend에서만 적용합니다.</text>
+  </g>
 </svg>

@@ -1,5 +1,7 @@
 # ps_location: FPGA Pose + PS Location 자동 실행 (PetaLinux 2020.2)
 
+> **이전 시험용 자동실행 절차:** 현재 기준은 [`../../../ps/petalinux/AUTOSTART.md`](../../../ps/petalinux/AUTOSTART.md)입니다. #81의 SD 기존 마운트 재사용 수정은 기본 `ps/petalinux/wisensing-autostart`에 적용되어 있습니다. 이 하위 폴더의 recipe로 기존 이미지를 교체하지 마세요.
+
 `ps_location/ps` 안의 **통합 프로그램 하나**가 USB CSI 수신, PL CNN Pose,
 PS Ridge Location, TCP 5000을 처리합니다. 부팅 서비스 이름은 기존과 같은
 `wisensing-autostart`이므로 **같은 서비스를 두 개 실행하지 않습니다.**

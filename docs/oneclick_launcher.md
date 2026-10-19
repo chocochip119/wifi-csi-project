@@ -1,7 +1,7 @@
 # Windows 원클릭 실행기 (Electron 사용 안 함)
 
 현재 Windows PC의 **Python Backend + Three.js/Vite Frontend**를 한 번에 실행하고,
-시연 화면에서 종료할 수 있도록 하는 개발용 실행 도구입니다. **Zybo의 CNN은 자동 실행하지 않습니다.**
+시연 화면에서 종료할 수 있도록 하는 개발용 실행 도구입니다. **PC 실행기는 Zybo의 PS/FPGA 프로그램을 시작하거나 종료하지 않습니다.** Zybo의 `wisensing-autostart`는 별도의 PetaLinux 부팅 서비스이므로 [PS 자동실행](../ps/petalinux/AUTOSTART.md)에서 확인합니다.
 
 ## 첫 사용 준비
 
@@ -9,14 +9,14 @@
 - 저장소 루트 `.venv\Scripts\python.exe`, 설치된 Backend 의존성 필요
 - Node.js LTS의 `npm.cmd`가 PATH에 있어야 함
 - 로컬 모델 `pc/frontend/public/models/`는 그대로 유지하며 Git으로 다운로드하지 않음
-- 실제 보드에서 `pose_cnn_rx5_live`를 실행하고 PC에서 Zybo 주소가 통신되어야 함
+- 실제 보드에서 `wisensing-autostart`가 통합 앱을 실행 중인지 확인하고 PC에서 Zybo 주소가 통신되어야 함(자동 서비스가 동작하면 수동 중복 실행 금지)
 - 기존 VS Code에서 직접 실행 중인 **Backend(8000), Vite(5173)** 는 처음 한 번만 Ctrl+C로 종료 (관리하지 않는 프로세스는 강제로 종료하지 않음)
 
 ## 시작
 
 1. 탐색기에서 저장소 루트 `WiSensing_Start.bat` 더블클릭
 2. Python Backend가 8000, Vite가 5173에서 준비되면 브라우저의 WiSensing 화면 자동 실행
-3. 시연 화면 우상단 **⚙ 설정 · 테스트** 클릭 → 별도 팝업에서 독립 테스트 설정
+3. 시연 화면 우상단 **⚙ 관리자 · 관절 테스트** 클릭 → 별도 팝업에서 독립 테스트 설정
 4. 시연 화면 우상단 **⏻ 프로그램 종료** 클릭 → 확인 후 이번 실행기가 시작한 PC 서버만 종료
 5. 브라우저 탭은 종료 후 직접 닫기. 실수로 탭을 닫았다면 `WiSensing_Stop.bat` 더블클릭으로 종료 가능
 

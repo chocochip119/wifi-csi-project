@@ -1,14 +1,13 @@
 # ML — 자세·위치 모델 학습과 배포 준비
 
-이 폴더는 **수집한 Wi-Fi CSI로 모델을 학습하고, 실제 실행 경로에서 사용할 가중치·정수 입력·검증 데이터를 만드는 곳**입니다. 모델 학습 코드와 FPGA/PC에서 실제로 추론하는 코드는 분리되어 있습니다.
+이 폴더는 **수집한 Wi-Fi CSI로 모델을 학습하고, 실제 실행 경로에서 사용할 가중치·정수 입력·검증 데이터를 만드는 곳**입니다. 학습 코드는 FPGA/PS에서 실제 추론하는 코드와 분리되어 있습니다.
 
 ## 구현 기능
 
 | 영역 | 입력과 처리 | 출력·연결 |
 |---|---|---|
 | [`pose/`](pose/README.md) | CSI CSV 확인·전처리 → **RX5 15채널 Pose CNN 학습** → INT8 calibration/export | FPGA용 가중치 blob, 입력·출력 golden, 12관절 24좌표 |
-| [`localization/`](localization/README.md) | RX5의 CSI 진폭·RSSI에서 **2초 윈도우 955특징** 추출 → kNN/Ridge/MLP 비교·학습·평가 | 9개 구역 + P10 앉기 + 사람 없음의 11클래스, PC용 Portable Ridge 모델 |
-| `respiration/` | 호흡 분석 아이디어 관련 디렉터리 | 현재 기본 Motion/Location 실행에는 포함하지 않음 |
+| [`localization/`](localization/README.md) | RX5의 CSI 진폭·RSSI에서 **2초 윈도우 955특징** 추출 → kNN/Ridge/MLP 비교·학습·평가 | 9개 구역 + P10 앉기 + 사람 없음의 11클래스, PS C 배포용 모델의 원본 Portable Ridge NPZ/JSON |
 
 ### Pose — 추론용 INT8 데이터 만들기
 
@@ -25,6 +24,7 @@ CSI 데이터셋 → base/delta/mask [15,128,10] → CNN 학습
 ```text
 RX5 CSI/RSSI 데이터셋 → 2초 통계 특징(955개)
                    → 모델 학습·평가 → Portable Ridge NPZ/JSON
+                   → ps/tools/export_loc_model.py → ps/models/loc_ridge_rx5.bin
                    → ps/src/loc_ridge.c 에서 실시간 구역 분류
 ```
 

@@ -1,6 +1,6 @@
 # WiSensing 실제 PC 설치 / LIVE 시연 및 관리자 화면
 
-이 문서는 기존 `main`의 원클릭 실행·설정 팝업 기능을 보존하면서 LIVE 위치·모션 시연을 설명합니다.
+이 문서는 파일 이름에 `v18`이 남아 있지만 **현재 main(#80·#81·#82 병합 후)**의 PC 구동·LIVE 시연 절차를 설명합니다. 화면의 최종 동작은 [Frontend README](../pc/frontend/README.md), 보드 자동실행은 [PS 자동실행](../ps/petalinux/AUTOSTART.md)이 기준입니다.
 
 ## 구동 PC에서 가져오기
 
@@ -18,7 +18,7 @@ npm ci
 
 ## 실행
 
-Zybo PetaLinux 콘솔에서 최종 모델과 동일한 input_scale, blob으로 `pose_cnn_rx5_live /dev/ttyACM0 <encoder.input_scale> 0 /root/weights_5rx.bin` 실행. PC 저장소 루트에서:
+Zybo는 먼저 `wisensing-autostart` 서비스가 **부팅 시 실행 중인지 확인**합니다. 최신 recipe는 `WISE_INPUT_SCALE=auto`와 SD FAT의 가중치를 사용하며, 이미 `/media/...`에 마운트된 SD도 재사용합니다. 서비스가 정상 작동 중이면 **`pose_cnn_rx5_live`를 수동으로 중복 실행하지 마세요.** 수동 점검이 필요할 때에는 서비스를 중지한 뒤 `pose_cnn_rx5_live /dev/ttyACM0 auto 0 <가중치_경로>`를 실행합니다. PC 저장소 루트에서:
 
 ```powershell
 .\scripts\start_backend_real.ps1 -PsIp 192.168.10.2
@@ -32,21 +32,27 @@ Zybo PetaLinux 콘솔에서 최종 모델과 동일한 input_scale, blob으로 `
 
 ## 시연 모드
 
-- **위치 따라가기**: 실제 P01~P09의 위치에 캐릭터 이동
-- **중앙 고정 · 모션 보기**: **Location Result는 실제 위치를 계속 표시**하지만 캐릭터는 Zone 5에 고정
+- **위치 따라가기**: P01~P09의 구역에 캐릭터 이동(걷는 동안 2D 걷기 스켈레톤, 도착 후 서기), P10은 중앙 앉기. 이 보기에서는 팔·다리 실시간 추종을 적용하지 않음
+- **중앙 고정 · 모션 보기**: **Location Result는 실제 위치를 계속 표시**하지만 캐릭터는 Zone 5에 고정하고 실제 12관절 팔·다리·스쿼트를 추종. 모션 추종은 추정 위치가 중앙인지 여부와 독립적으로 실행
 - 모드는 PS Location·Pose TCP 5000, WebSocket 수신을 차단하지 않습니다.
 - 관리자에서 RX0..4의 실제 MAC/슬롯/학습 배치를 확인한 다음에만 **배치 확인 후 위치 추론 시작**을 클릭하세요. 위치가 Unavailable이면 원인/STATUS와 RX 상태를 확인하세요.
-- Pose Result 스켈레톤은 CNN 12관절 좌표를 표시하고 캐릭터는 해당 좌표로 리깅합니다. 2D 좌표에서 3D 깊이는 복원되지 않으므로 완전 일치는 보장되지 않습니다. 실제 다리 추종은 기본 OFF, 설정 팝업에서 켤 수 있습니다.
+- **모션 보기**의 Pose Result 스켈레톤은 CNN 12관절 좌표를 표시하고 캐릭터는 동일 입력의 2D 근거로 리깅합니다. 실제 팔·다리 추종은 기본 ON입니다. 2D 좌표만으로 3D 깊이를 확정할 수는 없습니다.
 - `T`나 `O` 재생 중에는 테스트 데이터가 우선될 수 있습니다. 실제 확인 전 `B`로 로컬 재생을 종료하고 설정 팝업에서 **전체 LIVE**를 누르세요.
 
 ## 관리자 지표
 
-- `location.infer_ms`: PC 위치 모델 `predictor()` 실행시간, CSI 2초 윈도우 수집시간 제외
-- `location.age_ms`: CSI 윈도우의 타임스탬프 이후 현재까지 경과시간
-- `pose.infer_ms`: PS가 보고한 FPGA Pose 추론시간
+- `location.infer_ms`: **PS Ridge가 보낸 위치 추론 시간**(CSI 2초 창 수집·전송·화면 표시 전체 지연 아님)
+- `location.age_ms`: Backend가 마지막 PS 위치 결과를 받은 뒤의 경과시간
+- `pose.infer_ms`: PS가 보고한 FPGA Pose 추론시간(밀리초 정수 기반; 마이크로초 정밀도 아님)
 - `pose.age_ms`: Backend가 마지막 Pose 패킷을 수신한 후 경과시간
 - 값이 없으면 **측정 전**으로 표시합니다. 모든 지표가 전체 종단 간 지연시간을 의미하지는 않습니다.
 - 관리자 진단의 `raw_pose_joints`는 3D 표시 전 Backend 원본 좌표입니다.
+
+## RX5 회복·위치 표시 반응 점검
+
+- 관리자에서 `RUN` 수집 RX와 `LIVE/SAVED` 준비 RX를 구분합니다. RX가 늦게 합류해 RUN 4/5이면 PS의 `RX5 RECOVERY` 로그와 WAIT→RUN 재시작을 확인합니다.
+- 배치 승인 후 위치는 **서로 다른 PS 예측 창 2회 연속** 같은 결과일 때 확정됩니다. UI의 스쿼트·다리 들기 자세 전환 프레임 수와는 별개입니다.
+- 새 이미지 배포나 현장 성능을 검증하지 않은 상태에서 부팅·가속기 작동을 보증하지 않습니다.
 
 ## 검증
 
@@ -57,7 +63,7 @@ python pc\backend\tools\verify_wise_live.py --seconds 30 --require-pose --requir
 모델 파일이 없다면 실제 캐릭터 표시는 불가합니다. 실제 하드웨어·모델 정확도 검증은 구동 PC/Zybo 연결 후 진행해야 합니다.
 
 
-## 통합 관리자 및 12관절 직접 편집 (v19)
+## 통합 관리자 및 12관절 직접 편집 (v19 이후, 현행에서도 지원)
 
 - 메인 시연 화면 오른쪽 상단 `⚙ 관리자 · 관절 테스트` 버튼 → `/integration.html`. 기존 `/settings.html`은 관리자 화면으로 이동합니다.
 - 관리자에서 실제 위치/중앙 고정/수동 위치, 관절 소스(LIVE/TEST/비활성), 카메라 시점·좌우 반전, 실제 팔·다리 추종을 설정합니다.
@@ -68,7 +74,7 @@ python pc\backend\tools\verify_wise_live.py --seconds 30 --require-pose --requir
 - 브라우저 테스트는 FPGA/위치 Backend 입력을 변경하지 않습니다. 시스템 상태는 언제든 관리자가 따로 조회합니다.
 
 
-## 인체 구조 기반 IK (v20)
+## 인체 구조 기반 IK (v20 이후, 현행에서도 지원)
 
 - 기존 캐릭터 파일을 그대로 사용합니다. 별도 `anatomySolver.js`에서 앉기 깊이를 다리 길이/무릎 목표각으로 계산하며 `poseRig.js`가 발 고정 상태로 2-Bone IK를 적용합니다.
 - 관리자의 **인체 기반 IK 보정** 슬라이더: 무릎 목표 굽힘(75°~130°), 골반 하강 배율(0.65~1.50), 무릎 전방 굽힘 방향, 손·몸통 이격(0.04~0.25m). 이는 정답 좌표를 변경하지 않는 **3D 깊이 가정**입니다.

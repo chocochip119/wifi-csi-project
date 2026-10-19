@@ -16,7 +16,7 @@ wifi-csi-project/
 ├── integration/    Vivado IP·XSA 통합 하드웨어 자료
 ├── ps_location/    PS 위치 추론 이전 시험판 보관
 ├── ps_onlysw/      PS SW CNN 비교판 (별도)
-├── docs/           구조·통신·실행·검증 기록
+├── docs/           구조·통신·실행·운영 안내
 └── scripts/        실행 지원 스크립트
 ```
 
@@ -44,7 +44,7 @@ wifi-csi-project/
 | **Vivado 통합** | [`integration/`](../integration/README.md) | 기존 CNN/병렬 CNN·Ridge IP 패키지, 별도 XSA |
 | **별도 PS/CPU 실험** | [`ps_location/`](../ps_location/README.md), [`ps_onlysw/`](../ps_onlysw/README.md) | PS 위치 추론 시험판·PS CNN 비교 프로그램 |
 
-`pl/fft/`는 이전 FFT 실험 코드입니다. `ml/respiration/`은 기본 12관절/위치 실행에 포함되지 않습니다. 실제 PC 프런트엔드는 **`pc/frontend/src/`에 구현되어 있습니다.**
+`pl/fft/`는 이전 FFT 실험 코드입니다. **현재 Git 추적 트리에 `ml/respiration/` 디렉터리는 없습니다.** 실제 PC 프런트엔드는 `pc/frontend/src/`에 구현되어 있습니다.
 
 ## 수정할 때 함께 확인할 것
 
@@ -59,7 +59,7 @@ wifi-csi-project/
 | Location 학습/추론 | `ml/localization/`, `pc/backend/localization/` | RX 배치·955 특징·Portable Ridge NPZ/JSON |
 | HTTP·WebSocket·UI | `pc/backend/app/`, `pc/frontend/src/` | 스냅샷 유효성·실제 보드 상태·화면 표시 |
 
-**원본 RTL**과 **Vivado 패키지용 RTL 복사본**, **빌드된 XSA/bitstream**은 서로 다른 파일입니다. 소스가 변경되어도 패키지 및 실제 보드 이미지는 자동 변경되지 않습니다. 위치 계산도 기본 PC 경로와 PS/PL 시험 경로를 구분해서 반영하세요.
+**원본 RTL**과 **Vivado 패키지용 RTL 복사본**, **빌드된 XSA/bitstream**은 서로 다른 파일입니다. 소스가 변경되어도 패키지 및 실제 보드 이미지는 자동 변경되지 않습니다. 위치 계산은 **기본 PS C Ridge**와 **별도의 PL Ridge IP 하드웨어 시험판**을 구분해서 반영하세요. `ps_location/`과 `ps_onlysw/`는 과거 비교·검증 경로입니다.
 
 ## 상세 문서
 

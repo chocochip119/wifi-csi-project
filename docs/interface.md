@@ -9,6 +9,8 @@
 | PS | PC Backend | PS Ridge Location / FPGA Pose / STATUS / ACK | **TCP 5000 단일 포트** | WISE v2 header, Location type 5, Pose type 2 | ps/src/wise_server.c |
 | PC Backend | Frontend | Snapshot | **HTTP / WebSocket** (기본 8000) | JSON `/api/snapshot`, `/ws` | pc/backend/app/web.py |
 
+위치 결과는 PC Backend가 **서로 다른 예측 윈도우의 동일 클래스 2회**를 확인한 뒤 표시합니다. 이 UI 표시 안정화는 USB/WISE 패킷 포맷을 변경하지 않습니다.
+
 PS↔PC 바이트 상세는 [ps_pc_protocol.md](ps_pc_protocol.md)를 참조합니다. **Three.js/Vite 실행 Frontend는 `pc/frontend/`에 구현되어 있으며**, FFT/호흡은 기본 실행 파이프라인에 포함되지 않습니다. 이 표는 `ps/` + `pc/backend/`의 **PS C Ridge 위치 추론 기본 경로**를 설명합니다. `ps_location/`에는 이전 개발 버전이, `integration/`에는 별도 FPGA Ridge IP가 있습니다. 호스트 C↔Python TCP 테스트와 실제 Zybo/ARM 실보드 검증도 구분해 해석해야 합니다.
 
 ## CSI와 Pose tensor

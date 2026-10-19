@@ -5,7 +5,8 @@ Wi-Fi CSI(RX 5대)로 **사람 없음 + 9개 지점 + p05 의자 앉기(p10)**, 
 | 영역 | 위치 |
 |---|---|
 | 학습·평가 코드, 실시간 확인 GUI | 이 폴더 |
-| PC 실행(Backend)용 엔진과 배포 모델(NPZ) | [`pc/backend/localization`](../../pc/backend/localization) |
+| 실시간 배포용 PS C Ridge | [`ps/src/loc_ridge.c`](../../ps/src/loc_ridge.c) · [`ps/models/loc_ridge_rx5.bin`](../../ps/models/loc_ridge_rx5.bin) |
+| 기준 Python 엔진과 모델(NPZ) | [`pc/backend/localization`](../../pc/backend/localization) |
 | PS ↔ PC 통신 규격 | [`docs/ps_pc_protocol.md`](../../docs/ps_pc_protocol.md) |
 
 ## 구성
@@ -54,6 +55,8 @@ py -3.14 -m venv .venv
 
 ## 학습과 배포
 
+기본 실시간 경로에서는 `ridge_portable.npz/json` 자체를 PC Backend가 추론에 쓰지 않습니다. NPZ에서 `ps/tools/export_loc_model.py`로 **PS용 C 바이너리 모델을 추가 생성**하여 보드 rootfs에 배치합니다. PS 앱의 `WISE_LOC_MODEL` 경로가 실제 모델을 가리키는지 확인하세요. 학습 모델 변경은 PC NPZ·JSON/fixture와 PS binary를 함께 맞춰야 합니다.
+
 1. 노트북 `01_Train_and_Evaluate.ipynb`에서 manifest 작성 → split 지정 → 학습(train으로 fit, validation으로 선정). test는 모델 고정 후 별도로 한 번만 평가합니다.
 2. 결과 run 폴더(`runs/run_<날짜>_<시각>_<id>/`)는 통째로 보관합니다. 모델 파일 하나만 떼어 옮기지 않습니다.
 3. Backend에 배포:
@@ -74,9 +77,13 @@ py -3.14 -m venv .venv
 - 보드 없이 시험: [`pc/backend/tools/replay_ps_server.py`](../../pc/backend/tools/replay_ps_server.py)로 녹화 CSV를 TCP로 재생하고 연결 칸에 `127.0.0.1:5000`
 - 화면의 "입력 부족 / 대기"(STATUS 없음, RX 누락, 창 부족)는 사람 없음(empty)과 다릅니다.
 
-## 현재 배포 모델 — `run_20261008_091144_37cf3fcf`
+## 현재 PS 배포 계열과 과거 평가 보고서
 
-상세: [`results/run_20261008_091144_37cf3fcf/`](results/run_20261008_091144_37cf3fcf)
+현재 `pc/backend/localization/models/localization/ridge_portable.json`의 `source_run`은 **`run_20261013_122537_33a43334`**입니다. 같은 NPZ로 내보낸 PS `loc_ridge_rx5.bin`이 기본 실행 모델이며, 모델 메타데이터의 `test_evaluated`는 **false**입니다. 아래 성능 표는 **별도로 보존된 10/08 run**의 결과로, 10/13 배포 모델의 성능 수치로 인용하면 안 됩니다.
+
+### 이전 학습·검증 기록 — `run_20261008_091144_37cf3fcf`
+
+원본 기록: [`results/run_20261008_091144_37cf3fcf/`](results/run_20261008_091144_37cf3fcf)
 
 | split | 세션 | 참여자(가명) | 파일 |
 |---|---|---|---|
@@ -93,7 +100,7 @@ py -3.14 -m venv .venv
 - 지점 p01~p09와 empty는 validation에서 재현율 97~100%.
 - **p10(앉기) 재현율 60.8%**: 오답은 주로 p02(20창), empty(6창), p08(3창). 사람에 따라 차이가 큼(F의 p10 3파일은 모두 정답, C는 다수 오답). 시연·평가에서 앉기 결과는 따로 확인하세요.
 - validation은 2명·1세션입니다. 성능은 2초 창(겹침 없음) 단위이며, 같은 파일의 창은 독립 시행이 아닙니다. 실시간은 0.5초마다 판정해 창이 75% 겹칩니다. 새 날짜·새 사람·정지·입퇴장 조건 성능은 아직 측정하지 않았습니다. test는 아직 열지 않았습니다.
-- 모델에 RX MAC이 저장되어 있지 않아, 실행 시 STATUS의 RX 번호↔MAC↔위치를 사람이 확인해야 추론이 시작됩니다.
+- 모델에 RX MAC이 저장되어 있지 않아, 실행 시 STATUS의 RX 번호↔MAC↔위치를 사람이 확인해야 결과 표시가 시작됩니다. PS의 위치 추론 엔진 자체는 계속 동작합니다. Backend는 새로운 위치 윈도우 **2회 연속 확인** 후 화면에 표시합니다.
 
 ## 테스트
 

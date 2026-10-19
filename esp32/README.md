@@ -15,7 +15,7 @@ TX: UDP 3333으로 측정 CSI 수신 ←── RX 0~4
 TX: RX별 CSI를 cycle로 취합 ──────→ PS (USB CDC ACM)
 ```
 
-TX와 RX는 역할이 다릅니다. RX의 측정값이 **UDP 3333**으로 TX에 모이고, TX에서 PS로 보낼 때는 **USB CDC ACM의 별도 바이너리 프레임**을 사용합니다. PS가 다시 PC로 보내는 TCP 5000/5001과도 구분해야 합니다.
+TX와 RX는 역할이 다릅니다. RX의 측정값이 **UDP 3333**으로 TX에 모이고, TX에서 PS로 보낼 때는 **USB CDC ACM의 별도 바이너리 프레임**을 사용합니다. PS가 현재 기본 PC Backend로 보내는 **TCP 5000 단일 연결**과도 구분해야 합니다. TCP 5001은 `ps_onlysw/` 같은 과거 비교 구현의 별도 Pose 포트입니다.
 
 UDP CSI record에는 `trigger_seq`가 없으므로 늦게 수신된 기록이 어느 트리거에 속하는지 항상 구분할 수는 없습니다.
 

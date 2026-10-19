@@ -37,7 +37,7 @@ ESP-RX는 ESP-IDF 기반의 CSI(Channel State Information) 수신 노드 펌웨�
 | 기본 UDP 슬롯 간격 | `2000` us |
 | Heartbeat 주기 | `1000` ms |
 
-표의 채널/slot gap은 RX 부팅 기본값이다. 현재 TX 기본값은 채널 9·slot gap 500µs이며 NVS·TX 제어/assignment에 따라 실제 값이 달라진다. 연결 후 TX STATUS와 RX 슬롯을 확인한다. UDP record에는 trigger_seq가 없어 trigger별 정합은 [점검 기록](../../../docs/reviews/2026-10-07-pc-integration.md)의 남은 항목이다.
+표의 채널/slot gap은 RX 부팅 기본값이다. 현재 TX 기본값은 채널 9·slot gap 500µs이며 NVS·TX 제어/assignment에 따라 실제 값이 달라진다. 연결 후 TX STATUS와 RX 슬롯을 확인한다. UDP record에는 `trigger_seq`가 없어 이전 trigger에서 지연된 패킷을 다음 trigger 데이터와 완전히 구분하지 못할 수 있다.
 
 ## 업로드된 ESP의 역할
 
