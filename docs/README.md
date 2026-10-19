@@ -13,7 +13,7 @@
 | 학습 모델 준비 → FPGA 빌드 → PS → PC 실행 | [통합 실행 순서](bringup.md) · [PS 부팅 자동실행](../ps/petalinux/AUTOSTART.md) |
 | Windows에서 Backend·Frontend 함께 실행하기 | [원클릭 실행기](oneclick_launcher.md) |
 | 처음 설치한 PC의 구동·RX 배치·관리자 확인 | [운영 가이드](wisensing_live_v18_operator.md) |
-| 수행한 시험과 추가 확인 항목 | [기존 통합 점검](reviews/2026-10-07-pc-integration.md) · [2026-10-19 전체 저장소 점검](reviews/2026-10-19-repository-audit.md) |
+| 수행한 시험과 추가 확인 항목 | [통합 점검 기록](reviews/2026-10-07-pc-integration.md) |
 | 팀 협업 및 Git 브랜치/PR 사용 방법 | [Git 작업 가이드](git_guide.md) · [팀 기록](members/README.md) |
 
 ## 영역별 구현 설명
@@ -26,7 +26,5 @@
 | AI 학습 | [ML](../ml/README.md) · [Pose](../ml/pose/README.md) · [Location](../ml/localization/README.md) |
 | PC 프로그램 | [PC](../pc/README.md) · [Backend](../pc/backend/README.md) · [Frontend](../pc/frontend/README.md) |
 | Vivado 하드웨어 패키지 | [Integration](../integration/README.md) |
-
-기존 Markdown **50개 전체**를 점검해 현재 실행 설명과 과거 기록을 구분했습니다. 이번 작업의 [2026-10-19 전체 저장소 점검 기록](reviews/2026-10-19-repository-audit.md)도 함께 참고하세요. 날짜가 있는 테스트 기록·이전 통합본 README·외부 라이선스 고지는 그 시점과 출처를 보존합니다.
 
 점검 기록은 **그 날짜·해당 모델/비트스트림 기준의 검증 범위**를 보존합니다. 저장소에서 소스가 변경됐다는 사실과 실제 보드에서 새 버전을 테스트했다는 사실을 혼동하지 마세요.
