@@ -2,6 +2,10 @@
 
 현재 RX5는 base/delta/mask 15채널, subcarrier 128개, window 10개를 입력으로 사용합니다. 출력은 12관절의 x/y 24개입니다.
 
+<p align="center"><img src="../../docs/assets/presentation-pose-reference.jpg" width="360" alt="얼굴이 가려진 실험 동작 사진과 12관절 스켈레톤의 발표 시연 예시"></p>
+
+*발표 당시 실험 동작과 12관절 스켈레톤의 비교 장면입니다. 얼굴은 가려져 있으며, 카메라는 실시간 CSI 추론 입력에 사용하지 않습니다.*
+
 | 파일 | 역할 |
 |---|---|
 | [prepare.py](prepare.py) / [PREPARE.md](PREPARE.md) | CSV 검사, HT-LTF remap, base/delta/mask NPZ 생성 |

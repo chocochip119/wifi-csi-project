@@ -6,18 +6,11 @@ WiSensing은 **ESP32로 CSI를 수집**, **Zynq PS에서 파싱·전처리**, **
 
 ![WiSensing 아키텍처](assets/wisensing-architecture.svg)
 
-```mermaid
-flowchart TB
-    TX["ESP32 TX 1대 · 수집 제어"] -->|Wi-Fi 트리거·슬롯 제어| RX["ESP32 RX 5대 · CSI 측정"]
-    RX -->|UDP 3333: CSI| TX
-    TX -->|USB CDC ACM: CSI cycle / STATUS / ACK| PS["Zynq PS · USB 파서·전처리·FPGA 제어"]
-    PS -->|DDR INT8 / AXI4-Lite| PL["FPGA PL · RX5 Pose CNN"]
-    PL -->|INT8 12관절 x/y| PS
-    PS -->|2초 특징·C Ridge| LOC["Zynq PS · 9구역/P10/empty"]
-    LOC -->|위치 결과| PS
-    PS -->|TCP 5000: Location/Pose/STATUS/ACK| WEB["PC Backend · 단일 연결·스냅샷"]
-    WEB -->|HTTP / WebSocket 8000| UI["Three.js Frontend · 2D 스켈레톤 + 3D 캐릭터"]
-```
+### 실제 수집 환경
+
+<p align="center"><img src="assets/presentation-test-setup.jpg" width="700" alt="발표 자료의 실내 수집 실험 공간과 파티션·촬영 장비 배치"></p>
+
+*실제 실험 공간을 촬영한 PPT 자료. 화면 속 촬영 장비는 학습·평가를 위한 기준 자세 수집에 사용했으며, CSI 기반 실시간 추론의 입력 장치는 아닙니다.*
 
 ESP-NOW 제어와 UDP CSI 수집, USB 바이너리 프레임은 서로 다른 연결입니다. `/dev/ttyACM0`은 PS Linux에서 보이는 **USB CDC ACM** 장치명입니다. 보드 측 PS 프로그램의 실행·설치와 포트는 [PS README](../ps/README.md)를 참조하세요.
 
