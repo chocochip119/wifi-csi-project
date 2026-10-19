@@ -7,7 +7,7 @@ import { projectLiftedLeg } from './legLiftProjection.js'
 import { SingleLegLiftGate } from './singleLegLiftGate.js'
 import { clampArmHeading } from './armZoneLimit.js'
 import {DEFAULT_ANATOMY_CONFIG, normalizeAnatomyConfig, calculateSeatDrop, 
-  twoBoneTriangle, resolveTorsoHandClearance} from './anatomySolver.js'
+  twoBoneTriangle, resolveTorsoHandClearance, visualSquatStrength} from './anatomySolver.js'
 
 const vec = () => new THREE.Vector3()
 const quat = () => new THREE.Quaternion()
@@ -211,11 +211,17 @@ export class PoseRigController {
       ? clamp(options.stableLiftStrength,0,1) : 0
     const stableOverride=Number.isFinite(options.stableLiftStrength)
     const stableLift=savedStrength>0.01 && (savedSide==='L' || savedSide==='R')
-    const guardedLift=this.legLiftGate.update({
-      liftL:this.legMaxLiftDeg>0
-        ? stableOverride ? (stableLift && savedSide==='L'?savedStrength:0) : rawSolution.liftL : 0,
-      liftR:this.legMaxLiftDeg>0
-        ? stableOverride ? (stableLift && savedSide==='R'?savedStrength:0) : rawSolution.liftR : 0,
+    // StableLegPosture already confirmed the same lifted side over distinct
+    // CNN frames. The older 900ms gate must not unexpectedly clear a held
+    // gesture just because the UI is polling an unchanged snapshot.
+    const guardedLift=stableOverride ? (
+      squatTarget>0.075 || this.legMaxLiftDeg<=0 || !stableLift
+        ? {liftL:0,liftR:0}
+        : {liftL:savedSide==='L'?savedStrength:0,
+           liftR:savedSide==='R'?savedStrength:0}
+    ) : this.legLiftGate.update({
+      liftL:this.legMaxLiftDeg>0 ? rawSolution.liftL : 0,
+      liftR:this.legMaxLiftDeg>0 ? rawSolution.liftR : 0,
       seated:squatTarget>0.075, atMs:rigNow, frameKey
     })
     const drivenSolution={...solution,squat:squatTarget,
@@ -265,7 +271,9 @@ export class PoseRigController {
       }
       return
     }
-    if(this.active && performance.now()-this.inputAt>1500) this.clear()
+    // The PS/Backend may repeat a pose for a few seconds while CSI windows
+    // are pending. Motion mode has a separate 5s no-person hide policy.
+    if(this.active && performance.now()-this.inputAt>4500) this.clear()
     const liveState=this.active?this.solution:null
     // A valid leg lift must use the same 2D pose as the right-hand Pose panel.
     const requestedLift=Boolean(liveState && this.legEnabled && this.legMaxLiftDeg>0 &&
@@ -324,7 +332,9 @@ export class PoseRigController {
     // Squat and leg lift are exclusive; prevent two IK solvers fighting.
     const plantedSquat=Boolean(liveState && this.legEnabled && liveState.squat>0.075 &&
       liveState.liftL<0.2 && liveState.liftR<0.2)
-    const targetSquat=plantedSquat?liveState.squat:0
+    // Visual-only depth boost after sitting has been confirmed.
+    // Unilateral lifts never enter this two-foot-planted branch.
+    const targetSquat=plantedSquat?visualSquatStrength(liveState.squat):0
     const squatSmoothing=clamp(1-Math.exp(-Math.max(0,dt)*9),0,0.5)
     this.squatAmount+=(targetSquat-this.squatAmount)*squatSmoothing
     if(plantedSquat && this.liftAmount>0) {

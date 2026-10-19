@@ -7,10 +7,10 @@ export function singleLegLiftStrength({ ankleSpan, oppositeAnkleSpan, kneeSpan, 
   const ankleRise = oppositeAnkleSpan - ankleSpan
   const kneeRise = oppositeKneeSpan - kneeSpan
   // Preserve the previous ankle-only response for clear foot lifts.
-  const ankleScore = clamp((ankleRise - 0.13) / 0.37, 0, 1)
+  const ankleScore = clamp((ankleRise - 0.10) / 0.32, 0, 1)
   // Knee rise catches a raised thigh even if the ankle barely moves onscreen.
   // Require modest ankle evidence OR a clearly raised knee to reject minor flexion.
-  const kneeIsLift = ankleRise >= 0.045 || kneeRise >= 0.28
-  const kneeScore = kneeIsLift ? clamp((kneeRise - 0.075) / 0.30, 0, 1) : 0
+  const kneeIsLift = ankleRise >= 0.04 || kneeRise >= 0.25
+  const kneeScore = kneeIsLift ? clamp((kneeRise - 0.06) / 0.27, 0, 1) : 0
   return Math.max(ankleScore, kneeScore)
 }

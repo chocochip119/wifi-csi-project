@@ -2,8 +2,8 @@
 // 2D CSI joint estimates are not a depth measurement: these parameters express
 // explicit forward-depth priors that operators can tune while inspecting the rig.
 export const DEFAULT_ANATOMY_CONFIG = Object.freeze({
-  seatedKneeDeg: 105,
-  seatDepthGain: 1.12,
+  seatedKneeDeg: 127,
+  seatDepthGain: 1.38,
   kneeForward: 0.95,
   armClearance: 0.11
 })
@@ -23,6 +23,11 @@ export function normalizeAnatomyConfig(input = {}) {
     out[key]=clamp(value,lo,hi)
   }
   return out
+}
+// Apply more of the *already confirmed* squat strength to the visible 3D
+// avatar. Classification thresholds and 2D CNN joints are unchanged.
+export function visualSquatStrength(score) {
+  return clamp(Number.isFinite(score) ? score * 1.30 : 0, 0, 1)
 }
 // The included knee angle is 180° at straight extension; flexion is 0° there.
 export function twoBoneTriangle(upperLen,lowerLen,distance){
