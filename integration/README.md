@@ -133,4 +133,4 @@ Ridge RTL 기준 한 번의 추론 계산은 **31,526클록**, 100 MHz에서 **3
 - 합성/구현 로그·보고서는 변경의 근거로 보존할 수 있지만, **Vivado 빌드 성공을 실보드 검증 완료로 표기하지 않는다.**
 - Vivado 편집 가능한 Block Design 재현을 위해서는 `.xsa` 외에도 원본 Vivado 프로젝트 또는 재생성 가능한 Tcl/BD를 별도로 보관하는 것이 좋다.
 
-이전 CNN 통합·검증 사항은 [`../docs/reviews/2026-10-07-pc-integration.md`](../docs/reviews/2026-10-07-pc-integration.md)에서 확인한다.
+CNN 및 Ridge IP의 현재 구성·확인 범위는 [PL CNN](../pl/cnn/README.md), [PL Ridge](../pl/localization/README.md), [PS 실행](../ps/README.md)을 각각 참고한다.

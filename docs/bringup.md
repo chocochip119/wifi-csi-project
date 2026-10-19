@@ -98,4 +98,4 @@ python pc/backend/run_backend.py --fake
 | Pose만 unavailable | LOAD/INFER·scale·TCP 5000 연결, 최근 Pose 시각 |
 | BIT-EXACT 불일치 | 같은 모델/입력/scale·새 반올림 golden·재빌드한 하드웨어 |
 
-테스트/장비 검증 상태와 남은 ESP32 trigger 정합·Pose 윈도우 연속성은 [점검 기록](reviews/2026-10-07-pc-integration.md)을 참고하세요.
+ESP32의 UDP CSI record에는 `trigger_seq`가 없어 지연 패킷과 다음 trigger 사이의 정합을 보장하지 않습니다. 자세한 수집 조건은 [TX 설명](../esp32/ESP-TX/README.md)을, Pose 윈도우/학습 조건은 [Pose 설명](../ml/pose/README.md)을 참고하세요.

@@ -75,4 +75,4 @@ python -m pip install -r pc/backend/requirements-dev.txt
 python -m pytest pc/backend/tests ml/pose/tests -q
 ```
 
-`tests/test_ps_location_parity.py`는 PS C 위치 엔진을 호스트 GCC로 빌드해 같은 USB 스트림에서 Python 엔진과 창·라벨·점수를 비교합니다(Windows MSYS2 GCC도 가능). `tests/test_transport.py`의 C 통합 테스트는 Linux/POSIX와 GCC가 필요합니다. `/dev/mem`이나 보드 없이 checksum-valid USB 프레임을 PS 파서에 넣고 TCP/실제 Backend까지 검증합니다. 현재 모델의 회귀 fixture 40개는 **합성 CSI 입력**으로, 특징/점수/라벨 계산 일치만 확인합니다. 현장 데이터 정확도나 원본 validation 점수는 재검증하지 못했습니다. 보드/ARM/PetaLinux 전체 빌드와 실제 모델 정확도 검증은 [점검 기록](../../docs/reviews/2026-10-07-pc-integration.md)을 참고하세요.
+`tests/test_ps_location_parity.py`는 PS C 위치 엔진을 호스트 GCC로 빌드해 같은 USB 스트림에서 Python 엔진과 창·라벨·점수를 비교합니다(Windows MSYS2 GCC도 가능). `tests/test_transport.py`의 C 통합 테스트는 Linux/POSIX와 GCC가 필요합니다. `/dev/mem`이나 보드 없이 checksum-valid USB 프레임을 PS 파서에 넣고 TCP/실제 Backend까지 검증합니다. 현재 모델의 회귀 fixture 40개는 **합성 CSI 입력**으로, 특징/점수/라벨 계산 일치만 확인합니다. 현장 데이터 정확도나 원본 validation 점수는 재검증하지 못했습니다. 보드/ARM/PetaLinux 전체 빌드와 실제 모델 정확도는 이 호스트 테스트만으로 검증된 것이 아닙니다.

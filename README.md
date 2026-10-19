@@ -106,5 +106,5 @@ WiSensing은 여러 ESP32가 관측한 **Wi-Fi 채널 상태 정보(CSI)**를 �
 
 - **장치·모델별 설명:** [ESP32](esp32/README.md) · [FPGA](pl/README.md) · [PS](ps/README.md) · [ML](ml/README.md) · [PC](pc/README.md)
 - **전체 연결·규격:** [시스템 구조](docs/architecture.md) · [인터페이스](docs/interface.md) · [PS↔PC 패킷](docs/ps_pc_protocol.md)
-- **설치·실행·검증:** [통합 실행 순서](docs/bringup.md) · [PS 부팅 자동실행](ps/petalinux/AUTOSTART.md) · [Windows 원클릭 실행](docs/oneclick_launcher.md) · [기존 검증 기록](docs/reviews/2026-10-07-pc-integration.md)
+- **설치·실행·검증:** [통합 실행 순서](docs/bringup.md) · [PS 부팅 자동실행](ps/petalinux/AUTOSTART.md) · [Windows 원클릭 실행](docs/oneclick_launcher.md)
 

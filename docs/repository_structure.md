@@ -16,7 +16,7 @@ wifi-csi-project/
 ├── integration/    Vivado IP·XSA 통합 하드웨어 자료
 ├── ps_location/    PS 위치 추론 이전 시험판 보관
 ├── ps_onlysw/      PS SW CNN 비교판 (별도)
-├── docs/           구조·통신·실행·검증 기록
+├── docs/           구조·통신·실행·운영 안내
 └── scripts/        실행 지원 스크립트
 ```
 

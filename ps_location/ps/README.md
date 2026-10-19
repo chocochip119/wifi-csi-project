@@ -128,7 +128,7 @@ PC에서 실제 RX 배치/학습 순서를 확인한 뒤 API로 위치 추론을
 | 전체 전원 재부팅 | 이후 10윈도우·추론 10회 |
 | FPGA 추론 시간 | 관찰값 약 23~24ms/윈도우 |
 
-현재 소스의 호스트 컴파일·TCP 회귀 결과는 [2026-10-07 점검](../../docs/reviews/2026-10-07-pc-integration.md)에 있습니다. ARM/PetaLinux 전체 빌드·새 RTL bitstream·보드 비교는 남아 있습니다. `infer_ms`는 CSI 수집을 포함한 전체 지연시간과 다릅니다.
+이전 버전의 호스트 C/Backend TCP 테스트는 해당 테스트 소스로 재현할 수 있습니다. ARM/PetaLinux 전체 빌드·새 RTL bitstream·실보드 비교는 별도로 확인해야 합니다. `infer_ms`는 CSI 수집을 포함한 전체 지연시간과 다릅니다.
 
 입력 scale은 유한 양수·범위와 전체 문자열을 검사하고, 윈도우 수는 부호 없는 십진수로 검사합니다. 두 앱은 `/run/pose-cnn-rx5.lock`을 공유하지만 다른 직접 접근 프로그램에는 적용되지 않습니다. BUSY/timeout 강제 복구는 구현하지 않았고 CLEAR는 DMA 중단이 아닙니다. timeout 후 하드웨어 reset 절차를 확인해야 합니다.
 

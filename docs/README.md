@@ -13,7 +13,6 @@
 | 학습 모델 준비 → FPGA 빌드 → PS → PC 실행 | [통합 실행 순서](bringup.md) · [PS 부팅 자동실행](../ps/petalinux/AUTOSTART.md) |
 | Windows에서 Backend·Frontend 함께 실행하기 | [원클릭 실행기](oneclick_launcher.md) |
 | 처음 설치한 PC의 구동·RX 배치·관리자 확인 | [운영 가이드](wisensing_live_v18_operator.md) |
-| 수행한 시험과 추가 확인 항목 | [통합 점검 기록](reviews/2026-10-07-pc-integration.md) |
 | 팀 협업 및 Git 브랜치/PR 사용 방법 | [Git 작업 가이드](git_guide.md) · [팀 기록](members/README.md) |
 
 ## 영역별 구현 설명
@@ -27,4 +26,4 @@
 | PC 프로그램 | [PC](../pc/README.md) · [Backend](../pc/backend/README.md) · [Frontend](../pc/frontend/README.md) |
 | Vivado 하드웨어 패키지 | [Integration](../integration/README.md) |
 
-점검 기록은 **그 날짜·해당 모델/비트스트림 기준의 검증 범위**를 보존합니다. 저장소에서 소스가 변경됐다는 사실과 실제 보드에서 새 버전을 테스트했다는 사실을 혼동하지 마세요.
+코드·IP·모델 파일이 GitHub에 있다는 사실만으로 **새 버전의 실보드 검증이 완료된 것은 아닙니다.** 실제 구동 상태는 [통합 실행 안내](bringup.md)의 확인 항목을 기준으로 점검하세요.
