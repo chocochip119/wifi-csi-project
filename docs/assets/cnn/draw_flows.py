@@ -40,7 +40,7 @@ class SVG:
   png=OUT/(name+'.png')
   Image.open(png).convert('RGB').quantize(colors=256).save(png,optimize=True)
 
-def network():
+def network_compact():
  d=SVG(1920,1330,'WiSensing RX5 INT8 CNN dataflow')
  d.header('WiSensing | RX5 Pose CNN','Input [15, 128, 10] · INT8 inference · shared encoder weights · 12-joint coordinate regression','RX5 / tensor order [C, S, T]')
  d.heading('01',195,'Shared receiver encoder','One RX uses base / delta / mask; the same trained weights are applied to RX0–RX4.')
@@ -118,4 +118,85 @@ def fc():
  d.text(65,1387,'Source: pl/cnn/rtl/FC/fc_top.v · fc_controller.v · fc_mac.v · requant_core.v · gelu_core.v',17,'muted')
  d.finish('WiSensing_FC_Dataflow')
 
-network();fc()
+def feature_stack(d,cx,y,w,h,planes,color,grid=True):
+ for k in range(planes-1,-1,-1):
+  x=cx-w/2+k*8; yy=y-k*6
+  d.s.append(f'<rect x="{x}" y="{yy}" width="{w}" height="{h}" fill="{C[color+"bg"]}" stroke="{C[color]}" stroke-width="2"/>')
+ if grid:
+  for col in range(1,4):
+   xx=cx-w/2+w*col/4
+   d.line([(xx,y),(xx,y+h)],color,0.8,False)
+  for row in range(1,6):
+   yy=y+h*row/6
+   d.line([(cx-w/2,yy),(cx+w/2,yy)],color,0.8,False)
+
+def neuron_column(d,cx,ys,color):
+ for y in ys:
+  d.s.append(f'<circle cx="{cx}" cy="{y}" r="10" fill="{C[color+"bg"]}" stroke="{C[color]}" stroke-width="2"/>')
+ for y in [1290,1302,1314]:
+  d.s.append(f'<circle cx="{cx}" cy="{y}" r="2.7" fill="{C[color]}"/>')
+
+def network():
+ d=SVG(2400,1610,'Complete WiSensing RX5 INT8 Pose CNN architecture')
+ d.header('WiSensing | Complete RX5 Pose CNN','Full layer flow · feature-map illustrations · INT8 FPGA inference · 12-joint coordinate regression','RX5 / [C, S, T], batch omitted')
+ d.heading('01',198,'Shared receiver encoder','Total input [15, 128, 10] → gather base / delta / mask for each RX → apply the same trained encoder weights.')
+ centers=[175,585,995,1405,1815,2220]
+ data=[('Input','base / delta / mask','[3, 128, 10]','3 input channels',3,'blue'),('Conv1','3 → 16 · kernel 5×3','[16, 128, 10]','stride 1 · padding (2,1)',8,'blue'),('Requant + GELU','INT8 scale + LUT activation','[16, 128, 10]','shape unchanged',8,'purple'),('Conv2','16 → 32 · kernel 3×3','[32, 128, 10]','stride 1 · padding (1,1)',10,'blue'),('Requant + GELU','INT8 scale + LUT activation','[32, 128, 10]','shape unchanged',10,'purple'),('Adaptive AvgPool','output size 8×4','[32, 8, 4]','1,024 features / RX',8,'teal')]
+ for i,(title,sub,shape,note,n,color) in enumerate(data):
+  x=centers[i]
+  d.text(x,294,title,28,color,700,'middle')
+  d.text(x,330,sub,21,'muted',400,'middle')
+  feature_stack(d,x-20,395,90 if i!=5 else 76,168 if i!=5 else 118,n,color)
+  d.text(x,616,shape,27,'ink',700,'middle')
+  d.text(x,652,note,21,'muted',400,'middle')
+  if i<5:d.line([(x+126,482),(centers[i+1]-113,482)])
+ d.line([(65,694),(2335,694)],'line',1.5,False)
+ d.heading('02',746,'Receiver feature aggregation','Five receiver outputs are concatenated along channels; values are then flattened in RX → C → S → T order.')
+ rxs=[155,445,735,1025,1315]
+ for i,x in enumerate(rxs):
+  d.text(x,833,f'RX{i} encoder output',22,'muted',500,'middle')
+  feature_stack(d,x-17,871,62,86,6,'teal')
+  d.text(x,998,'[32, 8, 4]',24,'ink',700,'middle')
+  d.line([(x,1015),(x,1044)],'teal',2,False)
+ d.line([(155,1044),(1515,1044),(1515,910),(1675,910)],'teal',2.5)
+ d.text(1760,833,'Concat',28,'teal',700,'middle')
+ feature_stack(d,1730,900,82,75,10,'teal')
+ d.text(1760,998,'[160, 8, 4]',25,'ink',700,'middle')
+ d.text(1760,1032,'5 × 32 × 8 × 4 = 5,120',20,'muted',400,'middle')
+ d.line([(1885,910),(2070,910)],'teal')
+ d.text(2210,833,'Flatten',28,'teal',700,'middle')
+ for y in [867,885,903,939,957]:
+  d.s.append(f'<circle cx="2210" cy="{y}" r="8" fill="{C["tealbg"]}" stroke="{C["teal"]}" stroke-width="2"/>')
+ for y in [916,922,928]: d.s.append(f'<circle cx="2210" cy="{y}" r="2" fill="{C["teal"]}"/>')
+ d.text(2210,998,'[5120]',25,'ink',700,'middle')
+ # Wrap from the flatten output to the head without crossing the section title.
+ d.line([(2210,1015),(2210,1080),(40,1080),(40,1300),(158,1300)],'teal',2.5)
+ d.heading('03',1141,'FC head · pose coordinate regression')
+ xs=[180,680,1180,1680]
+ ys=[1236,1264,1340,1368,1396]
+ for a,b in zip(xs,xs[1:]):
+  for y1 in ys:
+   for y2 in ys:
+    d.line([(a+11,y1),(b-11,y2)],'line',0.9,False)
+ labels=[('Head input','5,120 features','[5120]','Flatten output','blue'),('FC1 + Requant + GELU','5120 → 128','[128]','Hidden RAM bank 0','orange'),('FC2 + Requant + GELU','128 → 128','[128]','Hidden RAM bank 1','orange'),('FC3 + Requant','128 → 24','[24]','Pose Buffer · no GELU','orange')]
+ for x,(title,sub,shape,note,c) in zip(xs,labels):
+  d.text(x,1191,title,26,c,700,'middle')
+  d.text(x,1222,sub,21,'muted',400,'middle')
+  neuron_column(d,x,ys,c)
+  d.text(x,1441,shape,26,'ink',700,'middle')
+  d.text(x,1476,note,21,'muted',400,'middle')
+ d.line([(1770,1315),(2020,1315)],'orange')
+ d.text(2195,1191,'12-joint pose',28,'blue',700,'middle')
+ d.text(2195,1222,'24 values × output_scale',21,'muted',400,'middle')
+ pts={'ls':(2150,1262),'rs':(2240,1262),'le':(2127,1300),'re':(2263,1300),'lw':(2110,1339),'rw':(2280,1339),'lh':(2163,1330),'rh':(2227,1330),'lk':(2150,1371),'rk':(2240,1371),'la':(2140,1410),'ra':(2250,1410)}
+ for a,b in [('ls','rs'),('ls','le'),('le','lw'),('rs','re'),('re','rw'),('ls','lh'),('rs','rh'),('lh','rh'),('lh','lk'),('lk','la'),('rh','rk'),('rk','ra')]: d.line([pts[a],pts[b]],'teal',3,False)
+ for x,y in pts.values(): d.s.append(f'<circle cx="{x}" cy="{y}" r="5" fill="{C["teal"]}"/>')
+ d.text(2195,1441,'12 × (x, y)',26,'ink',700,'middle')
+ d.text(2195,1476,'2D coordinate output',21,'muted',400,'middle')
+ d.line([(65,1510),(2335,1510)],'line',1.5,False)
+ d.text(65,1547,'BatchNorm is folded into Conv weights/bias. Dropout is omitted during inference. All FC layers include Requant; FC3 has no GELU.',21,'muted')
+ d.text(65,1581,'Blocks and neuron counts are schematic; labels show actual tensor sizes. Source: pl/cnn/README.md · pl/cnn/rtl/FC/fc_top.v',18,'muted')
+ d.finish('WiSensing_RX5_CNN_Flow')
+
+if __name__ == '__main__':
+ network();fc()
