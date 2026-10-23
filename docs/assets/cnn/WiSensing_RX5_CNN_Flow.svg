@@ -1,0 +1,421 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1610" viewBox="0 0 2400 1610" role="img"><title>Complete WiSensing RX5 INT8 Pose CNN architecture</title>
+<defs>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#61788F"/></marker>
+<marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#337DC1"/></marker>
+<marker id="arrow-teal" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#208F83"/></marker>
+<marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#815CB2"/></marker>
+<marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#C58A28"/></marker>
+</defs>
+<rect width="2400" height="1610" fill="white"/>
+<text x="65" y="68" font-family="DejaVu Sans, sans-serif" font-size="42" font-weight="700" fill="#17324D" text-anchor="start">WiSensing | Complete RX5 Pose CNN</text>
+<text x="65" y="108" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#61788F" text-anchor="start">Full layer flow · feature-map illustrations · INT8 FPGA inference · 12-joint coordinate regression</text>
+<text x="2335" y="65" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="600" fill="#61788F" text-anchor="end">RX5 / [C, S, T], batch omitted</text>
+<polyline points="65,140 2335,140" fill="none" stroke="#C7D5E2" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="65" y="198" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#337DC1" text-anchor="start">01</text>
+<text x="115" y="198" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#17324D" text-anchor="start">Shared receiver encoder</text>
+<text x="115" y="230" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#61788F" text-anchor="start">Total input [15, 128, 10] → gather base / delta / mask for each RX → apply the same trained encoder weights.</text>
+<text x="175" y="294" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#337DC1" text-anchor="middle">Input</text>
+<text x="175" y="330" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">base / delta / mask</text>
+<rect x="126.0" y="383" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="118.0" y="389" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="110.0" y="395" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<polyline points="132.5,395 132.5,563" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="155.0,395 155.0,563" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="177.5,395 177.5,563" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="110.0,423.0 200.0,423.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="110.0,451.0 200.0,451.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="110.0,479.0 200.0,479.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="110.0,507.0 200.0,507.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="110.0,535.0 200.0,535.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="175" y="616" font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="700" fill="#17324D" text-anchor="middle">[3, 128, 10]</text>
+<text x="175" y="652" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">3 input channels</text>
+<polyline points="301,482 472,482" fill="none" stroke="#61788F" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-muted)"/>
+<text x="585" y="294" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#337DC1" text-anchor="middle">Conv1</text>
+<text x="585" y="330" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">3 → 16 · kernel 5×3</text>
+<rect x="576.0" y="353" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="568.0" y="359" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="560.0" y="365" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="552.0" y="371" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="544.0" y="377" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="536.0" y="383" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="528.0" y="389" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="520.0" y="395" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<polyline points="542.5,395 542.5,563" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="565.0,395 565.0,563" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="587.5,395 587.5,563" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="520.0,423.0 610.0,423.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="520.0,451.0 610.0,451.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="520.0,479.0 610.0,479.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="520.0,507.0 610.0,507.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="520.0,535.0 610.0,535.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="585" y="616" font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="700" fill="#17324D" text-anchor="middle">[16, 128, 10]</text>
+<text x="585" y="652" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">stride 1 · padding (2,1)</text>
+<polyline points="711,482 882,482" fill="none" stroke="#61788F" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-muted)"/>
+<text x="995" y="294" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#815CB2" text-anchor="middle">Requant + GELU</text>
+<text x="995" y="330" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">INT8 scale + LUT activation</text>
+<rect x="986.0" y="353" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="978.0" y="359" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="970.0" y="365" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="962.0" y="371" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="954.0" y="377" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="946.0" y="383" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="938.0" y="389" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="930.0" y="395" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<polyline points="952.5,395 952.5,563" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="975.0,395 975.0,563" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="997.5,395 997.5,563" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="930.0,423.0 1020.0,423.0" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="930.0,451.0 1020.0,451.0" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="930.0,479.0 1020.0,479.0" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="930.0,507.0 1020.0,507.0" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="930.0,535.0 1020.0,535.0" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="995" y="616" font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="700" fill="#17324D" text-anchor="middle">[16, 128, 10]</text>
+<text x="995" y="652" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">shape unchanged</text>
+<polyline points="1121,482 1292,482" fill="none" stroke="#61788F" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-muted)"/>
+<text x="1405" y="294" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#337DC1" text-anchor="middle">Conv2</text>
+<text x="1405" y="330" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">16 → 32 · kernel 3×3</text>
+<rect x="1412.0" y="341" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="1404.0" y="347" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="1396.0" y="353" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="1388.0" y="359" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="1380.0" y="365" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="1372.0" y="371" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="1364.0" y="377" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="1356.0" y="383" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="1348.0" y="389" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<rect x="1340.0" y="395" width="90" height="168" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<polyline points="1362.5,395 1362.5,563" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1385.0,395 1385.0,563" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1407.5,395 1407.5,563" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1340.0,423.0 1430.0,423.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1340.0,451.0 1430.0,451.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1340.0,479.0 1430.0,479.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1340.0,507.0 1430.0,507.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1340.0,535.0 1430.0,535.0" fill="none" stroke="#337DC1" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="1405" y="616" font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="700" fill="#17324D" text-anchor="middle">[32, 128, 10]</text>
+<text x="1405" y="652" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">stride 1 · padding (1,1)</text>
+<polyline points="1531,482 1702,482" fill="none" stroke="#61788F" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-muted)"/>
+<text x="1815" y="294" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#815CB2" text-anchor="middle">Requant + GELU</text>
+<text x="1815" y="330" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">INT8 scale + LUT activation</text>
+<rect x="1822.0" y="341" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="1814.0" y="347" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="1806.0" y="353" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="1798.0" y="359" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="1790.0" y="365" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="1782.0" y="371" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="1774.0" y="377" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="1766.0" y="383" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="1758.0" y="389" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<rect x="1750.0" y="395" width="90" height="168" fill="#F1ECF8" stroke="#815CB2" stroke-width="2"/>
+<polyline points="1772.5,395 1772.5,563" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1795.0,395 1795.0,563" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1817.5,395 1817.5,563" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1750.0,423.0 1840.0,423.0" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1750.0,451.0 1840.0,451.0" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1750.0,479.0 1840.0,479.0" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1750.0,507.0 1840.0,507.0" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1750.0,535.0 1840.0,535.0" fill="none" stroke="#815CB2" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="1815" y="616" font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="700" fill="#17324D" text-anchor="middle">[32, 128, 10]</text>
+<text x="1815" y="652" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">shape unchanged</text>
+<polyline points="1941,482 2107,482" fill="none" stroke="#61788F" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-muted)"/>
+<text x="2220" y="294" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#208F83" text-anchor="middle">Adaptive AvgPool</text>
+<text x="2220" y="330" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">output size 8×4</text>
+<rect x="2218.0" y="353" width="76" height="118" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="2210.0" y="359" width="76" height="118" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="2202.0" y="365" width="76" height="118" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="2194.0" y="371" width="76" height="118" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="2186.0" y="377" width="76" height="118" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="2178.0" y="383" width="76" height="118" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="2170.0" y="389" width="76" height="118" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="2162.0" y="395" width="76" height="118" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<polyline points="2181.0,395 2181.0,513" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="2200.0,395 2200.0,513" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="2219.0,395 2219.0,513" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="2162.0,414.6666666666667 2238.0,414.6666666666667" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="2162.0,434.3333333333333 2238.0,434.3333333333333" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="2162.0,454.0 2238.0,454.0" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="2162.0,473.6666666666667 2238.0,473.6666666666667" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="2162.0,493.3333333333333 2238.0,493.3333333333333" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="2220" y="616" font-family="DejaVu Sans, sans-serif" font-size="27" font-weight="700" fill="#17324D" text-anchor="middle">[32, 8, 4]</text>
+<text x="2220" y="652" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">1,024 features / RX</text>
+<polyline points="65,694 2335,694" fill="none" stroke="#C7D5E2" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="65" y="746" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#337DC1" text-anchor="start">02</text>
+<text x="115" y="746" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#17324D" text-anchor="start">Receiver feature aggregation</text>
+<text x="115" y="778" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="400" fill="#61788F" text-anchor="start">Five receiver outputs are concatenated along channels; values are then flattened in RX → C → S → T order.</text>
+<text x="155" y="833" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="500" fill="#61788F" text-anchor="middle">RX0 encoder output</text>
+<rect x="147.0" y="841" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="139.0" y="847" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="131.0" y="853" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="123.0" y="859" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="115.0" y="865" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="107.0" y="871" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<polyline points="122.5,871 122.5,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="138.0,871 138.0,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="153.5,871 153.5,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="107.0,885.3333333333334 169.0,885.3333333333334" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="107.0,899.6666666666666 169.0,899.6666666666666" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="107.0,914.0 169.0,914.0" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="107.0,928.3333333333334 169.0,928.3333333333334" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="107.0,942.6666666666666 169.0,942.6666666666666" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="155" y="998" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#17324D" text-anchor="middle">[32, 8, 4]</text>
+<polyline points="155,1015 155,1044" fill="none" stroke="#208F83" stroke-width="2" stroke-linejoin="round"/>
+<text x="445" y="833" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="500" fill="#61788F" text-anchor="middle">RX1 encoder output</text>
+<rect x="437.0" y="841" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="429.0" y="847" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="421.0" y="853" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="413.0" y="859" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="405.0" y="865" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="397.0" y="871" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<polyline points="412.5,871 412.5,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="428.0,871 428.0,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="443.5,871 443.5,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="397.0,885.3333333333334 459.0,885.3333333333334" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="397.0,899.6666666666666 459.0,899.6666666666666" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="397.0,914.0 459.0,914.0" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="397.0,928.3333333333334 459.0,928.3333333333334" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="397.0,942.6666666666666 459.0,942.6666666666666" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="445" y="998" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#17324D" text-anchor="middle">[32, 8, 4]</text>
+<polyline points="445,1015 445,1044" fill="none" stroke="#208F83" stroke-width="2" stroke-linejoin="round"/>
+<text x="735" y="833" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="500" fill="#61788F" text-anchor="middle">RX2 encoder output</text>
+<rect x="727.0" y="841" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="719.0" y="847" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="711.0" y="853" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="703.0" y="859" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="695.0" y="865" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="687.0" y="871" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<polyline points="702.5,871 702.5,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="718.0,871 718.0,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="733.5,871 733.5,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="687.0,885.3333333333334 749.0,885.3333333333334" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="687.0,899.6666666666666 749.0,899.6666666666666" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="687.0,914.0 749.0,914.0" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="687.0,928.3333333333334 749.0,928.3333333333334" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="687.0,942.6666666666666 749.0,942.6666666666666" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="735" y="998" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#17324D" text-anchor="middle">[32, 8, 4]</text>
+<polyline points="735,1015 735,1044" fill="none" stroke="#208F83" stroke-width="2" stroke-linejoin="round"/>
+<text x="1025" y="833" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="500" fill="#61788F" text-anchor="middle">RX3 encoder output</text>
+<rect x="1017.0" y="841" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1009.0" y="847" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1001.0" y="853" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="993.0" y="859" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="985.0" y="865" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="977.0" y="871" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<polyline points="992.5,871 992.5,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1008.0,871 1008.0,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1023.5,871 1023.5,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="977.0,885.3333333333334 1039.0,885.3333333333334" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="977.0,899.6666666666666 1039.0,899.6666666666666" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="977.0,914.0 1039.0,914.0" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="977.0,928.3333333333334 1039.0,928.3333333333334" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="977.0,942.6666666666666 1039.0,942.6666666666666" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="1025" y="998" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#17324D" text-anchor="middle">[32, 8, 4]</text>
+<polyline points="1025,1015 1025,1044" fill="none" stroke="#208F83" stroke-width="2" stroke-linejoin="round"/>
+<text x="1315" y="833" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="500" fill="#61788F" text-anchor="middle">RX4 encoder output</text>
+<rect x="1307.0" y="841" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1299.0" y="847" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1291.0" y="853" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1283.0" y="859" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1275.0" y="865" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1267.0" y="871" width="62" height="86" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<polyline points="1282.5,871 1282.5,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1298.0,871 1298.0,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1313.5,871 1313.5,957" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1267.0,885.3333333333334 1329.0,885.3333333333334" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1267.0,899.6666666666666 1329.0,899.6666666666666" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1267.0,914.0 1329.0,914.0" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1267.0,928.3333333333334 1329.0,928.3333333333334" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1267.0,942.6666666666666 1329.0,942.6666666666666" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="1315" y="998" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#17324D" text-anchor="middle">[32, 8, 4]</text>
+<polyline points="1315,1015 1315,1044" fill="none" stroke="#208F83" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="155,1044 1515,1044 1515,910 1675,910" fill="none" stroke="#208F83" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-teal)"/>
+<text x="1760" y="833" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#208F83" text-anchor="middle">Concat</text>
+<rect x="1761.0" y="846" width="82" height="75" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1753.0" y="852" width="82" height="75" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1745.0" y="858" width="82" height="75" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1737.0" y="864" width="82" height="75" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1729.0" y="870" width="82" height="75" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1721.0" y="876" width="82" height="75" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1713.0" y="882" width="82" height="75" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1705.0" y="888" width="82" height="75" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1697.0" y="894" width="82" height="75" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<rect x="1689.0" y="900" width="82" height="75" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<polyline points="1709.5,900 1709.5,975" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1730.0,900 1730.0,975" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1750.5,900 1750.5,975" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1689.0,912.5 1771.0,912.5" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1689.0,925.0 1771.0,925.0" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1689.0,937.5 1771.0,937.5" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1689.0,950.0 1771.0,950.0" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<polyline points="1689.0,962.5 1771.0,962.5" fill="none" stroke="#208F83" stroke-width="0.8" stroke-linejoin="round"/>
+<text x="1760" y="998" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#17324D" text-anchor="middle">[160, 8, 4]</text>
+<text x="1760" y="1032" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="400" fill="#61788F" text-anchor="middle">5 × 32 × 8 × 4 = 5,120</text>
+<polyline points="1885,910 2070,910" fill="none" stroke="#208F83" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-teal)"/>
+<text x="2210" y="833" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#208F83" text-anchor="middle">Flatten</text>
+<circle cx="2210" cy="867" r="8" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<circle cx="2210" cy="885" r="8" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<circle cx="2210" cy="903" r="8" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<circle cx="2210" cy="939" r="8" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<circle cx="2210" cy="957" r="8" fill="#E9F6F2" stroke="#208F83" stroke-width="2"/>
+<circle cx="2210" cy="916" r="2" fill="#208F83"/>
+<circle cx="2210" cy="922" r="2" fill="#208F83"/>
+<circle cx="2210" cy="928" r="2" fill="#208F83"/>
+<text x="2210" y="998" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#17324D" text-anchor="middle">[5120]</text>
+<polyline points="2210,1015 2210,1080 40,1080 40,1300 158,1300" fill="none" stroke="#208F83" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-teal)"/>
+<text x="65" y="1141" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#337DC1" text-anchor="start">03</text>
+<text x="115" y="1141" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#17324D" text-anchor="start">FC head · pose coordinate regression</text>
+<polyline points="191,1236 669,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1236 669,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1236 669,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1236 669,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1236 669,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1264 669,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1264 669,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1264 669,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1264 669,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1264 669,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1340 669,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1340 669,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1340 669,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1340 669,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1340 669,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1368 669,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1368 669,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1368 669,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1368 669,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1368 669,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1396 669,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1396 669,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1396 669,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1396 669,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="191,1396 669,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1236 1169,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1236 1169,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1236 1169,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1236 1169,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1236 1169,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1264 1169,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1264 1169,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1264 1169,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1264 1169,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1264 1169,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1340 1169,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1340 1169,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1340 1169,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1340 1169,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1340 1169,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1368 1169,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1368 1169,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1368 1169,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1368 1169,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1368 1169,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1396 1169,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1396 1169,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1396 1169,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1396 1169,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="691,1396 1169,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1236 1669,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1236 1669,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1236 1669,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1236 1669,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1236 1669,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1264 1669,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1264 1669,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1264 1669,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1264 1669,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1264 1669,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1340 1669,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1340 1669,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1340 1669,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1340 1669,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1340 1669,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1368 1669,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1368 1669,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1368 1669,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1368 1669,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1368 1669,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1396 1669,1236" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1396 1669,1264" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1396 1669,1340" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1396 1669,1368" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="1191,1396 1669,1396" fill="none" stroke="#C7D5E2" stroke-width="0.9" stroke-linejoin="round"/>
+<text x="180" y="1191" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#337DC1" text-anchor="middle">Head input</text>
+<text x="180" y="1222" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">5,120 features</text>
+<circle cx="180" cy="1236" r="10" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<circle cx="180" cy="1264" r="10" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<circle cx="180" cy="1340" r="10" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<circle cx="180" cy="1368" r="10" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<circle cx="180" cy="1396" r="10" fill="#EAF3FC" stroke="#337DC1" stroke-width="2"/>
+<circle cx="180" cy="1290" r="2.7" fill="#337DC1"/>
+<circle cx="180" cy="1302" r="2.7" fill="#337DC1"/>
+<circle cx="180" cy="1314" r="2.7" fill="#337DC1"/>
+<text x="180" y="1441" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#17324D" text-anchor="middle">[5120]</text>
+<text x="180" y="1476" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">Flatten output</text>
+<text x="680" y="1191" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#C58A28" text-anchor="middle">FC1 + Requant + GELU</text>
+<text x="680" y="1222" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">5120 → 128</text>
+<circle cx="680" cy="1236" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="680" cy="1264" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="680" cy="1340" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="680" cy="1368" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="680" cy="1396" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="680" cy="1290" r="2.7" fill="#C58A28"/>
+<circle cx="680" cy="1302" r="2.7" fill="#C58A28"/>
+<circle cx="680" cy="1314" r="2.7" fill="#C58A28"/>
+<text x="680" y="1441" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#17324D" text-anchor="middle">[128]</text>
+<text x="680" y="1476" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">Hidden RAM bank 0</text>
+<text x="1180" y="1191" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#C58A28" text-anchor="middle">FC2 + Requant + GELU</text>
+<text x="1180" y="1222" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">128 → 128</text>
+<circle cx="1180" cy="1236" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="1180" cy="1264" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="1180" cy="1340" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="1180" cy="1368" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="1180" cy="1396" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="1180" cy="1290" r="2.7" fill="#C58A28"/>
+<circle cx="1180" cy="1302" r="2.7" fill="#C58A28"/>
+<circle cx="1180" cy="1314" r="2.7" fill="#C58A28"/>
+<text x="1180" y="1441" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#17324D" text-anchor="middle">[128]</text>
+<text x="1180" y="1476" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">Hidden RAM bank 1</text>
+<text x="1680" y="1191" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#C58A28" text-anchor="middle">FC3 + Requant</text>
+<text x="1680" y="1222" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">128 → 24</text>
+<circle cx="1680" cy="1236" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="1680" cy="1264" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="1680" cy="1340" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="1680" cy="1368" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="1680" cy="1396" r="10" fill="#FFF5E3" stroke="#C58A28" stroke-width="2"/>
+<circle cx="1680" cy="1290" r="2.7" fill="#C58A28"/>
+<circle cx="1680" cy="1302" r="2.7" fill="#C58A28"/>
+<circle cx="1680" cy="1314" r="2.7" fill="#C58A28"/>
+<text x="1680" y="1441" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#17324D" text-anchor="middle">[24]</text>
+<text x="1680" y="1476" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">Pose Buffer · no GELU</text>
+<polyline points="1770,1315 2020,1315" fill="none" stroke="#C58A28" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-orange)"/>
+<text x="2195" y="1191" font-family="DejaVu Sans, sans-serif" font-size="28" font-weight="700" fill="#337DC1" text-anchor="middle">12-joint pose</text>
+<text x="2195" y="1222" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">24 values × output_scale</text>
+<polyline points="2150,1262 2240,1262" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2150,1262 2127,1300" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2127,1300 2110,1339" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2240,1262 2263,1300" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2263,1300 2280,1339" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2150,1262 2163,1330" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2240,1262 2227,1330" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2163,1330 2227,1330" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2163,1330 2150,1371" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2150,1371 2140,1410" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2227,1330 2240,1371" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="2240,1371 2250,1410" fill="none" stroke="#208F83" stroke-width="3" stroke-linejoin="round"/>
+<circle cx="2150" cy="1262" r="5" fill="#208F83"/>
+<circle cx="2240" cy="1262" r="5" fill="#208F83"/>
+<circle cx="2127" cy="1300" r="5" fill="#208F83"/>
+<circle cx="2263" cy="1300" r="5" fill="#208F83"/>
+<circle cx="2110" cy="1339" r="5" fill="#208F83"/>
+<circle cx="2280" cy="1339" r="5" fill="#208F83"/>
+<circle cx="2163" cy="1330" r="5" fill="#208F83"/>
+<circle cx="2227" cy="1330" r="5" fill="#208F83"/>
+<circle cx="2150" cy="1371" r="5" fill="#208F83"/>
+<circle cx="2240" cy="1371" r="5" fill="#208F83"/>
+<circle cx="2140" cy="1410" r="5" fill="#208F83"/>
+<circle cx="2250" cy="1410" r="5" fill="#208F83"/>
+<text x="2195" y="1441" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#17324D" text-anchor="middle">12 × (x, y)</text>
+<text x="2195" y="1476" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="middle">2D coordinate output</text>
+<polyline points="65,1510 2335,1510" fill="none" stroke="#C7D5E2" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="65" y="1547" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="start">BatchNorm is folded into Conv weights/bias. Dropout is omitted during inference. All FC layers include Requant; FC3 has no GELU.</text>
+<text x="65" y="1581" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" fill="#61788F" text-anchor="start">Blocks and neuron counts are schematic; labels show actual tensor sizes. Source: pl/cnn/README.md · pl/cnn/rtl/FC/fc_top.v</text>
+</svg>

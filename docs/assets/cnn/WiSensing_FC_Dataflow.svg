@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1420" viewBox="0 0 1920 1420" role="img"><title>WiSensing shared FC accelerator dataflow and control</title>
+<defs>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#61788F"/></marker>
+<marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#337DC1"/></marker>
+<marker id="arrow-teal" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#208F83"/></marker>
+<marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#815CB2"/></marker>
+<marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#C58A28"/></marker>
+</defs>
+<rect width="1920" height="1420" fill="white"/>
+<text x="65" y="68" font-family="DejaVu Sans, sans-serif" font-size="42" font-weight="700" fill="#17324D" text-anchor="start">FC Accelerator | Dataflow &amp; Control</text>
+<text x="65" y="108" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="400" fill="#61788F" text-anchor="start">5120 → 128 → 128 → 24 · one shared MAC / Requant / GELU datapath</text>
+<text x="1855" y="65" font-family="DejaVu Sans, sans-serif" font-size="19" font-weight="600" fill="#61788F" text-anchor="end">PERSONAL SCOPE / FC RTL</text>
+<polyline points="65,140 1855,140" fill="none" stroke="#C7D5E2" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="65" y="195" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#337DC1" text-anchor="start">01</text>
+<text x="115" y="195" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#17324D" text-anchor="start">Select activation and weight sources by layer</text>
+<rect x="80" y="235" width="540" height="177" rx="14" fill="#EAF3FC" stroke="#337DC1" stroke-width="1.5"/>
+<text x="350.0" y="273" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#337DC1" text-anchor="middle">FC1 · 5120 → 128</text>
+<text x="350.0" y="308" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">Activation: Feature RAM / Flatten</text>
+<text x="350.0" y="337" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">Weights: 512×64 FWFT FIFO</text>
+<text x="350.0" y="366" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">640 groups / output · 8 INT8 lanes</text>
+<polyline points="350,412 350,465" fill="none" stroke="#61788F" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="660" y="235" width="540" height="177" rx="14" fill="#E9F6F2" stroke="#208F83" stroke-width="1.5"/>
+<text x="930.0" y="273" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#208F83" text-anchor="middle">FC2 · 128 → 128</text>
+<text x="930.0" y="308" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">Activation: Hidden RAM bank 0</text>
+<text x="930.0" y="337" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">Weights: FC weight RAM</text>
+<text x="930.0" y="366" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">16 groups / output · 8 INT8 lanes</text>
+<polyline points="930,412 930,465" fill="none" stroke="#61788F" stroke-width="2.4" stroke-linejoin="round"/>
+<rect x="1240" y="235" width="540" height="177" rx="14" fill="#F1ECF8" stroke="#815CB2" stroke-width="1.5"/>
+<text x="1510.0" y="273" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#815CB2" text-anchor="middle">FC3 · 128 → 24</text>
+<text x="1510.0" y="308" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">Activation: Hidden RAM bank 1</text>
+<text x="1510.0" y="337" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">Weights: FC weight RAM</text>
+<text x="1510.0" y="366" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">16 groups / output · 8 INT8 lanes</text>
+<polyline points="1510,412 1510,465" fill="none" stroke="#61788F" stroke-width="2.4" stroke-linejoin="round"/>
+<polyline points="350,465 1510,465" fill="none" stroke="#61788F" stroke-width="2.4" stroke-linejoin="round"/>
+<polyline points="600,465 600,525 350,525 350,545" fill="none" stroke="#61788F" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-muted)"/>
+<text x="65" y="512" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#337DC1" text-anchor="start">02</text>
+<text x="115" y="512" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#17324D" text-anchor="start">Shared compute path</text>
+<rect x="180" y="555" width="340" height="150" rx="14" fill="#EAF3FC" stroke="#337DC1" stroke-width="1.5"/>
+<text x="350.0" y="593" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#337DC1" text-anchor="middle">Layer input MUX</text>
+<text x="350.0" y="628" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">activation[63:0]</text>
+<text x="350.0" y="657" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">weight[63:0]</text>
+<polyline points="520,630 595,630" fill="none" stroke="#61788F" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-muted)"/>
+<rect x="605" y="555" width="330" height="150" rx="14" fill="#EAF3FC" stroke="#337DC1" stroke-width="1.5"/>
+<text x="770.0" y="593" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#337DC1" text-anchor="middle">8-lane FC MAC</text>
+<text x="770.0" y="628" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">signed INT8 × INT8</text>
+<text x="770.0" y="657" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">adder tree → INT32 acc</text>
+<polyline points="935,630 1010,630" fill="none" stroke="#61788F" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-muted)"/>
+<rect x="1020" y="555" width="340" height="150" rx="14" fill="#F1ECF8" stroke="#815CB2" stroke-width="1.5"/>
+<text x="1190.0" y="593" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#815CB2" text-anchor="middle">Requant</text>
+<text x="1190.0" y="628" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">bias → multiply → round</text>
+<text x="1190.0" y="657" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">shift → INT8 saturation</text>
+<polyline points="1360,630 1420,630 1420,580 1500,580" fill="none" stroke="#815CB2" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-purple)"/>
+<text x="1510" y="480" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="700" fill="#815CB2" text-anchor="start">FC1 / FC2</text>
+<rect x="1510" y="505" width="330" height="150" rx="14" fill="#F1ECF8" stroke="#815CB2" stroke-width="1.5"/>
+<text x="1675.0" y="543" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#815CB2" text-anchor="middle">GELU LUT</text>
+<text x="1675.0" y="578" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">layer-specific lookup</text>
+<text x="1675.0" y="607" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">INT8 activation</text>
+<polyline points="1675,655 1675,755" fill="none" stroke="#815CB2" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-purple)"/>
+<rect x="1510" y="755" width="330" height="170" rx="14" fill="#E9F6F2" stroke="#208F83" stroke-width="1.5"/>
+<text x="1675.0" y="793" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#208F83" text-anchor="middle">Hidden RAM · write</text>
+<text x="1675.0" y="828" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">FC1 → bank 0 (128 B)</text>
+<text x="1675.0" y="857" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">FC2 → bank 1 (128 B)</text>
+<text x="1675.0" y="886" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">8-bit write / 64-bit read</text>
+<polyline points="1360,630 1420,630 1420,1033 1500,1033" fill="none" stroke="#C58A28" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#arrow-orange)"/>
+<text x="1438" y="1001" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="700" fill="#C58A28" text-anchor="start">FC3</text>
+<rect x="1510" y="958" width="330" height="150" rx="14" fill="#FFF5E3" stroke="#C58A28" stroke-width="1.5"/>
+<text x="1675.0" y="996" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#C58A28" text-anchor="middle">Pose Buffer</text>
+<text x="1675.0" y="1031" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">24 INT8 coordinates</text>
+<text x="1675.0" y="1060" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">address 0–23</text>
+<rect x="80" y="755" width="1280" height="100" rx="14" fill="#F5F8FB" stroke="#C7D5E2" stroke-width="1.5"/>
+<text x="105" y="793" font-family="DejaVu Sans, sans-serif" font-size="24" font-weight="700" fill="#208F83" text-anchor="start">Memory hand-off between layers</text>
+<text x="105" y="830" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="start">FC1 writes bank 0 → FC2 reads bank 0; FC2 writes bank 1 → FC3 reads bank 1.</text>
+<text x="1510" y="949" font-family="DejaVu Sans, sans-serif" font-size="14" font-weight="400" fill="#61788F" text-anchor="start">Same Hidden RAM as the read-side sources above.</text>
+<text x="65" y="930" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" fill="#337DC1" text-anchor="start">03</text>
+<text x="115" y="930" font-family="DejaVu Sans, sans-serif" font-size="25" font-weight="700" fill="#17324D" text-anchor="start">Controller · address generation and completion</text>
+<rect x="80" y="970" width="1280" height="140" rx="14" fill="#EAF3FC" stroke="#337DC1" stroke-width="1.5"/>
+<text x="720.0" y="1008" font-family="DejaVu Sans, sans-serif" font-size="26" font-weight="700" fill="#337DC1" text-anchor="middle">FC Controller</text>
+<text x="720.0" y="1043" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">select layer / generate read addresses / issue valid, first, last and tag</text>
+<text x="720.0" y="1072" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#17324D" text-anchor="middle">FC1 FIFO empty → pause issue and keep counters; final result stored → fc_done</text>
+<polyline points="80,1040 45,1040 45,630 170,630" fill="none" stroke="#337DC1" stroke-width="2" stroke-linejoin="round" stroke-dasharray="8 7" marker-end="url(#arrow-blue)"/>
+<text x="62" y="874" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#337DC1" text-anchor="start">control</text>
+<polyline points="1510,875 1390,875 1390,1145 1180,1145 1180,1118" fill="none" stroke="#208F83" stroke-width="2" stroke-linejoin="round" stroke-dasharray="8 7" marker-end="url(#arrow-teal)"/>
+<polyline points="1675,1108 1675,1145 1390,1145" fill="none" stroke="#C58A28" stroke-width="2" stroke-linejoin="round" stroke-dasharray="8 7"/>
+<text x="950" y="1180" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="400" fill="#61788F" text-anchor="start">last Hidden / Pose write → layer_store_done</text>
+<rect x="65" y="1230" width="1790" height="113" rx="10" fill="#F5F8FB" stroke="#C7D5E2" stroke-width="1.5"/>
+<text x="90" y="1268" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="start">Dataflow, not a cycle-accurate timing waveform. Solid arrows: data. Dashed arrows: control / completion.</text>
+<text x="90" y="1307" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" fill="#61788F" text-anchor="start">Shared RAM/LUT loaders supply weights, bias/multiplier/shift and GELU tables; memory ports are simplified here.</text>
+<text x="65" y="1387" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" fill="#61788F" text-anchor="start">Source: pl/cnn/rtl/FC/fc_top.v · fc_controller.v · fc_mac.v · requant_core.v · gelu_core.v</text>
+</svg>

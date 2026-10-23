@@ -2,6 +2,12 @@
 
 기본 통합 top `rtl/top/pose_cnn.v`의 `RX=5`, FC `RX_NUM=5`를 기준으로 설명합니다. 일부 하위 블록/단위 TB의 기본 RX=3은 상위 모듈에서 전달한 파라미터로 바뀝니다. 실제 모델과 PS는 RX5를 사용합니다.
 
+## 구조 그림
+
+![RX5 INT8 CNN 데이터 흐름](../../docs/assets/cnn/WiSensing_RX5_CNN_Flow.png)
+
+[전체 CNN · FC 데이터/제어 흐름도](../../docs/cnn_fc_dataflow.md)에서 FC 가중치 FIFO, Hidden RAM bank, 공유 연산 경로와 결과 저장 분기를 확인할 수 있습니다. 이 그림은 데이터 흐름 설명용이며 타이밍 파형은 아닙니다.
+
 ## 연산과 입력
 
 입력은 batch를 제외한 INT8 `[15,128,10]`입니다. 채널은 `ch=rx+5*ic`, `ic=0/1/2`가 base/delta/mask입니다. 각 RX에서 해당 세 채널을 뽑아 같은 Encoder 가중치로 계산합니다.
@@ -32,3 +38,4 @@
 - FC/controller/loader를 포함한 전체 CNN 경로 검증은 `rounding/`의 golden TB를 사용합니다.
 
 소스와 golden의 일치는 실제 Vivado 타이밍/자원·보드 정확도 확인과 구분합니다. 기존 XSA/시험 벡터와 패키징 버전은 [통합 자료](../../integration/README.md)를 확인하고, RTL 테스트·실보드 실행 결과를 서로 구분해서 해석하세요.
+
