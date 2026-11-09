@@ -32,10 +32,10 @@
 
 ## 검증
 
-- [Encoder 단위/통합 TB](testbench/CNN_Encoder/README.md)
-- [반올림 회귀 및 RX5 전체 golden TB](testbench/rounding/README.md)
-- [FC 전용 단위/통합 TB](testbench/FC/README.md): FIFO·MAC·Requant·GELU·RAM·Controller와 RX3/RX5 FC1→FC2→FC3를 자동 비교합니다.
-- FC/controller/loader를 포함한 전체 CNN 경로 검증은 `rounding/`의 golden TB를 사용합니다.
+- [Encoder 모듈 및 연결 테스트](testbench/CNN_Encoder/README.md)
+- [정수 반올림 및 RX5 전체 CNN 테스트](testbench/rounding/README.md)
+- [FC 연산부 시뮬레이션 테스트](testbench/FC/README.md)는 각 모듈을 따로 확인하고, 수신기 3개·5개 설정에서 FC1부터 FC3까지 연결한 결과를 예상값과 비교합니다.
+- FC·제어부·가중치 로더까지 포함한 CNN 전체는 `rounding/`에서 예상 출력과 비교합니다.
 
 소스와 golden의 일치는 실제 Vivado 타이밍/자원·보드 정확도 확인과 구분합니다. 기존 XSA/시험 벡터와 패키징 버전은 [통합 자료](../../integration/README.md)를 확인하고, RTL 테스트·실보드 실행 결과를 서로 구분해서 해석하세요.
 
